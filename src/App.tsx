@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react'
-import logo from './logo.svg'
 import './App.css'
 
 import { fetchAudios, fetchFiles, fetchImages, fetchMovies } from '../packages/fetchFiles'
