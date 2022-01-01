@@ -20,7 +20,6 @@ function App() {
     const row = Math.floor((subDates(startDailySales.aggregationPeriod, dailySales.aggregationPeriod) + startDay) / 7);
     weeks[row][col] = dailySales;
   })
-  console.log(weeks);
   const [calendarTable, setCalendarTable] = useState<(DailySales | undefined)[][]>(weeks) 
 
   return (
