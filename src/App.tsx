@@ -1,72 +1,31 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import './App.css'
 
-import { fetchAudios, fetchFiles, fetchImages, fetchMovies } from '../packages/fetchFiles'
+import { DailySales } from './model/DailySales';
+import { DAYS, subDates } from './modules/calendar';
+import Calendar from './components/Calendar';
+import daily2021 from './assets/json/2021.json'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const jsonList = daily2021.map(item => new DailySales(item))
 
-  const onOpenFile = useCallback(async () => {
-    const files = await fetchFiles()
-    console.log(files);
-  },[])
+  const startDailySales = jsonList[0];
+  const startDay = DAYS.indexOf(startDailySales.day)
+  const endDailySales = jsonList[jsonList.length - 1];
+  const sub = subDates(startDailySales.aggregationPeriod, endDailySales.aggregationPeriod);
+  const weeks: (DailySales | undefined)[][] = [...new Array(Math.ceil(sub / 7))].map(() => [...new Array(7)].map(() => undefined));
 
-  const onOpenImages = useCallback(async () => {
-    const { files } = await fetchImages();
-    console.log('orpn images',files);
-  },[]);
-
-  const onOpenAudios = useCallback(async () => {
-    const { files } = await fetchAudios()
-    console.log('open audios', files);
-  },[]);
-
-  const onOpenMovies = useCallback(async () => {
-    const { files } = await fetchMovies()
-    console.log('open movies', files);
-  },[]);
+  jsonList.forEach(dailySales => {
+    const col = DAYS.indexOf(dailySales.day);
+    const row = Math.floor((subDates(startDailySales.aggregationPeriod, dailySales.aggregationPeriod) + startDay) / 7);
+    weeks[row][col] = dailySales;
+  })
+  console.log(weeks);
+  const [calendarTable, setCalendarTable] = useState<(DailySales | undefined)[][]>(weeks) 
 
   return (
     <div className="App">
-      <header className="App-header">
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={onOpenFile}>
-            open files
-          </button>
-          <button type="button" onClick={onOpenImages}>
-            image files
-          </button>
-          <button type="button" onClick={onOpenMovies}>
-            video files
-          </button>
-          <button type="button" onClick={onOpenAudios}>
-            audio files
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+      <Calendar dailySales2D={calendarTable} />
     </div>
   )
 }
