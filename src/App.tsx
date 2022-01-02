@@ -1,23 +1,30 @@
 import { useState } from 'react'
+import { addDays, format } from 'date-fns';
 import './App.css'
 
 import { DailySales } from './model/DailySales';
 import { DAYS, subDates } from './modules/calendar';
-import Calendar from './components/Calendar';
 import { dailySalesList } from './assets/json'
+import { divideDate } from '../packages/date'
+import Calendar from './components/Calendar';
 
 function App() {
   const startDailySales = dailySalesList[0];
   const startDay = DAYS.indexOf(startDailySales.day)
   const endDailySales = dailySalesList[dailySalesList.length - 1];
   const sub = subDates(startDailySales.aggregationPeriod, endDailySales.aggregationPeriod);
+  // カレンダーテーブルの作成
   const weeks: (DailySales | undefined)[][] = [...new Array(Math.ceil(sub / 7))].map(() => [...new Array(7)].map(() => undefined));
-
-  dailySalesList.forEach(dailySales => {
-    const col = DAYS.indexOf(dailySales.day);
-    const row = Math.floor((subDates(startDailySales.aggregationPeriod, dailySales.aggregationPeriod) + startDay) / 7);
-    // console.log(row);
-    weeks[row][col] = dailySales;
+  const { year, month, day } = divideDate(startDailySales.aggregationPeriod)
+  const tempStartDate = addDays(new Date(year, month - 1, day), - startDay)
+  
+  weeks.forEach((row, i) => {
+    row.forEach((_,j) => {
+      const ex = i * 7 + j;
+      const addedDay = addDays(tempStartDate, ex);
+      const day = format(addedDay, 'yyyyMMdd');
+      weeks[i][j] = dailySalesList.filter(dailySales => dailySales.aggregationPeriod === day)[0] || undefined;
+    })
   })
   const [calendarTable, setCalendarTable] = useState<(DailySales | undefined)[][]>(weeks) 
 
