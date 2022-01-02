@@ -1,8 +1,9 @@
 import React, { memo, useCallback } from 'react';
 import { css } from '@emotion/css';
 
-import { DAYS } from '../modules/calendar';
+import { DAYS, subDates } from '../modules/calendar';
 import { DailySales } from '../model/DailySales';
+import CalendarCell from './CalendarCell';
 
 type Props = {
   dailySales2D: (DailySales | undefined)[][]
@@ -49,7 +50,6 @@ const style = css`
 
 const Calendar: React.FC<Props> = memo(({ dailySales2D }) => {
   const initialDailySales = dailySales2D.flat().filter(item => item);
-  console.log(initialDailySales);
 
   const totalByDay = DAYS.map((day, i) => {
     const salesByDay = initialDailySales.filter(item => item?.day === day).map(item => Number(item?.sales))
@@ -71,6 +71,7 @@ const Calendar: React.FC<Props> = memo(({ dailySales2D }) => {
             {
               DAYS.map(day => <th key={`header-${day}`}>{ day }</th>)
             }
+            <th>分析</th>
           </tr>
         </thead>
         <tbody>
@@ -83,7 +84,11 @@ const Calendar: React.FC<Props> = memo(({ dailySales2D }) => {
                     <span>{ col && `${Number(col.sales).toLocaleString()}円` }</span>
                   </td>
                 ))
-              }</tr>
+              }
+                <td>
+                  <CalendarCell list={row.filter(item => item).map(item => Number(item?.sales || 0))} />
+                </td>
+              </tr>
             })
           }
           {/* 曜日別合計 */}
@@ -96,6 +101,9 @@ const Calendar: React.FC<Props> = memo(({ dailySales2D }) => {
                 <span>{ col.toLocaleString() }</span>
               </td>)
             }
+            <td>
+              <CalendarCell list={totalByDay} />
+            </td>
           </tr>
         </tbody>
       </table>

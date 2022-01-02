@@ -16,10 +16,23 @@ export const subDates = (startDate: string, endDate: string) => {
   const start = divideDate(startDate);
   const end = divideDate(endDate);
 
-  return Math.abs(
-    differenceInDays(
-      Date.UTC(start.year, start.month, start.day),
-      Date.UTC(end.year, end.month, end.day)
+  const date2 = +new Date(end.year, end.month, end.day);
+  const date1 = +new Date(start.year, start.month, start.day);
+
+  console.log(
+    Math.abs((date2 - date1) / 86400000),
+    Math.abs(
+      differenceInDays(
+        Date.UTC(start.year, start.month, start.day),
+        Date.UTC(end.year, end.month, end.day)
+      )
     )
   );
+  return Math.abs((date2 - date1) / 86400000);
+  // return Math.abs(
+  //   differenceInDays(
+  //     Date.UTC(start.year, start.month, start.day),
+  //     Date.UTC(end.year, end.month, end.day)
+  //   )
+  // );
 };
