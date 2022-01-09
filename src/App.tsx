@@ -1,12 +1,17 @@
 import { useState } from 'react'
 import { addDays, format } from 'date-fns';
-import './App.css'
+import { css } from '@emotion/css';
 
 import { DailySales } from './model/DailySales';
 import { DAYS, subDates } from './modules/calendar';
 import { dailySalesList } from './assets/json'
 import { divideDate } from '../packages/date'
 import Calendar from './components/Calendar';
+
+const style = css`
+  width: 1024px;
+  margin: 0 auto;
+`;
 
 function App() {
   const startDailySales = dailySalesList[0];
@@ -29,8 +34,13 @@ function App() {
   const [calendarTable, setCalendarTable] = useState<(DailySales | undefined)[][]>(weeks) 
 
   return (
-    <div className="App">
-      <Calendar dailySales2D={calendarTable} />
+    <div className={style}>
+      <div className='controller'>
+        aaaa
+      </div>
+      <div className='calendar'>
+        <Calendar dailySales2D={calendarTable} />
+      </div>
     </div>
   )
 }

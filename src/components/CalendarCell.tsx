@@ -8,18 +8,22 @@ type Props = {
 }
 
 const style = css`
-  padding: 10px 8px;
   p {
     margin: 0;
+  }
+  
+  .amount-label {
+    font-weight: bold;
+    font-size: 18px;
   }
 `;
 
 const CalendarCell: React.FC<Props> = memo(({ list }) => {
   return (
     <div className={style}>
-      <p>合計 {sum(list)}</p>
-      <p>平均 { average(list)}</p>
-      <p>標準偏差 { deviation(list)}</p>
+      <p>合計 <br /><span className='amount-label'>{ Math.round(sum(list)).toLocaleString() }</span>円</p>
+      <p>平均 <br /><span className='amount-label'>{ Math.round(average(list)).toLocaleString() }</span>円</p>
+      <p>標準偏差 { Math.round(deviation(list)).toLocaleString()}</p>
     </div>
   )
 });

@@ -1,7 +1,7 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo } from 'react';
 import { css } from '@emotion/css';
 
-import { DAYS, subDates } from '../modules/calendar';
+import { DAYS } from '../modules/calendar';
 import { DailySales } from '../model/DailySales';
 import CalendarCell from './CalendarCell';
 
@@ -25,6 +25,17 @@ const colorBy = (sales:number): string => {
 };
 
 const style = css`
+  display:flex;
+
+  .controller {
+    flex-basis: 100px;
+  }
+  .calendar {
+    flex: 1;
+  }
+`;
+
+const tableStyle = css`
   width: 100%;
   border-collapse:  collapse;
 
@@ -53,61 +64,65 @@ const Calendar: React.FC<Props> = memo(({ dailySales2D }) => {
 
   const totalByDay = DAYS.map((day, i) => {
     const salesByDay = initialDailySales.filter(item => item?.day === day).map(item => Number(item?.sales))
-    return salesByDay.reduce((sum, el) => sum + el);
+    return salesByDay
   })
   
   return (
-    <>
-      <div>
+    <div className={style}>
+      <div className='controller'>
         <select name="select">
           {
             DAYS.map((day, i) => <option key={`select-${i}`} value={i}>{ day }</option>)
           }
         </select>
       </div>
-      <table className={style}>
-        <thead>
-          <tr>
+      <div className='calendar'>
+        <table className={tableStyle}>
+          <thead>
+            <tr>
+              {
+                DAYS.map(day => <th key={`header-${day}`}>{ day }</th>)
+              }
+              <th>分析</th>
+            </tr>
+          </thead>
+          <tbody>
             {
-              DAYS.map(day => <th key={`header-${day}`}>{ day }</th>)
+              dailySales2D.map((row, i) => {
+                return <tr key={`row-${i}`}>{
+                  row.map((col, j) => (
+                    <td style={{ background: colorBy(Number(col?.sales) || 0) }} key={`col-${j}`}>
+                      <p>{ col && col.aggregationPeriod }</p>
+                      <span>{ col && `${Number(col.sales).toLocaleString()}円` }</span>
+                    </td>
+                  ))
+                }
+                  <td key={`col-final`}>
+                    <CalendarCell list={row.filter(item => item).map(item => Number(item?.sales || 0))} />
+                  </td>
+                </tr>
+              })
             }
-            <th>分析</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            dailySales2D.map((row, i) => {
-              return <tr key={`row-${i}`}>{
-                row.map((col, j) => (
-                  <td style={{ background: colorBy(Number(col?.sales) || 0) }} key={`col-${j}`}>
-                    <p>{ col && col.aggregationPeriod }</p>
-                    <span>{ col && `${Number(col.sales).toLocaleString()}円` }</span>
+            {/* 曜日別合計 */}
+            <tr>{
+              DAYS.map(day => <td key={`total-${day}`}>{ day } 合計</td>)
+            }</tr>
+            <tr>
+              {
+                totalByDay.map((cols,i) => (
+                  <td key={`total-day-${i}`}>
+                    <CalendarCell list={cols} />
                   </td>
                 ))
               }
-                <td>
-                  <CalendarCell list={row.filter(item => item).map(item => Number(item?.sales || 0))} />
-                </td>
-              </tr>
-            })
-          }
-          {/* 曜日別合計 */}
-          <tr>{
-            DAYS.map(day => <td>{ day } 合計</td>)
-          }</tr>
-          <tr>
-            {
-              totalByDay.map((col,i) => <td key={`total-${i}`}>
-                <span>{ col.toLocaleString() }</span>
-              </td>)
-            }
-            <td>
-              <CalendarCell list={totalByDay} />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </>
+              <td>
+                <CalendarCell list={totalByDay.flat()} />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   )
 })
 
