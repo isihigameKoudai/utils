@@ -20,6 +20,18 @@ const TOTAL_CASH_PAYMENT = "現金支払合計額" as const;
 const TOTAL_NO_CASH_PAYMENT = "現金その他支払合計額" as const;
 const DISCOUNT = "割引額" as const;
 
+export const dailyKey = {
+  AGGREGATION_PERIOD,
+  SALES,
+  NUMBER_OF_ACCOUNTS,
+  NUMBER_OF_CUSTOMERS,
+  AVERAGE_AMOUNT,
+  NUMBER_OF_PRODUCTS,
+  TOTAL_CASH_PAYMENT,
+  TOTAL_NO_CASH_PAYMENT,
+  DISCOUNT,
+};
+
 type Props = {
   [AGGREGATION_PERIOD]: string;
   [SALES]: string;

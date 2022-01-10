@@ -1,9 +1,9 @@
-import React, { memo } from 'react';
+import React, { memo, useState, useCallback, ChangeEvent } from 'react';
 import { css } from '@emotion/css';
 
 import { DAYS } from '../modules/calendar';
-import { DailySales } from '../model/DailySales';
-import CalendarCell from './CalendarCell';
+import { DailySales, dailyKey } from '../model/DailySales';
+import TotalCell from './TotalCell';
 
 type Props = {
   dailySales2D: (DailySales | undefined)[][]
@@ -24,6 +24,33 @@ const colorBy = (sales:number): string => {
   return '#fff';
 };
 
+type Option = {
+  value: keyof DailySales;
+  label: string;
+}
+const options: Option[] = [{
+  label: dailyKey.SALES,
+  value: 'sales'
+},{
+  label: dailyKey.NUMBER_OF_ACCOUNTS,
+  value: 'numberOfAccounts'
+},{
+  label: dailyKey.NUMBER_OF_CUSTOMERS,
+  value: 'numberOfCustomers'
+},{
+  label: dailyKey.AVERAGE_AMOUNT,
+  value: 'averageAmount'
+},{
+  label: dailyKey.NUMBER_OF_PRODUCTS,
+  value: 'numberOfProducts'
+},{
+  label: dailyKey.TOTAL_NO_CASH_PAYMENT,
+  value: 'totalNoCashPayment'
+},{
+  label: dailyKey.TOTAL_CASH_PAYMENT,
+  value: 'totalCashPayment'
+}];
+
 const style = css`
   display:flex;
 
@@ -32,6 +59,8 @@ const style = css`
   }
   .calendar {
     flex: 1;
+    height: 100vh;
+    overflow-y: scroll;
   }
 `;
 
@@ -61,18 +90,24 @@ const tableStyle = css`
 
 const Calendar: React.FC<Props> = memo(({ dailySales2D }) => {
   const initialDailySales = dailySales2D.flat().filter(item => item);
+  const [dailySalesType, setDailySalesType] = useState<keyof DailySales>('sales');
 
   const totalByDay = DAYS.map((day, i) => {
-    const salesByDay = initialDailySales.filter(item => item?.day === day).map(item => Number(item?.sales))
+    const salesByDay = initialDailySales.filter(item => item?.day === day).map(item => Number(item?.[dailySalesType]))
     return salesByDay
   })
+
+  const handleSelect = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+    console.log(e.target.value);
+    setDailySalesType(e.target.value as keyof DailySales)
+  },[])
   
   return (
     <div className={style}>
       <div className='controller'>
-        <select name="select">
+        <select name="select" onChange={handleSelect}>
           {
-            DAYS.map((day, i) => <option key={`select-${i}`} value={i}>{ day }</option>)
+            options.map((option, i) => <option key={`select-${i}`} value={option.value}>{ option.label }</option>)
           }
         </select>
       </div>
@@ -98,7 +133,7 @@ const Calendar: React.FC<Props> = memo(({ dailySales2D }) => {
                   ))
                 }
                   <td key={`col-final`}>
-                    <CalendarCell list={row.filter(item => item).map(item => Number(item?.sales || 0))} />
+                    <TotalCell list={row.filter(item => item).map(item => Number(item?.sales || 0))} />
                   </td>
                 </tr>
               })
@@ -111,12 +146,12 @@ const Calendar: React.FC<Props> = memo(({ dailySales2D }) => {
               {
                 totalByDay.map((cols,i) => (
                   <td key={`total-day-${i}`}>
-                    <CalendarCell list={cols} />
+                    <TotalCell list={cols} />
                   </td>
                 ))
               }
               <td>
-                <CalendarCell list={totalByDay.flat()} />
+                <TotalCell list={totalByDay.flat()} />
               </td>
             </tr>
           </tbody>

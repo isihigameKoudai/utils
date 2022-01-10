@@ -16,10 +16,6 @@ export const subDates = (startDate: string, endDate: string) => {
   const start = divideDate(startDate);
   const end = divideDate(endDate);
 
-  const date2 = +new Date(end.year, end.month, end.day);
-  const date1 = +new Date(start.year, start.month, start.day);
-
-  // return Math.abs((date2 - date1) / 86400000);
   return Math.abs(
     differenceInDays(
       Date.UTC(start.year, start.month, start.day),

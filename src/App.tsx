@@ -35,12 +35,7 @@ function App() {
 
   return (
     <div className={style}>
-      <div className='controller'>
-        aaaa
-      </div>
-      <div className='calendar'>
-        <Calendar dailySales2D={calendarTable} />
-      </div>
+      <Calendar dailySales2D={calendarTable} />
     </div>
   )
 }
