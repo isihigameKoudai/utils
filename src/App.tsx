@@ -9,7 +9,7 @@ import { divideDate } from '../packages/date'
 import Calendar from './components/Calendar';
 
 const style = css`
-  width: 1024px;
+  width: 1100px;
   margin: 0 auto;
 `;
 

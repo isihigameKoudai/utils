@@ -4,6 +4,7 @@ import { css } from '@emotion/css';
 import { DAYS } from '../modules/calendar';
 import { DailySales, dailyKey } from '../model/DailySales';
 import TotalCell from './TotalCell';
+import TableCell from './TableCell';
 
 type Props = {
   dailySales2D: (DailySales | undefined)[][]
@@ -53,14 +54,31 @@ const options: Option[] = [{
 
 const style = css`
   display:flex;
+  
+  p {
+    margin: 0;
+  }
+
+  .title-text {
+    font-size: 16px;
+    padding: 4px;
+  }
 
   .controller {
-    flex-basis: 100px;
+    flex-basis: 200px;
+    padding: 18px 8px;
   }
   .calendar {
     flex: 1;
     height: 100vh;
     overflow-y: scroll;
+  }
+
+  .select {
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 8px 10px;
   }
 `;
 
@@ -105,7 +123,8 @@ const Calendar: React.FC<Props> = memo(({ dailySales2D }) => {
   return (
     <div className={style}>
       <div className='controller'>
-        <select name="select" onChange={handleSelect}>
+        <p className='title-text'>表示項目</p>
+        <select name="select" onChange={handleSelect} className='select'>
           {
             options.map((option, i) => <option key={`select-${i}`} value={option.value}>{ option.label }</option>)
           }
@@ -126,9 +145,9 @@ const Calendar: React.FC<Props> = memo(({ dailySales2D }) => {
               dailySales2D.map((row, i) => {
                 return <tr key={`row-${i}`}>{
                   row.map((col, j) => (
-                    <td style={{ background: colorBy(Number(col?.sales) || 0) }} key={`col-${j}`}>
-                      <p>{ col && col.aggregationPeriod }</p>
-                      <span>{ col && `${Number(col.sales).toLocaleString()}円` }</span>
+                    <td className='cell' style={{ background: colorBy(Number(col?.sales) || 0) }} key={`col-${j}`}>{
+                      col && <TableCell dailySales={col} selectedDaily={dailySalesType} />
+                    }
                     </td>
                   ))
                 }
