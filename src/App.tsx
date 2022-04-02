@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { addDays, format } from 'date-fns';
 import { css } from '@emotion/css';
 
 import { DailySales } from './model/DailySales';
 import { DAYS, subDates } from './modules/calendar';
-import { dailySalesList } from './assets/json'
+import { dailySalesList, covidList } from './assets/json';
 import { divideDate } from '../packages/date'
 import Calendar from './components/Calendar';
+import Chart from './components/Chart';
 
 const style = css`
   width: 1100px;
@@ -32,10 +33,29 @@ function App() {
     })
   })
   const [calendarTable, setCalendarTable] = useState<(DailySales | undefined)[][]>(weeks) 
+  const initialDailySales = weeks.flat().filter(item => item);
+
+  const [viewMode, setViewMode] = useState<'calendar' | 'chart'>('calendar');
+  const handleCalendar = useCallback(() => {
+    setViewMode('calendar');
+  },[]);
+  const handleChart = useCallback(() => {
+    setViewMode('chart');
+  },[]);
+  
 
   return (
     <div className={style}>
-      <Calendar dailySales2D={calendarTable} />
+      <header>
+        <button type='button' onClick={handleCalendar}>カレンダー</button>
+        <button type='button' onClick={handleChart}>チャート</button>
+      </header>
+      {
+        viewMode === 'calendar' && <Calendar dailySales2D={calendarTable} />
+      }
+      {
+        viewMode === 'chart' && <Chart dailySales={initialDailySales} covidList={covidList} />
+      }
     </div>
   )
 }

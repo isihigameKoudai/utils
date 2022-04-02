@@ -31,7 +31,7 @@ const TableCell: React.FC<Props> = memo(({ dailySales, selectedDaily = 'sales' }
       <div>
         {
           /* eslint-disable-next-line */
-          Object.keys(dailyKey).map((key) => <p className={tooltipStyle}>{ dailyKey[key] }: { dailySales.toObj[dailyKey[key]]}</p>)
+          Object.keys(dailyKey).map((key) => <p className={tooltipStyle} key={key}>{ dailyKey[key] }: { dailySales.toObj[dailyKey[key]]}</p>)
         }
       </div>
     }>
