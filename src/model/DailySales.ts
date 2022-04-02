@@ -90,6 +90,11 @@ export class DailySales {
     });
   }
 
+  get date() {
+    const { year, month, day } = divideDate(this.aggregationPeriod);
+    return { year, month, day };
+  }
+
   get toObj() {
     return {
       [AGGREGATION_PERIOD]: this.aggregationPeriod,

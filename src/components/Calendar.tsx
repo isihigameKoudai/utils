@@ -29,6 +29,7 @@ type Option = {
   value: keyof DailySales;
   label: string;
 }
+
 const options: Option[] = [{
   label: dailyKey.SALES,
   value: 'sales'
