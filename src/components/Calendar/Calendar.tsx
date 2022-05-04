@@ -1,9 +1,9 @@
 import React, { memo, useState, useCallback, ChangeEvent } from 'react';
 import { css } from '@emotion/css';
 
-import { DAYS, colorBy } from '../modules/calendar';
-import { DailySales, dailyKey } from '../model/DailySales';
-import TotalCell from './TotalCell';
+import { DAYS, colorBy } from '../../modules/calendar';
+import { DailySales, dailyKey } from '../../model/DailySales';
+import TotalCell from '../TotalCell';
 import TableCell from './TableCell';
 
 type Props = {

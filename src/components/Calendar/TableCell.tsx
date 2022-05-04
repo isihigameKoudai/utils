@@ -2,8 +2,8 @@ import React, { memo } from 'react';
 import { Tooltip } from '@mui/material';
 import { css } from '@emotion/css';
 
-import { DailySales, dailyKey } from '../model/DailySales';
-import { divideDate } from '../../packages/date'
+import { DailySales, dailyKey } from '../../model/DailySales';
+import { divideDate } from '../../../packages/date'
 
 type Props = {
   dailySales: DailySales

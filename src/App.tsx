@@ -6,8 +6,8 @@ import { DailySales } from './model/DailySales';
 import { DAYS, subDates } from './modules/calendar';
 import { dailySalesList, covidList } from './assets/json';
 import { divideDate } from '../packages/date'
-import Calendar from './components/Calendar';
-import Chart from './components/Chart';
+import Calendar from './components/Calendar/Calendar';
+import Chart from './components/Calendar/Chart';
 import TimelyCalendar from './components/TimelyCalendar';
 
 const style = css`
