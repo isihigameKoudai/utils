@@ -85,11 +85,10 @@ const scheduleStyle = css`
     background: inherit;
     border-right: solid 1px ${color.LIGHT_GRAY};
     border-bottom: solid 1px ${color.LIGHT_GRAY};
+    box-sizing: border-box;
     height: ${color.HEADER_ROW_HEIGHT}px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
+    padding: 8px 0;
   }
 
   .schedule-sidebar {
@@ -118,6 +117,7 @@ const scheduleStyle = css`
       width: 200px;
       height: ${color.HEADER_ROW_HEIGHT}px;
       box-sizing: border-box;
+      border: solid 1px ${color.LIGHT_GRAY};
     }
     .schedule-totals_row {
       width: calc(100% - 200px);
@@ -212,23 +212,30 @@ const TimelyCalendar: React.FC = () => {
             style={{ height: `${dailySales2D.length * color.HEADER_ROW_HEIGHT + 1}px` }}
           >
             {
-              dailySales2D.map(({ list },i) => (
-                <div className="schedule-content__row" key={`schedule-col-${i}`}>
-                  {
-                    list.map((hourItem,j) => {
-                      const sales = hourItem && Number(hourItem?.sales).toLocaleString();
-                      const background = timelyColorBy(Number(hourItem?.sales));
-                      return (
-                        <div
-                          className="schedule-content__col"
-                          key={`schedule-col-${i}-${j}`}
-                          style={{ background }}
-                        >{sales && `${sales}円`}</div>
-                      )
-                    })
-                  }
-                </div>
-              ))
+              dailySales2D.map(({ list },i) => {
+                const totalSales = sum(list.filter(item => item).map(item => Number(item?.sales)));
+                return (
+                  <div className="schedule-content__row" key={`schedule-col-${i}`}>
+                    {
+                      list.map((hourItem,j) => {
+                        const sales = hourItem && Number(hourItem?.sales).toLocaleString();
+                        const background = timelyColorBy(Number(hourItem?.sales));
+                        const percentage = ((Number(hourItem?.sales) / totalSales) * 100).toFixed(2);
+                        return (
+                          <div
+                            className="schedule-content__col"
+                            key={`schedule-col-${i}-${j}`}
+                            style={{ background }}
+                          >
+                            <p>{sales && `${sales}円`}</p>
+                            <p>{ sales && `（${percentage}%）` }</p>
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                )
+              })
             }
           </div>
         </div>
