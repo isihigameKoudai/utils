@@ -1,9 +1,12 @@
 import { DailySales } from "../../model/DailySales";
 import Covid from "../../model/Covid";
 
+// 月別データ
 import csv2021 from "./2021.json";
 import csv2022 from "./2022.json";
-import csv from "./csv2022/";
+// 時間別データ
+import timely2021 from "./csv2021/";
+import timely2022 from "./csv2022/";
 
 import covidAll from "./covidAll.json";
 
@@ -13,7 +16,7 @@ export const dailySalesList: DailySales[] = [...csv2021, ...csv2022].map(
 );
 
 // 時間別売り上げ
-export const timelySalesList: DailySales[] = [...csv].map(
+export const timelySalesList: DailySales[] = [...timely2021, ...timely2022].map(
   (item) => new DailySales(item)
 );
 
