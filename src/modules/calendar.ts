@@ -42,3 +42,18 @@ export const colorBy = (sales: number): string => {
 
   return "#fff";
 };
+
+export const timelyColorBy = (sales: number) => {
+  if (10000 < sales) return "#B71C1C";
+  if (9000 < sales) return "#C62828";
+  if (8000 < sales) return "#D32F2F";
+  if (7000 < sales) return "#E53935";
+  if (6000 < sales) return "#F44336";
+  if (5000 < sales) return "#EF5350";
+  if (4000 < sales) return "#E57373";
+  if (3000 < sales) return "#EF9A9A";
+  if (2000 < sales) return "#FFCDD2";
+  if (1000 < sales) return "#FFEBEE";
+
+  return "#fff";
+};

@@ -13,6 +13,11 @@ import TimelyCalendar from './components/TimelyCalendar';
 const style = css`
   width: 1100px;
   margin: 0 auto;
+
+  .is-active {
+    border: solid 1px #222;
+    font-weight: bold;
+  }
 `;
 
 function App() {
@@ -42,9 +47,9 @@ function App() {
   return (
     <div className={style}>
       <header>
-        <button type='button' onClick={() => setViewMode('calendar')}>カレンダー</button>
-        <button type='button' onClick={() => setViewMode('timely')}>カレンダー（時間別）</button>
-        <button type='button' onClick={() => setViewMode('chart')}>チャート</button>
+        <button type='button' onClick={() => setViewMode('calendar')} className={ viewMode === 'calendar' ? 'is-active' : ''}>カレンダー（日別）</button>
+        <button type='button' onClick={() => setViewMode('timely')} className={ viewMode === 'timely' ? 'is-active' : ''}>カレンダー（時間別）</button>
+        <button type='button' onClick={() => setViewMode('chart')} className={ viewMode === 'chart' ? 'is-active' : ''}>チャート</button>
       </header>
       {
         viewMode === 'calendar' && <Calendar dailySales2D={calendarTable} />

@@ -3,30 +3,18 @@ import { useRef, useEffect } from 'react';
 import { css } from '@emotion/css';
 import groupBy from 'just-group-by';
 
-import { HOURS, OPEN_HOURS } from '../modules/calendar';
-import { timelySalesList } from '../assets/json';
-import { DailySales } from '../model/DailySales';
-import { sum } from '../../packages/math';
-import { colorBy } from '../modules/calendar';
-
+import { HOURS, OPEN_HOURS } from '../../modules/calendar';
+import { timelySalesList } from '../../assets/json';
+import { DailySales } from '../../model/DailySales';
+import { sum } from '../../../packages/math';
+import { timelyColorBy } from '../../modules/calendar';
+import { color } from './constants';
+import SideBarCell from './SideBarCell';
+import TotalCell from './TotalCell';
 
 const style = css`
   width: 100%;
 `;
-
-const color = {
-  BLACK: '#333',
-  GRAY: '#cacaca',
-  LIGHT_GRAY: '#eee',
-  WHITE: '#fdfdfd',
-  FONT_WHITE: '#f0f0f0',
-  RED: '#F44336',
-  BLUE: '#2196F3',
-  GREEN: '#4CAF50',
-  ROW_HEIGHT: 60,
-  HEADER_ROW_HEIGHT: 72,
-  COL_WIDTH: 100
-}
 
 const scheduleStyle = css`
   p {
@@ -110,23 +98,6 @@ const scheduleStyle = css`
     filter: drop-shadow(0 1px 2px ${color.LIGHT_GRAY});
   }
 
-  .schedule-sidebar_row {
-    position: relative;
-    width: 100%;
-    height: ${color.HEADER_ROW_HEIGHT}px;
-    padding: 10px 20px;
-    background-color: ${color.WHITE};
-    border-bottom: solid 1px ${color.GRAY};
-    border-right: solid 1px ${color.GRAY};
-    filter: drop-shadow(0 1px 2px ${color.GRAY});
-    box-sizing: border-box;
-  }
-
-  .schedule-sidebar_row__title {
-    font-size: 16px;
-    color: #010101;
-  }
-
   .schedule__view {
     position: relative;
     overflow-y: scroll;
@@ -154,21 +125,6 @@ const scheduleStyle = css`
       position: absolute;
       left: 200px;
       display: flex;
-      
-      .schedule-totals_col {
-        position: relative;
-        width: ${color.COL_WIDTH}px;
-        min-width: ${color.COL_WIDTH}px;
-        background: inherit;
-        border-right: solid 1px ${color.LIGHT_GRAY};
-        border-bottom:  solid 1px ${color.LIGHT_GRAY};
-        height: ${color.HEADER_ROW_HEIGHT}px;
-        box-sizing: border-box;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
     }
   }
 
@@ -247,22 +203,7 @@ const TimelyCalendar: React.FC = () => {
         <div className="schedule__view">
           <div className="schedule-sidebar">
             {
-              dailySales2D.map(({ date, list },i) => {
-                const backgroundColor = colorBy(Number(sum(list.filter(item => item).map(item => Number(item?.sales)))) || 0);
-                const day = list.filter(item => item)[0]?.day;
-                const totalSales = sum(list.filter(item => item).map(item => Number(item?.sales)));
-                
-                return (
-                  <div
-                    className="schedule-sidebar_row"
-                    key={`sidebar-row-${i}`}
-                    style={{ background: backgroundColor }}
-                  >
-                    <p className="schedule-sidebar_row__title">{ date }: { day }</p>
-                    <p>売上:  <span className='bold'>{ totalSales.toLocaleString() }円</span></p>
-                  </div>
-                )
-              })
+              dailySales2D.map(({ date, list },i) => <SideBarCell key={`sidebar-row-${i}`}  groupedSales={{ date, list }} />)
             }
           </div>
           <div
@@ -276,10 +217,12 @@ const TimelyCalendar: React.FC = () => {
                   {
                     list.map((hourItem,j) => {
                       const sales = hourItem && Number(hourItem?.sales).toLocaleString();
+                      const background = timelyColorBy(Number(hourItem?.sales));
                       return (
                         <div
                           className="schedule-content__col"
                           key={`schedule-col-${i}-${j}`}
+                          style={{ background }}
                         >{sales && `${sales}円`}</div>
                       )
                     })
@@ -294,7 +237,11 @@ const TimelyCalendar: React.FC = () => {
           <div className='schedule-totals_row' ref={$scheduleTotalsRow}>
             {
               totalDailySales.map((total,i) => (
-                <div className='schedule-totals_col' key={`schedule-totals_col-${i}`}>{ total }</div>
+                <TotalCell
+                  totalPerHour={total}
+                  totalDailySales={totalDailySales}
+                  key={`schedule-totals_col-${i}`}
+                />
               ))
             }
           </div>
