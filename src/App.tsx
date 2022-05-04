@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { addDays, format } from 'date-fns';
 import { css } from '@emotion/css';
 
@@ -8,6 +8,7 @@ import { dailySalesList, covidList } from './assets/json';
 import { divideDate } from '../packages/date'
 import Calendar from './components/Calendar';
 import Chart from './components/Chart';
+import TimelyCalendar from './components/TimelyCalendar';
 
 const style = css`
   width: 1100px;
@@ -35,23 +36,21 @@ function App() {
   const [calendarTable, setCalendarTable] = useState<(DailySales | undefined)[][]>(weeks) 
   const initialDailySales = weeks.flat().filter(item => item);
 
-  const [viewMode, setViewMode] = useState<'calendar' | 'chart'>('calendar');
-  const handleCalendar = useCallback(() => {
-    setViewMode('calendar');
-  },[]);
-  const handleChart = useCallback(() => {
-    setViewMode('chart');
-  },[]);
+  const [viewMode, setViewMode] = useState<'calendar' | 'chart' | 'timely'>('timely');
   
 
   return (
     <div className={style}>
       <header>
-        <button type='button' onClick={handleCalendar}>カレンダー</button>
-        <button type='button' onClick={handleChart}>チャート</button>
+        <button type='button' onClick={() => setViewMode('calendar')}>カレンダー</button>
+        <button type='button' onClick={() => setViewMode('timely')}>カレンダー（時間別）</button>
+        <button type='button' onClick={() => setViewMode('chart')}>チャート</button>
       </header>
       {
         viewMode === 'calendar' && <Calendar dailySales2D={calendarTable} />
+      }
+      {
+        viewMode === 'timely' && <TimelyCalendar />
       }
       {
         viewMode === 'chart' && <Chart dailySales={initialDailySales} covidList={covidList} />

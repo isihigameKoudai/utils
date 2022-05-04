@@ -1,7 +1,7 @@
 import React, { memo, useState, useCallback, ChangeEvent } from 'react';
 import { css } from '@emotion/css';
 
-import { DAYS } from '../modules/calendar';
+import { DAYS, colorBy } from '../modules/calendar';
 import { DailySales, dailyKey } from '../model/DailySales';
 import TotalCell from './TotalCell';
 import TableCell from './TableCell';
@@ -9,21 +9,6 @@ import TableCell from './TableCell';
 type Props = {
   dailySales2D: (DailySales | undefined)[][]
 }
-
-const colorBy = (sales:number): string => {
-  if(50000 < sales) return '#B71C1C' ;
-  if(45000 < sales) return '#C62828';
-  if(40000 < sales) return '#D32F2F';
-  if(35000 < sales) return '#E53935';
-  if(30000 < sales) return '#F44336';
-  if(25000 < sales) return '#EF5350';
-  if(20000 < sales) return '#E57373';
-  if(15000 < sales) return '#EF9A9A';
-  if(10000 < sales) return '#FFCDD2';
-  if(5000 < sales) return '#FFEBEE';
-
-  return '#fff';
-};
 
 type Option = {
   value: keyof DailySales;
@@ -117,7 +102,6 @@ const Calendar: React.FC<Props> = memo(({ dailySales2D }) => {
   })
 
   const handleSelect = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value);
     setDailySalesType(e.target.value as keyof DailySales)
   },[])
   

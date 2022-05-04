@@ -91,8 +91,8 @@ export class DailySales {
   }
 
   get date() {
-    const { year, month, day } = divideDate(this.aggregationPeriod);
-    return { year, month, day };
+    const { year, month, day, hour = 0 } = divideDate(this.aggregationPeriod);
+    return { year, month, day, hour };
   }
 
   get toObj() {
