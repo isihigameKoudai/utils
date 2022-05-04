@@ -133,10 +133,29 @@ const scheduleStyle = css`
   }
 `;
 
+/**
+ * data sample image
+ * {
+ *  20210915: (3) [DailySales, DailySales, DailySales]
+ *  20210916: (4) [DailySales, DailySales, DailySales, DailySales]
+ *  20210917: (5) [DailySales, DailySales, DailySales, DailySales, DailySales]
+ *  20210918: (6) [DailySales, DailySales, DailySales, DailySales, DailySales, DailySales]
+ * ...
+ * }
+ */
 const groupedTimelySalesList = groupBy(timelySalesList, (item) => {
   return Number(`${item['date']['year']}${item['date']['month'].toString().padStart(2,'0')}${item['date']['day'].toString().padStart(2,'0')}`);
 });
 
+/**
+ * data sample image
+ * [
+ *  {date: '20210915', list: Array(24)},
+ *  {date: '20210916', list: Array(24)},
+ *  {date: '20210917', list: Array(24)}
+ * ...
+ * ]
+ */
 const dailySales2D = Object.keys(groupedTimelySalesList).map(key => ({
   date:key,
   list: groupedTimelySalesList[key],

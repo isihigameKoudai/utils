@@ -11,7 +11,7 @@ import Chart from './components/Calendar/Chart';
 import TimelyCalendar from './components/TimelyCalendar';
 
 const style = css`
-  width: 1100px;
+  width: 1280px;
   margin: 0 auto;
 
   .is-active {
