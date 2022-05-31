@@ -29,7 +29,6 @@ export const timelySalesList: DailySales[] = [...timely2021, ...timely2022].map(
 
 // 祝日データ
 export const HolidayList: Holiday[] = holiday.map((item) => new Holiday(item));
-console.log(HolidayList);
 
 // 県別感染者数（20200422 ~ 20220331）
 export const covidList: Covid[] = covidAll.itemList.map(

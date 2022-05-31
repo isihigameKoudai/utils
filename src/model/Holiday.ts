@@ -19,6 +19,22 @@ class Holiday {
     const [year, month, day] = this.holidayDate.split("/").map(Number);
     return { year, month, day };
   }
+
+  isHoliday({
+    year,
+    month,
+    day,
+  }: {
+    year: number;
+    month: number;
+    day: number;
+  }) {
+    return (
+      this.date.year === year &&
+      this.date.month === month &&
+      this.date.day === day
+    );
+  }
 }
 
 export default Holiday;
