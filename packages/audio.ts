@@ -55,6 +55,8 @@ class Audio {
    */
   stop() {
     this.audioSource.stop();
+    this.audioSource.disconnect();
+    this.audioSource.buffer = null;
     this.isPlaying = false;
   }
 }
