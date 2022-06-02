@@ -1,5 +1,7 @@
 /**
  * 音声データの再生、停止、一時停止、再開を行うクラス
+ * web audio api使用
+ * https://developer.mozilla.org/ja/docs/Web/API/Web_Audio_API
  */
 export default class Audio {
   context: AudioContext;
