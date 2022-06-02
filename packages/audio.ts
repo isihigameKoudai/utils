@@ -1,7 +1,7 @@
 /**
  * 音声データの再生、停止、一時停止、再開を行うクラス
  */
-class Audio {
+export default class Audio {
   context: AudioContext;
   audioSource: AudioBufferSourceNode;
   isPlaying: boolean;
@@ -60,5 +60,3 @@ class Audio {
     this.isPlaying = false;
   }
 }
-
-export default new Audio();
