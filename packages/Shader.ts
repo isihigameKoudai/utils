@@ -10,6 +10,11 @@ type Props = {
 /**
  * How to use
  *
+ * *****************************************************************************
+ * npm i three
+ * npm i -D @types/three
+ * *****************************************************************************
+ *
  * import Shader from "...";
  * import fragment from './glsl/fragment.frag?raw';
  * import vertex from './glsl/vertex.vert?raw';
