@@ -7,7 +7,6 @@
 import format from "date-fns/format";
 import ja from "date-fns/locale/ja";
 
-import Holiday from "./Holiday";
 import { divideDate } from "../../packages/date";
 
 const AGGREGATION_PERIOD = "集計期間" as const;
@@ -44,6 +43,16 @@ type Props = {
   [TOTAL_CASH_PAYMENT]: string;
   [TOTAL_NO_CASH_PAYMENT]: string;
   [DISCOUNT]: string;
+};
+
+export const unitObj = {
+  sales: "円",
+  numberOfAccounts: "件",
+  numberOfCustomers: "人",
+  averageAmount: "円",
+  numberOfProducts: "個",
+  totalNoCashPayment: "円",
+  totalCashPayment: "円",
 };
 
 export class DailySales {
@@ -94,6 +103,10 @@ export class DailySales {
   get date() {
     const { year, month, day, hour = 0 } = divideDate(this.aggregationPeriod);
     return { year, month, day, hour };
+  }
+
+  unitBy(salesType: keyof typeof unitObj) {
+    return unitObj[salesType];
   }
 
   get toObj() {

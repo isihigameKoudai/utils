@@ -2,12 +2,12 @@ import React, { memo } from 'react';
 import { Tooltip } from '@mui/material';
 import { css } from '@emotion/css';
 
-import { DailySales, dailyKey } from '../../model/DailySales';
+import { DailySales, dailyKey, unitObj } from '../../model/DailySales';
 import { divideDate } from '../../../packages/date'
 
 type Props = {
   dailySales: DailySales
-  selectedDaily?: keyof DailySales
+  selectedDaily?: keyof typeof unitObj
 }
 
 const style = css`
@@ -38,6 +38,7 @@ const TableCell: React.FC<Props> = memo(({ dailySales, selectedDaily = 'sales' }
       <div className={style}>
         <p className='date'>{ month }/{ day }</p>
         <span>{ dailySales[selectedDaily] }</span>
+        <span>{ dailySales.unitBy(selectedDaily)}</span>
       </div>
     </Tooltip>
   )
