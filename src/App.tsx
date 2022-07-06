@@ -1,10 +1,12 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import './App.css'
 
-import { fetchAudios, fetchFiles, fetchImages, fetchMovies } from '../packages/fetchFiles'
+import { fetchAudios, fetchAudio, fetchFiles, fetchImages, fetchMovies } from '../packages/fetchFiles'
+import Audio from '../packages/audio';
 
 function App() {
   const [count, setCount] = useState(0)
+  const [audioInstance, _] = useState<Audio>(new Audio())
 
   const onOpenFile = useCallback(async () => {
     const files = await fetchFiles()
@@ -26,6 +28,27 @@ function App() {
     console.log('open movies', files);
   },[]);
 
+  const onOpenAudio = useCallback(async () => {
+    const { files } = await fetchAudio()
+    const buffer = await files[0].arrayBuffer()
+    audioInstance.setAudio(buffer);
+  },[]);
+  
+  const onPlayAudio = useCallback(() => {
+    audioInstance.play();
+  },[]);
+
+  const onStopAudio = useCallback(() => {
+    audioInstance.stop();
+  },[]);
+
+  const onToggleAudio = useCallback(() => {
+    audioInstance.pause()
+    console.log(audioInstance.isPlaying);
+  },[]);
+
+  const isPlaying = useMemo(() => audioInstance.isPlaying,[audioInstance.isPlaying]);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -42,6 +65,22 @@ function App() {
           </button>
           <button type="button" onClick={onOpenAudios}>
             audio files
+          </button>
+        </p>
+        <p>
+          <button type='button' onClick={onOpenAudio}>
+            audio file
+          </button>
+          <button type='button' onClick={onPlayAudio}>
+            play
+          </button>
+          <button type='button' onClick={onStopAudio}>
+            stop
+          </button>
+          <button type='button' onClick={onToggleAudio}>
+            {
+              isPlaying ? 'pause' : 'play'
+            }
           </button>
         </p>
         <p>
