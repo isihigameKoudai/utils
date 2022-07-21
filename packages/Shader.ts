@@ -44,6 +44,7 @@ class Shader {
       vertexShader: props.vertexShader,
       fragmentShader: props.fragmentShader,
     });
+    // DOMのマウント
     props.$target.appendChild(this.renderer.domElement);
     this.geometry = new THREE.PlaneBufferGeometry(2.0, 2.0);
     this.camera = new THREE.PerspectiveCamera(
