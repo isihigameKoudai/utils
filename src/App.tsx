@@ -2,10 +2,9 @@ import { useState, useCallback, useEffect, useMemo } from 'react'
 import './App.css'
 
 import { fetchAudios, fetchAudio, fetchFiles, fetchImages, fetchMovies } from '../packages/fetchFiles'
-import Audio from '../packages/audio';
+import Audio from '../packages/Audio';
 
 function App() {
-  const [count, setCount] = useState(0)
   const [audioInstance, _] = useState<Audio>(new Audio())
 
   const onOpenFile = useCallback(async () => {
