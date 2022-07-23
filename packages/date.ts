@@ -7,7 +7,7 @@ type DivideDate = (date: string) => {
 
 /**
  *
- * @param date yyyyMMdd
+ * @param date yyyyMMddHH
  * @returns object of year,month,day
  */
 export const divideDate: DivideDate = (date) => {
