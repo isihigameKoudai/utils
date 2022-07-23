@@ -1,3 +1,6 @@
+export const createAudioContext = (): AudioContext =>
+  new AudioContext() ||
+  new (window.AudioContext || window.webkitAudioContext)();
 /**
  * 音声データの再生、停止、一時停止、再開を行うクラス
  * web audio api使用
@@ -9,9 +12,7 @@ export default class Audio {
   isPlaying: boolean;
 
   constructor() {
-    this._context =
-      new AudioContext() ||
-      new (window.AudioContext || window.webkitAudioContext)();
+    this._context = createAudioContext();
     this._audioSource = this._context.createBufferSource();
     this.isPlaying = false;
   }
@@ -29,6 +30,7 @@ export default class Audio {
    * @param arrayBuffer
    */
   async setAudio(arrayBuffer: ArrayBuffer) {
+    this._context = createAudioContext();
     this._audioSource = this._context.createBufferSource();
     const audioBuffer = await this._context.decodeAudioData(arrayBuffer);
     this._audioSource.buffer = audioBuffer;
