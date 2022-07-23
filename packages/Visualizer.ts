@@ -26,15 +26,15 @@ type RenderOptions = {
  * 取り込んだ音声を任意のビジュアルに変換・描画の機能を司る
  */
 export default class Visualizer extends Audio {
-  analyzerNode: AnalyserNode;
+  analyserNode: AnalyserNode;
   times: Uint8Array;
   $canvas: HTMLCanvasElement;
   $gl: WebGL2RenderingContext | null;
 
   constructor() {
     super();
-    this.analyzerNode = this._context.createAnalyser();
-    this.times = new Uint8Array(this.analyzerNode.frequencyBinCount);
+    this.analyserNode = this._context.createAnalyser();
+    this.times = new Uint8Array(this.analyserNode.frequencyBinCount);
     window.requestAnimationFrame = requestAnimationFrame;
   }
 
@@ -44,8 +44,8 @@ export default class Visualizer extends Audio {
    */
   async setAudio(arrayBuffer: ArrayBuffer) {
     await super.setAudio(arrayBuffer);
-    this.audioSource.connect(this.analyzerNode);
-    this.analyzerNode.connect(this.context.destination);
+    this.audioSource.connect(this.analyserNode);
+    this.analyserNode.connect(this.context.destination);
   }
 
   /**
@@ -72,9 +72,9 @@ export default class Visualizer extends Audio {
     $canvas.height = canvasHeight;
     this.$gl = $canvas.getContext("webgl2");
     this.$canvas = $canvas;
-    this.analyzerNode.smoothingTimeConstant = smoothingTimeConstant;
-    this.analyzerNode.fftSize = fftSize;
-    this.analyzerNode.getByteTimeDomainData(this.times);
+    this.analyserNode.smoothingTimeConstant = smoothingTimeConstant;
+    this.analyserNode.fftSize = fftSize;
+    this.analyserNode.getByteTimeDomainData(this.times);
 
     this.render(renderCallBack);
   }
