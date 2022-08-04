@@ -2,9 +2,11 @@ import React, { memo } from 'react';
 import { css } from '@emotion/css';
 
 import { sum, average, deviation } from '../../packages/math';
+import { DailySales, dailyKey, unitObj } from '../model/DailySales';
 
 type Props = {
   list: number[];
+  selectedDaily: keyof typeof unitObj
 }
 
 const style = css`
@@ -18,12 +20,13 @@ const style = css`
   }
 `;
 
-const CalendarCell: React.FC<Props> = memo(({ list }) => {
+const CalendarCell: React.FC<Props> = memo(({ list, selectedDaily }) => {
+  console.log(selectedDaily, unitObj[selectedDaily]);
   return (
     <div className={style}>
-      <p>合計 <br /><span className='amount-label'>{ Math.round(sum(list)).toLocaleString() }</span>円</p>
-      <p>平均 <br /><span className='amount-label'>{ Math.round(average(list)).toLocaleString() }</span>円</p>
-      <p>標準偏差 { Math.round(deviation(list)).toLocaleString()}</p>
+      <p>合計 <br /><span className='amount-label'>{ Math.round(sum(list)).toLocaleString() }</span>{ unitObj[selectedDaily] }</p>
+      <p>平均 <br /><span className='amount-label'>{ Math.round(average(list)).toLocaleString() }</span>{ unitObj[selectedDaily] }</p>
+      <p>標準偏差 { Math.round(deviation(list)).toLocaleString()} { unitObj[selectedDaily] }</p>
     </div>
   )
 });

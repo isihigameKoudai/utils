@@ -137,7 +137,7 @@ const Calendar: React.FC<Props> = memo(({ dailySales2D }) => {
                   ))
                 }
                   <td key={`col-final`}>
-                    <TotalCell list={row.filter(item => item).map(item => Number(item?.sales || 0))} />
+                    <TotalCell list={row.filter(item => item).map(item => Number(item?.sales || 0))} selectedDaily='sales' />
                   </td>
                 </tr>
               })
@@ -150,12 +150,12 @@ const Calendar: React.FC<Props> = memo(({ dailySales2D }) => {
               {
                 totalByDay.map((cols,i) => (
                   <td key={`total-day-${i}`}>
-                    <TotalCell list={cols} />
+                    <TotalCell list={cols} selectedDaily={dailySalesType} />
                   </td>
                 ))
               }
               <td>
-                <TotalCell list={totalByDay.flat()} />
+                <TotalCell list={totalByDay.flat()} selectedDaily={dailySalesType} />
               </td>
             </tr>
           </tbody>

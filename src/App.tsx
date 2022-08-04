@@ -4,10 +4,9 @@ import { css } from '@emotion/css';
 
 import { DailySales } from './model/DailySales';
 import { DAYS, subDates } from './modules/calendar';
-import { dailySalesList, covidList } from './assets/json';
+import { dailySalesList } from './assets/json';
 import { divideDate } from '../packages/date'
 import Calendar from './components/Calendar/Calendar';
-import Chart from './components/Calendar/Chart';
 import TimelyCalendar from './components/TimelyCalendar';
 
 const style = css`
@@ -39,9 +38,7 @@ function App() {
     })
   })
   const [calendarTable, setCalendarTable] = useState<(DailySales | undefined)[][]>(weeks) 
-  const initialDailySales = weeks.flat().filter(item => item);
-
-  const [viewMode, setViewMode] = useState<'calendar' | 'chart' | 'timely'>('timely');
+  const [viewMode, setViewMode] = useState<'calendar' | 'timely'>('calendar');
   
 
   return (
@@ -49,16 +46,12 @@ function App() {
       <header>
         <button type='button' onClick={() => setViewMode('calendar')} className={ viewMode === 'calendar' ? 'is-active' : ''}>カレンダー（日別）</button>
         <button type='button' onClick={() => setViewMode('timely')} className={ viewMode === 'timely' ? 'is-active' : ''}>カレンダー（時間別）</button>
-        <button type='button' onClick={() => setViewMode('chart')} className={ viewMode === 'chart' ? 'is-active' : ''}>チャート</button>
       </header>
       {
         viewMode === 'calendar' && <Calendar dailySales2D={calendarTable} />
       }
       {
         viewMode === 'timely' && <TimelyCalendar />
-      }
-      {
-        viewMode === 'chart' && <Chart dailySales={initialDailySales} covidList={covidList} />
       }
     </div>
   )

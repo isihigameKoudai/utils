@@ -7,7 +7,7 @@ import { divideDate } from '../../../packages/date'
 
 type Props = {
   dailySales: DailySales
-  selectedDaily?: keyof typeof unitObj
+  selectedDaily: keyof typeof unitObj
 }
 
 const style = css`
