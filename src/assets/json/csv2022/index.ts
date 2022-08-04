@@ -4,5 +4,14 @@ import csv03 from "./03.json";
 import csv04 from "./04.json";
 import csv05 from "./05.json";
 import csv06 from "./06.json";
+import csv07 from "./07.json";
 
-export default [...csv01, ...csv02, ...csv03, ...csv04, ...csv05, ...csv06];
+export default [
+  ...csv01,
+  ...csv02,
+  ...csv03,
+  ...csv04,
+  ...csv05,
+  ...csv06,
+  ...csv07,
+];

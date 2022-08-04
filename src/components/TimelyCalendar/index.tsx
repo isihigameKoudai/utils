@@ -181,6 +181,7 @@ const totalDailySales = HOURS.map((hour) => {
 
 const TimelyCalendar: React.FC = () => {
   const $headerView = useRef<HTMLDivElement>(null);
+  const $scheduleView = useRef<HTMLDivElement>(null);
   const $scheduleContainer = useRef<HTMLDivElement>(null);
   const $scheduleTotalsRow = useRef<HTMLDivElement>(null);
 
@@ -201,6 +202,8 @@ const TimelyCalendar: React.FC = () => {
 
     $scheduleContainer.current!.scrollLeft = OPEN_HOURS * color.COL_WIDTH;
     $scheduleTotalsRow.current!.scrollLeft = OPEN_HOURS * color.COL_WIDTH;
+
+    $scheduleView.current?.scrollTo($scheduleContainer.current!.scrollLeft, $scheduleContainer.current!.getBoundingClientRect().height);
   },[])
 
   return (
@@ -219,7 +222,7 @@ const TimelyCalendar: React.FC = () => {
             }
           </div>
         </div>
-        <div className="schedule__view">
+        <div className="schedule__view" ref={$scheduleView}>
           <div className="schedule-sidebar">
             {
               dailySales2D.map(({ date, list },i) => <SideBarCell key={`sidebar-row-${i}`}  groupedSales={{ date, list }} />)

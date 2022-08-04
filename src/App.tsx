@@ -40,7 +40,6 @@ function App() {
   const [calendarTable, setCalendarTable] = useState<(DailySales | undefined)[][]>(weeks) 
   const [viewMode, setViewMode] = useState<'calendar' | 'timely'>('calendar');
   
-
   return (
     <div className={style}>
       <header>
