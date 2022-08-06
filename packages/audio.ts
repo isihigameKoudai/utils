@@ -38,8 +38,7 @@ export default class Audio {
   async setAudio(arrayBuffer: ArrayBuffer) {
     this._context = createAudioContext();
     this._audioSource = this._context.createBufferSource();
-    const audioBuffer = await this._context.decodeAudioData(arrayBuffer);
-    this._audioSource.buffer = audioBuffer;
+    this._audioSource.buffer = await this._context.decodeAudioData(arrayBuffer);
   }
 
   /**
