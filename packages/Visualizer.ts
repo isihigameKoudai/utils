@@ -5,6 +5,10 @@ declare global {
     mozRequestAnimationFrame: (callback: FrameRequestCallback) => number;
     webkitRequestAnimationFrame: (callback: FrameRequestCallback) => number;
     msRequestAnimationFrame: (callback: FrameRequestCallback) => number;
+    webkitCancelAnimationFrame: (handle: number) => void;
+    mozCancelAnimationFrame: (handle: number) => void;
+    msCancelAnimationFrame: (handle: number) => void;
+    oCancelAnimationFrame: (handle: number) => void;
   }
 }
 export const requestAnimationFrame =
@@ -12,6 +16,12 @@ export const requestAnimationFrame =
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
   window.msRequestAnimationFrame;
+export const cancelAnimationFrame =
+  window.cancelAnimationFrame ||
+  window.webkitCancelAnimationFrame ||
+  window.mozCancelAnimationFrame ||
+  window.msCancelAnimationFrame ||
+  window.oCancelAnimationFrame;
 
 type RenderCallBack = ($gl: WebGL2RenderingContext) => void;
 type RenderOptions = {
@@ -28,14 +38,19 @@ type RenderOptions = {
 export default class Visualizer extends Audio {
   analyserNode: AnalyserNode;
   times: Uint8Array;
-  $canvas: HTMLCanvasElement;
+  $canvas: HTMLCanvasElement | null;
   $gl: WebGL2RenderingContext | null;
+  requestAnimationFrameId: number;
 
   constructor() {
     super();
     this.analyserNode = this._context.createAnalyser();
     this.times = new Uint8Array(this.analyserNode.frequencyBinCount);
+    this.$canvas = null;
+    this.$gl = null;
+    this.requestAnimationFrameId = 0;
     window.requestAnimationFrame = requestAnimationFrame;
+    window.cancelAnimationFrame = cancelAnimationFrame;
   }
 
   /**
@@ -44,6 +59,7 @@ export default class Visualizer extends Audio {
    */
   async setAudio(arrayBuffer: ArrayBuffer) {
     await super.setAudio(arrayBuffer);
+    this.analyserNode = this.context.createAnalyser();
     this.audioSource.connect(this.analyserNode);
     this.analyserNode.connect(this.context.destination);
   }
@@ -68,6 +84,10 @@ export default class Visualizer extends Audio {
       fftSize = 2048,
     }: RenderOptions
   ) {
+    // 音声の再生
+    super.play();
+
+    // ビジュアライザーをcanvasに反映
     $canvas.width = canvasWidth;
     $canvas.height = canvasHeight;
     this.$gl = $canvas.getContext("webgl2");
@@ -75,8 +95,16 @@ export default class Visualizer extends Audio {
     this.analyserNode.smoothingTimeConstant = smoothingTimeConstant;
     this.analyserNode.fftSize = fftSize;
     this.analyserNode.getByteTimeDomainData(this.times);
-
+    // 再起レンダー処理
     this.render(renderCallBack);
+  }
+
+  /**
+   * 音声とビジュアライザーを停止させる
+   */
+  stop() {
+    super.stop();
+    window.cancelAnimationFrame(this.requestAnimationFrameId);
   }
 
   /**
@@ -85,6 +113,8 @@ export default class Visualizer extends Audio {
    */
   render(renderCallBack: RenderCallBack) {
     renderCallBack(this.$gl!);
-    window.requestAnimationFrame(this.render.bind(this));
+    this.requestAnimationFrameId = window.requestAnimationFrame(
+      this.render.bind(this, renderCallBack)
+    );
   }
 }
