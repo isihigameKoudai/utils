@@ -1,3 +1,9 @@
+declare global {
+  interface Window {
+    webkitAudioContext: typeof AudioContext;
+  }
+}
+
 export const createAudioContext = (): AudioContext =>
   new AudioContext() ||
   new (window.AudioContext || window.webkitAudioContext)();
