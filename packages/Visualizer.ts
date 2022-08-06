@@ -23,7 +23,11 @@ export const cancelAnimationFrame =
   window.msCancelAnimationFrame ||
   window.oCancelAnimationFrame;
 
-type RenderCallBack = ($gl: WebGL2RenderingContext) => void;
+type RenderCallBack = (props: {
+  $gl: WebGL2RenderingContext;
+  frequencyBinCount: number;
+  times: Uint8Array;
+}) => void;
 type RenderOptions = {
   $canvas: HTMLCanvasElement;
   canvasWidth?: number;
@@ -112,7 +116,11 @@ export default class Visualizer extends Audio {
    * @param {Function} renderCallBack webglに描画する内容。 シェーダーなど任意の描画内容を記述する。
    */
   render(renderCallBack: RenderCallBack) {
-    renderCallBack(this.$gl!);
+    renderCallBack({
+      $gl: this.$gl!,
+      frequencyBinCount: this.analyserNode.frequencyBinCount,
+      times: this.times,
+    });
     this.requestAnimationFrameId = window.requestAnimationFrame(
       this.render.bind(this, renderCallBack)
     );
