@@ -5,6 +5,10 @@ declare global {
     mozRequestAnimationFrame: (callback: FrameRequestCallback) => number;
     webkitRequestAnimationFrame: (callback: FrameRequestCallback) => number;
     msRequestAnimationFrame: (callback: FrameRequestCallback) => number;
+    webkitCancelAnimationFrame: (handle: number) => void;
+    mozCancelAnimationFrame: (handle: number) => void;
+    msCancelAnimationFrame: (handle: number) => void;
+    oCancelAnimationFrame: (handle: number) => void;
   }
 }
 export const requestAnimationFrame =
@@ -12,8 +16,18 @@ export const requestAnimationFrame =
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
   window.msRequestAnimationFrame;
+export const cancelAnimationFrame =
+  window.cancelAnimationFrame ||
+  window.webkitCancelAnimationFrame ||
+  window.mozCancelAnimationFrame ||
+  window.msCancelAnimationFrame ||
+  window.oCancelAnimationFrame;
 
-type RenderCallBack = ($gl: WebGL2RenderingContext) => void;
+type RenderCallBack = (props: {
+  $canvas: HTMLCanvasElement;
+  frequencyBinCount: number;
+  times: Uint8Array;
+}) => void;
 type RenderOptions = {
   $canvas: HTMLCanvasElement;
   canvasWidth?: number;
@@ -26,30 +40,23 @@ type RenderOptions = {
  * 取り込んだ音声を任意のビジュアルに変換・描画の機能を司る
  */
 export default class Visualizer extends Audio {
-  analyserNode: AnalyserNode;
+  analyzer: AnalyserNode | null;
   times: Uint8Array;
-  $canvas: HTMLCanvasElement;
-  $gl: WebGL2RenderingContext | null;
+  $canvas: HTMLCanvasElement | null;
+  requestAnimationFrameId: number;
 
   constructor() {
     super();
-    this.analyserNode = this._context.createAnalyser();
-    this.times = new Uint8Array(this.analyserNode.frequencyBinCount);
+    this.analyzer = null;
+    this.times = new Uint8Array();
+    this.$canvas = null;
+    this.requestAnimationFrameId = 0;
     window.requestAnimationFrame = requestAnimationFrame;
+    window.cancelAnimationFrame = cancelAnimationFrame;
   }
 
   /**
-   * マイクや音声ファイルのArrayBufferをセットする。
-   * @param arrayBuffer 汎用的な音声のバイト配列。
-   */
-  async setAudio(arrayBuffer: ArrayBuffer) {
-    await super.setAudio(arrayBuffer);
-    this.audioSource.connect(this.analyserNode);
-    this.analyserNode.connect(this.context.destination);
-  }
-
-  /**
-   * 描画の開始
+   * 音声再生と描画の開始
    * @param {Function} renderCallBack webglに描画する内容。 シェーダーなど任意の描画内容を記述する。
    * @param {Object} renderOptions 描画に関する設定
    * @param {Object} renderOptions.$canvas webglの描画先
@@ -68,13 +75,19 @@ export default class Visualizer extends Audio {
       fftSize = 2048,
     }: RenderOptions
   ) {
+    // 音声の再生
+    super.play();
+    // ビジュアライザーの初期化
+    this.analyzer = this.context.createAnalyser(); // AnalyserNodeを作成
+    this.times = new Uint8Array(this.analyzer.frequencyBinCount); // 時間領域の波形データを格納する配列を生成
+    this._audioSource.connect(this.analyzer);
+    this.analyzer.connect(this.context.destination); // AnalyserNodeをAudioDestinationNodeに接続
+    // ビジュアライザーをcanvasに反映
     $canvas.width = canvasWidth;
     $canvas.height = canvasHeight;
-    this.$gl = $canvas.getContext("webgl2");
     this.$canvas = $canvas;
-    this.analyserNode.smoothingTimeConstant = smoothingTimeConstant;
-    this.analyserNode.fftSize = fftSize;
-    this.analyserNode.getByteTimeDomainData(this.times);
+    this.analyzer.smoothingTimeConstant = smoothingTimeConstant;
+    this.analyzer.fftSize = fftSize;
 
     this.render(renderCallBack);
   }
@@ -84,7 +97,29 @@ export default class Visualizer extends Audio {
    * @param {Function} renderCallBack webglに描画する内容。 シェーダーなど任意の描画内容を記述する。
    */
   render(renderCallBack: RenderCallBack) {
-    renderCallBack(this.$gl!);
-    window.requestAnimationFrame(this.render.bind(this));
+    if (!this.analyzer) {
+      throw new Error("analyzer is null");
+    }
+
+    this.analyzer.getByteTimeDomainData(this.times);
+
+    renderCallBack({
+      $canvas: this.$canvas!,
+      frequencyBinCount: this.analyzer.frequencyBinCount,
+      times: this.times,
+    });
+
+    this.requestAnimationFrameId = window.requestAnimationFrame(
+      this.render.bind(this, renderCallBack)
+    );
+  }
+
+  /**
+   * 音声とビジュアライザーを停止させる
+   */
+  stop() {
+    super.stop();
+    this.analyzer?.disconnect();
+    window.cancelAnimationFrame(this.requestAnimationFrameId);
   }
 }

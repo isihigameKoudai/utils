@@ -1,11 +1,12 @@
-import { useState, useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useRef } from 'react'
 import './App.css'
 
 import { fetchAudios, fetchAudio, fetchFiles, fetchImages, fetchMovies } from '../packages/fetchFiles'
-import Audio from '../packages/Audio';
+import Visualizer from '../packages/Visualizer';
 
 function App() {
-  const [audioInstance, _] = useState<Audio>(new Audio())
+  const visualizer = new Visualizer();
+  const $canvas = useRef<HTMLCanvasElement>(null);
 
   const onOpenFile = useCallback(async () => {
     const files = await fetchFiles()
@@ -30,23 +31,40 @@ function App() {
   const onOpenAudio = useCallback(async () => {
     const { files } = await fetchAudio()
     const buffer = await files[0].arrayBuffer()
-    audioInstance.setAudio(buffer);
+    visualizer.setAudio(buffer);
   },[]);
   
   const onPlayAudio = useCallback(() => {
-    audioInstance.play();
+    visualizer.start(({ $canvas, times, frequencyBinCount}) => {
+      console.log(times.reduce((acc, cur) => acc + cur));
+      const $gl = $canvas.getContext('2d')
+      console.log($gl);
+      
+      const cw = window.innerWidth;
+    const ch = window.innerHeight;
+    const barWidth = cw / frequencyBinCount;
+
+    $gl!.fillStyle = "rgba(0, 0, 0, 1)";
+    $gl!.fillRect(0, 0, cw, ch);
+
+    // analyserNode.frequencyBinCountはanalyserNode.fftSize / 2の数値。よって今回は1024。
+    for (let i = 0; i < frequencyBinCount; ++i) {
+      const value = times[i]; // 波形データ 0 ~ 255までの数値が格納されている。
+      const percent = value / 255; // 255が最大値なので波形データの%が算出できる。
+      const height = ch * percent; // %に基づく高さを算出
+      const offset = ch - height; // y座標の描画開始位置を算出
+
+      $gl!.fillStyle = "#fff";
+      $gl!.fillRect(i * barWidth, offset, barWidth, 2);
+    }
+    },{
+      $canvas: $canvas.current!
+    });
   },[]);
 
   const onStopAudio = useCallback(() => {
-    audioInstance.stop();
+    visualizer.stop();
   },[]);
-
-  const onToggleAudio = useCallback(() => {
-    audioInstance.pause()
-    console.log(audioInstance.isPlaying);
-  },[]);
-
-  const isPlaying = useMemo(() => audioInstance.isPlaying,[audioInstance.isPlaying]);
 
   return (
     <div className="App">
@@ -68,42 +86,16 @@ function App() {
         </p>
         <p>
           <button type='button' onClick={onOpenAudio}>
-            audio file
+            audio file vis
           </button>
           <button type='button' onClick={onPlayAudio}>
-            play
+            play vis
           </button>
           <button type='button' onClick={onStopAudio}>
-            stop
-          </button>
-          <button type='button' onClick={onToggleAudio}>
-            {
-              isPlaying ? 'pause' : 'play'
-            }
+            stop vis
           </button>
         </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
+        <canvas id="canvas" ref={$canvas}></canvas>
       </header>
     </div>
   )
