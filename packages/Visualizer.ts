@@ -24,7 +24,7 @@ export const cancelAnimationFrame =
   window.oCancelAnimationFrame;
 
 type RenderCallBack = (props: {
-  $gl: WebGL2RenderingContext;
+  $canvas: HTMLCanvasElement;
   frequencyBinCount: number;
   times: Uint8Array;
 }) => void;
@@ -40,36 +40,23 @@ type RenderOptions = {
  * 取り込んだ音声を任意のビジュアルに変換・描画の機能を司る
  */
 export default class Visualizer extends Audio {
-  analyserNode: AnalyserNode;
+  analyzer: AnalyserNode | null;
   times: Uint8Array;
   $canvas: HTMLCanvasElement | null;
-  $gl: WebGL2RenderingContext | null;
   requestAnimationFrameId: number;
 
   constructor() {
     super();
-    this.analyserNode = this._context.createAnalyser();
-    this.times = new Uint8Array(this.analyserNode.frequencyBinCount);
+    this.analyzer = null;
+    this.times = new Uint8Array();
     this.$canvas = null;
-    this.$gl = null;
     this.requestAnimationFrameId = 0;
     window.requestAnimationFrame = requestAnimationFrame;
     window.cancelAnimationFrame = cancelAnimationFrame;
   }
 
   /**
-   * マイクや音声ファイルのArrayBufferをセットする。
-   * @param arrayBuffer 汎用的な音声のバイト配列。
-   */
-  async setAudio(arrayBuffer: ArrayBuffer) {
-    await super.setAudio(arrayBuffer);
-    this.analyserNode = this.context.createAnalyser();
-    this.audioSource.connect(this.analyserNode);
-    this.analyserNode.connect(this.context.destination);
-  }
-
-  /**
-   * 描画の開始
+   * 音声再生と描画の開始
    * @param {Function} renderCallBack webglに描画する内容。 シェーダーなど任意の描画内容を記述する。
    * @param {Object} renderOptions 描画に関する設定
    * @param {Object} renderOptions.$canvas webglの描画先
@@ -90,25 +77,19 @@ export default class Visualizer extends Audio {
   ) {
     // 音声の再生
     super.play();
-
+    // ビジュアライザーの初期化
+    this.analyzer = this.context.createAnalyser(); // AnalyserNodeを作成
+    this.times = new Uint8Array(this.analyzer.frequencyBinCount); // 時間領域の波形データを格納する配列を生成
+    this._audioSource.connect(this.analyzer);
+    this.analyzer.connect(this.context.destination); // AnalyserNodeをAudioDestinationNodeに接続
     // ビジュアライザーをcanvasに反映
     $canvas.width = canvasWidth;
     $canvas.height = canvasHeight;
-    this.$gl = $canvas.getContext("webgl2");
     this.$canvas = $canvas;
-    this.analyserNode.smoothingTimeConstant = smoothingTimeConstant;
-    this.analyserNode.fftSize = fftSize;
-    this.analyserNode.getByteTimeDomainData(this.times);
-    // 再起レンダー処理
-    this.render(renderCallBack);
-  }
+    this.analyzer.smoothingTimeConstant = smoothingTimeConstant;
+    this.analyzer.fftSize = fftSize;
 
-  /**
-   * 音声とビジュアライザーを停止させる
-   */
-  stop() {
-    super.stop();
-    window.cancelAnimationFrame(this.requestAnimationFrameId);
+    this.render(renderCallBack);
   }
 
   /**
@@ -116,13 +97,29 @@ export default class Visualizer extends Audio {
    * @param {Function} renderCallBack webglに描画する内容。 シェーダーなど任意の描画内容を記述する。
    */
   render(renderCallBack: RenderCallBack) {
+    if (!this.analyzer) {
+      throw new Error("analyzer is null");
+    }
+
+    this.analyzer.getByteTimeDomainData(this.times);
+
     renderCallBack({
-      $gl: this.$gl!,
-      frequencyBinCount: this.analyserNode.frequencyBinCount,
+      $canvas: this.$canvas!,
+      frequencyBinCount: this.analyzer.frequencyBinCount,
       times: this.times,
     });
+
     this.requestAnimationFrameId = window.requestAnimationFrame(
       this.render.bind(this, renderCallBack)
     );
+  }
+
+  /**
+   * 音声とビジュアライザーを停止させる
+   */
+  stop() {
+    super.stop();
+    this.analyzer?.disconnect();
+    window.cancelAnimationFrame(this.requestAnimationFrameId);
   }
 }
