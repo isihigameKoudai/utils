@@ -16,6 +16,7 @@ export const requestAnimationFrame =
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
   window.msRequestAnimationFrame;
+
 export const cancelAnimationFrame =
   window.cancelAnimationFrame ||
   window.webkitCancelAnimationFrame ||
@@ -28,6 +29,7 @@ type RenderCallBack = (props: {
   frequencyBinCount: number;
   times: Uint8Array;
 }) => void;
+
 type RenderOptions = {
   $canvas: HTMLCanvasElement;
   canvasWidth?: number;
@@ -80,7 +82,14 @@ export default class Visualizer extends Audio {
     // ビジュアライザーの初期化
     this.analyzer = this.context.createAnalyser(); // AnalyserNodeを作成
     this.times = new Uint8Array(this.analyzer.frequencyBinCount); // 時間領域の波形データを格納する配列を生成
-    this._audioSource.connect(this.analyzer);
+    if (this._audioSource) {
+      this._audioSource.connect(this.analyzer);
+    }
+
+    if (this._mediaSource) {
+      this._mediaSource.connect(this.analyzer);
+    }
+
     this.analyzer.connect(this.context.destination); // AnalyserNodeをAudioDestinationNodeに接続
     // ビジュアライザーをcanvasに反映
     $canvas.width = canvasWidth;
