@@ -14,12 +14,14 @@ export const createAudioContext = (): AudioContext =>
  */
 export default class Audio {
   _context: AudioContext;
-  _audioSource: AudioBufferSourceNode;
+  _audioSource: AudioBufferSourceNode | null;
+  _mediaSource: MediaStreamAudioSourceNode | null;
   isPlaying: boolean;
 
   constructor() {
     this._context = createAudioContext();
-    this._audioSource = this._context.createBufferSource();
+    this._audioSource = null;
+    this._mediaSource = null;
     this.isPlaying = false;
   }
 
@@ -27,8 +29,12 @@ export default class Audio {
     return this._context;
   }
 
-  get audioSource(): AudioBufferSourceNode {
+  get audioSource(): AudioBufferSourceNode | null {
     return this._audioSource;
+  }
+
+  get mediaSource(): MediaStreamAudioSourceNode | null {
+    return this._mediaSource;
   }
 
   /**
@@ -42,15 +48,36 @@ export default class Audio {
   }
 
   /**
+   * メディアデバイス（マイク等）の登録
+   * @param stream デバイス情報
+   */
+  async setDeviceAudio(constraints = { audio: true }) {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      this._context = createAudioContext();
+      const filter = this.context.createBiquadFilter();
+      filter.type = "highpass";
+      this._mediaSource = this._context.createMediaStreamSource(stream);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  /**
    * 再生（登録されている音声を再生）
    */
   play() {
+    if (this._mediaSource) {
+      return;
+    }
+
     if (this._audioSource) {
       this._audioSource.disconnect();
     }
 
-    this._audioSource.connect(this._context.destination);
-    this._audioSource.start(0);
+    this._audioSource?.connect(this._context.destination);
+    this._audioSource?.start(0);
+
     this.isPlaying = true;
   }
 
@@ -71,9 +98,34 @@ export default class Audio {
    * 停止
    */
   stop() {
+    if (this._audioSource) {
+      this.stopAudio();
+    } else {
+      this.stopDeviceAudio();
+    }
+  }
+
+  /**
+   * 音声データの停止
+   */
+  stopAudio() {
+    if (!this._audioSource) {
+      return;
+    }
+
     this._audioSource.stop();
     this._audioSource.disconnect();
     this._audioSource.buffer = null;
     this.isPlaying = false;
+  }
+
+  /**
+   * デバイスメディアデータの停止
+   */
+  stopDeviceAudio() {
+    if (!this._mediaSource) {
+      return;
+    }
+    this._mediaSource = null;
   }
 }
