@@ -58,7 +58,6 @@ export default class Audio {
       const filter = this.context.createBiquadFilter();
       filter.type = "highpass";
       this._mediaSource = this._context.createMediaStreamSource(stream);
-      console.log("activate device");
     } catch (e) {
       console.error(e);
     }
