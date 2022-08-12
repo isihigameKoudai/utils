@@ -55,8 +55,6 @@ export default class Audio {
     try {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       this._context = createAudioContext();
-      const filter = this.context.createBiquadFilter();
-      filter.type = "highpass";
       this._mediaSource = this._context.createMediaStreamSource(stream);
     } catch (e) {
       console.error(e);
@@ -77,7 +75,6 @@ export default class Audio {
 
     this._audioSource?.connect(this._context.destination);
     this._audioSource?.start(0);
-
     this.isPlaying = true;
   }
 
@@ -127,5 +124,6 @@ export default class Audio {
       return;
     }
     this._mediaSource = null;
+    this.isPlaying = false;
   }
 }
