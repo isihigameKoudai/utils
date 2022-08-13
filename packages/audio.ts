@@ -123,6 +123,7 @@ export default class Audio {
     if (!this._mediaSource) {
       return;
     }
+    this._mediaSource.disconnect();
     this._mediaSource = null;
     this.isPlaying = false;
   }
