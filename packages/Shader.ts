@@ -40,6 +40,14 @@ class Shader {
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer = renderer;
+    // 視点（カメラ）の初期化・生成
+    this.camera = new THREE.PerspectiveCamera(
+      0,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      0
+    );
+    // シェーダーの設定
     this.material = new THREE.ShaderMaterial({
       uniforms: material.uniforms,
       vertexShader,
@@ -47,14 +55,6 @@ class Shader {
     });
     this.geometry = new THREE.PlaneBufferGeometry(2.0, 2.0);
     this.mesh = new THREE.Mesh(this.geometry, this.material);
-    // カメラの初期化・生成
-    this.camera = new THREE.PerspectiveCamera(
-      0,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      0
-    );
-
     // 時間空間の生成
     this.clock = new THREE.Clock();
     // DOMのマウント
