@@ -1,10 +1,9 @@
-import { useCallback, useRef } from 'react'
-import './App.css'
+import React, { useCallback, useRef } from 'react';
 
-import { fetchAudios, fetchAudio, fetchFiles, fetchImages, fetchMovies } from '../packages/fetchFiles'
-import Visualizer from '../packages/Visualizer';
+import { fetchAudios, fetchAudio, fetchFiles, fetchImages, fetchMovies } from '../../packages/fetchFiles'
+import Visualizer from '../../packages/Visualizer';
 
-function App() {
+const Index: React.FC = () => {
   const visualizer = new Visualizer();
   const micVisualizer = new Visualizer();
   const $canvas = useRef<HTMLCanvasElement>(null);
@@ -101,46 +100,43 @@ function App() {
   },[]);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={onOpenFile}>
-            open files
-          </button>
-          <button type="button" onClick={onOpenImages}>
-            image files
-          </button>
-          <button type="button" onClick={onOpenMovies}>
-            video files
-          </button>
-          <button type="button" onClick={onOpenAudios}>
-            audio files
-          </button>
-        </p>
-        <p>
-          <button type='button' onClick={onOpenAudio}>
-            audio file vis
-          </button>
-          <button type='button' onClick={onPlayAudio}>
-            play vis
-          </button>
-          <button type='button' onClick={onStopAudio}>
-            stop vis
-          </button>
-        </p>
-        <p>
-          <button type='button' onClick={onActivateMic}>
-            activate mic
-          </button>
-          <button type='button' onClick={onStopDeviceAudio}>
-            stop mic
-          </button>
-        </p>
-        <canvas id="canvas" ref={$canvas}></canvas>
-      </header>
+    <div id="index-page">
+      <p>
+        <button type="button" onClick={onOpenFile}>
+          open files
+        </button>
+        <button type="button" onClick={onOpenImages}>
+          image files
+        </button>
+        <button type="button" onClick={onOpenMovies}>
+          video files
+        </button>
+        <button type="button" onClick={onOpenAudios}>
+          audio files
+        </button>
+      </p>
+      <p>
+        <button type='button' onClick={onOpenAudio}>
+          audio file vis
+        </button>
+        <button type='button' onClick={onPlayAudio}>
+          play vis
+        </button>
+        <button type='button' onClick={onStopAudio}>
+          stop vis
+        </button>
+      </p>
+      <p>
+        <button type='button' onClick={onActivateMic}>
+          activate mic
+        </button>
+        <button type='button' onClick={onStopDeviceAudio}>
+          stop mic
+        </button>
+      </p>
+      <canvas id="canvas" ref={$canvas}></canvas>
     </div>
   )
-}
+};
 
-export default App
+export default Index;

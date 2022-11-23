@@ -35,27 +35,32 @@ class Shader {
   camera: THREE.PerspectiveCamera;
   mesh: THREE.Mesh;
   clock: THREE.Clock;
-  constructor(props: Props) {
+  constructor({ $target, vertexShader, fragmentShader, material }: Props) {
     this.scene = new THREE.Scene();
-    this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.material = new THREE.ShaderMaterial({
-      uniforms: props.material.uniforms,
-      vertexShader: props.vertexShader,
-      fragmentShader: props.fragmentShader,
-    });
-    // DOMのマウント
-    props.$target.appendChild(this.renderer.domElement);
-    this.geometry = new THREE.PlaneBufferGeometry(2.0, 2.0);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer = renderer;
+    // 視点（カメラ）の初期化・生成
     this.camera = new THREE.PerspectiveCamera(
       0,
       window.innerWidth / window.innerHeight,
       0.1,
       0
     );
+    // シェーダーの設定
+    this.material = new THREE.ShaderMaterial({
+      uniforms: material.uniforms,
+      vertexShader,
+      fragmentShader,
+    });
+    this.geometry = new THREE.PlaneBufferGeometry(2.0, 2.0);
     this.mesh = new THREE.Mesh(this.geometry, this.material);
+    // 時間空間の生成
     this.clock = new THREE.Clock();
+    // DOMのマウント
+    $target.appendChild(this.renderer.domElement);
 
+    // レンダリング開始
     this.init();
     this.loop();
   }
@@ -63,7 +68,6 @@ class Shader {
   init() {
     this.scene.add(this.mesh);
     this.clock.start();
-
     window.addEventListener("resize", this.resize.bind(this));
   }
 
@@ -73,7 +77,7 @@ class Shader {
   }
 
   render() {
-    this.mesh.material.uniforms!.time.value = this.clock.getElapsedTime();
+    this.material.uniforms.time.value = this.clock.getElapsedTime();
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -81,7 +85,7 @@ class Shader {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.mesh.material.uniforms!.resolution.value.set(
+    this.material.uniforms.resolution.value.set(
       window.innerWidth,
       window.innerHeight
     );
