@@ -8,7 +8,8 @@ const Box = (props: MeshProps) => {
   const [clicked, setClicked] = useState<boolean>(false);
 
   useFrame((state, delta) => {
-    return (ref.current.rotation.x += 0.01)
+    ref.current.rotation.x += 0.01;
+    ref.current.rotation.y -= 0.01;
   });
 
   const handleClick = useCallback(() => {

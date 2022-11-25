@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 import Index from "./pages";
 import Shader from './pages/shader';
 import ThreeDimension from "./pages/ThreeDimension";
+import Shadows from './pages/ThreeDimension/Shadows';
 
 type IRoute = {
   title: string;
@@ -23,6 +24,10 @@ export const routeList: IRoute[] = [{
   title: '3D',
   path: '/three-dimension',
   element: <ThreeDimension />
+},{
+  title: '3D（影）',
+  path: '/three-dimension/shadows',
+  element: <Shadows />
 }]
 
 
