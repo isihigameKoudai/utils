@@ -20,6 +20,7 @@ const Content: React.FC = () => {
 
   return (
     <>
+      <color attach="background" args={[0x222222]} />
       <OrbitControls />
       <directionalLight ref={lightRef} position={[5,5,5]} intensity={1} shadowMapWidth={2048} shadowMapHeight={2048} castShadow />
 
