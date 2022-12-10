@@ -40,12 +40,9 @@ const ParticleScene: React.FC = () => {
         />
         <shaderMaterial
           transparent
-          depthTest
-          depthWrite
+          depthTest={false}
+          depthWrite={false}
           args={[shaderArgs]}
-          // uniforms={shaderArgs.uniforms}
-          // vertexShader={vertexShader}
-          // fragmentShader={fragmentShader}
         />
       </bufferGeometry>
     </points>
