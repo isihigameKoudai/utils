@@ -2,11 +2,13 @@ import React, { useCallback, useRef } from 'react';
 
 import { fetchAudios, fetchAudio, fetchFiles, fetchImages, fetchMovies } from '../../packages/fetchFiles'
 import Visualizer from '../../packages/Visualizer';
+import Speech from '../../packages/Speech';
 
 const Index: React.FC = () => {
   const visualizer = new Visualizer();
   const micVisualizer = new Visualizer();
   const $canvas = useRef<HTMLCanvasElement>(null);
+  const speech = new Speech();
 
   const onOpenFile = useCallback(async () => {
     const files = await fetchFiles()
@@ -99,6 +101,17 @@ const Index: React.FC = () => {
     micVisualizer.stopDeviceAudio()
   },[]);
 
+  const onStartSpeech = useCallback(() => {
+    speech.setOnResult((e) => {
+      console.log(e.results[0][0]?.transcript);
+    });
+    speech.start();
+  },[]);
+
+  const onStopSpeech = useCallback(() => {
+    speech.stop();
+  },[]);
+
   return (
     <div id="index-page">
       <p>
@@ -132,6 +145,14 @@ const Index: React.FC = () => {
         </button>
         <button type='button' onClick={onStopDeviceAudio}>
           stop mic
+        </button>
+      </p>
+      <p>
+        <button type='button' onClick={onStartSpeech}>
+          speech start
+        </button>
+        <button type='button' onClick={onStopSpeech}>
+          speech end
         </button>
       </p>
       <canvas id="canvas" ref={$canvas}></canvas>
