@@ -3,13 +3,14 @@ import * as THREE from 'three';
 
 import ShaderCanvas from '../../../../packages/ShaderCanvas';
 import vertex from '../../../../packages/glsl/vertex.vert?raw';
-import roundRing from '../../../../packages/glsl/roundRing.frag?raw';
+// import roundRing from '../../../../packages/glsl/roundRing.frag?raw';
+import fragColor from '../../../../packages/glsl/fragColor.frag?raw';
 
 const ShaderPage: React.FC = () => {
   
   return <div id="3D" style={{
     width: '100%',
-    height: '100vh'
+    height: '100svh'
   }}>
     <ShaderCanvas
       uniforms={{
@@ -21,7 +22,7 @@ const ShaderPage: React.FC = () => {
         }
       }}
       vertexShader={vertex}
-      fragmentShader={roundRing}
+      fragmentShader={fragColor}
     />
   </div>;
 }
