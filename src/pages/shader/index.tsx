@@ -4,12 +4,10 @@ import Shader from '../../../packages/Shader';
 
 import * as THREE from 'three';
 import vertex from '../../../packages/glsl/vertex.vert?raw';
-// import roundRing from '../../../packages/glsl/roundRing.frag?raw';
-import fragColor from '../../../packages/glsl/fragColor.frag?raw';
+import roundRing from '../../../packages/glsl/roundRing.frag?raw';
 
 const ShaderPage: React.FC = () => {
   const $shader = useRef<HTMLDivElement>(null);
-  
   useEffect(() => {
     if(!$shader || $shader === null) return;
 
@@ -26,7 +24,7 @@ const ShaderPage: React.FC = () => {
         },
       },
       vertexShader: vertex,
-      fragmentShader: fragColor
+      fragmentShader: roundRing
     });
   },[]);
   

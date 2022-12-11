@@ -9,7 +9,6 @@ type Props = {
 };
 
 const Scene: React.FC<Props> = ({ uniforms, vertexShader, fragmentShader }) => {
-  // TODO: リングに位置がpages/shader/indexと異なるので直す
   const shaderMaterialArgs = useMemo(() =>(
     new THREE.ShaderMaterial({
       uniforms,
@@ -38,6 +37,7 @@ const ShaderCanvas: React.FC<Props> = (props) => {
   return (
     <Canvas
       shadows
+      dpr={[1,1]}
     >
       <Scene {...props} />
     </Canvas>
