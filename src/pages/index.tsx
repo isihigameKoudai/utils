@@ -69,7 +69,7 @@ const Index: React.FC = () => {
   },[]);
 
   const onActivateMic = useCallback(async () => {
-    await micVisualizer.setDeviceAudio();
+    await micVisualizer.setDeviceAudio({ audio: true });
     micVisualizer.start(({ $canvas, times, frequencyBinCount}) => {
       console.log(times.reduce((acc, cur) => acc + cur));
       const $gl = $canvas.getContext('2d')

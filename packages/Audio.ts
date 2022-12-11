@@ -51,7 +51,7 @@ export default class Audio {
    * メディアデバイス（マイク等）の登録
    * @param stream デバイス情報
    */
-  async setDeviceAudio(constraints = { audio: true }) {
+  async setDeviceAudio(constraints: MediaStreamConstraints) {
     try {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       this._context = createAudioContext();
