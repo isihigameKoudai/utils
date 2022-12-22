@@ -27,8 +27,9 @@ export const cancelAnimationFrame =
 export type RenderCallBack = (props: {
   $canvas: HTMLCanvasElement;
   frequencyBinCount: number;
+  timeDomainArray: Float32Array;
+  spectrumRawArray: Float32Array;
   times: Uint8Array;
-  analyzer: AnalyserNode;
 }) => void;
 
 type RenderOptions = {
@@ -45,6 +46,8 @@ type RenderOptions = {
 export default class Visualizer extends Audio {
   analyzer: AnalyserNode | null;
   times: Uint8Array;
+  timeDomainArray: Float32Array;
+  spectrumRawArray: Float32Array;
   $canvas: HTMLCanvasElement | null;
   requestAnimationFrameId: number;
 
@@ -52,6 +55,8 @@ export default class Visualizer extends Audio {
     super();
     this.analyzer = null;
     this.times = new Uint8Array();
+    this.timeDomainArray = new Float32Array();
+    this.spectrumRawArray = new Float32Array();
     this.$canvas = null;
     this.requestAnimationFrameId = 0;
     window.requestAnimationFrame = requestAnimationFrame;
@@ -82,7 +87,11 @@ export default class Visualizer extends Audio {
     super.play();
     // ビジュアライザーの初期化
     this.analyzer = this.context.createAnalyser(); // AnalyserNodeを作成
+    this.analyzer.smoothingTimeConstant = smoothingTimeConstant;
+    this.analyzer.fftSize = fftSize;
     this.times = new Uint8Array(this.analyzer.frequencyBinCount); // 時間領域の波形データを格納する配列を生成
+    this.timeDomainArray = new Float32Array(this.analyzer.fftSize); // 波形表示用データ
+    this.spectrumRawArray = new Float32Array(this.analyzer.frequencyBinCount); // スペクトル波形用データ
 
     if (this._audioSource) {
       this._audioSource.connect(this.analyzer);
@@ -96,8 +105,6 @@ export default class Visualizer extends Audio {
     $canvas.width = canvasWidth;
     $canvas.height = canvasHeight;
     this.$canvas = $canvas;
-    this.analyzer.smoothingTimeConstant = smoothingTimeConstant;
-    this.analyzer.fftSize = fftSize;
 
     this.render(renderCallBack);
   }
@@ -111,13 +118,17 @@ export default class Visualizer extends Audio {
       throw new Error("analyzer is null");
     }
 
+    // その時点での波形データを元にした配列を取得
     this.analyzer.getByteTimeDomainData(this.times);
+    this.analyzer.getFloatTimeDomainData(this.timeDomainArray);
+    this.analyzer.getFloatFrequencyData(this.spectrumRawArray);
 
     renderCallBack({
       $canvas: this.$canvas!,
       frequencyBinCount: this.analyzer.frequencyBinCount,
       times: this.times,
-      analyzer: this.analyzer,
+      timeDomainArray: this.timeDomainArray,
+      spectrumRawArray: this.spectrumRawArray,
     });
 
     this.requestAnimationFrameId = window.requestAnimationFrame(
