@@ -20,6 +20,7 @@ const Scene: React.FC<Props> = ({ uniforms, vertexShader, fragmentShader }) => {
   
   useFrame(({ clock }) => {
     shaderMaterialArgs.uniforms.time = { value: clock.getElapsedTime()}
+    shaderMaterialArgs.uniforms.resolution.value.set(window.innerWidth,window.innerHeight)
   });
   
   return (
@@ -38,6 +39,10 @@ const ShaderCanvas: React.FC<Props> = (props) => {
     <Canvas
       shadows
       dpr={[1,1]}
+      style={{
+        width: '100%',
+        height: 'auto'
+      }}
     >
       <Scene {...props} />
     </Canvas>
