@@ -24,10 +24,11 @@ export const cancelAnimationFrame =
   window.msCancelAnimationFrame ||
   window.oCancelAnimationFrame;
 
-type RenderCallBack = (props: {
+export type RenderCallBack = (props: {
   $canvas: HTMLCanvasElement;
   frequencyBinCount: number;
   times: Uint8Array;
+  analyzer: AnalyserNode;
 }) => void;
 
 type RenderOptions = {
@@ -82,6 +83,7 @@ export default class Visualizer extends Audio {
     // ビジュアライザーの初期化
     this.analyzer = this.context.createAnalyser(); // AnalyserNodeを作成
     this.times = new Uint8Array(this.analyzer.frequencyBinCount); // 時間領域の波形データを格納する配列を生成
+
     if (this._audioSource) {
       this._audioSource.connect(this.analyzer);
     }
@@ -90,7 +92,6 @@ export default class Visualizer extends Audio {
       this._mediaSource.connect(this.analyzer);
     }
 
-    this.analyzer.connect(this.context.destination); // AnalyserNodeをAudioDestinationNodeに接続
     // ビジュアライザーをcanvasに反映
     $canvas.width = canvasWidth;
     $canvas.height = canvasHeight;
@@ -116,6 +117,7 @@ export default class Visualizer extends Audio {
       $canvas: this.$canvas!,
       frequencyBinCount: this.analyzer.frequencyBinCount,
       times: this.times,
+      analyzer: this.analyzer,
     });
 
     this.requestAnimationFrameId = window.requestAnimationFrame(
