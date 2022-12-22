@@ -58,6 +58,7 @@ export default class Audio {
       this._mediaSource = this._context.createMediaStreamSource(stream);
     } catch (e) {
       console.error(e);
+      throw e;
     }
   }
 
