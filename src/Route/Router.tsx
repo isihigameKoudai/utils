@@ -12,7 +12,7 @@ export const NavigationHeader: React.FC = () => {
       <button style={{
         position: 'fixed',
         top: 10,
-        left: 10
+        right: 10
       }} onClick={() => setIsOpen(true)}>Menu</button>
       {
         isOpen && (

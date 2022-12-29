@@ -14,9 +14,16 @@ const Menu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         right: 0,
         zIndex: 0,
         display: 'grid',
-        gridTemplateColumns: '320px 1fr'
+        gridTemplateColumns: '1fr 320px'
       }}
     >
+      <div
+        onClick={onClose}
+        style={{
+          background: 'rgba(250, 250, 250, 0.3)',
+          backdropFilter: 'blur(4px)'
+        }}
+      />
       <nav style={{
         background: '#222222',
         margin: 0,
@@ -40,13 +47,6 @@ const Menu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         }
         </ul>
       </nav>
-      <div
-        onClick={onClose}
-        style={{
-          background: 'rgba(250, 250, 250, 0.3)',
-          backdropFilter: 'blur(4px)'
-        }}
-      />
     </div>
   )
 }
