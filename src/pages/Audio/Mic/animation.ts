@@ -1,28 +1,28 @@
 type Props = {
   $canvas: HTMLCanvasElement;
   frequencyBinCount: number;
-  times: Uint8Array;
+  times: Uint8Array | Float32Array;
 };
 
 export const basicParticle = ({ $canvas, frequencyBinCount, times }: Props) => {
   const $gl = $canvas.getContext("2d");
-  const cw = window.innerWidth;
-  const ch = window.innerHeight;
-  const barWidth = cw / frequencyBinCount;
+  const barWidth = window.innerWidth / frequencyBinCount;
 
+  //  1フレームごとにリセット
   $gl!.fillStyle = "rgba(0, 0, 0, 1)";
-  $gl!.fillRect(0, 0, cw, ch);
+  $gl!.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
   // analyserNode.frequencyBinCountはanalyserNode.fftSize / 2の数値。よって今回は1024。
-  for (let i = 0; i < frequencyBinCount; ++i) {
-    const value = times[i]; // 波形データ 0 ~ 255までの数値が格納されている。
-    const percent = value / 255; // 255が最大値なので波形データの%が算出できる。
-    const height = ch * percent; // %に基づく高さを算出
-    const offset = ch - height; // y座標の描画開始位置を算出
+  times.forEach((time, i) => {
+    const percent = time / 255; // 255が最大値なので波形データの%が算出できる。
+    const height = window.innerHeight * percent; // %に基づく高さを算出
+    const offset = window.innerHeight - height; // y座標の描画開始位置を算出
 
-    $gl!.fillStyle = "#fff";
+    const r = time;
+    // 対象のドットを描写
+    $gl!.fillStyle = `rgb(${r}, ${r}, ${r})`;
     $gl!.fillRect(i * barWidth, offset, barWidth, 2);
-  }
+  });
 };
 
 const renderLineVertex = `#version 300 es
@@ -139,14 +139,14 @@ const injectWaveArray = ({
   );
   $gl?.useProgram(program);
   const uniformKeys = Object.keys(uniforms);
-  const uniformLocs = getUniformLocs($gl, program, [...uniformKeys]);
-
+  const uniformLocs = getUniformLocs($gl, program, [...uniformKeys, "u_color"]);
+  // TODO: vec2やvec3などのプリミティブではない値だった場合、自動で出し分けるようにする
   uniformKeys.forEach((uniformKey) => {
+    console.log(typeof uniforms[uniformKey]);
     $gl.uniform1f(uniformLocs.get(uniformKey), uniforms[uniformKey]);
   });
-
   $gl.uniform3f(uniformLocs.get("u_color"), color.r, color.g, color.b);
-  $gl.bindBuffer($gl.ARRAY_BUFFER, vbo);
+
   $gl.enableVertexAttribArray(0);
   $gl.vertexAttribPointer(0, 1, $gl.FLOAT, false, 0, 0);
   $gl.drawArrays($gl.LINE_STRIP, 0, waveArray.length);
@@ -158,7 +158,6 @@ export const lineAudio = ({
   timeDomainArray,
   spectrumArray,
 }: LineAUdioProps) => {
-  // const $gl = $canvas.getContext("2d");
   const $gl = $canvas.getContext("webgl2");
   if (!$gl) return;
 
@@ -169,8 +168,8 @@ export const lineAudio = ({
     $gl,
     color: {
       r: 1.0,
-      g: 0.4,
-      b: 0.5,
+      g: 0.0,
+      b: 0.7,
     },
     uniforms: {
       u_length: timeDomainArray.length,
