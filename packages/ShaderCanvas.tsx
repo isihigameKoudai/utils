@@ -41,7 +41,7 @@ const ShaderCanvas: React.FC<Props> = (props) => {
       dpr={[1,1]}
       style={{
         width: '100%',
-        height: 'auto'
+        height: '100%'
       }}
     >
       <Scene {...props} />
