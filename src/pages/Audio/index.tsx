@@ -7,7 +7,10 @@ const AudioPage: React.FC = () => {
   const $canvas = useRef<HTMLCanvasElement>(null);
   const visualizer = new Visualizer();
 
-  const onPlayAudio = useCallback(() => {
+  const onPlayAudio = useCallback(async () => {
+    const { files } = await fetchAudio()
+    const buffer = await files[0].arrayBuffer()
+    visualizer.setAudio(buffer);
     visualizer.start(({ $canvas, times, frequencyBinCount}) => {
       basicParticle({ $canvas, times, frequencyBinCount });
     },{
@@ -15,10 +18,8 @@ const AudioPage: React.FC = () => {
     });
   },[]);
 
-  const onOpenAudio = useCallback(async () => {
-    const { files } = await fetchAudio()
-    const buffer = await files[0].arrayBuffer()
-    visualizer.setAudio(buffer);
+  const onPauseAudio = useCallback(() => {
+    visualizer.pause();
   },[]);
 
   const onStopAudio = useCallback(() => {
@@ -28,11 +29,11 @@ const AudioPage: React.FC = () => {
   return (
     <div className="audio-page">
       <p>
-        <button type='button' onClick={onOpenAudio}>
-          audio file vis
-        </button>
         <button type='button' onClick={onPlayAudio}>
           play vis
+        </button>
+        <button type='button' onClick={onPauseAudio}>
+          pause vis
         </button>
         <button type='button' onClick={onStopAudio}>
           stop vis
