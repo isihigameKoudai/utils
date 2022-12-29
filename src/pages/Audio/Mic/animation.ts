@@ -51,7 +51,7 @@ void main(void) {
 }
 `;
 
-type LineAUdioProps = {
+type LineAudioProps = {
   $canvas: HTMLCanvasElement;
   analyzer: AnalyserNode;
   timeDomainArray: Float32Array;
@@ -142,7 +142,6 @@ const injectWaveArray = ({
   const uniformLocs = getUniformLocs($gl, program, [...uniformKeys, "u_color"]);
   // TODO: vec2やvec3などのプリミティブではない値だった場合、自動で出し分けるようにする
   uniformKeys.forEach((uniformKey) => {
-    console.log(typeof uniforms[uniformKey]);
     $gl.uniform1f(uniformLocs.get(uniformKey), uniforms[uniformKey]);
   });
   $gl.uniform3f(uniformLocs.get("u_color"), color.r, color.g, color.b);
@@ -157,7 +156,7 @@ export const lineAudio = ({
   analyzer,
   timeDomainArray,
   spectrumArray,
-}: LineAUdioProps) => {
+}: LineAudioProps) => {
   const $gl = $canvas.getContext("webgl2");
   if (!$gl) return;
 
