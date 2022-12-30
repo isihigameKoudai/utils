@@ -30,7 +30,7 @@ const Menu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         padding: '64px 24px',
         overflow: 'scroll-y'
       }}>
-        <ul style={{ margin: 0 }}>
+        <ul style={{ margin: 0, padding: 0 }}>
         {
           routeList.map((item, i) => (
             <li style={{
@@ -41,7 +41,7 @@ const Menu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
               <Link style={{
                 textDecoration: 'none',
                 color: '#fefefe'
-              }} to={item.path}>{item.title}</Link>
+              }} to={item.path}>{ [...new Array((item.path.match(new RegExp('/', 'g')))?.length)].map(() => '- ').join(' ') }{ item.title }</Link>
             </li>
           ))
         }
