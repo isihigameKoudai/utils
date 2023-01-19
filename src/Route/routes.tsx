@@ -7,11 +7,13 @@ import ParticlePage from '../pages/ThreeDimension/Particle';
 import AudioPage from "../pages/Audio";
 import MicPage from "../pages/Audio/Mic";
 import SpeechPage from "../pages/Audio/Speech";
+import FivePointCirclePage from "../pages/Examples/FivePointCircle";
+import NormalCirclePage from "../pages/Examples/NormalCircle";
 
 export type IRoute = {
   title: string;
   path: string;
-  element: JSX.Element;
+  element?: JSX.Element;
 };
 
 export const routeList: IRoute[] = [
@@ -59,5 +61,19 @@ export const routeList: IRoute[] = [
     title: "3D（パーティクル）",
     path: "/three-dimension/particle",
     element: <ParticlePage />,
+  },
+  {
+    title: 'サンプル',
+    path: '/'
+  },
+  {
+    title: '5スター',
+    path: '/samples/5star-particle',
+    element: <FivePointCirclePage />
+  },
+  {
+    title: '円',
+    path: '/samples/normal-circle',
+    element: <NormalCirclePage />
   },
 ];
