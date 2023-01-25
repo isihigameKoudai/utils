@@ -9,6 +9,7 @@ import MicPage from "../pages/Audio/Mic";
 import SpeechPage from "../pages/Audio/Speech";
 import FivePointCirclePage from "../pages/Examples/FivePointCircle";
 import NormalCirclePage from "../pages/Examples/NormalCircle";
+import SquareSparkPage from "../pages/Examples/SquareSpark";
 
 export type IRoute = {
   title: string;
@@ -75,5 +76,10 @@ export const routeList: IRoute[] = [
     title: '円',
     path: '/samples/normal-circle',
     element: <NormalCirclePage />
+  },
+  {
+    title: 'キラキラ',
+    path: '/samples/square-apark',
+    element: <SquareSparkPage />
   },
 ];
