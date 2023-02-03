@@ -160,7 +160,8 @@ export const lineAudio = ({
   const $gl = $canvas.getContext("webgl2");
   if (!$gl) return;
 
-  $gl.clear($gl.COLOR_BUFFER_BIT);
+  $gl.clear($gl.COLOR_BUFFER_BIT | $gl.DEPTH_BUFFER_BIT);
+  $gl.clearColor(0, 0, 0, 1);
 
   injectWaveArray({
     waveArray: timeDomainArray,
@@ -168,7 +169,7 @@ export const lineAudio = ({
     color: {
       r: 1.0,
       g: 0.0,
-      b: 0.7,
+      b: 1.0,
     },
     uniforms: {
       u_length: timeDomainArray.length,
@@ -182,8 +183,8 @@ export const lineAudio = ({
     $gl,
     color: {
       r: 1.0,
-      g: 0.4,
-      b: 0.5,
+      g: 0.0,
+      b: 0.3,
     },
     uniforms: {
       u_length: spectrumArray.length,
