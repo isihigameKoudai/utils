@@ -1,26 +1,28 @@
 import React, { useMemo, useRef } from "react";
 import * as THREE from 'three';
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, RenderCallback } from "@react-three/fiber";
 
 type Props = {
   uniforms: THREE.ShaderMaterialParameters['uniforms'];
   vertexShader: THREE.ShaderMaterialParameters['vertexShader'];
   fragmentShader: THREE.ShaderMaterialParameters['fragmentShader'];
+  requestFrame?: RenderCallback;
 };
 
-const Scene: React.FC<Props> = ({ uniforms, vertexShader, fragmentShader }) => {
+const Scene: React.FC<Props> = ({ uniforms, vertexShader, fragmentShader, requestFrame = () => {} }) => {
   const shaderMaterialArgs = useMemo(() =>(
     new THREE.ShaderMaterial({
       uniforms,
       vertexShader,
       fragmentShader
     })
-  ),[]);
+  ),[uniforms]);
   const $shaderRef = useRef<THREE.Mesh>(null!);
   
-  useFrame(({ clock }) => {
-    shaderMaterialArgs.uniforms.time = { value: clock.getElapsedTime()}
+  useFrame((state,delta,frame) => {
+    shaderMaterialArgs.uniforms.time = { value: state.clock.getElapsedTime()}
     shaderMaterialArgs.uniforms.resolution.value.set(window.innerWidth,window.innerHeight)
+    requestFrame(state, delta, frame)
   });
   
   return (

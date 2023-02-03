@@ -42,9 +42,9 @@ const MicPage: React.FC = () => {
         </button>
       </p>
       <p>particle animation</p>
-      <canvas id="canvas" ref={$particle}></canvas>
+      <canvas ref={$particle}></canvas>
       <p>timeDomain and spectrum</p>
-      <canvas id="canvas" ref={$lineAudio}></canvas>
+      <canvas ref={$lineAudio}></canvas>
     </div>
   )
 };
