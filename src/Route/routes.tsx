@@ -10,6 +10,7 @@ import SpeechPage from "../pages/Audio/Speech";
 import FivePointCirclePage from "../pages/Examples/FivePointCircle";
 import NormalCirclePage from "../pages/Examples/NormalCircle";
 import SquareSparkPage from "../pages/Examples/SquareSpark";
+import AudioCirclePage from "../pages/Examples/AudioCircle";
 
 export type IRoute = {
   title: string;
@@ -76,6 +77,11 @@ export const routeList: IRoute[] = [
     title: '円',
     path: '/samples/normal-circle',
     element: <NormalCirclePage />
+  },
+  {
+    title: '円(オーディオ)',
+    path: '/samples/audio-circle',
+    element: <AudioCirclePage />
   },
   {
     title: 'キラキラ',
