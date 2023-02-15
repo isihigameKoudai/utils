@@ -29,7 +29,7 @@ export type RenderCallBack = (props: {
   frequencyBinCount: number;
   times: Uint8Array;
   spectrumArray: Uint8Array;
-  timeDomainArray: Float32Array;
+  timeDomainRawArray: Float32Array;
   spectrumRawArray: Float32Array;
 }) => void;
 
@@ -48,7 +48,7 @@ export default class Visualizer extends Audio {
   analyzer: AnalyserNode | null;
   times: Uint8Array;
   spectrumArray: Uint8Array;
-  timeDomainArray: Float32Array;
+  timeDomainRawArray: Float32Array;
   spectrumRawArray: Float32Array;
   $canvas: HTMLCanvasElement | null;
   requestAnimationFrameId: number;
@@ -58,7 +58,7 @@ export default class Visualizer extends Audio {
     this.analyzer = null;
     this.times = new Uint8Array();
     this.spectrumArray = new Uint8Array();
-    this.timeDomainArray = new Float32Array();
+    this.timeDomainRawArray = new Float32Array();
     this.spectrumRawArray = new Float32Array();
     this.$canvas = null;
     this.requestAnimationFrameId = 0;
@@ -94,7 +94,7 @@ export default class Visualizer extends Audio {
     this.analyzer.fftSize = fftSize;
     this.times = new Uint8Array(this.analyzer.frequencyBinCount); // 時間領域の波形データを格納する配列を生成
     this.spectrumArray = new Uint8Array(this.analyzer.frequencyBinCount);
-    this.timeDomainArray = new Float32Array(this.analyzer.fftSize); // 波形表示用データ
+    this.timeDomainRawArray = new Float32Array(this.analyzer.fftSize); // 波形表示用データ
     this.spectrumRawArray = new Float32Array(this.analyzer.frequencyBinCount); // スペクトル波形用データ
 
     if (this._audioSource) {
@@ -127,7 +127,7 @@ export default class Visualizer extends Audio {
     // その時点での波形データを元にした配列を取得
     this.analyzer.getByteTimeDomainData(this.times);
     this.analyzer.getByteFrequencyData(this.spectrumArray);
-    this.analyzer.getFloatTimeDomainData(this.timeDomainArray);
+    this.analyzer.getFloatTimeDomainData(this.timeDomainRawArray);
     this.analyzer.getFloatFrequencyData(this.spectrumRawArray);
 
     renderCallBack({
@@ -135,7 +135,7 @@ export default class Visualizer extends Audio {
       frequencyBinCount: this.analyzer.frequencyBinCount,
       times: this.times,
       spectrumArray: this.spectrumArray,
-      timeDomainArray: this.timeDomainArray,
+      timeDomainRawArray: this.timeDomainRawArray,
       spectrumRawArray: this.spectrumRawArray,
     });
 

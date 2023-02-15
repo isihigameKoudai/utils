@@ -11,7 +11,7 @@ const MicPage: React.FC = () => {
   const lineVisualizer = new Visualizer();
   const onActivateMic = useCallback(async () => {
     await particleVisualizer.setDeviceAudio({ audio: true });
-    particleVisualizer.start(({ $canvas, times, frequencyBinCount, timeDomainArray }) => {
+    particleVisualizer.start(({ $canvas, times, frequencyBinCount, timeDomainRawArray }) => {
       basicParticle({ $canvas, times, frequencyBinCount });
     },{
       $canvas: $particle.current!,
@@ -19,8 +19,8 @@ const MicPage: React.FC = () => {
     });
 
     await lineVisualizer.setDeviceAudio({ audio: true });
-    lineVisualizer.start(({ $canvas, timeDomainArray, spectrumRawArray }) => {
-      lineAudio({ $canvas, timeDomainArray, spectrumArray: spectrumRawArray, analyzer: lineVisualizer.analyzer! })
+    lineVisualizer.start(({ $canvas, timeDomainRawArray, spectrumRawArray }) => {
+      lineAudio({ $canvas, timeDomainRawArray, spectrumRawArray, analyzer: lineVisualizer.analyzer! })
     },{
       $canvas: $lineAudio.current!,
     });

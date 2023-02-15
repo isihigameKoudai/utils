@@ -54,8 +54,8 @@ void main(void) {
 type LineAudioProps = {
   $canvas: HTMLCanvasElement;
   analyzer: AnalyserNode;
-  timeDomainArray: Float32Array;
-  spectrumArray: Float32Array;
+  timeDomainRawArray: Float32Array;
+  spectrumRawArray: Float32Array;
 };
 
 const createVbo = (
@@ -154,8 +154,8 @@ const injectWaveArray = ({
 export const lineAudio = ({
   $canvas,
   analyzer,
-  timeDomainArray,
-  spectrumArray,
+  timeDomainRawArray,
+  spectrumRawArray,
 }: LineAudioProps) => {
   const $gl = $canvas.getContext("webgl2");
   if (!$gl) return;
@@ -164,7 +164,7 @@ export const lineAudio = ({
   $gl.clearColor(0, 0, 0, 1);
 
   injectWaveArray({
-    waveArray: timeDomainArray,
+    waveArray: timeDomainRawArray,
     $gl,
     color: {
       r: 1.0,
@@ -172,14 +172,14 @@ export const lineAudio = ({
       b: 1.0,
     },
     uniforms: {
-      u_length: timeDomainArray.length,
+      u_length: timeDomainRawArray.length,
       u_minValue: -1.0,
       u_maxValue: 1.0,
     },
   });
 
   injectWaveArray({
-    waveArray: spectrumArray,
+    waveArray: spectrumRawArray,
     $gl,
     color: {
       r: 1.0,
@@ -187,7 +187,7 @@ export const lineAudio = ({
       b: 0.3,
     },
     uniforms: {
-      u_length: spectrumArray.length,
+      u_length: spectrumRawArray.length,
       u_minValue: analyzer.minDecibels,
       u_maxValue: analyzer.maxDecibels,
     },
