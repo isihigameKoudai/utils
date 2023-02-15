@@ -7,6 +7,7 @@ import AudioCircle from './AudioCircle.frag?raw';
 import Visualizer from '../../../../packages/Visualizer';
 import { average } from '../../../../packages/math';
 import { splitMap } from '../../../../packages/array';
+import { LoadingManager } from 'three';
 
 const flatSums = (arr:number[], lengthPerArr: number) => splitMap(arr,lengthPerArr).map(items => average(items));
 
@@ -29,7 +30,9 @@ const AudioCirclePage: React.FC = () => {
     await ringVisualizer.setDeviceAudio({ audio: true });
     ringVisualizer.start(({ spectrumArray }) => {
       const av = flatSums([...spectrumArray], 100);
-      const masteredNum = spectrumArray[512] / 512;
+      console.log(av);
+      const AUDIO_DRUMS = 512;
+      const masteredNum = spectrumArray[AUDIO_DRUMS] / 512;
       // 512 ボーカル、ドラムなど
       uniforms.num.value = masteredNum;
     },{})
