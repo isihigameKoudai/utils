@@ -11,6 +11,7 @@ import FivePointCirclePage from "../pages/Examples/FivePointCircle";
 import NormalCirclePage from "../pages/Examples/NormalCircle";
 import SquareSparkPage from "../pages/Examples/SquareSpark";
 import AudioCirclePage from "../pages/Examples/AudioCircle";
+import StableFluids from "../pages/StableFluids";
 
 export type IRoute = {
   title: string;
@@ -63,6 +64,11 @@ export const routeList: IRoute[] = [
     title: "3D（パーティクル）",
     path: "/three-dimension/particle",
     element: <ParticlePage />,
+  },
+  {
+    title: 'stable fluids',
+    path: '/stable-fluids',
+    element: <StableFluids />
   },
   {
     title: 'サンプル',
