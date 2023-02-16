@@ -31,7 +31,6 @@ export default class WebGL {
     Mouse.update();
     Common.update();
     this.output.update();
-    console.log("render");
   }
 
   loop() {

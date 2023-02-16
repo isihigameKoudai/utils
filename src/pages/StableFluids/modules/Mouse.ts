@@ -34,8 +34,6 @@ class Mouse {
       this.onDocumentTouchMove.bind(this),
       false
     );
-
-    console.log("Mouse", this);
   }
 
   setCoords(x: number, y: number) {

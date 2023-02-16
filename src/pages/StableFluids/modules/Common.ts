@@ -51,8 +51,6 @@ class Common {
 
     this.clock = new THREE.Clock();
     this.clock.start();
-
-    console.log("Common", this);
   }
 
   resize() {
