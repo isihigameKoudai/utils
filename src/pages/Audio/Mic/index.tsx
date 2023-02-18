@@ -11,8 +11,8 @@ const MicPage: React.FC = () => {
   const lineVisualizer = new Visualizer();
   const onActivateMic = useCallback(async () => {
     await particleVisualizer.setDeviceAudio({ audio: true });
-    particleVisualizer.start(({ $canvas, times, frequencyBinCount, timeDomainRawArray }) => {
-      basicParticle({ $canvas, times, frequencyBinCount });
+    particleVisualizer.start(({ $canvas, timeDomainArray, frequencyBinCount, timeDomainRawArray }) => {
+      basicParticle({ $canvas, timeDomainArray, frequencyBinCount });
     },{
       $canvas: $particle.current!,
       smoothingTimeConstant: 0.1

@@ -27,7 +27,7 @@ export const cancelAnimationFrame =
 export type RenderCallBack = (props: {
   $canvas: HTMLCanvasElement;
   frequencyBinCount: number;
-  times: Uint8Array;
+  timeDomainArray: Uint8Array;
   spectrumArray: Uint8Array;
   timeDomainRawArray: Float32Array;
   spectrumRawArray: Float32Array;
@@ -46,7 +46,7 @@ type RenderOptions = {
  */
 export default class Visualizer extends Audio {
   analyzer: AnalyserNode | null;
-  times: Uint8Array;
+  timeDomainArray: Uint8Array;
   spectrumArray: Uint8Array;
   timeDomainRawArray: Float32Array;
   spectrumRawArray: Float32Array;
@@ -56,7 +56,7 @@ export default class Visualizer extends Audio {
   constructor() {
     super();
     this.analyzer = null;
-    this.times = new Uint8Array();
+    this.timeDomainArray = new Uint8Array();
     this.spectrumArray = new Uint8Array();
     this.timeDomainRawArray = new Float32Array();
     this.spectrumRawArray = new Float32Array();
@@ -92,7 +92,7 @@ export default class Visualizer extends Audio {
     this.analyzer = this.context.createAnalyser(); // AnalyserNodeを作成
     this.analyzer.smoothingTimeConstant = smoothingTimeConstant;
     this.analyzer.fftSize = fftSize;
-    this.times = new Uint8Array(this.analyzer.frequencyBinCount); // 時間領域の波形データを格納する配列を生成
+    this.timeDomainArray = new Uint8Array(this.analyzer.frequencyBinCount); // 時間領域の波形データを格納する配列を生成
     this.spectrumArray = new Uint8Array(this.analyzer.frequencyBinCount);
     this.timeDomainRawArray = new Float32Array(this.analyzer.fftSize); // 波形表示用データ
     this.spectrumRawArray = new Float32Array(this.analyzer.frequencyBinCount); // スペクトル波形用データ
@@ -125,7 +125,7 @@ export default class Visualizer extends Audio {
     }
 
     // その時点での波形データを元にした配列を取得
-    this.analyzer.getByteTimeDomainData(this.times);
+    this.analyzer.getByteTimeDomainData(this.timeDomainArray);
     this.analyzer.getByteFrequencyData(this.spectrumArray);
     this.analyzer.getFloatTimeDomainData(this.timeDomainRawArray);
     this.analyzer.getFloatFrequencyData(this.spectrumRawArray);
@@ -133,7 +133,7 @@ export default class Visualizer extends Audio {
     renderCallBack({
       $canvas: this.$canvas!,
       frequencyBinCount: this.analyzer.frequencyBinCount,
-      times: this.times,
+      timeDomainArray: this.timeDomainArray,
       spectrumArray: this.spectrumArray,
       timeDomainRawArray: this.timeDomainRawArray,
       spectrumRawArray: this.spectrumRawArray,

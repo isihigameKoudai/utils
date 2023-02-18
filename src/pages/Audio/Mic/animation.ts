@@ -1,10 +1,14 @@
 type Props = {
   $canvas: HTMLCanvasElement;
   frequencyBinCount: number;
-  times: Uint8Array | Float32Array;
+  timeDomainArray: Uint8Array | Float32Array;
 };
 
-export const basicParticle = ({ $canvas, frequencyBinCount, times }: Props) => {
+export const basicParticle = ({
+  $canvas,
+  frequencyBinCount,
+  timeDomainArray,
+}: Props) => {
   const $gl = $canvas.getContext("2d");
   const barWidth = window.innerWidth / frequencyBinCount;
 
@@ -13,7 +17,7 @@ export const basicParticle = ({ $canvas, frequencyBinCount, times }: Props) => {
   $gl!.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
   // analyserNode.frequencyBinCountはanalyserNode.fftSize / 2の数値。よって今回は1024。
-  times.forEach((time, i) => {
+  timeDomainArray.forEach((time, i) => {
     const percent = time / 255; // 255が最大値なので波形データの%が算出できる。
     const height = window.innerHeight * percent; // %に基づく高さを算出
     const offset = window.innerHeight - height; // y座標の描画開始位置を算出

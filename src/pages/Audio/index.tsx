@@ -11,8 +11,8 @@ const AudioPage: React.FC = () => {
     const { files } = await fetchAudio()
     const buffer = await files[0].arrayBuffer()
     visualizer.setAudio(buffer);
-    visualizer.start(({ $canvas, times, frequencyBinCount}) => {
-      basicParticle({ $canvas, times, frequencyBinCount });
+    visualizer.start(({ $canvas, timeDomainArray, frequencyBinCount}) => {
+      basicParticle({ $canvas, timeDomainArray, frequencyBinCount });
     },{
       $canvas: $canvas.current!
     });
