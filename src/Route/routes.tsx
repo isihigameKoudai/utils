@@ -12,6 +12,7 @@ import NormalCirclePage from "../pages/Examples/NormalCircle";
 import SquareSparkPage from "../pages/Examples/SquareSpark";
 import AudioCirclePage from "../pages/Examples/AudioCircle";
 import StableFluids from "../pages/StableFluids";
+import PlaygroundPage from "../pages/Playground";
 
 export type IRoute = {
   title: string;
@@ -24,6 +25,11 @@ export const routeList: IRoute[] = [
     title: "TOP",
     path: "/",
     element: <Index />,
+  },
+  {
+    title: 'プレイグラウンド',
+    path: 'playground',
+    element: <PlaygroundPage />
   },
   {
     title: "Shader",

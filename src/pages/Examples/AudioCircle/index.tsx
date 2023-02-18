@@ -7,7 +7,6 @@ import AudioCircle from './AudioCircle.frag?raw';
 import Visualizer from '../../../../packages/Visualizer';
 import { average } from '../../../../packages/math';
 import { splitMap } from '../../../../packages/array';
-import { LoadingManager } from 'three';
 
 const flatSums = (arr:number[], lengthPerArr: number) => splitMap(arr,lengthPerArr).map(items => average(items));
 
