@@ -2,6 +2,7 @@ precision highp float;
 uniform sampler2D velocity;
 varying vec2 uv;
 
+// 流体の色
 void main(){
     vec2 vel = texture2D(velocity, uv).xy;
     float len = length(vel);

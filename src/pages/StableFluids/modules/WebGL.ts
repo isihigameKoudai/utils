@@ -13,8 +13,8 @@ export default class WebGL {
     this.$wrapper = $wrapper;
     Common.init();
     Mouse.init();
+    // Mouse.onMoveByGhostAudio();
 
-    // this.init();
     this.$wrapper.prepend(Common.renderer!.domElement);
     this.output = new Output();
     this.loop();
