@@ -8,7 +8,6 @@ import roundRing from '../../../packages/glsl/roundRing.frag?raw';
 
 const ShaderPage: React.FC = () => {
   const $shader = useRef<HTMLDivElement>(null);
-  
   useEffect(() => {
     if(!$shader || $shader === null) return;
 

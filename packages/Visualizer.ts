@@ -24,14 +24,17 @@ export const cancelAnimationFrame =
   window.msCancelAnimationFrame ||
   window.oCancelAnimationFrame;
 
-type RenderCallBack = (props: {
+export type RenderCallBack = (props: {
   $canvas: HTMLCanvasElement;
   frequencyBinCount: number;
-  times: Uint8Array;
+  timeDomainArray: Uint8Array;
+  spectrumArray: Uint8Array;
+  timeDomainRawArray: Float32Array;
+  spectrumRawArray: Float32Array;
 }) => void;
 
 type RenderOptions = {
-  $canvas: HTMLCanvasElement;
+  $canvas?: HTMLCanvasElement;
   canvasWidth?: number;
   canvasHeight?: number;
   smoothingTimeConstant?: number;
@@ -43,14 +46,20 @@ type RenderOptions = {
  */
 export default class Visualizer extends Audio {
   analyzer: AnalyserNode | null;
-  times: Uint8Array;
+  timeDomainArray: Uint8Array;
+  spectrumArray: Uint8Array;
+  timeDomainRawArray: Float32Array;
+  spectrumRawArray: Float32Array;
   $canvas: HTMLCanvasElement | null;
   requestAnimationFrameId: number;
 
   constructor() {
     super();
     this.analyzer = null;
-    this.times = new Uint8Array();
+    this.timeDomainArray = new Uint8Array();
+    this.spectrumArray = new Uint8Array();
+    this.timeDomainRawArray = new Float32Array();
+    this.spectrumRawArray = new Float32Array();
     this.$canvas = null;
     this.requestAnimationFrameId = 0;
     window.requestAnimationFrame = requestAnimationFrame;
@@ -81,7 +90,13 @@ export default class Visualizer extends Audio {
     super.play();
     // ビジュアライザーの初期化
     this.analyzer = this.context.createAnalyser(); // AnalyserNodeを作成
-    this.times = new Uint8Array(this.analyzer.frequencyBinCount); // 時間領域の波形データを格納する配列を生成
+    this.analyzer.smoothingTimeConstant = smoothingTimeConstant;
+    this.analyzer.fftSize = fftSize;
+    this.timeDomainArray = new Uint8Array(this.analyzer.frequencyBinCount); // 時間領域の波形データを格納する配列を生成
+    this.spectrumArray = new Uint8Array(this.analyzer.frequencyBinCount);
+    this.timeDomainRawArray = new Float32Array(this.analyzer.fftSize); // 波形表示用データ
+    this.spectrumRawArray = new Float32Array(this.analyzer.frequencyBinCount); // スペクトル波形用データ
+
     if (this._audioSource) {
       this._audioSource.connect(this.analyzer);
     }
@@ -90,13 +105,12 @@ export default class Visualizer extends Audio {
       this._mediaSource.connect(this.analyzer);
     }
 
-    this.analyzer.connect(this.context.destination); // AnalyserNodeをAudioDestinationNodeに接続
     // ビジュアライザーをcanvasに反映
-    $canvas.width = canvasWidth;
-    $canvas.height = canvasHeight;
-    this.$canvas = $canvas;
-    this.analyzer.smoothingTimeConstant = smoothingTimeConstant;
-    this.analyzer.fftSize = fftSize;
+    if ($canvas) {
+      $canvas.width = canvasWidth;
+      $canvas.height = canvasHeight;
+      this.$canvas = $canvas;
+    }
 
     this.render(renderCallBack);
   }
@@ -110,12 +124,19 @@ export default class Visualizer extends Audio {
       throw new Error("analyzer is null");
     }
 
-    this.analyzer.getByteTimeDomainData(this.times);
+    // その時点での波形データを元にした配列を取得
+    this.analyzer.getByteTimeDomainData(this.timeDomainArray);
+    this.analyzer.getByteFrequencyData(this.spectrumArray);
+    this.analyzer.getFloatTimeDomainData(this.timeDomainRawArray);
+    this.analyzer.getFloatFrequencyData(this.spectrumRawArray);
 
     renderCallBack({
       $canvas: this.$canvas!,
       frequencyBinCount: this.analyzer.frequencyBinCount,
-      times: this.times,
+      timeDomainArray: this.timeDomainArray,
+      spectrumArray: this.spectrumArray,
+      timeDomainRawArray: this.timeDomainRawArray,
+      spectrumRawArray: this.spectrumRawArray,
     });
 
     this.requestAnimationFrameId = window.requestAnimationFrame(
