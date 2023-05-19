@@ -70,7 +70,7 @@ export default class ExternalForce extends ShaderPass {
     );
 
     // const uniforms = (this.mouse.material as THREE.ShaderMaterial).uniforms;
-    const uniforms = (this.mouse.material as THREE.ShaderMaterial.uniforms;
+    const uniforms = (this.mouse.material as THREE.ShaderMaterial).uniforms;
 
     uniforms.force.value.set(forceX, forceY);
     uniforms.center.value.set(centerX, centerY);
