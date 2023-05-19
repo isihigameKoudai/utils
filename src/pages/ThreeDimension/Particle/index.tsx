@@ -10,7 +10,7 @@ import fragmentShader from './fragmentShader.frag?raw';
 // TODO:
 const ParticleScene: React.FC = () => {
   const planePositions = useMemo(() => {
-    const planeGeometry = new THREE.PlaneBufferGeometry(6,6,128,128);
+    const planeGeometry = new THREE.PlaneGeometry(6,6,128,128);
     const positions = planeGeometry.attributes.position.array;
     return positions;
   },[]);

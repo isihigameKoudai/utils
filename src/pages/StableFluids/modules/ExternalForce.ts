@@ -27,7 +27,7 @@ export default class ExternalForce extends ShaderPass {
     });
     super.init();
 
-    const mouseG = new THREE.PlaneBufferGeometry(1, 1);
+    const mouseG = new THREE.PlaneGeometry(1, 1);
 
     const mouseM = new THREE.RawShaderMaterial({
       vertexShader: mouse_vert,
@@ -69,7 +69,8 @@ export default class ExternalForce extends ShaderPass {
       1 - cursorSizeY - props.cellScale.y * 2
     );
 
-    const uniforms = this.mouse.material.uniforms;
+    // const uniforms = (this.mouse.material as THREE.ShaderMaterial).uniforms;
+    const uniforms = (this.mouse.material as THREE.ShaderMaterial).uniforms;
 
     uniforms.force.value.set(forceX, forceY);
     uniforms.center.value.set(centerX, centerY);
