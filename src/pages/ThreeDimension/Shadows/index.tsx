@@ -22,7 +22,7 @@ const Content: React.FC = () => {
     <>
       <color attach="background" args={[0x222222]} />
       <OrbitControls />
-      <directionalLight ref={lightRef} position={[5,5,5]} intensity={1} shadowMapWidth={2048} shadowMapHeight={2048} castShadow />
+      {/* <directionalLight ref={lightRef} position={[5,5,5]} intensity={1} shadowMapWidth={2048} shadowMapHeight={2048} castShadow /> */}
 
       <mesh ref={ref} position={[0,2,0]} receiveShadow castShadow>
         <boxGeometry args={[1,1,1]} />

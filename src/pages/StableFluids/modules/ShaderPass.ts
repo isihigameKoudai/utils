@@ -1,5 +1,5 @@
-import Common from "./Common";
 import * as THREE from "three";
+import Common from "./Common";
 
 export type Uniforms = THREE.ShaderMaterialParameters["uniforms"];
 
@@ -14,7 +14,7 @@ export default class ShaderPass {
   scene?: THREE.Scene;
   camera?: THREE.Camera;
   material?: THREE.RawShaderMaterial;
-  geometry?: THREE.PlaneBufferGeometry;
+  geometry?: THREE.BufferGeometry;
   plane?: THREE.Mesh;
   props: ShaderPassProps;
   uniforms: THREE.ShaderMaterialParameters["uniforms"];
@@ -26,11 +26,13 @@ export default class ShaderPass {
 
   init() {
     this.scene = new THREE.Scene();
-    this.camera = new THREE.Camera();
+    // this.camera = new THREE.Camera();
+    this.camera = new THREE.PerspectiveCamera();
 
     if (this.uniforms) {
       this.material = new THREE.RawShaderMaterial(this.props.material);
-      this.geometry = new THREE.PlaneBufferGeometry(2.0, 2.0);
+      // this.geometry = new THREE.PlaneBufferGeometry(2.0, 2.0);
+      this.geometry = new THREE.PlaneGeometry(2.0, 2.0);
       this.plane = new THREE.Mesh(this.geometry, this.material);
       this.scene.add(this.plane);
     }

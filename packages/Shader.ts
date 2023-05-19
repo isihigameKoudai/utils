@@ -31,7 +31,7 @@ class Shader {
   scene: THREE.Scene;
   material: THREE.ShaderMaterial;
   renderer: THREE.WebGLRenderer;
-  geometry: THREE.PlaneBufferGeometry;
+  geometry: THREE.PlaneGeometry;
   camera: THREE.PerspectiveCamera;
   mesh: THREE.Mesh;
   clock: THREE.Clock;
@@ -53,7 +53,8 @@ class Shader {
       vertexShader,
       fragmentShader,
     });
-    this.geometry = new THREE.PlaneBufferGeometry(2.0, 2.0);
+    // this.geometry = new THREE.PlaneBufferGeometry(2.0, 2.0);
+    this.geometry = new THREE.PlaneGeometry(2.0, 2.0);
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     // 時間空間の生成
     this.clock = new THREE.Clock();
