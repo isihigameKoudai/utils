@@ -13,6 +13,7 @@ import SquareSparkPage from "../pages/Examples/SquareSpark";
 import AudioCirclePage from "../pages/Examples/AudioCircle";
 import StableFluids from "../pages/StableFluids";
 import PlaygroundPage from "../pages/Playground";
+import SakuraPage from "../pages/Examples/Sakura";
 
 export type IRoute = {
   title: string;
@@ -99,5 +100,9 @@ export const routeList: IRoute[] = [
     title: 'キラキラ',
     path: '/samples/square-apark',
     element: <SquareSparkPage />
+  },{
+    title: 'SAKURA',
+    path: '/samples/sakura',
+    element: <SakuraPage />
   },
 ];
