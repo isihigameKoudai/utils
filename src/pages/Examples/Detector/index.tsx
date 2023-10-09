@@ -9,7 +9,6 @@ export default function Detector() {
 
   const handleDetect = useCallback(() => {
     if(detector.$video && detector._$video) {
-      // detector._$video.style.opacity = '0.5';
       $videoContainer.current?.appendChild(detector.$video);
     }
     detector.start((objects) => {
