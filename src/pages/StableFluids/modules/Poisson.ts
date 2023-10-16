@@ -2,7 +2,7 @@ import face_vert from "./glsl/sim/face.vert?raw";
 import poisson_frag from "./glsl/sim/poisson.frag?raw";
 
 import ShaderPass from "./ShaderPass";
-import { SimProps } from "../types/Sim";
+import { SimProps } from "./types/Sim";
 
 interface Props extends SimProps {
   boundarySpace: THREE.Vector2;

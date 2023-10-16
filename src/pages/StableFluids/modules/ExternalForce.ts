@@ -6,7 +6,7 @@ import externalForce_frag from "./glsl/sim/externalForce.frag?raw";
 import ShaderPass from "./ShaderPass";
 import Mouse from "./Mouse";
 import { ControlProps } from "./Controls";
-import { SimProps } from "../types/Sim";
+import { SimProps } from "./types/Sim";
 
 interface Props extends SimProps {
   dst: THREE.WebGLRenderTarget;
