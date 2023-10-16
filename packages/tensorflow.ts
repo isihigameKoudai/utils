@@ -84,7 +84,7 @@ export class VisualDetector {
       x: width / INITIAL_VIDEO_EL_WIDTH,
       y: height / INITIAL_VIDEO_EL_HEIGHT
     }
-
+    
     if (!$video) {
       const _$video = document.createElement('video');
       _$video.muted = true;

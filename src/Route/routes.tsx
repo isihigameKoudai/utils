@@ -14,6 +14,7 @@ import AudioCirclePage from "../pages/Examples/AudioCircle";
 import StableFluids from "../pages/StableFluids";
 import PlaygroundPage from "../pages/Playground";
 import Detector from "../pages/Examples/Detector";
+import FluidDetect from "../pages/Examples/Detector";
 
 export type IRoute = {
   title: string;
@@ -105,5 +106,10 @@ export const routeList: IRoute[] = [
     title: 'ML',
     path: '/samples/detector',
     element: <Detector />
+  },
+  {
+    title: 'fluid-detect',
+    path: '/samples/fluid-detect',
+    element: <FluidDetect />
   },
 ];
