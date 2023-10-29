@@ -18,7 +18,8 @@ export default function Detector() {
 
   useEffect(() => {
     const init = async () => {
-      await detector.load({ width: 640, height: 480 });
+      // await detector.load({ width: 640, height: 480 });
+      await detector.load({ width: window.innerWidth, height: window.innerHeight });
       setIsShow(true);
     }
     init();
@@ -32,7 +33,9 @@ export default function Detector() {
         position: 'relative'
       }}>
         {
-          objects.map((obj,i) => {
+          objects
+            .filter(obj => obj.class === 'person')
+            .map((obj,i) => {
             return (
               <>
                 <p
@@ -52,7 +55,7 @@ export default function Detector() {
                   top: obj.top,
                   width: obj.width,
                   height: obj.height,
-                  background: '#00cc0088'
+                  background: '#00cc0044'
                 }}></div>
               </>
             )
