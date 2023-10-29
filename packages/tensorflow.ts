@@ -36,6 +36,7 @@ export class VisualDetector {
   _detectedRawObjects: cocoSsd.DetectedObject[];
   _requestAnimationFrameId: number;
   _magnification: { x: number; y: number };
+  _stream: MediaStream | null;
 
   constructor() {
     this._model = null;
@@ -49,6 +50,7 @@ export class VisualDetector {
       x: 1,
       y: 1
     };
+    this._stream = null;
   }
 
   get model() {
@@ -93,6 +95,10 @@ export class VisualDetector {
     return this._magnification;
   }
 
+  get stream() {
+    return this._stream;
+  }
+
   async loadModel(config: cocoSsd.ModelConfig = {}) {
     try {
       this._model = await cocoSsd.load(config);
@@ -105,6 +111,7 @@ export class VisualDetector {
 
   async loadEl({ $video, width = INITIAL_VIDEO_EL_WIDTH, height = INITIAL_VIDEO_EL_HEIGHT }:LoadElProps): Promise<HTMLVideoElement> {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    this._stream = stream;
 
     this._magnification = {
       x: width / INITIAL_VIDEO_EL_WIDTH,
@@ -118,11 +125,9 @@ export class VisualDetector {
       _$video.width = width;
       _$video.height = height;
       _$video.srcObject = stream;
-
       this._$video = _$video;
       return _$video;
     }
-
     $video.width = width;
     $video.height = height;
     $video.srcObject = stream;
@@ -156,5 +161,30 @@ export class VisualDetector {
     }
     
     this._requestAnimationFrameId = window.requestAnimationFrame(this.start.bind(this, renderCallBack));
+  }
+
+  stop() {
+    console.log('detector stop')
+    this.stopVideos();
+    this.stopAudios();
+
+    if(this._$video) {
+      this._stream = null;
+      this._$video.srcObject = null;
+      this._$video = null;
+    }
+  }
+
+  stopVideos() {
+    this.stream?.getVideoTracks().forEach(videoStream => {
+      videoStream.enabled = false;
+      videoStream.stop();
+    });
+  }
+  stopAudios() {
+    this.stream?.getAudioTracks().forEach(audioStream => {
+      audioStream.enabled = false;
+      audioStream.stop();
+    });
   }
 }
