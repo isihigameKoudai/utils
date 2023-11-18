@@ -14,7 +14,7 @@ import AudioCirclePage from "../pages/Examples/AudioCircle";
 import StableFluids from "../pages/StableFluids";
 import PlaygroundPage from "../pages/Playground";
 import Detector from "../pages/Examples/Detector";
-import FluidDetect from "../pages/Examples/Detector";
+import FluidDetect from "../pages/Examples/FluidDetect";
 
 export type IRoute = {
   title: string;

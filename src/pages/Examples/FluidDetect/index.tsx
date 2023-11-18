@@ -1,34 +1,62 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { VisualDetector, DetectedObject } from "../../../../packages/tensorflow";
+import WebGL from "./modules/WebGL";
+import { DetectedObject, VisualDetector } from "../../../../packages/tensorflow";
+import Mouse from "./modules/Mouse";
 
-export default function Detector() {
-  const detector = new VisualDetector();
-  const $videoContainer = useRef<HTMLDivElement>(null);
+export default function FluidDetect() {
+  const $ref = useRef<HTMLDivElement>(null!);
+  let isInit = true;
+  const [gl, setGl] = useState<WebGL>();
+  const [detectorInstance, setDetectorInstance] = useState<VisualDetector>()
   const [objects, setObjects] = useState<DetectedObject[]>([]);
-  const [isShow, setIsShow] = useState<boolean>(false);
+  const [isShow, setIsShow] = useState(true);
 
-  const handleDetect = useCallback(() => {
-    if(detector.$video && detector._$video) {
-      $videoContainer.current?.appendChild(detector.$video);
+  const handleDetect = useCallback(async () => {
+    if(detectorInstance?.$video && detectorInstance._$video) {
+      detectorInstance.$video.style.position = 'absolute';
+      detectorInstance.$video.style.top = '0px';
+      detectorInstance.$video.style.left = '0px';
+      detectorInstance.$video.style.opacity = '0.1';
+      $ref.current.appendChild(detectorInstance?.$video);
     }
-    detector.start((objects) => {
+    await detectorInstance?.start((objectList) => {
+      const objects = objectList
+        .filter(obj => obj.class === 'person');
+      objects.forEach(obj => {
+        Mouse.setCoords(obj.center.x,obj.center.y);
+      })
       setObjects(objects);
+      console.log(objects)
     });
-  },[$videoContainer]);
+    setIsShow(false);
+  },[$ref, detectorInstance, gl]);
 
   useEffect(() => {
-    const init = async () => {
-      await detector.load({ width: 640, height: 480 });
-      setIsShow(true);
-    }
-    init();
-  },[]);
+    (async () => {
+      if (isInit) {
+        const gl = new WebGL({
+          $wrapper: $ref.current
+        });
+        setGl(gl);
+        isInit = false;
+        const detector = await gl.initDetector({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        });
 
+        setDetectorInstance(detector);
+      }
+    })();
+
+    return () => {
+      detectorInstance?.stop();
+    }
+  },[]);
 
   return (
     <div>
-      { isShow && <button onClick={handleDetect}>start detect</button>}
-      <div ref={$videoContainer} style={{
+      { isShow && <button type="button" onClick={handleDetect}>start detect</button>}
+      <div ref={$ref} style={{
         position: 'relative'
       }}>
         {
@@ -52,14 +80,13 @@ export default function Detector() {
                   top: obj.top,
                   width: obj.width,
                   height: obj.height,
-                  background: '#00cc0088'
+                  background: '#00cc0044'
                 }}></div>
               </>
             )
           })
         }
       </div>
-      {/* <video width={1280} height={960} muted autoPlay ref={$video}></video> */}
     </div>
   )
 }

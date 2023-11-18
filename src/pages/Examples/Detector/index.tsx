@@ -23,6 +23,10 @@ export default function Detector() {
       setIsShow(true);
     }
     init();
+
+    return () => {
+      detector.stop();
+    }
   },[]);
 
 
