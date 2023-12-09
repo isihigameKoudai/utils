@@ -164,7 +164,6 @@ export class VisualDetector {
   }
 
   stop() {
-    console.log('detector stop')
     this.stopVideos();
     this.stopAudios();
 

@@ -26,7 +26,6 @@ export default function FluidDetect() {
         Mouse.setCoords(obj.center.x,obj.center.y);
       })
       setObjects(objects);
-      console.log(objects)
     });
     setIsShow(false);
   },[$ref, detectorInstance, gl]);
