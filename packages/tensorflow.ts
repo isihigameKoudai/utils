@@ -109,7 +109,11 @@ export class VisualDetector {
     }
   }
 
-  async loadEl({ $video, width = INITIAL_VIDEO_EL_WIDTH, height = INITIAL_VIDEO_EL_HEIGHT }:LoadElProps): Promise<HTMLVideoElement> {
+  async loadEl({
+    $video,
+    width = INITIAL_VIDEO_EL_WIDTH,
+    height = INITIAL_VIDEO_EL_HEIGHT
+  }:LoadElProps): Promise<HTMLVideoElement> {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     this._stream = stream;
 
@@ -135,7 +139,10 @@ export class VisualDetector {
     return $video;
   }
 
-  async load(elConfig?: LoadElProps, modelConfig: cocoSsd.ModelConfig = {}): Promise<HTMLVideoElement> {
+  async load(
+    elConfig?: LoadElProps,
+    modelConfig: cocoSsd.ModelConfig = {}
+  ): Promise<HTMLVideoElement> {
     const $video = this.loadEl(elConfig || {});
     await this.loadModel(modelConfig);
 
