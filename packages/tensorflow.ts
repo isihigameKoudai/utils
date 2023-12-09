@@ -18,7 +18,7 @@ export type DetectedObject = {
     x: number;
     y: number;
   };
-  score: cocoSsd.DetectedObject['score']
+  score: cocoSsd.DetectedObject['score'];
 }
 type RenderCallBack = (objects: DetectedObject[]) => void | Promise<void>;
 
