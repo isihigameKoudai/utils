@@ -15,6 +15,7 @@ import StableFluids from "../pages/StableFluids";
 import PlaygroundPage from "../pages/Playground";
 import Detector from "../pages/Examples/Detector";
 import FluidDetect from "../pages/Examples/FluidDetect";
+import FollowerCircle from '../pages/Examples/FollowerCircle';
 
 export type IRoute = {
   title: string;
@@ -96,6 +97,11 @@ export const routeList: IRoute[] = [
     title: '円(オーディオ)',
     path: '/samples/audio-circle',
     element: <AudioCirclePage />
+  },
+  {
+    title: '円（追尾）',
+    path: '/samples/follower-circle',
+    element: <FollowerCircle />
   },
   {
     title: 'キラキラ',
