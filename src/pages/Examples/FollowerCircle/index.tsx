@@ -48,7 +48,8 @@ const FollowerCirclePage: React.FC = () => {
       follower.y = (mouse.y + delay * follower.y) / (delay+1);
 
       uniforms.x.value = follower.x;
-      uniforms.y.value = follower.y;
+      // y軸調整
+      uniforms.y.value = follower.y - window.innerHeight - 150;
     },10);
 
     return () => {
