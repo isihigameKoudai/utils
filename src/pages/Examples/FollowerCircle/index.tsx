@@ -3,7 +3,7 @@ import * as THREE from 'three';
 
 import ShaderCanvas from '../../../../packages/ShaderCanvas';
 import vertex from '../../../../packages/glsl/vertex.vert?raw';
-import normalCircle from './normalCircle.frag?raw';
+import followerCircle from './followerCircle.frag?raw';
 
 const FollowerCirclePage: React.FC = () => {
   const uniforms = {
@@ -49,7 +49,8 @@ const FollowerCirclePage: React.FC = () => {
 
       uniforms.x.value = follower.x;
       // y軸調整
-      uniforms.y.value = follower.y - window.innerHeight - 150;
+      // uniforms.y.value = follower.y - window.innerHeight - 150;
+      uniforms.y.value = follower.y;
     },10);
 
     return () => {
@@ -66,7 +67,7 @@ const FollowerCirclePage: React.FC = () => {
     <ShaderCanvas
       uniforms={uniforms}
       vertexShader={vertex}
-      fragmentShader={normalCircle}
+      fragmentShader={followerCircle}
     />
   </div>;
 }
