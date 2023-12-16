@@ -36,11 +36,12 @@ const FollowerCirclePage: React.FC = () => {
   const delay = 100;
 
   const init = () => {
-    document.addEventListener('mousemove', (e) => {
+    const mouseEvent = (e: MouseEvent) => {
       const rect = (e.target as HTMLCanvasElement).getBoundingClientRect();
       mouse.x = Math.floor(e.clientX - rect.left);
       mouse.y = Math.floor(e.screenY - rect.top);
-    });
+    }
+    document.addEventListener('mousemove', mouseEvent);
 
     const intervalTimer = setInterval(() => {
       // 汎用フォローカーソルの座標計算
@@ -54,7 +55,7 @@ const FollowerCirclePage: React.FC = () => {
     },10);
 
     return () => {
-      document.removeEventListener('mousemove', () => {});
+      document.removeEventListener('mousemove', mouseEvent);
       clearInterval(intervalTimer);
     }
   };
