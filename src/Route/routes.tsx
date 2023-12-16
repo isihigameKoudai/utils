@@ -19,6 +19,7 @@ import FollowerCircle from '../pages/Examples/FollowerCircle';
 import FbmNoisePage from "../pages/Noise/Fbm";
 import FractalNoisePage from "../pages/Noise/Fractal";
 import CellularNoisePage from "../pages/Noise/CellularNoise";
+import MeltTheBorder from "../pages/MeltTheBorder";
 
 export type IRoute = {
   title: string;
@@ -139,5 +140,10 @@ export const routeList: IRoute[] = [
     title: 'セルラーノイズ',
     path: '/noise/cellular',
     element: <CellularNoisePage />
+  },
+  {
+    title: 'Melt the border',
+    path: '/melt-the-border',
+    element: <MeltTheBorder />
   },
 ];
