@@ -16,6 +16,9 @@ import PlaygroundPage from "../pages/Playground";
 import Detector from "../pages/Examples/Detector";
 import FluidDetect from "../pages/Examples/FluidDetect";
 import FollowerCircle from '../pages/Examples/FollowerCircle';
+import FbmNoisePage from "../pages/Noise/Fbm";
+import FractalNoisePage from "../pages/Noise/Fractal";
+import CellularNoisePage from "../pages/Noise/CellularNoise";
 
 export type IRoute = {
   title: string;
@@ -117,5 +120,24 @@ export const routeList: IRoute[] = [
     title: 'fluid-detect',
     path: '/samples/fluid-detect',
     element: <FluidDetect />
+  },
+  {
+    title: 'ノイズ',
+    path: '/noise',
+  },
+  {
+    title: 'fBMノイズ',
+    path: '/noise/fbm',
+    element: <FbmNoisePage />
+  },
+  {
+    title: 'フラクタルノイズ',
+    path: '/noise/fractal',
+    element: <FractalNoisePage />
+  },
+  {
+    title: 'セルラーノイズ',
+    path: '/noise/cellular',
+    element: <CellularNoisePage />
   },
 ];
