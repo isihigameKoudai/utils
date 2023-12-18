@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import WebGL from "./modules/WebGL";
 import { DetectedObject, VisualDetector } from "../../../../packages/tensorflow";
 import Mouse from "./modules/Mouse";
+import TargetView from "../../../components/TargetView";
 
 export default function FluidDetect() {
   const $ref = useRef<HTMLDivElement>(null!);
@@ -55,37 +56,11 @@ export default function FluidDetect() {
   return (
     <div>
       { isShow && <button type="button" onClick={handleDetect}>start detect</button>}
-      <div ref={$ref} style={{
-        position: 'relative'
-      }}>
-        {
-          objects.map((obj,i) => {
-            return (
-              <>
-                <p
-                  style={{
-                  position: 'absolute',
-                  marginInlineStart: obj.left,
-                  marginBlockStart: obj.top - 20,
-                  width: obj.width,
-                  top: 0,
-                  left: 0,
-                  background: '#cc0000aa'
-                }}>{ `${obj.class} - with ${Math.round(parseFloat(obj.score.toString()) * 100)} % confidence.` }</p>
-                <div
-                  style={{
-                  position: 'absolute',
-                  left: obj.left,
-                  top: obj.top,
-                  width: obj.width,
-                  height: obj.height,
-                  background: '#00cc0044'
-                }}></div>
-              </>
-            )
-          })
-        }
-      </div>
+      <TargetView
+        ref={$ref}
+        objects={objects.filter(obj => obj.class === 'person')}
+        opacity={0.4}
+      />
     </div>
   )
 }

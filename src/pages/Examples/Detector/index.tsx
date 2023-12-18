@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { VisualDetector, DetectedObject } from "../../../../packages/tensorflow";
+import TargetView from "../../../components/TargetView";
 
 export default function Detector() {
   const detector = new VisualDetector();
@@ -33,40 +34,11 @@ export default function Detector() {
   return (
     <div>
       { isShow && <button onClick={handleDetect}>start detect</button>}
-      <div ref={$videoContainer} style={{
-        position: 'relative'
-      }}>
-        {
-          objects
-            .filter(obj => obj.class === 'person')
-            .map((obj,i) => {
-            return (
-              <>
-                <p
-                  style={{
-                  position: 'absolute',
-                  marginInlineStart: obj.left,
-                  marginBlockStart: obj.top - 20,
-                  width: obj.width,
-                  top: 0,
-                  left: 0,
-                  background: '#cc0000aa'
-                }}>{ `${obj.class} - with ${Math.round(parseFloat(obj.score.toString()) * 100)} % confidence.` }</p>
-                <div
-                  style={{
-                  position: 'absolute',
-                  left: obj.left,
-                  top: obj.top,
-                  width: obj.width,
-                  height: obj.height,
-                  background: '#00cc0044'
-                }}></div>
-              </>
-            )
-          })
-        }
-      </div>
-      {/* <video width={1280} height={960} muted autoPlay ref={$video}></video> */}
+      <TargetView
+        ref={$videoContainer}
+        objects={objects.filter(obj => obj.class === 'person')}
+        opacity={0.6}
+      />
     </div>
   )
 }
