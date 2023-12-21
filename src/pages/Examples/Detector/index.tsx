@@ -19,7 +19,6 @@ export default function Detector() {
 
   useEffect(() => {
     const init = async () => {
-      // await detector.load({ width: 640, height: 480 });
       await detector.load({ width: window.innerWidth, height: window.innerHeight });
       setIsShow(true);
     }
@@ -37,7 +36,7 @@ export default function Detector() {
       <TargetView
         ref={$videoContainer}
         objects={objects.filter(obj => obj.class === 'person')}
-        opacity={0.6}
+        opacity={0.3}
       />
     </div>
   )

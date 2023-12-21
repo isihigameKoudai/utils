@@ -145,7 +145,7 @@ export class VisualDetector {
   ): Promise<HTMLVideoElement> {
     const $video = this.loadEl(elConfig || {});
     await this.loadModel(modelConfig);
-
+    
     return $video;
   }
 

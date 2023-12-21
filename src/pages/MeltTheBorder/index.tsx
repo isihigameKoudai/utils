@@ -1,9 +1,15 @@
 import React, { useEffect } from 'react';
 import * as THREE from 'three';
+import { isEmpty } from 'lodash-es';
 
+import { DetectedObject } from '../../../packages/tensorflow';
 import ShaderCanvas from '../../../packages/ShaderCanvas';
 import vertex from '../../../packages/glsl/vertex.vert?raw';
 import fragment from './fragment.frag?raw';
+
+import DetectorView from './DetectorView';
+import { DETECTOR_OPACITY } from './const';
+
 
 const MeltTheBorder: React.FC = () => {
   const uniforms = {
@@ -34,13 +40,13 @@ const MeltTheBorder: React.FC = () => {
   };
   const delay = 100;
 
-  const init = () => {
+  useEffect(() => {
     const mouseEvent = (e: MouseEvent) => {
       const rect = (e.target as HTMLCanvasElement).getBoundingClientRect();
       mouse.x = Math.floor(e.clientX - rect.left);
       mouse.y = Math.floor(e.screenY - rect.top);
     }
-    document.addEventListener('mousemove', mouseEvent);
+    // document.addEventListener('mousemove', mouseEvent);
 
     const intervalTimer = setInterval(() => {
       // 汎用フォローカーソルの座標計算
@@ -49,26 +55,38 @@ const MeltTheBorder: React.FC = () => {
 
       uniforms.x.value = follower.x;
       // y軸調整
-      uniforms.y.value = follower.y - window.innerHeight - 150;
-      // uniforms.y.value = follower.y;
+      // uniforms.y.value = follower.y - window.innerHeight - 150;
+      uniforms.y.value = follower.y;
     },10);
-
+    
     return () => {
       document.removeEventListener('mousemove', mouseEvent);
       clearInterval(intervalTimer);
     }
-  };
-  useEffect(init, []);
+  }, []);
+
+  const handleDetect = (objects: DetectedObject[]) => {
+    if (isEmpty(objects)) return;
+
+    const object = objects[0];
+    console.log(object.center.x, object.center.y);
+    mouse.x = object.center.x;
+    mouse.y = -object.center.y;
+  }
 
   return <div id="3D" style={{
     width: '100%',
-    height: '100svh'
+    height: '100svh',
+    position: 'relative'
   }}>
     <ShaderCanvas
       uniforms={uniforms}
       vertexShader={vertex}
       fragmentShader={fragment}
     />
+    <div style={{ position: 'absolute', top: 0, width: '100%' }}>
+      <DetectorView opacity={DETECTOR_OPACITY} onDetect={handleDetect} />
+    </div>
   </div>;
 }
 

@@ -5,9 +5,10 @@ import { DetectedObject } from '../../packages/tensorflow';
 interface Props {
   objects: DetectedObject[];
   opacity?: number;
+  showCenter?: boolean;
 }
 
-const TargetView = forwardRef<HTMLDivElement,Props>(({ objects, opacity = 0.5 }, ref) => {
+const TargetView = forwardRef<HTMLDivElement,Props>(({ objects, opacity = 0.5, showCenter = false }, ref) => {
 
   return (
     <div ref={ref} style={{
@@ -38,6 +39,22 @@ const TargetView = forwardRef<HTMLDivElement,Props>(({ objects, opacity = 0.5 },
                 background: '#00cc00',
                 opacity
               }}></div>
+              {
+                showCenter && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      left: obj.center.x,
+                      top: obj.center.y,
+                      width: 10,
+                      height: 10,
+                      background: '#000',
+                      transform: 'translate(-50%,-50%,)',
+                      opacity
+                    }}
+                  ></div>
+                )
+              }
             </>
           )
         })
