@@ -21,14 +21,14 @@ const Menu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         onClick={onClose}
         style={{
           background: 'rgba(250, 250, 250, 0.3)',
-          backdropFilter: 'blur(4px)'
+          backdropFilter: 'blur(4px)',
         }}
       />
       <nav style={{
         background: '#222222',
         margin: 0,
         padding: '64px 24px',
-        overflow: 'scroll-y'
+        overflowY: 'scroll'
       }}>
         <ul style={{ margin: 0, padding: 0 }}>
         {

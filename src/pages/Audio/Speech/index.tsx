@@ -3,7 +3,6 @@ import Speech from "../../../../packages/Speech";
 
 const SpeechPage: React.FC = () => {
   const speech = new Speech();
-  console.log(window.navigator.userAgent);
   const onStartSpeech = useCallback(() => {
     speech.setOnResult((e) => {
       console.log(e, e.results[0][0]?.transcript);

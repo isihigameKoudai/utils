@@ -29,7 +29,6 @@ const AudioCirclePage: React.FC = () => {
     await ringVisualizer.setDeviceAudio({ audio: true });
     ringVisualizer.start(({ spectrumArray }) => {
       const av = flatSums([...spectrumArray], 100);
-      console.log(av);
       const AUDIO_DRUMS = 512;
       const masteredNum = spectrumArray[AUDIO_DRUMS] / 512;
       // 512 ボーカル、ドラムなど

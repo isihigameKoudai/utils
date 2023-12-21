@@ -13,6 +13,13 @@ import SquareSparkPage from "../pages/Examples/SquareSpark";
 import AudioCirclePage from "../pages/Examples/AudioCircle";
 import StableFluids from "../pages/StableFluids";
 import PlaygroundPage from "../pages/Playground";
+import Detector from "../pages/Examples/Detector";
+import FluidDetect from "../pages/Examples/FluidDetect";
+import FollowerCircle from '../pages/Examples/FollowerCircle';
+import FbmNoisePage from "../pages/Noise/Fbm";
+import FractalNoisePage from "../pages/Noise/Fractal";
+import CellularNoisePage from "../pages/Noise/CellularNoise";
+import MeltTheBorder from "../pages/MeltTheBorder";
 
 export type IRoute = {
   title: string;
@@ -96,8 +103,47 @@ export const routeList: IRoute[] = [
     element: <AudioCirclePage />
   },
   {
+    title: '円（追尾）',
+    path: '/samples/follower-circle',
+    element: <FollowerCircle />
+  },
+  {
     title: 'キラキラ',
     path: '/samples/square-apark',
     element: <SquareSparkPage />
+  },
+  {
+    title: 'ML',
+    path: '/samples/detector',
+    element: <Detector />
+  },
+  {
+    title: 'fluid-detect',
+    path: '/samples/fluid-detect',
+    element: <FluidDetect />
+  },
+  {
+    title: 'ノイズ',
+    path: '/noise',
+  },
+  {
+    title: 'fBMノイズ',
+    path: '/noise/fbm',
+    element: <FbmNoisePage />
+  },
+  {
+    title: 'フラクタルノイズ',
+    path: '/noise/fractal',
+    element: <FractalNoisePage />
+  },
+  {
+    title: 'セルラーノイズ',
+    path: '/noise/cellular',
+    element: <CellularNoisePage />
+  },
+  {
+    title: 'Melt the border',
+    path: '/melt-the-border',
+    element: <MeltTheBorder />
   },
 ];

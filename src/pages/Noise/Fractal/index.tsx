@@ -1,23 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React from 'react';
 import * as THREE from 'three';
 
 import ShaderCanvas from '../../../../packages/ShaderCanvas';
 import vertex from '../../../../packages/glsl/vertex.vert?raw';
-import normalCircle from './normalCircle.frag?raw';
+import fractal from './fractal.frag?raw';
 
-const NormalCirclePage: React.FC = () => {
+const FractalNoisePage: React.FC = () => {
   const uniforms = {
     time: {
       value: 0
     },
     resolution: {
       value: new THREE.Vector2(window.innerWidth, window.innerHeight)
-    },
-    x: {
-      value: window.innerWidth / 2
-    },
-    y: {
-      value: -window.innerHeight / 2
     },
   };
 
@@ -28,9 +22,9 @@ const NormalCirclePage: React.FC = () => {
     <ShaderCanvas
       uniforms={uniforms}
       vertexShader={vertex}
-      fragmentShader={normalCircle}
+      fragmentShader={fractal}
     />
   </div>;
 }
 
-export default NormalCirclePage;
+export default FractalNoisePage;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as THREE from 'three';
 
 import ShaderCanvas from '../../../packages/ShaderCanvas';
@@ -6,6 +6,14 @@ import vertex from '../../../packages/glsl/vertex.vert?raw';
 import fragment from './glsl/fragment.frag?raw';
 
 const PlaygroundPage: React.FC = () => {
+
+  useEffect(() => {
+    const init = async () => {
+      // const model = await cocoSsd.load();
+    }
+
+    init();
+  },[]);
   
   return <div id="3D" style={{
     width: '100%',
