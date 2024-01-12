@@ -62,7 +62,7 @@ float fbm ( in vec2 _st) {
 
 void main(void){
   vec2 st = gl_FragCoord.xy/resolution.xy*5.;
-  vec3 color = vec3(1.0);
+  vec3 color = vec3(0.0);
 
   vec2 q = vec2(0.0);
   q.x = fbm( st + 0.01*time);
@@ -78,17 +78,17 @@ void main(void){
     clamp((f*f)*4.0,0.0,1.0)
   );
 
-    color = mix(
-      color,
-      vec3(1.0, 1.0, 1.0),
-      clamp(length(q),0.0,1.0)
-    );
+  color = mix(
+    color,
+    vec3(1.0, 1.0, 1.0),
+    clamp(length(q),0.0,1.0)
+  );
 
-    color = mix(
-      color,
-      vec3(0.9804, 0.3843, 0.9804),
-      clamp(length(r.x),0.0,1.0)
-    );
+  color = mix(
+    color,
+    vec3(0.9804, 0.3843, 0.9804),
+    clamp(length(r.x),0.0,1.0)
+  );
 
 
   // 半径
