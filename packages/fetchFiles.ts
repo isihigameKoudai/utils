@@ -24,12 +24,6 @@ const IMAGE_TYPE = "image" as const;
 const MOVIE_TYPE = "movie" as const;
 const AUDIO_TYPE = "audio" as const;
 
-const detailsBy = {
-  [IMAGE_TYPE]: imageDetails,
-  [AUDIO_TYPE]: audioDetails,
-  [MOVIE_TYPE]: movieDetails,
-};
-
 type Option = {
   isMultiple?: boolean;
   fileType?: typeof IMAGE_TYPE | typeof MOVIE_TYPE | typeof AUDIO_TYPE;
