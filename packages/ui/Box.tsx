@@ -9,8 +9,14 @@ import { style as _style } from 'typestyle';
 
 import isEmpty from '@/packages/is-empty';
 
+// HTMLタグ名から各HTMLElementの型を取得
+// type HTMLElementType<E extends React.ElementType> = E extends keyof HTMLElementTagNameMap
+//   ? HTMLElementTagNameMap[E]
+//   : HTMLElement;
+
 type OwnProps<E extends React.ElementType> = {
   as?: E;
+  // _ref?: HTMLElementType<E>;
 };
 
 export type BoxProps<E extends React.ElementType> = OwnProps<E> &
@@ -19,6 +25,7 @@ export type BoxProps<E extends React.ElementType> = OwnProps<E> &
 
 const Box = <E extends React.ElementType = 'div'>({
   as,
+  // _ref,
   children,
   className: _className,
   ...styleProps
@@ -28,7 +35,10 @@ const Box = <E extends React.ElementType = 'div'>({
   const className = _className ? ` ${_className}` : '';
   
   return (
-    <Tag className={`${style}${className}`}>
+    <Tag
+      // ref={_ref}
+      className={`${style}${className}`}
+    >
       {children}
     </Tag>
   );
