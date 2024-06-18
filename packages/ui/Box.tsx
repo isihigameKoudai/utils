@@ -7,7 +7,7 @@
 import React from 'react';
 import { style as _style } from 'typestyle';
 
-import isEmpty from '../is-empty';
+import isEmpty from '@/packages/is-empty';
 
 type OwnProps<E extends React.ElementType> = {
   as?: E;
