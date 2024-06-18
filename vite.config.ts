@@ -6,11 +6,8 @@ import Pages from "vite-plugin-pages";
 export default defineConfig({
   plugins: [react(), Pages()],
   resolve: {
-    alias: [
-      {
-        find: "@",
-        replacement: "/",
-      },
-    ],
+    alias: {
+      '@': './'
+    },
   },
 });
