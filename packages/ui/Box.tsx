@@ -10,7 +10,7 @@ import { style as _style } from 'typestyle';
 import isEmpty from '@/packages/is-empty';
 
 // HTMLタグ名から各HTMLElementの型を取得
-// type HTMLElementType<E extends React.ElementType> = E extends keyof HTMLElementTagNameMap
+// type HTMLElementMap<E extends React.ElementType> = E extends keyof HTMLElementTagNameMap
 //   ? HTMLElementTagNameMap[E]
 //   : HTMLElement;
 
@@ -19,9 +19,10 @@ type OwnProps<E extends React.ElementType> = {
   // _ref?: HTMLElementType<E>;
 };
 
-export type BoxProps<E extends React.ElementType> = OwnProps<E> &
-  Omit<React.ComponentProps<E>, keyof OwnProps<E>> &
-  React.CSSProperties;
+export type BoxProps<E extends React.ElementType>
+  = OwnProps<E> 
+  & Omit<React.ComponentProps<E>, keyof OwnProps<E>>
+  & React.CSSProperties;
 
 const Box = <E extends React.ElementType = 'div'>({
   as,
