@@ -1,3 +1,6 @@
+/**
+ * npm i @tensorflow/tfjs @tensorflow-models/coco-ssd
+ */
 import '@tensorflow/tfjs';
 
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
