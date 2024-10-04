@@ -1,7 +1,7 @@
-/** ストアの状態を表す型。すべてのプロパティが読み取り専用 */
+/** ストアの状態を表す型、読み取り専用 */
 export type State = Readonly<Record<string, unknown>>;
 
-/** 初期状態を表す型。直接のオブジェクトか、状態を返す関数 */
+/** 初期状態を表す型。直接のオブジェクトか状態を返す関数 */
 export type StateOrStateFn<S extends State> = S | (() => S);
 
 /** クエリ関数の型。状態を受け取り、何らかの値を返す */
@@ -28,4 +28,14 @@ export interface StoreProps<S extends State, Q extends Queries<S>, A extends Act
   queries?: Q;
   /** アクション関数のオブジェクト */
   actions: A;
+}
+
+export type UseStoreReturn<S extends State, Q extends Queries<S>, A extends Actions<S>> = {
+  state: S;
+  queries: { readonly [K in keyof Q]: ReturnType<Q[K]> };
+  actions: { readonly [K in keyof A]: (...args: Parameters<A[K]> extends [ActionContext<S>, ...infer P] ? P : never) => void | Promise<void> };
+};
+
+export type CreateStoreReturn<S extends State, Q extends Queries<S>, A extends Actions<S>> = {
+  useStore: () => UseStoreReturn<S, Q, A>;
 }

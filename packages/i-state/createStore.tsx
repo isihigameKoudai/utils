@@ -1,17 +1,18 @@
 import { useCallback, useState, useMemo } from "react"
 
-import { State, Queries, Actions, ActionContext, Dispatch, StoreProps} from './type';
+import { State, Queries, Actions, ActionContext, Dispatch, StoreProps, CreateStoreReturn, UseStoreReturn} from './type';
 
 export const createStore = <
   S extends State,
   Q extends Queries<S>,
   A extends Actions<S>
->(storeConfig: StoreProps<S, Q, A>) => {
+>(storeConfig: StoreProps<S, Q, A>): CreateStoreReturn<S, Q, A> => {
+
   const initialState = typeof storeConfig.state === 'function'
     ? (storeConfig.state as () => S)()
     : storeConfig.state;
 
-  const useStore = () => {
+  const useStore = (): UseStoreReturn<S, Q, A> => {
     const [state, setState] = useState<S>(initialState);
 
     const dispatch: Dispatch<S> = useCallback((key, value) => {
@@ -20,8 +21,7 @@ export const createStore = <
 
     const queries = useMemo(() => {
       const queryEntries = Object.entries(storeConfig.queries || {});
-      const queryObject = {} as { readonly [K in keyof Q]: ReturnType<Q[K]> };
-      
+      const queryObject = {} as ReturnType<CreateStoreReturn<S, Q, A>['useStore']>['queries'];
       queryEntries.forEach(([key, query]) => {
         Object.defineProperty(queryObject, key, {
           get: () => Object.freeze(query(state)),
@@ -38,7 +38,7 @@ export const createStore = <
           ...acc,
           [key]: (...args: any[]) => action({ state, dispatch }, ...args)
         }),
-        {} as { readonly [K in keyof A]: (...args: Parameters<A[K]> extends [ActionContext<S>, ...infer P] ? P : never) => void | Promise<void> }
+        {} as ReturnType<CreateStoreReturn<S, Q, A>['useStore']>['actions']
       ));
     }, [state, dispatch, storeConfig.actions]);
 
