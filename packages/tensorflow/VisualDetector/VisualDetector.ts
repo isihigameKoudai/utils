@@ -2,32 +2,10 @@
  * npm i @tensorflow/tfjs @tensorflow-models/coco-ssd
  */
 import '@tensorflow/tfjs';
-
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
-type LoadElProps = {
-  $video?: HTMLVideoElement;
-  width?: HTMLVideoElement['width'];
-  height?: HTMLVideoElement['height'];
-};
-
-export type DetectedObject = {
-  class: cocoSsd.DetectedObject['class'];
-  left: cocoSsd.DetectedObject['bbox'][0];
-  top: cocoSsd.DetectedObject['bbox'][1];
-  width: cocoSsd.DetectedObject['bbox'][2];
-  height: cocoSsd.DetectedObject['bbox'][3];
-  center: {
-    x: number;
-    y: number;
-  };
-  score: cocoSsd.DetectedObject['score'];
-}
-type RenderCallBack = (objects: DetectedObject[]) => void | Promise<void>;
-
-const INITIAL_VIDEO_EL_WIDTH = 640 as const;
-const INITIAL_VIDEO_EL_HEIGHT = 480 as const;
-
+import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from './constants';
+import { LoadElProps, DetectedObject, RenderCallBack } from './type';
 /**
  * Detect some objects by using camera;
  * powered by tensorflow.js cocossd model;
