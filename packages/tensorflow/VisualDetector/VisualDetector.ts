@@ -4,7 +4,7 @@
 import '@tensorflow/tfjs';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
-import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from './constants';
+import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../constants';
 import { LoadElProps, DetectedObject, RenderCallBack } from './type';
 /**
  * Detect some objects by using camera;
@@ -13,8 +13,9 @@ import { LoadElProps, DetectedObject, RenderCallBack } from './type';
  */
 export class VisualDetector {
   _model: cocoSsd.ObjectDetection | null;
-  _$video: HTMLVideoElement | null;
   _detectedRawObjects: cocoSsd.DetectedObject[];
+
+  _$video: HTMLVideoElement | null;
   _requestAnimationFrameId: number;
   _magnification: { x: number; y: number };
   _stream: MediaStream | null;
@@ -90,6 +91,7 @@ export class VisualDetector {
     }
   }
 
+  // TODO: 共通化
   async loadEl({
     $video,
     width = INITIAL_VIDEO_EL_WIDTH,
@@ -116,6 +118,8 @@ export class VisualDetector {
     $video.width = width;
     $video.height = height;
     $video.srcObject = stream;
+    $video.autoplay = true;
+    $video.muted = true;
     this._$video = $video;
     return $video;
   }
