@@ -1,4 +1,4 @@
-import { Audio } from "./Media/Audio";
+import { Audio } from "../Media";
 
 declare global {
   interface Window {
@@ -11,18 +11,26 @@ declare global {
     oCancelAnimationFrame: (handle: number) => void;
   }
 }
-export const requestAnimationFrame =
-  window.requestAnimationFrame ||
-  window.mozRequestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  window.msRequestAnimationFrame;
 
-export const cancelAnimationFrame =
-  window.cancelAnimationFrame ||
-  window.webkitCancelAnimationFrame ||
-  window.mozCancelAnimationFrame ||
-  window.msCancelAnimationFrame ||
-  window.oCancelAnimationFrame;
+// グローバルな window オブジェクトの存在をチェックする関数
+const isWindowDefined = () => typeof window !== 'undefined';
+
+// requestAnimationFrame の定義を修正
+export const requestAnimationFrame = isWindowDefined()
+  ? window.requestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.msRequestAnimationFrame
+  : (callback: FrameRequestCallback) => setTimeout(callback, 1000 / 60);
+
+// cancelAnimationFrame の定義を修正
+export const cancelAnimationFrame = isWindowDefined()
+  ? window.cancelAnimationFrame ||
+    window.webkitCancelAnimationFrame ||
+    window.mozCancelAnimationFrame ||
+    window.msCancelAnimationFrame ||
+    window.oCancelAnimationFrame
+  : (handle: number) => clearTimeout(handle);
 
 export type RenderCallBack = (props: {
   $canvas: HTMLCanvasElement;
@@ -44,7 +52,7 @@ type RenderOptions = {
 /**
  * 取り込んだ音声を任意のビジュアルに変換・描画の機能を司る
  */
-export default class Visualizer extends Audio {
+export class Visualizer extends Audio {
   analyzer: AnalyserNode | null;
   timeDomainArray: Uint8Array;
   spectrumArray: Uint8Array;
