@@ -43,10 +43,10 @@ describe('Media', () => {
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const constraints: MediaStreamConstraints = { audio: true, video: true };
-    const result = await media.getUserMedia(constraints);
+    
+    await expect(media.getUserMedia(constraints)).rejects.toThrow('getUserMedia error');
 
     expect(mockGetUserMedia).toHaveBeenCalledWith(constraints);
-    expect(result).toBeUndefined();
     expect(media.stream).toBeNull();
     expect(consoleErrorSpy).toHaveBeenCalledWith(mockError);
 
