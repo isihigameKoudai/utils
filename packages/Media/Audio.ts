@@ -84,12 +84,12 @@ export class Audio {
   /**
    * 一時停止/再生
    */
-  pause() {
-    if (this.isPlaying) {
-      this._context.suspend();
+  async pause() {
+    if (this._context.state === 'running') {
+      await this._context.suspend();
       this.isPlaying = false;
-    } else {
-      this._context.resume();
+    } else if (this._context.state === 'suspended') {
+      await this._context.resume();
       this.isPlaying = true;
     }
   }
