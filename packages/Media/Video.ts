@@ -1,5 +1,6 @@
 import { Media } from "./Media";
 
+const INITIAL_MAGNIFICATION = { x: 1, y: 1 };
 export class Video extends Media {
   _$video: HTMLVideoElement | null;
 
@@ -7,7 +8,7 @@ export class Video extends Media {
 
   constructor() {
     super();
-    this._magnification = { x: 1, y: 1 };
+    this._magnification = INITIAL_MAGNIFICATION;
     this._$video = null;
   }
 
@@ -24,8 +25,12 @@ export class Video extends Media {
     return videoStream;
   }
 
-  setMagnification(x: number, y: number) {
+  setMagnification({ x, y }: { x: number; y: number }) {
     this._magnification = { x, y };
+  }
+
+  resetMagnification() {
+    this._magnification = INITIAL_MAGNIFICATION;
   }
 
   setVideo($video: HTMLVideoElement) {
@@ -35,5 +40,14 @@ export class Video extends Media {
     }
     $video.srcObject = this.stream;
     this._$video = $video;
+  }
+
+  stopVideo() {
+    if(!this._$video) return;
+
+    this.deleteStream();
+    this._$video.pause();
+    this._$video.srcObject = null;
+    this._$video = null;
   }
 }

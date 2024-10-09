@@ -12,7 +12,7 @@ export const createAudioContext = (): AudioContext =>
  * web audio api使用
  * https://developer.mozilla.org/ja/docs/Web/API/Web_Audio_API
  */
-export default class Audio {
+export class Audio {
   _context: AudioContext;
   _audioSource: AudioBufferSourceNode | null;
   _mediaSource: MediaStreamAudioSourceNode | null;

@@ -17,7 +17,7 @@ describe('Video', () => {
   });
 
   test('setMagnificationが正常に動作すること', () => {
-    video.setMagnification(2, 3);
+    video.setMagnification({ x: 2, y: 3 });
     expect(video.magnification).toEqual({ x: 2, y: 3 });
   });
 

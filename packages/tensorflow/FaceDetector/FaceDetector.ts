@@ -9,31 +9,24 @@ import {
   LoadElProps,
   RenderCallBack
 } from './type';
+import { Video } from '../../Media/Video';
 
-export class FaceDetector {
+export class FaceDetector extends Video {
+
   _model: faceDetection.SupportedModels;
+
   _detector: faceDetection.FaceDetector | null;
-  _detectedFaces: faceDetection.Face[];
-  
+
+  _detectedRawFaces: faceDetection.Face[];
+
   _requestAnimationFrameId: number;
-  _magnification: { x: number; y: number };
-  _$video: HTMLVideoElement | null;
-  _stream: MediaStream | null;
 
   constructor() {
+    super();
     this._model = faceDetection.SupportedModels.MediaPipeFaceDetector;
-    this._requestAnimationFrameId = 0;
-    /**
-     * 設定されたvideo elementがtensorflow.jsの基準値（width: 640, height: 480）から、何倍かを保存する。
-     */
-    this._magnification = {
-      x: 1,
-      y: 1
-    };
-    this._stream = null;
-    this._$video = null;
     this._detector = null;
-    this._detectedFaces = [];
+    this._detectedRawFaces = [];
+    this._requestAnimationFrameId = 0;
   }
 
   get model() {
@@ -44,16 +37,35 @@ export class FaceDetector {
     return this._detector;
   }
 
-  get $video() {
-    return this._$video;
+  get detectedRawFaces() {
+    return this._detectedRawFaces;
   }
 
-  get stream() {
-    return this._stream;
+  get requestAnimationFrameId() {
+    return this._requestAnimationFrameId;
   }
-  
-  get detectedFaces() {
-    return this._detectedFaces;
+
+  get detectedFaces(): faceDetection.Face[] {
+    return this.detectedRawFaces.map(face => {
+      const { x: timesX, y: timesY } = this.magnification;
+      return {
+        box: {
+          width: face.box.width * timesX,
+          height: face.box.height * timesY,
+          xMin: face.box.xMin * timesX,
+          xMax: face.box.xMax * timesX,
+          yMin: face.box.yMin * timesY,
+          yMax: face.box.yMax * timesY
+        },
+        keypoints: face.keypoints.map(keypoint => {
+          return {
+            x: keypoint.x * timesX,
+            y: keypoint.y * timesY,
+            name: keypoint.name
+          }
+        })
+      }
+    })
   }
 
   async loadModel() {
@@ -68,45 +80,27 @@ export class FaceDetector {
     }
   }
 
-  // TODO: 共通化
   async loadEl({
     $video,
     width = INITIAL_VIDEO_EL_WIDTH,
     height = INITIAL_VIDEO_EL_HEIGHT
-  }:LoadElProps): Promise<HTMLVideoElement> {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    this._stream = stream;
+  }: LoadElProps): Promise<HTMLVideoElement> {
+    const stream = await this.getVideoStream();
+    this.setMagnification({ x: width / INITIAL_VIDEO_EL_WIDTH, y: height / INITIAL_VIDEO_EL_HEIGHT });
 
-    this._magnification = {
-      x: width / INITIAL_VIDEO_EL_WIDTH,
-      y: height / INITIAL_VIDEO_EL_HEIGHT
-    }
-
-    if (!$video) {
-      const _$video = document.createElement('video');
-      _$video.muted = true;
-      _$video.autoplay = true;
-      _$video.width = width;
-      _$video.height = height;
-      _$video.srcObject = stream;
-      this._$video = _$video;
-      return _$video;
-    }
-    $video.width = width;
-    $video.height = height;
-    $video.srcObject = stream;
-    $video.autoplay = true;
-    $video.muted = true;
-    this._$video = $video;
-
-    return $video;
+    const videoEl = $video || document.createElement('video');
+    videoEl.muted = true;
+    videoEl.autoplay = true;
+    videoEl.width = width;
+    videoEl.height = height;
+    this.setVideo(videoEl);
+    return videoEl;
   }
 
   async load(elConfig?: LoadElProps) {
-    const $video = this.loadEl(elConfig || {});
+    await this.loadEl(elConfig || {});
     await this.loadModel();
-    return $video;
-  }
+    }
 
   async start(renderCallBack?: RenderCallBack) {
     if(!this.detector) {
@@ -119,21 +113,22 @@ export class FaceDetector {
       return
     }
 
-    if(!this.detector) {
-      console.error('detector is empty. you should load model');
-      return
-    }
-
     const faces = await this.detector.estimateFaces(this.$video, {
       flipHorizontal: false
     });
 
-    this._detectedFaces = faces;
+    this._detectedRawFaces = faces;
 
-    if(renderCallBack) {
-      renderCallBack(this.detectedFaces);
-    }
+    renderCallBack?.(this.detectedFaces);
     
     this._requestAnimationFrameId = window.requestAnimationFrame(this.start.bind(this, renderCallBack));
   }
-};
+
+  stop() {
+    this.stopVideo();
+    window.cancelAnimationFrame(this._requestAnimationFrameId);
+    this._detectedRawFaces = [];
+    this._requestAnimationFrameId = 0;
+    this._detector = null;
+  }
+}
