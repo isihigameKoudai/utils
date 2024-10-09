@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { VisualDetector, DetectedObject } from "../../../../packages/tensorflow";
-import TargetView from "../../../components/TargetView";
+import VisualDetectionView from "../../../components/VisualDetectionView";
 
 export default function Detector() {
   const detector = new VisualDetector();
@@ -33,7 +33,7 @@ export default function Detector() {
   return (
     <div>
       { isShow && <button onClick={handleDetect}>start detect</button>}
-      <TargetView
+      <VisualDetectionView
         ref={$videoContainer}
         objects={objects.filter(obj => obj.class === 'person')}
         opacity={0.3}
