@@ -4,7 +4,7 @@ declare global {
   }
 }
 
-export const createAudioContext = (): AudioContext =>
+const createAudioContext = (): AudioContext =>
   new AudioContext() ||
   new (window.AudioContext || window.webkitAudioContext)();
 /**
