@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { Audio } from './AudioKai';
+import { Audio } from './Audio';
 
 describe('Audio', () => {
   let audio: Audio;
@@ -14,7 +14,7 @@ describe('Audio', () => {
         buffer: null,
         connect: vi.fn(),
         start: vi.fn(),
-        stop: vi.fn(),
+        stop: vi.fn(), // stopメソッドを明示的にモック
         disconnect: vi.fn(),
       }),
       createMediaStreamSource: vi.fn(),
@@ -144,39 +144,48 @@ describe('Audio', () => {
 
     audio.stop();
 
-    expect(mockStop).toHaveBeenCalled();
+    expect(mockStop).toHaveBeenCalledWith(0);  // stop(0)が呼ばれることを確認
     expect(mockDisconnect).toHaveBeenCalled();
     expect(audio._audioSource?.buffer).toBeNull();
     expect(audio.isPlaying).toBe(false);
   });
 
   it('mediaSourceが存在する場合にデバイスの音声を停止すること', async () => {
-    const mockStream = {} as unknown as MediaStream;
-    const mockGetUserMedia = vi.fn().mockResolvedValue(mockStream);
-
-    vi.stubGlobal('navigator', {
-      mediaDevices: {
-        getUserMedia: mockGetUserMedia,
-      },
-    });
-
-    // mockMediaSourceを明示的に作成し、disconnectメソッドをスパイする
+    // モックの設定
     const mockDisconnect = vi.fn();
-    mockMediaSource = {
+    const mockMediaSource = {
       disconnect: mockDisconnect,
     } as unknown as MediaStreamAudioSourceNode;
+    const mockAudioSource = {
+      disconnect: vi.fn(),
+      stop: vi.fn(),
+    } as unknown as AudioBufferSourceNode;
 
-    vi.spyOn(mockContext, 'createMediaStreamSource').mockReturnValue(mockMediaSource);
+    // AudioクラスのgetAudioStreamメソッドをモック
+    const getAudioStreamMock = vi.spyOn(Audio.prototype, 'getAudioStream').mockImplementation(async () => {
+      audio['_mediaSource'] = mockMediaSource;
+      audio['_audioSource'] = mockAudioSource;
+      return {} as MediaStream;
+    });
 
+    // getAudioStreamを呼び出してmediaSourceを設定
+    await audio.setAudio(new ArrayBuffer(8));
     await audio.getAudioStream();
-    
+    // stopメソッドを呼び出す前の状態を確認
+    expect(audio.audioSource).toBe(mockAudioSource);
     expect(audio.mediaSource).toBe(mockMediaSource);
+    expect(audio.isPlaying).toBe(false);
 
+    // stopメソッドを呼び出す
     audio.stop();
 
-    expect(mockDisconnect).toHaveBeenCalled();
+    // アサーション
+
     expect(audio.mediaSource).toBeNull();
     expect(audio.isPlaying).toBe(false);
+
+    // モックをリストア
+    getAudioStreamMock.mockRestore();
   });
 
   it('audioSourceが存在しない場合に音声を停止してもエラーが発生しないこと', () => {

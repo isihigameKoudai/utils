@@ -27,9 +27,7 @@ export class Media {
   }
 
   deleteStream() {
-    console.log(this.stream?.getTracks(), this.stream?.getVideoTracks());
     this.stream?.getVideoTracks().forEach(videoStream => {
-      console.log(videoStream);
       videoStream.enabled = false;
       videoStream.stop();
     });
