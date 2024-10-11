@@ -12,25 +12,20 @@ declare global {
   }
 }
 
-// グローバルな window オブジェクトの存在をチェックする関数
-const isWindowDefined = () => typeof window !== 'undefined';
-
 // requestAnimationFrame の定義を修正
-export const requestAnimationFrame = isWindowDefined()
-  ? window.requestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.msRequestAnimationFrame
-  : (callback: FrameRequestCallback) => setTimeout(callback, 1000 / 60);
+export const requestAnimationFrame = () =>
+  window.requestAnimationFrame ||
+  window.mozRequestAnimationFrame ||
+  window.webkitRequestAnimationFrame ||
+  window.msRequestAnimationFrame;
 
 // cancelAnimationFrame の定義を修正
-export const cancelAnimationFrame = isWindowDefined()
-  ? window.cancelAnimationFrame ||
-    window.webkitCancelAnimationFrame ||
-    window.mozCancelAnimationFrame ||
-    window.msCancelAnimationFrame ||
-    window.oCancelAnimationFrame
-  : (handle: number) => clearTimeout(handle);
+export const cancelAnimationFrame = () =>
+  window.cancelAnimationFrame ||
+  window.webkitCancelAnimationFrame ||
+  window.mozCancelAnimationFrame ||
+  window.msCancelAnimationFrame ||
+  window.oCancelAnimationFrame;
 
 export type RenderCallBack = (props: {
   $canvas: HTMLCanvasElement;
@@ -70,8 +65,8 @@ export class Visualizer extends Audio {
     this.spectrumRawArray = new Float32Array();
     this.$canvas = null;
     this.requestAnimationFrameId = 0;
-    window.requestAnimationFrame = requestAnimationFrame;
-    window.cancelAnimationFrame = cancelAnimationFrame;
+    window.requestAnimationFrame = requestAnimationFrame();
+    window.cancelAnimationFrame = cancelAnimationFrame();
   }
 
   /**
