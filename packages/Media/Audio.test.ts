@@ -1,12 +1,14 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { Audio } from './Audio';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { Audio } from './AudioKai';
 
 describe('Audio', () => {
   let audio: Audio;
+  let mockContext: AudioContext;
+  let mockMediaSource: MediaStreamAudioSourceNode;
 
   beforeEach(() => {
     // AudioContextのモック
-    const mockAudioContext = vi.fn().mockImplementation(() => ({
+    mockContext = {
       decodeAudioData: vi.fn(),
       createBufferSource: vi.fn().mockReturnValue({
         buffer: null,
@@ -19,16 +21,21 @@ describe('Audio', () => {
       destination: {},
       suspend: vi.fn().mockResolvedValue(undefined),
       resume: vi.fn().mockResolvedValue(undefined),
-    }));
+    } as unknown as AudioContext;
+
+    // MediaStreamAudioSourceNodeのモック
+    mockMediaSource = {
+      disconnect: vi.fn(),
+    } as unknown as MediaStreamAudioSourceNode;
 
     // windowオブジェクトのモック
     global.window = {
-      AudioContext: mockAudioContext,
-      webkitAudioContext: mockAudioContext,
+      AudioContext: vi.fn().mockImplementation(() => mockContext),
+      webkitAudioContext: vi.fn().mockImplementation(() => mockContext),
     } as any;
 
     // AudioContextのグローバル定義
-    global.AudioContext = mockAudioContext;
+    global.AudioContext = vi.fn().mockImplementation(() => mockContext);
 
     // navigatorオブジェクトのモック
     global.navigator = {
@@ -75,7 +82,7 @@ describe('Audio', () => {
 
     expect(audio.audioSource).not.toBeNull();
     expect(audio.context.decodeAudioData).toHaveBeenCalledWith(mockArrayBuffer);
-    expect(mockBufferSource.buffer).toBe(null);
+    expect(mockBufferSource.buffer).not.toBeNull();
   });
 
   it('デバイスの音声をセットすること', async () => {
@@ -83,7 +90,7 @@ describe('Audio', () => {
     vi.spyOn(navigator.mediaDevices, 'getUserMedia').mockResolvedValue(mockStream);
     vi.spyOn(audio.context, 'createMediaStreamSource').mockReturnValue({} as MediaStreamAudioSourceNode);
 
-    const stream = await audio.setDeviceAudio();
+    const stream = await audio.getAudioStream();
 
     expect(stream).toBe(mockStream);
     expect(audio.mediaSource).not.toBeNull();
@@ -143,16 +150,32 @@ describe('Audio', () => {
     expect(audio.isPlaying).toBe(false);
   });
 
-  it('mediaSourceが存在する場合にデバイスの音声を停止すること', () => {
+  it('mediaSourceが存在する場合にデバイスの音声を停止すること', async () => {
+    const mockStream = {} as unknown as MediaStream;
+    const mockGetUserMedia = vi.fn().mockResolvedValue(mockStream);
+
+    vi.stubGlobal('navigator', {
+      mediaDevices: {
+        getUserMedia: mockGetUserMedia,
+      },
+    });
+
+    // mockMediaSourceを明示的に作成し、disconnectメソッドをスパイする
     const mockDisconnect = vi.fn();
-    audio._mediaSource = {
+    mockMediaSource = {
       disconnect: mockDisconnect,
     } as unknown as MediaStreamAudioSourceNode;
+
+    vi.spyOn(mockContext, 'createMediaStreamSource').mockReturnValue(mockMediaSource);
+
+    await audio.getAudioStream();
+    
+    expect(audio.mediaSource).toBe(mockMediaSource);
 
     audio.stop();
 
     expect(mockDisconnect).toHaveBeenCalled();
-    expect(audio._mediaSource).toBeNull();
+    expect(audio.mediaSource).toBeNull();
     expect(audio.isPlaying).toBe(false);
   });
 
