@@ -1,6 +1,6 @@
 import { useCallback, useState, useMemo } from "react"
 
-import { State, Queries, Actions, ActionContext, Dispatch, StoreProps, CreateStoreReturn, UseStoreReturn} from './type';
+import { State, Queries, Actions, Dispatch, StoreProps, CreateStoreReturn, UseStoreReturn} from './type';
 
 export const createStore = <
   S extends State,
