@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import ShaderCanvas from '../../../../packages/ShaderCanvas';
 import vertex from '../../../../packages/glsl/vertex.vert?raw';
 import AudioCircle from './AudioCircle.frag?raw';
-import Visualizer from '../../../../packages/Visualizer';
+import { Visualizer } from '../../../../packages/Visualizer';
 import { average } from '../../../../packages/math';
 import { splitMap } from '../../../../packages/array';
 
@@ -26,7 +26,7 @@ const AudioCirclePage: React.FC = () => {
   };
 
   const handleStart = useCallback(async () => {
-    await ringVisualizer.setDeviceAudio({ audio: true });
+    await ringVisualizer.getAudioStream({ audio: true });
     ringVisualizer.start(({ spectrumArray }) => {
       const av = flatSums([...spectrumArray], 100);
       const AUDIO_DRUMS = 512;

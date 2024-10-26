@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from "react";
 
-import Visualizer from "../../../../packages/Visualizer";
+import { Visualizer } from "../../../../packages/Visualizer";
 import { basicParticle, lineAudio } from "./animation";
 
 const MicPage: React.FC = () => {
@@ -10,7 +10,7 @@ const MicPage: React.FC = () => {
   const particleVisualizer = new Visualizer();
   const lineVisualizer = new Visualizer();
   const onActivateMic = useCallback(async () => {
-    await particleVisualizer.setDeviceAudio({ audio: true });
+    await particleVisualizer.getAudioStream()
     particleVisualizer.start(({ $canvas, timeDomainArray, frequencyBinCount, timeDomainRawArray }) => {
       basicParticle({ $canvas, timeDomainArray, frequencyBinCount });
     },{
@@ -18,7 +18,7 @@ const MicPage: React.FC = () => {
       smoothingTimeConstant: 0.1
     });
 
-    await lineVisualizer.setDeviceAudio({ audio: true });
+    await lineVisualizer.getAudioStream();
     lineVisualizer.start(({ $canvas, timeDomainRawArray, spectrumRawArray }) => {
       lineAudio({ $canvas, timeDomainRawArray, spectrumRawArray, analyzer: lineVisualizer.analyzer! })
     },{
@@ -27,8 +27,8 @@ const MicPage: React.FC = () => {
   },[]);
 
   const onStopDeviceAudio = useCallback(() => {
-    particleVisualizer.stopDeviceAudio();
-    lineVisualizer.stopDeviceAudio();
+    particleVisualizer.stop();
+    lineVisualizer.stop();
   },[]);
 
   return (

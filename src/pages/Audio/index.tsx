@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from "react";
-import Visualizer from "../../../packages/Visualizer";
+import { Visualizer } from "../../../packages/Visualizer";
 import { fetchAudio } from "../../../packages/fetchFiles";
 import { basicParticle } from "./Mic/animation";
 
