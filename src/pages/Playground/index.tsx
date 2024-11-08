@@ -1,93 +1,144 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { FaceDetector } from '../../../packages/tensorflow/FaceDetector';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+
+type VirtualizedProps<T> = {
+  list: readonly T[];
+  children: (item: T, index: number) => React.ReactNode;
+};
+
+export const Virtualized = <T extends unknown>({ 
+  list,
+  children 
+}: VirtualizedProps<T>) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [visibleIndices, setVisibleIndices] = useState<Set<number>>(new Set());
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const [itemHeights, setItemHeights] = useState<number[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  const updateVisibility = useCallback((entries: IntersectionObserverEntry[]) => {
+    entries.forEach(entry => {
+      const index = Number(entry.target.getAttribute('data-list-index'));
+      setVisibleIndices(prev => {
+        const next = new Set(prev);
+        if (entry.isIntersecting) {
+          next.add(index);
+        } else {
+          next.delete(index);
+        }
+        return next;
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // 初期表示時の可視要素を計算
+    const calculateInitialVisibleItems = () => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const placeholders = container.querySelectorAll('[data-list-index]');
+      
+      placeholders.forEach(placeholder => {
+        const rect = placeholder.getBoundingClientRect();
+        if (rect.top < containerRect.bottom && rect.bottom > containerRect.top) {
+          const index = Number(placeholder.getAttribute('data-list-index'));
+          setVisibleIndices(prev => new Set(prev).add(index));
+        }
+      });
+      
+      setIsInitialized(true);
+    };
+
+    observerRef.current = new IntersectionObserver(updateVisibility, {
+      root: containerRef.current,
+      rootMargin: '100px 0px',
+      threshold: 0
+    });
+
+    // 初期表示時の可視要素を計算
+    calculateInitialVisibleItems();
+
+    return () => {
+      observerRef.current?.disconnect();
+    };
+  }, [updateVisibility]);
+
+  return (
+    <div 
+      ref={containerRef}
+      style={{
+        width: 200,
+        height: 500,
+        overflowY: 'scroll',
+      }}
+    >
+      {list.map((item, i) => {
+        const height = itemHeights[i] || 100; // デフォルトの高さを設定
+        
+        return (
+          <div
+            key={i}
+            data-list-index={i}
+            ref={el => {
+              if (el && isInitialized) {
+                observerRef.current?.observe(el);
+              }
+            }}
+            style={{ 
+              height,
+              boxSizing: 'border-box'
+            }}
+          >
+            {visibleIndices.has(i) ? children(item, i) : null}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+const ListItem = ({ height, num }: { height: number, num: number }) => {
+  useEffect(() => {
+    console.log('mount', num);
+    return () => {
+      console.log('unmount', num);
+    }
+  }, [num]);
+  return (
+    <div style={{ height, padding: '8px', borderBottom: '1px solid #eee' }}>
+      item {num}
+    </div>
+  )
+}
 
 const PlaygroundPage: React.FC = () => {
-  const detector = new FaceDetector();
-  
-  const $video = useRef<HTMLVideoElement>(null);
-  const $face = useRef<HTMLDivElement>(null);
-  const [points, setPoints] = useState<{ x: number; y: number; name: string}[]>([]);
-
-  // 受け取った認識情報を元に顔にインジケーターを当てる
-  const setFace = (face: FaceDetector['_detectedFaces'][number]) => {
-    if (!$face.current) {
-      return;
-    }
-    console.log('width', face.box.width, 'height', face.box.height);
-    const { yMin, xMin, width, height} = face.box;
-    const faceElement = $face.current;
-    faceElement.style.top = `${yMin}px`;
-    faceElement.style.left = `${xMin}px`;
-    faceElement.style.width = `${width}px`;
-    faceElement.style.height = `${height}px`;
-    const { keypoints } = face;
-    setPoints(keypoints.map(point => ({
-      x: point.x,
-      y: point.y,
-      name: point.name || ''
-    })));
-  } 
-
-  const activate = async () => {
-    if (!$video.current) {
-      return;
-    }
-    await detector.load({
-      $video: $video.current,
-    });
-  }
-
-  const handleActive = async () => {
-    activate();
-  }
-
-  const handleStart = async () => {
-    detector.start((faces) => {
-      // 今回は1人だけ対象
-      if (faces.length > 0) {
-        setFace(faces[0]);
-      }
-    });
-  }
+  const [open, setOpen] = useState(false);
+  const customItems = [...Array(100)].map((_, i) => ({
+    id: i,
+    name: `Item ${i}`,
+    height: Math.floor(Math.random() * 100) + 100
+  }));
 
   return (
     <div>
-      <button onClick={handleActive}>load</button>
-      <button onClick={handleStart}>start</button>
-      <div style={{
-        width: '640px',
-        height: '480px',
-        position: 'relative',
-      }}>
-        <video
-          ref={$video}
-          id="video"
-          width="640"
-          height="480"
-          muted
-        ></video>
-        <div className='face-area' ref={$face} style={{
-          position: 'absolute',
-          background: 'transparent',
-          border: 'solid 2px #ff2b2b',
-          pointerEvents: 'none'
-        }}></div>
-        {
-          points.map(point => {
-            console.log(point)
-            return <div className={point.name} style={{
-              position: 'absolute',
-              width: 4,
-              height: 4,
-              top: point.y - 2,
-              left: point.x - 2,
-              background: '#ccc'
-            }} />
-          })
-        }
-      </div>
+      <button onClick={() => setOpen(!open)}>open</button>
+      {
+        open && (
+          <Virtualized list={customItems}>
+            {(item, i) => {
+              console.log(i);
+              return (
+                <ListItem height={item.height} num={i} />
+              )
+            }}
+          </Virtualized>
+        )
+      }
     </div>
   );
-}
+};
 
 export default PlaygroundPage;
