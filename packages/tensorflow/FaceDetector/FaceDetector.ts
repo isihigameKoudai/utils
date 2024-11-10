@@ -85,7 +85,7 @@ export class FaceDetector extends Video {
     width = INITIAL_VIDEO_EL_WIDTH,
     height = INITIAL_VIDEO_EL_HEIGHT
   }: LoadElProps): Promise<HTMLVideoElement> {
-    const stream = await this.getVideoStream();
+    await this.getVideoStream();
     this.setMagnification({ x: width / INITIAL_VIDEO_EL_WIDTH, y: height / INITIAL_VIDEO_EL_HEIGHT });
 
     const videoEl = $video || document.createElement('video');
@@ -100,7 +100,7 @@ export class FaceDetector extends Video {
   async load(elConfig?: LoadElProps) {
     await this.loadEl(elConfig || {});
     await this.loadModel();
-    }
+  }
 
   async start(renderCallBack?: RenderCallBack) {
     if(!this.detector) {
