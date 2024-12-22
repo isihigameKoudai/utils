@@ -8,7 +8,7 @@ interface Props {
   showCenter?: boolean;
 }
 
-const TargetView = forwardRef<HTMLDivElement,Props>(({ objects, opacity = 0.5, showCenter = false }, ref) => {
+const VisualDetectionView = forwardRef<HTMLDivElement,Props>(({ objects, opacity = 0.5, showCenter = false }, ref) => {
 
   return (
     <div ref={ref} style={{
@@ -63,4 +63,4 @@ const TargetView = forwardRef<HTMLDivElement,Props>(({ objects, opacity = 0.5, s
   )
 });
 
-export default TargetView;
+export default VisualDetectionView;

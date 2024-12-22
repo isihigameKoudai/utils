@@ -1,30 +1,11 @@
+/**
+ * npm i @tensorflow/tfjs @tensorflow-models/coco-ssd
+ */
 import '@tensorflow/tfjs';
-
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
-type LoadElProps = {
-  $video?: HTMLVideoElement;
-  width?: HTMLVideoElement['width'];
-  height?: HTMLVideoElement['height'];
-};
-
-export type DetectedObject = {
-  class: cocoSsd.DetectedObject['class'];
-  left: cocoSsd.DetectedObject['bbox'][0];
-  top: cocoSsd.DetectedObject['bbox'][1];
-  width: cocoSsd.DetectedObject['bbox'][2];
-  height: cocoSsd.DetectedObject['bbox'][3];
-  center: {
-    x: number;
-    y: number;
-  };
-  score: cocoSsd.DetectedObject['score'];
-}
-type RenderCallBack = (objects: DetectedObject[]) => void | Promise<void>;
-
-const INITIAL_VIDEO_EL_WIDTH = 640 as const;
-const INITIAL_VIDEO_EL_HEIGHT = 480 as const;
-
+import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../constants';
+import { LoadElProps, DetectedObject, RenderCallBack } from './type';
 /**
  * Detect some objects by using camera;
  * powered by tensorflow.js cocossd model;
@@ -32,8 +13,9 @@ const INITIAL_VIDEO_EL_HEIGHT = 480 as const;
  */
 export class VisualDetector {
   _model: cocoSsd.ObjectDetection | null;
-  _$video: HTMLVideoElement | null;
   _detectedRawObjects: cocoSsd.DetectedObject[];
+
+  _$video: HTMLVideoElement | null;
   _requestAnimationFrameId: number;
   _magnification: { x: number; y: number };
   _stream: MediaStream | null;
@@ -109,6 +91,7 @@ export class VisualDetector {
     }
   }
 
+  // TODO: 共通化
   async loadEl({
     $video,
     width = INITIAL_VIDEO_EL_WIDTH,
@@ -135,6 +118,8 @@ export class VisualDetector {
     $video.width = width;
     $video.height = height;
     $video.srcObject = stream;
+    $video.autoplay = true;
+    $video.muted = true;
     this._$video = $video;
     return $video;
   }

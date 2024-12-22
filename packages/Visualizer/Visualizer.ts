@@ -1,4 +1,4 @@
-import Audio from "./Audio";
+import { Audio } from "../Media";
 
 declare global {
   interface Window {
@@ -11,13 +11,16 @@ declare global {
     oCancelAnimationFrame: (handle: number) => void;
   }
 }
-export const requestAnimationFrame =
+
+// requestAnimationFrame の定義を修正
+export const requestAnimationFrame = () =>
   window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
   window.msRequestAnimationFrame;
 
-export const cancelAnimationFrame =
+// cancelAnimationFrame の定義を修正
+export const cancelAnimationFrame = () =>
   window.cancelAnimationFrame ||
   window.webkitCancelAnimationFrame ||
   window.mozCancelAnimationFrame ||
@@ -44,7 +47,7 @@ type RenderOptions = {
 /**
  * 取り込んだ音声を任意のビジュアルに変換・描画の機能を司る
  */
-export default class Visualizer extends Audio {
+export class Visualizer extends Audio {
   analyzer: AnalyserNode | null;
   timeDomainArray: Uint8Array;
   spectrumArray: Uint8Array;
@@ -62,8 +65,8 @@ export default class Visualizer extends Audio {
     this.spectrumRawArray = new Float32Array();
     this.$canvas = null;
     this.requestAnimationFrameId = 0;
-    window.requestAnimationFrame = requestAnimationFrame;
-    window.cancelAnimationFrame = cancelAnimationFrame;
+    window.requestAnimationFrame = requestAnimationFrame();
+    window.cancelAnimationFrame = cancelAnimationFrame();
   }
 
   /**

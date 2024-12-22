@@ -5,13 +5,16 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "dependencies": {
     "@react-three/drei": "^9.68.3",
     "@react-three/fiber": "^8.13.0",
     "@tensorflow-models/coco-ssd": "^2.2.3",
-    "@tensorflow/tfjs": "^4.11.0",
+    "@tensorflow-models/face-detection": "^1.0.2",
+    "@tensorflow-models/face-landmarks-detection": "^1.0.6",
+    "@tensorflow/tfjs": "^4.21.0",
     "@types/lodash-es": "^4.17.12",
     "dat.gui": "^0.7.9",
     "lodash-es": "^4.17.21",
@@ -19,17 +22,19 @@
     "react-dom": "^18.2.0",
     "react-router": "^6.4.3",
     "react-router-dom": "^6.4.3",
-    "three": "^0.152.2"
+    "three": "^0.152.2",
+    "typestyle": "^2.4.0"
   },
   "devDependencies": {
     "@types/dat.gui": "^0.7.10",
-    "@types/node": "^20.2.1",
+    "@types/node": "^22.7.4",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "@types/three": "^0.152.0",
-    "@vitejs/plugin-react": "^2.0.0",
-    "typescript": "^4.7.4",
-    "vite": "^3.0.4",
-    "vite-plugin-pages": "^0.27.1"
+    "@vitejs/plugin-react": "^4.3.2",
+    "typescript": "^5.4.5",
+    "vite": "^5.4.8",
+    "vite-plugin-pages": "^0.32.3",
+    "vitest": "^2.1.1"
   }
 }

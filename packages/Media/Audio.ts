@@ -1,10 +1,12 @@
+import { Media } from "./Media";
+
 declare global {
   interface Window {
     webkitAudioContext: typeof AudioContext;
   }
 }
 
-export const createAudioContext = (): AudioContext =>
+const createAudioContext = (): AudioContext =>
   new AudioContext() ||
   new (window.AudioContext || window.webkitAudioContext)();
 /**
@@ -12,13 +14,14 @@ export const createAudioContext = (): AudioContext =>
  * web audio api使用
  * https://developer.mozilla.org/ja/docs/Web/API/Web_Audio_API
  */
-export default class Audio {
+export class Audio extends Media {
   _context: AudioContext;
   _audioSource: AudioBufferSourceNode | null;
   _mediaSource: MediaStreamAudioSourceNode | null;
   isPlaying: boolean;
 
   constructor() {
+    super();
     this._context = createAudioContext();
     this._audioSource = null;
     this._mediaSource = null;
@@ -49,23 +52,17 @@ export default class Audio {
 
   /**
    * メディアデバイス（マイク等）の登録
-   * @param stream デバイス情報
+   * @returns MediaStream
    */
-  async setDeviceAudio(constraints: MediaStreamConstraints = { audio: true, video: false }): Promise<MediaStream> {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      const context = createAudioContext();
-      this._context = context;
-      this._mediaSource = context.createMediaStreamSource(stream);
-      return stream;
-    } catch (e) {
-      console.error(e);
-      throw e;
-    }
+  async getAudioStream(constraints: MediaStreamConstraints = { audio: true, video: false }): Promise<MediaStream> {
+    const stream = await this.getUserMedia(constraints);
+    this._context = createAudioContext();
+    this._mediaSource = this._context.createMediaStreamSource(stream);
+    return stream;
   }
 
   /**
-   * 再生（登録されている音声を再生）
+   * 再生
    */
   play() {
     if (this._mediaSource) {
@@ -82,13 +79,13 @@ export default class Audio {
   }
 
   /**
-   * 一時停止/再生
+   * 一時停止
    */
   pause() {
-    if (this.isPlaying) {
+    if (this._context.state === 'running') {
       this._context.suspend();
       this.isPlaying = false;
-    } else {
+    } else if (this._context.state === 'suspended') {
       this._context.resume();
       this.isPlaying = true;
     }
@@ -98,36 +95,19 @@ export default class Audio {
    * 停止
    */
   stop() {
-    if (this._audioSource) {
-      this.stopAudio();
-    } else {
-      this.stopDeviceAudio();
-    }
-  }
-
-  /**
-   * 音声データの停止
-   */
-  stopAudio() {
     if (!this._audioSource) {
       return;
     }
 
-    this._audioSource.stop();
+    // audioSourceの削除
+    this._audioSource.stop(0);
     this._audioSource.disconnect();
     this._audioSource.buffer = null;
-    this.isPlaying = false;
-  }
-
-  /**
-   * デバイスメディアデータの停止
-   */
-  stopDeviceAudio() {
-    if (!this._mediaSource) {
-      return;
-    }
-    this._mediaSource.disconnect();
+    // MediaSourceの削除
+    this._mediaSource?.disconnect();
     this._mediaSource = null;
     this.isPlaying = false;
+
+    this.deleteStream();
   }
 }

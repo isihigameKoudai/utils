@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef, ComponentType } from 'react';
 
 import { DetectedObject, VisualDetector } from '../../../../packages/tensorflow';
-import TargetView from '../../../components/TargetView';
+import VisualDetectionView from '../../../components/VisualDetectionView';
 import { DETECTOR_OPACITY } from '../const';
 
 type DetectorViewProps = {
@@ -54,7 +54,7 @@ const DetectorView: React.FC<DetectorViewProps> = ({ opacity = 1.0, onDetect = (
   return (
     <>
     { isShow && <button type="button" onClick={handleDetect}>start detect</button>}
-      <TargetView
+      <VisualDetectionView
         ref={$videoContainer}
         objects={objects}
         opacity={opacity}

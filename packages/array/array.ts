@@ -39,11 +39,11 @@ export const unique = (arr: (number | string | undefined)[]) => [
 /**
  * keyごとに並び替えをする
  * 指定したkeyで並び替えをする
- * ex: [
+ * ex: sortByKey([
  *  { key: 'a', value: 1 },
  *  { key: 'b', value: 2 },
  *  { key: 'a', value: 3, foo: 'bar' }
- * ]
+ * ], 'key')
  * => [
  *  { key: 'a', value: 1 },
  *  { key: 'a', value: 3, foo: 'bar' },
@@ -69,22 +69,24 @@ export const sortByKey = <T extends ListItem>(arr: T[],orderKey?: keyof T, order
 /**
  * keyごとに並び替えをし、同じkeyのvalueを合計する
  * 
- * ex: [
+ * ex: sumByKey([
  *  { key: 'a', value: 1 },
  *  { key: 'b', value: 2 },
  *  { key: 'a', value: 3 }
- * ]
+ * ])
  * => [
  *  { key: 'a', value: 4 },
  *  { key: 'b', value: 2 }
  * ]
  */
-export const sumByKey = (array: ListItem[]): ListItem[] => {
-  const map = new Map<string, number>();
-  array.forEach((item) => {
-    const currentValue = map.get(item.key) || 0;
-    map.set(item.key, currentValue + item.value);
+export const sumByKey = <T extends ListItem>(array: ListItem[]): T[] => {
+  type MapValue = Omit<T, 'key'>;
+  const map = new Map<string, Omit<T,'key'>>();
+  array.forEach(({ key, value: valueOrigin, ...others}) => {
+    const currentValue = map.get(key);
+    const value = currentValue ? currentValue.value + valueOrigin : valueOrigin;
+    map.set(key, { value, ...others }as MapValue);
   });
 
-  return Array.from(map).map(([key, value]) => ({ key, value }));
+  return Array.from(map).map(([key, value]) => ({ key, ...value }) as T);
 }
