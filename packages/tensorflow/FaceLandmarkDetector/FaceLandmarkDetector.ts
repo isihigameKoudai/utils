@@ -107,7 +107,7 @@ export class FaceLandmarkDetector extends Video {
 
     this._requestAnimationFrameId = window.requestAnimationFrame(this.start.bind(this, renderCallBack));
   }
-  stopVideo() {
+  stop() {
     this.stopVideo();
     window.cancelAnimationFrame(this._requestAnimationFrameId);
     this._detectedRawFaces = [];

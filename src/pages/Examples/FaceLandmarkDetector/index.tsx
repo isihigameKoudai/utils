@@ -14,6 +14,10 @@ export default function Detector() {
       setFaces(faces);
     });
   },[]);
+
+  const handleStop = useCallback(() => {
+    detector.stop();
+  },[]);
   
 
   useEffect(() => {
@@ -30,6 +34,7 @@ export default function Detector() {
   return (
     <div>
       { isShow && <button onClick={handleDetect}>start detect</button>}
+      <button onClick={handleStop}>stop detect</button>
       <FaceMesh ref={$video} objects={faces} />
     </div>
   )
