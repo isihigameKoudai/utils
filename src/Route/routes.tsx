@@ -20,6 +20,7 @@ import FbmNoisePage from "../pages/Noise/Fbm";
 import FractalNoisePage from "../pages/Noise/Fractal";
 import CellularNoisePage from "../pages/Noise/CellularNoise";
 import MeltTheBorder from "../pages/MeltTheBorder";
+import FaceLandmarkDetector from "../pages/Examples/FaceLandmarkDetector";
 
 export type IRoute = {
   title: string;
@@ -116,6 +117,11 @@ export const routeList: IRoute[] = [
     title: 'ML',
     path: '/samples/detector',
     element: <Detector />
+  },
+  {
+    title: 'ML（顔ランドマーク検出）',
+    path: '/samples/face-landmark-detector',
+    element: <FaceLandmarkDetector />
   },
   {
     title: 'fluid-detect',

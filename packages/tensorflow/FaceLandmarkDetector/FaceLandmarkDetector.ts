@@ -52,14 +52,12 @@ export class FaceLandmarkDetector extends Video {
 
   async loadModel() {
     try {
-      this._detector = await faceLandmarksDetection.createDetector(this._model, {
-        runtime: 'mediapipe',
-        solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh',
+      this._detector = await faceLandmarksDetection.createDetector(this.model, {
+        runtime: 'tfjs',
         refineLandmarks: true
       });
     } catch (error) {
       console.error('モデル読み込みエラー:', error);
-      throw error;
     }
   }
 

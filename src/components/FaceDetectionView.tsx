@@ -98,5 +98,5 @@ const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({ width = 640, heig
     </div>
   );
 };
-
 export default FaceDetectionView;
+
