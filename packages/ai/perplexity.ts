@@ -1,5 +1,3 @@
-// import api from '../api';
+/** wip */
 
-export const generatePerplexity = async (model: any, data: any) => {
-  
-};
+export const generatePerplexity = async (model: any, data: any) => {};
