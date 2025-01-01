@@ -1,7 +1,7 @@
 import React, { forwardRef, ComponentPropsWithRef } from 'react';
-import { style } from '@vanilla-extract/css';
-import { useTheme } from './theme';
-import type { Theme } from './theme';
+import { style as _style } from 'typestyle';
+
+import { Theme, useTheme } from './theme';
 
 type StyledOptions = {
   className?: string;
@@ -14,13 +14,12 @@ export function styled<T extends keyof JSX.IntrinsicElements>(Component: T) {
     return forwardRef<JSX.IntrinsicElements[T] extends React.DetailedHTMLProps<any, infer E> ? E : never, Props>(
       (props, ref) => {
         const { theme } = useTheme();
-        const { className: inputClassName, ...rest } = props;
+        const { className: parentClassName, ...rest } = props;
+        const localClassName = _style(themeFunction(theme));
         
-        const generatedClassName = style(themeFunction(theme));
-        
-        const className = inputClassName
-          ? `${generatedClassName} ${inputClassName}`
-          : generatedClassName;
+        const className = parentClassName
+          ? `${localClassName} ${parentClassName}`
+          : localClassName;
 
         return React.createElement(Component, {
           ...rest,
