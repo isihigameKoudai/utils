@@ -1,7 +1,22 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
+
+import { navigatorMock, streamMock, windowMock, documentMock } from '../../__test__/mocks/global';
 import { VisualDetection } from './VisualDetection';
 import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media/constants';
+
+const mockModel = {
+  detect: vi.fn(),
+  modelPath: '',
+  model: {},
+  getPrefix: () => '',
+  load: vi.fn(),
+  infer: vi.fn(),
+  buildDetectedObjects: vi.fn(),
+  calculateMaxScores: vi.fn(),
+  dispose: vi.fn()
+} as unknown as cocoSsd.ObjectDetection;
+
 
 describe('VisualDetection', () => {
   let visualDetector: VisualDetection;
@@ -14,60 +29,14 @@ describe('VisualDetection', () => {
     }
   ];
 
-  const mockModel = {
-    detect: vi.fn(),
-    modelPath: '',
-    model: {},
-    getPrefix: () => '',
-    load: vi.fn(),
-    infer: vi.fn(),
-    buildDetectedObjects: vi.fn(),
-    calculateMaxScores: vi.fn(),
-    dispose: vi.fn()
-  } as unknown as cocoSsd.ObjectDetection;
-
-  const mockStream = {
-    getVideoTracks: vi.fn().mockReturnValue([
-      { enabled: true, stop: vi.fn() }
-    ]),
-    getAudioTracks: vi.fn().mockReturnValue([
-      { enabled: true, stop: vi.fn() }
-    ])
-  };
-
   beforeEach(() => {
     // ブラウザAPIのモック
-    global.navigator = {
-      mediaDevices: {
-        getUserMedia: vi.fn().mockResolvedValue(mockStream)
-      }
-    } as unknown as Navigator;
-
-    global.document = {
-      createElement: vi.fn().mockReturnValue({
-        muted: false,
-        autoplay: false,
-        width: INITIAL_VIDEO_EL_WIDTH,
-        height: INITIAL_VIDEO_EL_HEIGHT,
-        srcObject: null,
-        play: vi.fn().mockResolvedValue(undefined),
-        pause: vi.fn().mockResolvedValue(undefined),
-        // HTMLVideoElementとして認識されるために必要なプロパティを追加
-        tagName: 'VIDEO',
-        nodeName: 'VIDEO',
-        nodeType: 1,
-        ELEMENT_NODE: 1
-      }),
-    } as unknown as Document;
+    global.navigator = navigatorMock;
+    global.window = windowMock;
+    global.document = documentMock;
 
     // cocoSsd.loadのモックを修正
     vi.spyOn(cocoSsd, 'load').mockResolvedValue(mockModel);
-
-    // windowオブジェクトのモックを追加
-    global.window = {
-      requestAnimationFrame: vi.fn().mockReturnValue(1),
-      cancelAnimationFrame: vi.fn().mockReturnValue(1),
-    } as unknown as Window & typeof globalThis;
 
     visualDetector = new VisualDetection();
   });
@@ -96,7 +65,7 @@ describe('VisualDetection', () => {
       expect(video.height).toBe(INITIAL_VIDEO_EL_HEIGHT);
       expect(video.muted).toBe(true);
       expect(video.autoplay).toBe(true);
-      expect(video.srcObject).toBe(mockStream);
+      expect(video.srcObject).toBe(streamMock);
     });
 
     it('カスタムサイズでビデオ要素が正しく初期化されること', async () => {
@@ -149,8 +118,8 @@ describe('VisualDetection', () => {
       await visualDetector.loadEl({});
       visualDetector.stop();
 
-      const videoTracks = mockStream.getVideoTracks()[0];
-      const audioTracks = mockStream.getAudioTracks()[0];
+      const videoTracks = streamMock.getVideoTracks()[0];
+      const audioTracks = streamMock.getAudioTracks()[0];
 
       expect(videoTracks.stop).toHaveBeenCalled();
       expect(audioTracks.stop).toHaveBeenCalled();
