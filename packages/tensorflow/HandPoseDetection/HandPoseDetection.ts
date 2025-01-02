@@ -4,8 +4,7 @@
 import '@tensorflow/tfjs';
 import * as handPoseDetection from '@tensorflow-models/hand-pose-detection';
 
-import { Video } from '../../Media/Video';
-import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH } from '../../Media';
+import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH, Video } from '../../Media';
 import { ElOption } from '../type';
 import { RenderCallBack } from './type';
 
