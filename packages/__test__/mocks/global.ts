@@ -1,6 +1,8 @@
 import { vi } from 'vitest';
 import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH } from '../../Media/constants';
 
+import { AudioContextMock } from './audio';
+
 export const streamMock = {
   getVideoTracks: vi.fn().mockReturnValue([
     { enabled: true, stop: vi.fn() }
@@ -19,6 +21,10 @@ export const navigatorMock = {
 export const windowMock = {
   requestAnimationFrame: vi.fn().mockReturnValue(1),
   cancelAnimationFrame: vi.fn().mockReturnValue(1),
+  AudioContext: vi.fn().mockImplementation(() => AudioContextMock),
+  webkitAudioContext: vi.fn().mockImplementation(() => AudioContextMock),
+  innerWidth: 1024,
+  innerHeight: 768,
 } as unknown as Window & typeof globalThis;
 
 export const documentMock = {
@@ -37,3 +43,15 @@ export const documentMock = {
     ELEMENT_NODE: 1
   }),
 } as unknown as Document
+
+export const analyzerMock = {
+  connect: vi.fn(),
+  disconnect: vi.fn(),
+  getByteTimeDomainData: vi.fn(),
+  getByteFrequencyData: vi.fn(),
+  getFloatTimeDomainData: vi.fn(),
+  getFloatFrequencyData: vi.fn(),
+  frequencyBinCount: 1024,
+  fftSize: 2048,
+  smoothingTimeConstant: 0.8,
+} as unknown as AnalyserNode;

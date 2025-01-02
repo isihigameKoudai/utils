@@ -1,31 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Visualizer, RenderCallBack } from "./Visualizer";
 
-// AudioContextのモックを作成
-class MockAudioContext {
-  mockAnalyser: AnalyserNode;
-
-  constructor(mockAnalyser: AnalyserNode) {
-    this.mockAnalyser = mockAnalyser;
-  }
-
-  createAnalyser() {
-    return this.mockAnalyser;
-  }
-
-  createBufferSource() {
-    return {
-      connect: vi.fn(),
-      start: vi.fn(),
-    };
-  }
-
-  createMediaStreamSource() {
-    return {
-      connect: vi.fn(),
-    };
-  }
-}
+import { analyzerMock, windowMock } from '../__test__/mocks/global';
+import { AudioContextMock } from '../__test__/mocks/audio';
 
 // documentオブジェクトのモックを作成
 const mockDocument = {
@@ -41,36 +18,14 @@ describe("Visualizer", () => {
   let mockAnalyser: AnalyserNode;
 
   beforeEach(() => {
-    mockAnalyser = {
-      connect: vi.fn(),
-      disconnect: vi.fn(),
-      getByteTimeDomainData: vi.fn(),
-      getByteFrequencyData: vi.fn(),
-      getFloatTimeDomainData: vi.fn(),
-      getFloatFrequencyData: vi.fn(),
-      frequencyBinCount: 1024,
-      fftSize: 2048,
-      smoothingTimeConstant: 0.8,
-    } as unknown as AnalyserNode;
+    mockAnalyser = analyzerMock;
 
-    mockAudioContext = new MockAudioContext(mockAnalyser) as unknown as AudioContext;
+    mockAudioContext = new AudioContextMock(mockAnalyser) as unknown as AudioContext;
 
-    // グローバルオブジェクトのモックを追加
-    global.window = {
-      AudioContext: vi.fn().mockImplementation(() => mockAudioContext),
-      webkitAudioContext: vi.fn().mockImplementation(() => mockAudioContext),
-      cancelAnimationFrame: vi.fn(),
-      requestAnimationFrame: vi.fn(),
-      innerWidth: 1024,
-      innerHeight: 768,
-    } as unknown as Window & typeof globalThis;
-
-    // documentオブジェクトのモックを追加
+    global.window = windowMock;
     global.document = mockDocument as unknown as Document;
-
-    // AudioContextのモックを追加
-    global.AudioContext = MockAudioContext as unknown as typeof AudioContext;
-    global.webkitAudioContext = MockAudioContext as unknown as typeof AudioContext;
+    global.AudioContext = AudioContextMock as unknown as typeof AudioContext;
+    global.webkitAudioContext = AudioContextMock as unknown as typeof AudioContext;
 
     // requestAnimationFrameのモックを追加
     const mockRequestAnimationFrame = vi.fn();
