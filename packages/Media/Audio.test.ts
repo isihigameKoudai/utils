@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { Audio } from './Audio';
 
+import { mediaSourceMock, audioSourceMock } from '../__test__/mocks/media';
+import { navigatorMock, windowMock } from '../__test__/mocks/global';
+
 describe('Audio', () => {
   let audio: Audio;
   let mockContext: AudioContext;
@@ -24,25 +27,13 @@ describe('Audio', () => {
     } as unknown as AudioContext;
 
     // MediaStreamAudioSourceNodeのモック
-    mockMediaSource = {
-      disconnect: vi.fn(),
-    } as unknown as MediaStreamAudioSourceNode;
-
+    mockMediaSource = mediaSourceMock;
+    // navigatorオブジェクトのモック
+    global.navigator = navigatorMock;
     // windowオブジェクトのモック
-    global.window = {
-      AudioContext: vi.fn().mockImplementation(() => mockContext),
-      webkitAudioContext: vi.fn().mockImplementation(() => mockContext),
-    } as any;
-
+    global.window = windowMock;
     // AudioContextのグローバル定義
     global.AudioContext = vi.fn().mockImplementation(() => mockContext);
-
-    // navigatorオブジェクトのモック
-    global.navigator = {
-      mediaDevices: {
-        getUserMedia: vi.fn(),
-      },
-    } as any;
 
     audio = new Audio();
   });
@@ -152,19 +143,12 @@ describe('Audio', () => {
 
   it('mediaSourceが存在する場合にデバイスの音声を停止すること', async () => {
     // モックの設定
-    const mockDisconnect = vi.fn();
-    const mockMediaSource = {
-      disconnect: mockDisconnect,
-    } as unknown as MediaStreamAudioSourceNode;
-    const mockAudioSource = {
-      disconnect: vi.fn(),
-      stop: vi.fn(),
-    } as unknown as AudioBufferSourceNode;
+    const mockAudioSource = audioSourceMock;
 
     // AudioクラスのgetAudioStreamメソッドをモック
     const getAudioStreamMock = vi.spyOn(Audio.prototype, 'getAudioStream').mockImplementation(async () => {
-      audio['_mediaSource'] = mockMediaSource;
-      audio['_audioSource'] = mockAudioSource;
+      audio['_mediaSource'] = mediaSourceMock;
+      audio['_audioSource'] = audioSourceMock;
       return {} as MediaStream;
     });
 
