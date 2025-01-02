@@ -16,7 +16,7 @@ describe("Visualizer", () => {
     mockAudioContext = new AudioContextMock(mockAnalyser) as unknown as AudioContext;
 
     global.window = windowMock;
-    global.document = documentMock as unknown as Document;
+    global.document = documentMock;
     global.AudioContext = AudioContextMock as unknown as typeof AudioContext;
     global.webkitAudioContext = AudioContextMock as unknown as typeof AudioContext;
 
