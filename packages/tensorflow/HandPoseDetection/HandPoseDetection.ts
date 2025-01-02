@@ -7,6 +7,7 @@ import * as handPoseDetection from '@tensorflow-models/hand-pose-detection';
 import { Video } from '../../Media/Video';
 import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH } from '../../Media';
 
+// TODO: 共通化
 export type LoadElProps = {
   $video?: HTMLVideoElement;
   width?: HTMLVideoElement['width'];
@@ -16,7 +17,6 @@ export type LoadElProps = {
 type RenderCallBack = (
   hands: handPoseDetection.Hand[]
 ) => void | Promise<void>;
-
 
 export class HandPoseDetection extends Video {
   private _model: handPoseDetection.SupportedModels;
@@ -51,8 +51,13 @@ export class HandPoseDetection extends Video {
   async loadModel() {
     try {
       const detector = await handPoseDetection.createDetector(this._model, {
-        runtime: 'mediapipe',
-        solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands'
+        runtime: 'tfjs',
+        // detectorModelUrl: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands_tfjs_model.tflite',
+        // landmarkModelUrl: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands_tfjs_landmarks_model.tflite',
+        // runtime: 'mediapipe',
+        // solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands',
+        // modelType: 'full',
+        // maxHands: 2,
       });
       this._detector = detector;
     } catch (error) {
@@ -76,6 +81,11 @@ export class HandPoseDetection extends Video {
     videoEl.height = height;
     this.setVideo(videoEl);
     return videoEl;
+  }
+
+  async load(elConfig?: LoadElProps) {
+    await this.loadEl(elConfig || {});
+    await this.loadModel();
   }
 
   async start(renderCallBack?: RenderCallBack) {
