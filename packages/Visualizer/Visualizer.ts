@@ -1,4 +1,5 @@
 import { Audio } from "../Media";
+import { RenderCallBack } from "./type";
 
 declare global {
   interface Window {
@@ -26,15 +27,6 @@ export const cancelAnimationFrame = () =>
   window.mozCancelAnimationFrame ||
   window.msCancelAnimationFrame ||
   window.oCancelAnimationFrame;
-
-export type RenderCallBack = (props: {
-  $canvas: HTMLCanvasElement;
-  frequencyBinCount: number;
-  timeDomainArray: Uint8Array;
-  spectrumArray: Uint8Array;
-  timeDomainRawArray: Float32Array;
-  spectrumRawArray: Float32Array;
-}) => void;
 
 type RenderOptions = {
   $canvas?: HTMLCanvasElement;

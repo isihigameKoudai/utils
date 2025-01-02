@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH } from '../../Media/constants';
 
-import { AudioContextMock } from './audio';
+import { AudioContextMock } from './media';
 
 export const streamMock = {
   getVideoTracks: vi.fn().mockReturnValue([
