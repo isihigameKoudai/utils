@@ -16,9 +16,7 @@ vi.mock('@tensorflow-models/hand-pose-detection', () => ({
           { x: 10, y: 10, name: 'thumb_tip' },
           { x: 20, y: 20, name: 'index_finger_tip' }
         ],
-        handedness: [
-          { score: 0.9, label: 'Left' }
-        ],
+        handedness: 'Left',
         score: 0.98
       },
       {
@@ -27,9 +25,7 @@ vi.mock('@tensorflow-models/hand-pose-detection', () => ({
           { x: 110, y: 110, name: 'thumb_tip' },
           { x: 120, y: 120, name: 'index_finger_tip' }
         ],
-        handedness: [
-          { score: 0.95, label: 'Right' }
-        ],
+        handedness: 'Right',
         score: 0.96
       }
     ])
@@ -121,8 +117,8 @@ describe('HandPoseDetection', () => {
       await detector.start();
 
       const hands = detector.detectedRawHands;
-      expect(hands[0].handedness[0].label).toBe('Left');
-      expect(hands[1].handedness[0].label).toBe('Right');
+      expect(hands[0].handedness).toBe('Left');
+      expect(hands[1].handedness).toBe('Right');
     });
 
     it('should not start if detector is not loaded', async () => {
