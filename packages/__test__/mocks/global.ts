@@ -40,7 +40,7 @@ export const documentMock = {
     tagName: 'VIDEO',
     nodeName: 'VIDEO',
     nodeType: 1,
-    ELEMENT_NODE: 1
+    ELEMENT_NODE: 1,
   }),
 } as unknown as Document
 

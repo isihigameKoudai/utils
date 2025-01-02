@@ -1,16 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Visualizer, RenderCallBack } from "./Visualizer";
 
-import { analyzerMock, windowMock } from '../__test__/mocks/global';
+import { analyzerMock, windowMock, documentMock } from '../__test__/mocks/global';
 import { AudioContextMock } from '../__test__/mocks/audio';
-
-// documentオブジェクトのモックを作成
-const mockDocument = {
-  createElement: vi.fn().mockReturnValue({
-    width: 0,
-    height: 0,
-  }),
-};
 
 describe("Visualizer", () => {
   let visualizer: Visualizer;
@@ -23,7 +15,7 @@ describe("Visualizer", () => {
     mockAudioContext = new AudioContextMock(mockAnalyser) as unknown as AudioContext;
 
     global.window = windowMock;
-    global.document = mockDocument as unknown as Document;
+    global.document = documentMock as unknown as Document;
     global.AudioContext = AudioContextMock as unknown as typeof AudioContext;
     global.webkitAudioContext = AudioContextMock as unknown as typeof AudioContext;
 
@@ -98,7 +90,7 @@ describe("Visualizer", () => {
   });
 
   it("ビジュアライゼーションを開始すること", () => {
-    const mockCanvas = mockDocument.createElement("canvas");
+    const mockCanvas = documentMock.createElement("canvas");
     const mockRenderCallback: RenderCallBack = vi.fn();
     
     // Audio.playメソッドのモックを追加
@@ -127,7 +119,7 @@ describe("Visualizer", () => {
   });
 
   it("ビジュアライゼーションをレンダリングすること", () => {
-    const mockCanvas = mockDocument.createElement("canvas");
+    const mockCanvas = documentMock.createElement("canvas");
     const mockRenderCallback: RenderCallBack = vi.fn();
     visualizer.analyzer = mockAnalyser;
     visualizer.$canvas = mockCanvas;
