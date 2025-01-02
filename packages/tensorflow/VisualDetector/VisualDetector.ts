@@ -48,8 +48,7 @@ export class VisualDetector {
   }
 
   get detectedObjects(): DetectedObject[] {
-
-    return this.detectedRawObjects.map(obj => {
+    return (this.detectedRawObjects || []).map(obj => {
       const { x: timesX, y: timesY } = this.magnification;
       const left = obj.bbox[0] * timesX;
       const top = obj.bbox[1] * timesY;

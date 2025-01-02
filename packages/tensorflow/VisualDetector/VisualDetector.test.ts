@@ -6,7 +6,7 @@ import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../constants';
 describe('VisualDetector', () => {
   let visualDetector: VisualDetector;
   
-  const mockDetectedObjects = [
+  const mockDetectedObjects: cocoSsd.DetectedObject[] = [
     {
       bbox: [100, 200, 50, 60], // [x, y, width, height]
       class: 'person',
@@ -15,8 +15,16 @@ describe('VisualDetector', () => {
   ];
 
   const mockModel = {
-    detect: vi.fn().mockResolvedValue(mockDetectedObjects)
-  };
+    detect: vi.fn(),
+    modelPath: '',
+    model: {},
+    getPrefix: () => '',
+    load: vi.fn(),
+    infer: vi.fn(),
+    buildDetectedObjects: vi.fn(),
+    calculateMaxScores: vi.fn(),
+    dispose: vi.fn()
+  } as unknown as cocoSsd.ObjectDetection;
 
   const mockStream = {
     getVideoTracks: vi.fn().mockReturnValue([
@@ -39,8 +47,25 @@ describe('VisualDetector', () => {
       createElement: vi.fn().mockReturnValue({
         muted: false,
         autoplay: false,
+        width: INITIAL_VIDEO_EL_WIDTH,
+        height: INITIAL_VIDEO_EL_HEIGHT,
+        srcObject: null,
+        play: vi.fn().mockResolvedValue(undefined),
+        // HTMLVideoElementとして認識されるために必要なプロパティを追加
+        tagName: 'VIDEO',
+        nodeName: 'VIDEO',
+        nodeType: 1,
+        ELEMENT_NODE: 1
       }),
     } as unknown as Document;
+
+    // cocoSsd.loadのモックを修正
+    vi.spyOn(cocoSsd, 'load').mockResolvedValue(mockModel);
+
+    // windowオブジェクトのモックを追加
+    global.window = {
+      requestAnimationFrame: vi.fn().mockReturnValue(1),
+    } as unknown as Window & typeof globalThis;
 
     visualDetector = new VisualDetector();
   });
@@ -92,10 +117,7 @@ describe('VisualDetector', () => {
     it('検出されたオブジェクトが正しく変換されること', async () => {
       await visualDetector.loadModel();
       await visualDetector.loadEl({});
-      visualDetector['_detectedRawObjects'] = mockDetectedObjects.map(obj => ({
-        ...obj,
-        bbox: obj.bbox as [number, number, number, number]
-      }));
+      visualDetector._detectedRawObjects = mockDetectedObjects;
 
       const detectedObjects = visualDetector.detectedObjects;
       const obj = detectedObjects[0];
