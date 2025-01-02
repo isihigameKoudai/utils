@@ -31,6 +31,10 @@ export class Media {
       videoStream.enabled = false;
       videoStream.stop();
     });
+    this.stream?.getAudioTracks().forEach(audioStream => {
+      audioStream.enabled = false;
+      audioStream.stop();
+    });
     this._stream = null;
   }
 };

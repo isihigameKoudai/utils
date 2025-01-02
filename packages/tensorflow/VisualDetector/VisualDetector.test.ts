@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 import { VisualDetector } from './VisualDetector';
 import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../constants';
@@ -51,6 +51,7 @@ describe('VisualDetector', () => {
         height: INITIAL_VIDEO_EL_HEIGHT,
         srcObject: null,
         play: vi.fn().mockResolvedValue(undefined),
+        pause: vi.fn().mockResolvedValue(undefined),
         // HTMLVideoElementとして認識されるために必要なプロパティを追加
         tagName: 'VIDEO',
         nodeName: 'VIDEO',
@@ -65,6 +66,7 @@ describe('VisualDetector', () => {
     // windowオブジェクトのモックを追加
     global.window = {
       requestAnimationFrame: vi.fn().mockReturnValue(1),
+      cancelAnimationFrame: vi.fn().mockReturnValue(1),
     } as unknown as Window & typeof globalThis;
 
     visualDetector = new VisualDetector();
