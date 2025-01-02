@@ -2,7 +2,7 @@ import Common from "./Common";
 import Output from "./Output";
 import Mouse from "./Mouse";
 
-import { VisualDetector } from "../../../../../packages/tensorflow";
+import { VisualDetection } from "../../../../../packages/tensorflow";
 
 type Props = {
   $wrapper: HTMLElement;
@@ -49,7 +49,7 @@ export default class WebGL {
     width?: number;
     height?: number;
   }) {
-    const detector = new VisualDetector();
+    const detector = new VisualDetection();
     await detector.load({ width, height });
     return detector;
   }

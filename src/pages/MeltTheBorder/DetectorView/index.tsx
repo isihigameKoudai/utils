@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef, ComponentType } from 'react';
 
-import { DetectedObject, VisualDetector } from '../../../../packages/tensorflow';
+import { DetectedObject, VisualDetection } from '../../../../packages/tensorflow';
 import VisualDetectionView from '../../../components/VisualDetectionView';
 import { DETECTOR_OPACITY } from '../const';
 
@@ -10,7 +10,7 @@ type DetectorViewProps = {
 }
 const DetectorView: React.FC<DetectorViewProps> = ({ opacity = 1.0, onDetect = () => {} }) => {
   let isInit = true;
-  const detector = new VisualDetector();
+  const detector = new VisualDetection();
   const $videoContainer = useRef<HTMLDivElement>(null);
   const [objects, setObjects] = useState<DetectedObject[]>([]);
   const [isShow, setIsShow] = useState(false);

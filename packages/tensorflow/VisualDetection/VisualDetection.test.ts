@@ -3,7 +3,7 @@ import * as cocoSsd from '@tensorflow-models/coco-ssd';
 import { VisualDetection } from './VisualDetection';
 import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media/constants';
 
-describe('VisualDetector', () => {
+describe('VisualDetection', () => {
   let visualDetector: VisualDetection;
   
   const mockDetectedObjects: cocoSsd.DetectedObject[] = [

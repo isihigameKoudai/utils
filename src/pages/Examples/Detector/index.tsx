@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { VisualDetector, DetectedObject } from "../../../../packages/tensorflow";
+import { VisualDetection, DetectedObject } from "../../../../packages/tensorflow";
 import VisualDetectionView from "../../../components/VisualDetectionView";
 
 export default function Detector() {
-  const detector = new VisualDetector();
+  const detector = new VisualDetection();
   const $videoContainer = useRef<HTMLDivElement>(null);
   const [objects, setObjects] = useState<DetectedObject[]>([]);
   const [isShow, setIsShow] = useState<boolean>(false);
