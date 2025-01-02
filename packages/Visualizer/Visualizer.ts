@@ -1,18 +1,6 @@
 import { Audio } from "../Media";
 import { RenderCallBack } from "./type";
 
-declare global {
-  interface Window {
-    mozRequestAnimationFrame: (callback: FrameRequestCallback) => number;
-    webkitRequestAnimationFrame: (callback: FrameRequestCallback) => number;
-    msRequestAnimationFrame: (callback: FrameRequestCallback) => number;
-    webkitCancelAnimationFrame: (handle: number) => void;
-    mozCancelAnimationFrame: (handle: number) => void;
-    msCancelAnimationFrame: (handle: number) => void;
-    oCancelAnimationFrame: (handle: number) => void;
-  }
-}
-
 // requestAnimationFrame の定義を修正
 export const requestAnimationFrame = () =>
   window.requestAnimationFrame ||
