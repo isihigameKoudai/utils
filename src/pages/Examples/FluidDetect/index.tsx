@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import WebGL from "./modules/WebGL";
-import { DetectedObject, VisualDetector } from "../../../../packages/tensorflow";
+import { DetectedObject, VisualDetection } from "../../../../packages/tensorflow";
 import Mouse from "./modules/Mouse";
 import VisualDetectionView from "../../../components/VisualDetectionView";
 
@@ -8,7 +8,7 @@ export default function FluidDetect() {
   const $ref = useRef<HTMLDivElement>(null!);
   let isInit = true;
   const [gl, setGl] = useState<WebGL>();
-  const [detectorInstance, setDetectorInstance] = useState<VisualDetector>()
+  const [detectorInstance, setDetectorInstance] = useState<VisualDetection>()
   const [objects, setObjects] = useState<DetectedObject[]>([]);
   const [isShow, setIsShow] = useState(true);
 

@@ -1,1 +1,0 @@
-export { FaceDetector } from './FaceDetector';

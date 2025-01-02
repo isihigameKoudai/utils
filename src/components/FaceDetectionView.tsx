@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { FaceDetector } from '../../packages/tensorflow';
+import { FaceDetection } from '../../packages/tensorflow';
 
 interface FaceDetectionViewProps {
   width?: number;
@@ -7,12 +7,12 @@ interface FaceDetectionViewProps {
 }
 
 const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({ width = 640, height = 480 }) => {
-  const detector = new FaceDetector();
+  const detector = new FaceDetection();
   const $video = useRef<HTMLVideoElement>(null);
   const $face = useRef<HTMLDivElement>(null);
   const [points, setPoints] = useState<{ x: number; y: number; name: string }[]>([]);
 
-  const setFace = (face: FaceDetector['detectedFaces'][number]) => {
+  const setFace = (face: FaceDetection['detectedFaces'][number]) => {
     if (!$face.current) return;
 
     const { yMin, xMin, width, height } = face.box;

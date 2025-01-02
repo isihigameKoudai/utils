@@ -1,0 +1,1 @@
+export { FaceDetection } from './FaceDetection';

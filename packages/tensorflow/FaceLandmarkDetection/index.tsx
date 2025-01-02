@@ -1,0 +1,1 @@
+export { FaceLandmarkDetection } from './FaceLandmarkDetection';

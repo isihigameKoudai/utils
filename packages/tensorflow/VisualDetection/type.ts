@@ -1,11 +1,5 @@
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
-export type LoadElProps = {
-  $video?: HTMLVideoElement;
-  width?: HTMLVideoElement['width'];
-  height?: HTMLVideoElement['height'];
-};
-
 export type DetectedObject = {
   class: cocoSsd.DetectedObject['class'];
   left: cocoSsd.DetectedObject['bbox'][0];
