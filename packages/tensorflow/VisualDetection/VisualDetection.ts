@@ -5,8 +5,9 @@ import '@tensorflow/tfjs';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
 import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media/constants';
-import { LoadElProps, DetectedObject, RenderCallBack } from './type';
+import { DetectedObject, RenderCallBack } from './type';
 import { Video } from '../../Media/Video';
+import { ElOption } from '../type';
 
 /**
  * Detect some objects by using camera;
@@ -72,7 +73,7 @@ export class VisualDetection extends Video {
     $video,
     width = INITIAL_VIDEO_EL_WIDTH,
     height = INITIAL_VIDEO_EL_HEIGHT
-  }: LoadElProps): Promise<HTMLVideoElement> {
+  }: ElOption): Promise<HTMLVideoElement> {
     await this.getVideoStream();
     this.setMagnification({ x: width / INITIAL_VIDEO_EL_WIDTH, y: height / INITIAL_VIDEO_EL_HEIGHT });
 
@@ -86,7 +87,7 @@ export class VisualDetection extends Video {
   }
 
   async load(
-    elConfig?: LoadElProps,
+    elConfig?: ElOption,
     modelConfig: cocoSsd.ModelConfig = {}
   ): Promise<HTMLVideoElement> {
     const $video = await this.loadEl(elConfig || {});

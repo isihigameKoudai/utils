@@ -6,17 +6,8 @@ import * as handPoseDetection from '@tensorflow-models/hand-pose-detection';
 
 import { Video } from '../../Media/Video';
 import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH } from '../../Media';
-
-// TODO: 共通化
-type LoadElProps = {
-  $video?: HTMLVideoElement;
-  width?: HTMLVideoElement['width'];
-  height?: HTMLVideoElement['height'];
-};
-
-type RenderCallBack = (
-  hands: handPoseDetection.Hand[]
-) => void | Promise<void>;
+import { ElOption } from '../type';
+import { RenderCallBack } from './type';
 
 export class HandPoseDetection extends Video {
   private _model: handPoseDetection.SupportedModels;
@@ -59,12 +50,11 @@ export class HandPoseDetection extends Video {
     }
   }
 
-  // TODO: 共通化
   async loadEl({
     $video,
     width = INITIAL_VIDEO_EL_WIDTH,
     height = INITIAL_VIDEO_EL_HEIGHT
-  }: LoadElProps): Promise<HTMLVideoElement> {
+  }: ElOption): Promise<HTMLVideoElement> {
     await this.getVideoStream();
     this.setMagnification({ x: width / INITIAL_VIDEO_EL_WIDTH, y: height / INITIAL_VIDEO_EL_HEIGHT });
 
@@ -77,7 +67,7 @@ export class HandPoseDetection extends Video {
     return videoEl;
   }
 
-  async load(elConfig?: LoadElProps) {
+  async load(elConfig?: ElOption) {
     await this.loadEl(elConfig || {});
     await this.loadModel();
   }

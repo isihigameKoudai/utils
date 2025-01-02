@@ -6,16 +6,8 @@ import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detec
 
 import { Video } from '../../Media/Video';
 import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH } from '../../Media';
-
-export type LoadElProps = {
-  $video?: HTMLVideoElement;
-  width?: HTMLVideoElement['width'];
-  height?: HTMLVideoElement['height'];
-};
-
-export type RenderCallBack = (
-  faces: faceLandmarksDetection.Face[]
-) => void | Promise<void>;
+import { ElOption } from '../type';
+import { RenderCallBack } from './type';
 
 export class FaceLandmarkDetection extends Video {
   
@@ -66,7 +58,7 @@ export class FaceLandmarkDetection extends Video {
     $video,
     width = INITIAL_VIDEO_EL_WIDTH,
     height = INITIAL_VIDEO_EL_HEIGHT
-  }: LoadElProps): Promise<HTMLVideoElement> {
+  }: ElOption): Promise<HTMLVideoElement> {
     await this.getVideoStream();
     this.setMagnification({ x: width / INITIAL_VIDEO_EL_WIDTH, y: height / INITIAL_VIDEO_EL_HEIGHT });
 
@@ -80,7 +72,7 @@ export class FaceLandmarkDetection extends Video {
     return videoEl;
   }
 
-  async load(elConfig?: LoadElProps) {
+  async load(elConfig?: ElOption) {
     await this.loadEl(elConfig || {});
     await this.loadModel();
   }

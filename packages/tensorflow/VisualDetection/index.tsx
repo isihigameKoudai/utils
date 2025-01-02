@@ -1,2 +1,2 @@
 export { VisualDetection } from "./VisualDetection";
-export { type DetectedObject, type LoadElProps, type RenderCallBack } from "./type";
+export { type DetectedObject, type RenderCallBack } from "./type";

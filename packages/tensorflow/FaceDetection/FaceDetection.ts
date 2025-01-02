@@ -6,10 +6,10 @@ import * as faceDetection from '@tensorflow-models/face-detection';
 
 import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media/constants';
 import {
-  LoadElProps,
   RenderCallBack
 } from './type';
 import { Video } from '../../Media/Video';
+import { ElOption } from '../type';
 
 export class FaceDetection extends Video {
 
@@ -85,7 +85,7 @@ export class FaceDetection extends Video {
     $video,
     width = INITIAL_VIDEO_EL_WIDTH,
     height = INITIAL_VIDEO_EL_HEIGHT
-  }: LoadElProps): Promise<HTMLVideoElement> {
+  }: ElOption): Promise<HTMLVideoElement> {
     await this.getVideoStream();
     this.setMagnification({ x: width / INITIAL_VIDEO_EL_WIDTH, y: height / INITIAL_VIDEO_EL_HEIGHT });
 
@@ -98,7 +98,7 @@ export class FaceDetection extends Video {
     return videoEl;
   }
 
-  async load(elConfig?: LoadElProps) {
+  async load(elConfig?: ElOption) {
     await this.loadEl(elConfig || {});
     await this.loadModel();
   }
