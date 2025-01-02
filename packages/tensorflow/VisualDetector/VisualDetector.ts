@@ -4,7 +4,7 @@
 import '@tensorflow/tfjs';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
-import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../constants';
+import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media/constants';
 import { LoadElProps, DetectedObject, RenderCallBack } from './type';
 import { Video } from '../../Media/Video';
 

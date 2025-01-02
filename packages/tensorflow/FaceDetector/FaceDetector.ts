@@ -4,7 +4,7 @@
 import '@tensorflow/tfjs';
 import * as faceDetection from '@tensorflow-models/face-detection';
 
-import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../constants';
+import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media/constants';
 import {
   LoadElProps,
   RenderCallBack
@@ -80,6 +80,7 @@ export class FaceDetector extends Video {
     }
   }
 
+  // 共通化
   async loadEl({
     $video,
     width = INITIAL_VIDEO_EL_WIDTH,

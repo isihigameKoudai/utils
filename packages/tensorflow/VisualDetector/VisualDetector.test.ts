@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 import { VisualDetector } from './VisualDetector';
-import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../constants';
+import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media/constants';
 
 describe('VisualDetector', () => {
   let visualDetector: VisualDetector;
