@@ -8,7 +8,7 @@ import { Video } from '../../Media/Video';
 import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH } from '../../Media';
 
 // TODO: 共通化
-export type LoadElProps = {
+type LoadElProps = {
   $video?: HTMLVideoElement;
   width?: HTMLVideoElement['width'];
   height?: HTMLVideoElement['height'];
@@ -52,12 +52,6 @@ export class HandPoseDetection extends Video {
     try {
       const detector = await handPoseDetection.createDetector(this._model, {
         runtime: 'tfjs',
-        // detectorModelUrl: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands_tfjs_model.tflite',
-        // landmarkModelUrl: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands_tfjs_landmarks_model.tflite',
-        // runtime: 'mediapipe',
-        // solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands',
-        // modelType: 'full',
-        // maxHands: 2,
       });
       this._detector = detector;
     } catch (error) {

@@ -13,7 +13,7 @@ import { Video } from '../../Media/Video';
  * powered by tensorflow.js cocossd model;
  * https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd
  */
-export class VisualDetector extends Video {
+export class VisualDetection extends Video {
   _model: cocoSsd.ObjectDetection | null;
   _detectedRawObjects: cocoSsd.DetectedObject[];
   _requestAnimationFrameId: number;

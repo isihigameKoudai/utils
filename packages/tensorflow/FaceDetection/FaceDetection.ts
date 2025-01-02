@@ -1,37 +1,32 @@
 /**
- * npm i @tensorflow/tfjs @tensorflow-models/face-landmarks-detection
+ * npm i @tensorflow/tfjs @tensorflow-models/face-detection
  */
 import '@tensorflow/tfjs';
-import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
+import * as faceDetection from '@tensorflow-models/face-detection';
 
+import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media/constants';
+import {
+  LoadElProps,
+  RenderCallBack
+} from './type';
 import { Video } from '../../Media/Video';
-import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH } from '../../Media';
 
-export type LoadElProps = {
-  $video?: HTMLVideoElement;
-  width?: HTMLVideoElement['width'];
-  height?: HTMLVideoElement['height'];
-};
+export class FaceDetection extends Video {
 
-export type RenderCallBack = (
-  faces: faceLandmarksDetection.Face[]
-) => void | Promise<void>;
+  _model: faceDetection.SupportedModels;
 
-export class FaceLandmarkDetector extends Video {
-  
-  _model: faceLandmarksDetection.SupportedModels;
-  _detector: faceLandmarksDetection.FaceLandmarksDetector | null;
-  _detectedRawFaces: faceLandmarksDetection.Face[];
+  _detector: faceDetection.FaceDetector | null;
+
+  _detectedRawFaces: faceDetection.Face[];
+
   _requestAnimationFrameId: number;
-  _isRunning: boolean;
 
   constructor() {
     super();
-    this._model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
+    this._model = faceDetection.SupportedModels.MediaPipeFaceDetector;
     this._detector = null;
     this._detectedRawFaces = [];
     this._requestAnimationFrameId = 0;
-    this._isRunning = false;
   }
 
   get model() {
@@ -50,14 +45,38 @@ export class FaceLandmarkDetector extends Video {
     return this._requestAnimationFrameId;
   }
 
+  get detectedFaces(): faceDetection.Face[] {
+    return this.detectedRawFaces.map(face => {
+      const { x: timesX, y: timesY } = this.magnification;
+      return {
+        box: {
+          width: face.box.width * timesX,
+          height: face.box.height * timesY,
+          xMin: face.box.xMin * timesX,
+          xMax: face.box.xMax * timesX,
+          yMin: face.box.yMin * timesY,
+          yMax: face.box.yMax * timesY
+        },
+        keypoints: face.keypoints.map(keypoint => {
+          return {
+            x: keypoint.x * timesX,
+            y: keypoint.y * timesY,
+            name: keypoint.name
+          }
+        })
+      }
+    })
+  }
+
   async loadModel() {
     try {
-      this._detector = await faceLandmarksDetection.createDetector(this.model, {
-        runtime: 'tfjs',
-        refineLandmarks: true
+      const detector = await faceDetection.createDetector(this._model, {
+        runtime: 'mediapipe',
+        solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_detection',
       });
+      this._detector = detector;
     } catch (error) {
-      console.error('モデル読み込みエラー:', error);
+      console.error(error);
     }
   }
 
@@ -76,7 +95,6 @@ export class FaceLandmarkDetector extends Video {
     videoEl.width = width;
     videoEl.height = height;
     this.setVideo(videoEl);
-  
     return videoEl;
   }
 
@@ -96,17 +114,17 @@ export class FaceLandmarkDetector extends Video {
       return
     }
 
-    const detectedRawFaces = await this.detector.estimateFaces(this.$video, {
+    const faces = await this.detector.estimateFaces(this.$video, {
       flipHorizontal: false
     });
 
-    this._detectedRawFaces = detectedRawFaces;
+    this._detectedRawFaces = faces;
 
-    // TODO: detectedRawFacesを使ったgettersをrenderCallBackに渡す
-    renderCallBack?.(this.detectedRawFaces);
-
+    renderCallBack?.(this.detectedFaces);
+    
     this._requestAnimationFrameId = window.requestAnimationFrame(this.start.bind(this, renderCallBack));
   }
+
   stop() {
     this.stopVideo();
     window.cancelAnimationFrame(this._requestAnimationFrameId);

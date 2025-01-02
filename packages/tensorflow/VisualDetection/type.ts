@@ -1,5 +1,6 @@
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
+// TODO: 共通化
 export type LoadElProps = {
   $video?: HTMLVideoElement;
   width?: HTMLVideoElement['width'];
