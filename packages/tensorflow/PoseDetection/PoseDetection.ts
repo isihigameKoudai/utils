@@ -1,19 +1,23 @@
-
+/**
+ * npm install @tensorflow/tfjs @tensorflow-models/pose-detection
+ */
+import * as tf from '@tensorflow/tfjs';
 import * as poseDetection from '@tensorflow-models/pose-detection';
 
 import { Video, INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media';
 import { ElOption } from '../type';
-import { RenderCallBack } from './type';
+import { ModelType, RenderCallBack, Pose } from './type';
+import { createConfig } from './module';
 
 export class PoseDetection extends Video {
   private _model: poseDetection.SupportedModels;
   private _detector: poseDetection.PoseDetector | null;
-  private _detectedPoses: poseDetection.Pose[];
+  private _detectedPoses: Pose[];
   private _requestAnimationFrameId: number;
 
-  constructor() {
+  constructor(modelType: ModelType = poseDetection.SupportedModels.MoveNet) {
     super();
-    this._model = poseDetection.SupportedModels.BlazePose;
+    this._model = poseDetection.SupportedModels[modelType];
     this._detector = null;
     this._detectedPoses = [];
     this._requestAnimationFrameId = 0;
@@ -33,10 +37,12 @@ export class PoseDetection extends Video {
 
   async loadDetector() {
     try {
-      this._detector = await poseDetection.createDetector(this.model, {
-        runtime: 'tfjs',
-        modelType: 'full',
-      });
+      // NOTE: tensorflowのバックエンドを準備してからdetectorを作成する
+      await tf.ready();
+
+      const config = createConfig(this.model);
+      console.log(config);
+      this._detector = await poseDetection.createDetector(this.model, config);
       return this.detector;
     } catch(e) {
       console.error(e);
