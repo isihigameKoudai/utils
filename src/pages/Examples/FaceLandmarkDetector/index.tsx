@@ -10,7 +10,6 @@ export default function Detector() {
   const [faces, setFaces] = useState<Face[]>([]);
   const handleDetect = useCallback(async () => {
     await detector.start((faces) => {
-      console.log(faces);
       setFaces(faces);
     });
   },[]);

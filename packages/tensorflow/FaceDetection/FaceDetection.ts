@@ -1,7 +1,7 @@
 /**
  * npm i @tensorflow/tfjs @tensorflow-models/face-detection
  */
-import '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs';
 import * as faceDetection from '@tensorflow-models/face-detection';
 
 import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media/constants';
@@ -70,6 +70,7 @@ export class FaceDetection extends Video {
 
   async loadModel() {
     try {
+      await tf.ready();
       const detector = await faceDetection.createDetector(this._model, {
         runtime: 'mediapipe',
         solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_detection',

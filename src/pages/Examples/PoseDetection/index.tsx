@@ -27,7 +27,6 @@ const PoseDetectionPage = () => {
   const handleStart = () => {
     setIsRunning(true);
     detector.start((detectedPoses: Pose[]) => {
-      console.log(detectedPoses);
       setPose(detectedPoses);
     });
   };
