@@ -3,7 +3,6 @@ import * as poseDetection from '@tensorflow-models/pose-detection';
 import { ModelType } from './type';
 
 export const createConfig = (modelType: ModelType) => {
-  console.log(modelType);
   const configMap = new Map<
     ModelType,
     Record<string, unknown>

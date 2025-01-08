@@ -1,7 +1,7 @@
 /**
  * npm i @tensorflow/tfjs @tensorflow-models/coco-ssd
  */
-import '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
 import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media/constants';
@@ -61,6 +61,7 @@ export class VisualDetection extends Video {
 
   async loadModel(config: cocoSsd.ModelConfig = {}) {
     try {
+      await tf.ready();
       this._model = await cocoSsd.load(config);
       return this.model;
     } catch(e) {

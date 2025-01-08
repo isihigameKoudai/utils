@@ -35,6 +35,10 @@ export class PoseDetection extends Video {
     return this._model;
   }
 
+  get requestAnimationFrameId() {
+    return this._requestAnimationFrameId;
+  }
+
   async loadDetector() {
     try {
       // NOTE: tensorflowのバックエンドを準備してからdetectorを作成する
