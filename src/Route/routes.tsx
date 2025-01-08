@@ -23,6 +23,7 @@ import MeltTheBorder from "../pages/MeltTheBorder";
 import FaceLandmarkDetector from "../pages/Examples/FaceLandmarkDetector";
 import ThemeDemo from "../pages/Examples/Theme";
 import HandPoseDetectionPage from "../pages/Examples/HandPoseDetection";
+import PoseDetectionPage from "../pages/Examples/PoseDetection";
 
 export type IRoute = {
   title: string;
@@ -129,6 +130,11 @@ export const routeList: IRoute[] = [
     title: 'ML（手のポーズ検出）',
     path: '/samples/hand-pose-detection',
     element: <HandPoseDetectionPage />
+  },
+  {
+    title: 'ML（ポーズ検出）',
+    path: '/samples/pose-detection',
+    element: <PoseDetectionPage />
   },
   {
     title: 'fluid-detect',

@@ -41,7 +41,6 @@ export class PoseDetection extends Video {
       await tf.ready();
 
       const config = createConfig(this.model);
-      console.log(config);
       this._detector = await poseDetection.createDetector(this.model, config);
       return this.detector;
     } catch(e) {
