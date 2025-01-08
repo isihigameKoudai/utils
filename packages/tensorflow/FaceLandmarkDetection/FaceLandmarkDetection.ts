@@ -1,7 +1,7 @@
 /**
  * npm i @tensorflow/tfjs @tensorflow-models/face-landmarks-detection
  */
-import '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs';
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
 
 import { Video } from '../../Media/Video';
@@ -44,6 +44,7 @@ export class FaceLandmarkDetection extends Video {
 
   async loadModel() {
     try {
+      await tf.ready();
       this._detector = await faceLandmarksDetection.createDetector(this.model, {
         runtime: 'tfjs',
         refineLandmarks: true

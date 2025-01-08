@@ -43,7 +43,6 @@ const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({ width = 640, heig
   const handleStart = async () => {
     
     detector.start((faces) => {
-      console.log(faces);
       if (faces.length > 0) {
         setFace(faces[0]);
       }

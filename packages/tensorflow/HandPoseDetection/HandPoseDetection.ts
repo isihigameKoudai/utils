@@ -1,7 +1,7 @@
 /**
  * npm i @tensorflow/tfjs @tensorflow-models/hand-pose-detection
  */
-import '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs';
 import * as handPoseDetection from '@tensorflow-models/hand-pose-detection';
 
 import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH, Video } from '../../Media';
@@ -40,6 +40,7 @@ export class HandPoseDetection extends Video {
 
   async loadModel() {
     try {
+      await tf.ready();
       const detector = await handPoseDetection.createDetector(this._model, {
         runtime: 'tfjs',
       });
