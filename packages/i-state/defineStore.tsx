@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useCallback, useState } from 'react';
 
-import { State, Queries, Actions, Store, ActionContext } from './type';
+import { State, Queries, Actions, Store, ActionContext, StoreActions } from './type';
 
 export const defineStore = <
   S extends State,
@@ -38,7 +38,7 @@ export const defineStore = <
           ...acc,
           [key]: (...args: any[]) => fn(context, ...args),
         }),
-        {} as { [K in keyof A]: A[K] extends (context: ActionContext<S, Q>, ...args: infer P) => void ? (...args: P) => void : () => void }
+        {} as StoreActions<S, Q, A>
       );
 
       return { state, queries, actions };
