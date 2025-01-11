@@ -38,7 +38,7 @@ export const defineStore = <
           ...acc,
           [key]: (...args: any[]) => fn(context, ...args),
         }),
-        {} as { [K in keyof A]: A[K] extends (context: any, ...args: infer P) => void ? (...args: P) => void : () => void }
+        {} as { [K in keyof A]: A[K] extends (context: ActionContext<S, Q>, ...args: infer P) => void ? (...args: P) => void : () => void }
       );
 
       return { state, queries, actions };
