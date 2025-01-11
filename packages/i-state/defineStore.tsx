@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useCallback, useState } from 'react';
 
-import { State, Queries, Actions, Store } from './type';
+import { State, Queries, Actions, Store, ActionContext } from './type';
 
 export const defineStore = <
   S extends State,
@@ -31,7 +31,7 @@ export const defineStore = <
         setState((prev) => ({ ...prev, [key]: value }));
       }, []);
 
-      const context = { state, queries, dispatch };
+      const context: ActionContext<S,Q> = { state, queries, dispatch };
 
       const actions = Object.entries(actionFns).reduce(
         (acc, [key, fn]) => ({
