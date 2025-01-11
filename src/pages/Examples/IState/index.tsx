@@ -54,79 +54,96 @@ const ErrorText = styled('span')((theme: Theme) => ({
   marginLeft: '5px',
 }));
 
+const Counter = () => {
+  const { state: counterState, queries: counterQueries, actions: counterActions } = counterStore.useStore();
+
+  return (
+    <Section>
+      <h2>1. シンプルなカウンター（ローカルstate: useStore）</h2>
+      <div>
+        <p>現在の値: {counterState.count}</p>
+        <p>
+          ステータス：
+          {counterQueries.isPositive && '正の数'}
+          {counterQueries.isNegative && '負の数'}
+          {!counterQueries.isPositive && !counterQueries.isNegative && 'ゼロ'}
+        </p>
+        <Button onClick={() => counterActions.increment()}>増加</Button>
+        <Button onClick={() => counterActions.decrement()}>減少</Button>
+        <Button onClick={() => counterActions.reset()}>リセット</Button>
+      </div>
+    </Section>
+  )
+};
+
+const Todo = () => {
+  const {
+    state: todoState,
+    queries: todoQueries,
+    actions: todoActions
+  } = todoStore.useContainer();
+
+  return (
+    <Section>
+      <h2>2. TODOリスト（useContainer使用）</h2>
+      <div>
+        <form
+          onSubmit={(e: FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            const input = e.currentTarget.elements.namedItem('todoText') as HTMLInputElement;
+            if (input.value.trim()) {
+              todoActions.addTodo(input.value.trim());
+              input.value = '';
+            }
+          }}
+        >
+          <Input
+            type="text"
+            name="todoText"
+            placeholder="新しいTODOを入力"
+          />
+          <Button type="submit">追加</Button>
+        </form>
+        
+        <div>
+          <p>全てのTODO ({todoQueries.totalCount})</p>
+          <ul>
+            {todoState.todos.map((todo) => (
+              <li key={todo.id}>
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  onChange={() => todoActions.toggleTodo(todo.id)}
+                />
+                <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+                  {todo.text}
+                </span>
+                <Button onClick={() => todoActions.removeTodo(todo.id)}>削除</Button>
+              </li>
+            ))}
+          </ul>
+          <p>完了済み: {todoQueries.completedTodos.length}</p>
+          <p>未完了: {todoQueries.incompleteTodos.length}</p>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
 
 // メインコンポーネント
 const IStateExample: React.FC = () => {
-  const { state: counterState, queries: counterQueries, actions: counterActions } = counterStore.useStore();
-  const { state: todoState, queries: todoQueries, actions: todoActions } = todoStore.useStore();
+  
   const { state: formState, queries: formQueries, actions: formActions } = formStore.useStore();
   
   return (
     <Container>
       <h1>i-state Examples</h1>
+      <Counter />
+      <Todo />
       
       <Section>
-        <h2>1. シンプルなカウンター</h2>
-        <div>
-          <p>現在の値: {counterState.count}</p>
-          <p>
-            ステータス：
-            {counterQueries.isPositive && '正の数'}
-            {counterQueries.isNegative && '負の数'}
-            {!counterQueries.isPositive && !counterQueries.isNegative && 'ゼロ'}
-          </p>
-          <Button onClick={() => counterActions.increment()}>増加</Button>
-          <Button onClick={() => counterActions.decrement()}>減少</Button>
-          <Button onClick={() => counterActions.reset()}>リセット</Button>
-        </div>
-      </Section>
-      
-      <Section>
-        <h2>2. TODOリスト</h2>
-        <div>
-          <form
-            onSubmit={(e: FormEvent<HTMLFormElement>) => {
-              e.preventDefault();
-              const input = e.currentTarget.elements.namedItem('todoText') as HTMLInputElement;
-              if (input.value.trim()) {
-                todoActions.addTodo(input.value.trim());
-                input.value = '';
-              }
-            }}
-          >
-            <Input
-              type="text"
-              name="todoText"
-              placeholder="新しいTODOを入力"
-            />
-            <Button type="submit">追加</Button>
-          </form>
-          
-          <div>
-            <p>全てのTODO ({todoQueries.totalCount})</p>
-            <ul>
-              {todoState.todos.map((todo) => (
-                <li key={todo.id}>
-                  <input
-                    type="checkbox"
-                    checked={todo.completed}
-                    onChange={() => todoActions.toggleTodo(todo.id)}
-                  />
-                  <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
-                    {todo.text}
-                  </span>
-                  <Button onClick={() => todoActions.removeTodo(todo.id)}>削除</Button>
-                </li>
-              ))}
-            </ul>
-            <p>完了済み: {todoQueries.completedTodos.length}</p>
-            <p>未完了: {todoQueries.incompleteTodos.length}</p>
-          </div>
-        </div>
-      </Section>
-      
-      <Section>
-        <h2>3. フォーム状態管理</h2>
+        <h2>3. フォーム状態管理（親コンポーネントローカルステート: useStore）</h2>
         <form
           onSubmit={(e: FormEvent<HTMLFormElement>) => {
             e.preventDefault();
@@ -191,7 +208,9 @@ const IStateExample: React.FC = () => {
 };
 
 export default () => (
-  <ThemeContainer.Provider>
-    <IStateExample />
-  </ThemeContainer.Provider>
+  <todoStore.Provider>
+    <ThemeContainer.Provider>
+      <IStateExample />
+    </ThemeContainer.Provider>
+  </todoStore.Provider>
 );
