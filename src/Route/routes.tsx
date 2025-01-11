@@ -24,6 +24,7 @@ import FaceLandmarkDetector from "../pages/Examples/FaceLandmarkDetector";
 import ThemeDemo from "../pages/Examples/Theme";
 import HandPoseDetectionPage from "../pages/Examples/HandPoseDetection";
 import PoseDetectionPage from "../pages/Examples/PoseDetection";
+import IStatePage from "../pages/Examples/IState";
 
 export type IRoute = {
   title: string;
@@ -170,4 +171,9 @@ export const routeList: IRoute[] = [
     path: '/melt-the-border',
     element: <MeltTheBorder />
   },
+  {
+    title: 'IState',
+    path: '/samples/istate',
+    element: <IStatePage />
+  }
 ];

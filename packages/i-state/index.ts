@@ -1,2 +1,2 @@
-export { createStore } from './createStore';
+export { defineStore } from './defineStore';
 export * from './type';
