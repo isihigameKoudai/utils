@@ -26,9 +26,9 @@ import { State, Queries, Actions, Dispatch, StoreProps, CreateStoreReturn, UseSt
 */
 export const createStore = <
   S extends State,
-  Q extends Queries<S>,
-  A extends Actions<S>
->(storeConfig: StoreProps<S, Q, A>): CreateStoreReturn<S, Q, A> => {
+>(storeConfig: StoreProps<S>): CreateStoreReturn<S, Queries<S>, Actions<S>> => {
+  type Q = Queries<S>;
+  type A = Actions<S>;
 
   const initialState = typeof storeConfig.state === 'function'
     ? (storeConfig.state as () => S)()

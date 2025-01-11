@@ -24,10 +24,10 @@ export type Actions<S extends State> = {
 export type Dispatch<S extends State> = <K extends keyof S>(key: K, value: S[K]) => void;
 
 /** ストア作成時に必要なプロパティの型 */
-export interface StoreProps<S extends State, Q extends Queries<S>, A extends Actions<S>> {
+export interface StoreProps<S extends State> {
   state: StateOrStateFn<S>;
-  queries?: Q;
-  actions: A;
+  queries?: Queries<S>;
+  actions: Actions<S>;
 }
 
 /** useStoreの戻り値の型 */
@@ -40,6 +40,6 @@ export type UseStoreReturn<S extends State, Q extends Queries<S>, A extends Acti
 /** createStoreの戻り値の型 */
 export type CreateStoreReturn<S extends State, Q extends Queries<S>, A extends Actions<S>> = {
   useStore: () => UseStoreReturn<S, Q, A>;
-  Provider: React.FC<{ children: React.ReactNode }>;
   useStoreContainer: () => UseStoreReturn<S, Q, A>;
+  Provider: React.FC<{ children: React.ReactNode }>;
 };
