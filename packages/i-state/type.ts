@@ -25,4 +25,10 @@ export type Store<S extends State, Q extends Queries<S>, A extends Actions<S, Q>
     queries: { [K in keyof Q]: ReturnType<Q[K]> };
     actions: StoreActions<S, Q, A>;
   };
+  useContainer: () => {
+    state: S;
+    queries: { [K in keyof Q]: ReturnType<Q[K]> };
+    actions: StoreActions<S, Q, A>;
+  };
+  Provider: React.ComponentType<{ children: React.ReactNode }>;
 };
