@@ -6,6 +6,43 @@ import { State, Queries, Actions, Store, ActionContext, StoreActions } from './t
 
 const EMPTY: unique symbol = Symbol();
 
+/**
+ * ステート管理のためのストアを定義するファクトリ関数
+ * @template S - ステートの型
+ * @template Q - クエリの型
+ * @template A - アクションの型
+ * @param {Object} config - ストアの設定オブジェクト
+ * @param {S} config.state - 初期ステート
+ * @param {Q} config.queries - ステートから派生する値を計算するクエリ関数群
+ * @param {A} config.actions - ステートを更新するアクション関数群
+ * @returns {Object} ストアオブジェクト
+ * @property {Function} useStore - フックとしてストアを使用するための関数
+ * @property {React.FC} Provider - ストアのコンテキストを提供するプロバイダーコンポーネント
+ * @property {Function} useStoreContainer - プロバイダー配下でストアにアクセスするためのフック
+ * @example
+ * const CounterStore = defineStore({
+ *   state: { count: 0 },
+ *   queries: {
+ *     doubleCount: (state) => state.count * 2
+ *   },
+ *   actions: {
+ *     increment: ({ state, dispatch }) => dispatch('count', state.count + 1)
+ *   }
+ * });
+ * 
+ * // Providerの使用
+ * const App = () => (
+ *   <CounterStore.Provider>
+ *     <Counter />
+ *   </CounterStore.Provider>
+ * );
+ * 
+ * // ストアの使用
+ * const Counter = () => {
+ *   const { state, actions } = counterStore.useStoreContainer();
+ *   return <button onClick={actions.increment}>{state.count}</button>;
+ * };
+ */
 export const defineStore = <
   S extends State,
   Q extends Queries<S>,
@@ -15,8 +52,13 @@ export const defineStore = <
   queries: Q;
   actions: A;
 }): Store<S, Q, A> => {
-  const { state: initialState, queries: queryFns, actions: actionFns } = config;
+  const {
+    state: initialState,
+    queries: queryFns,
+    actions: actionFns
+  } = config;
   
+  // ローカルステートとしてのストア
   const useStore = () => {
     const [state, setState] = useState<S>(initialState);
 
@@ -52,6 +94,7 @@ export const defineStore = <
     return <Context.Provider value={store}>{children}</Context.Provider>;
   };
 
+  // グローバルステートとしてのストア
   const useContainer = () => {
     const store = React.useContext(Context);
     if (store === EMPTY) {
