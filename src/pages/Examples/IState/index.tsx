@@ -1,8 +1,12 @@
 import React, { ChangeEvent, FormEvent } from 'react';
-import { defineStore } from '../../../../packages/i-state/defineStore';
+
 import { styled } from '../../../../packages/ui/styled';
 import { Theme } from '../../../../packages/ui/theme';
 import { ThemeContainer } from './defaultTheme';
+
+import { counterStore } from './store/counter';
+import { todoStore } from './store/todo';
+import { formStore } from './store/form';
 
 // スタイル付きコンポーネント
 const Container = styled('div')((theme: Theme) => ({
@@ -50,146 +54,6 @@ const ErrorText = styled('span')((theme: Theme) => ({
   marginLeft: '5px',
 }));
 
-// 1. シンプルなカウンター
-const counterStore = defineStore({
-  state: {
-    count: 0,
-  },
-  queries: {
-    isPositive: (state) => state.count > 0,
-    isNegative: (state) => state.count < 0,
-  },
-  actions: {
-    increment: ({ state, dispatch }) => {
-      dispatch('count', state.count + 1);
-    },
-    decrement: ({ state, dispatch }) => {
-      dispatch('count', state.count - 1);
-    },
-    reset: ({ dispatch }) => {
-      dispatch('count', 0);
-    },
-  },
-});
-
-// 2. TODOリスト
-type Todo = {
-  id: number;
-  text: string;
-  completed: boolean;
-};
-
-const todoStore = defineStore({
-  state: {
-    todos: [] as Todo[],
-    nextId: 1,
-  },
-  queries: {
-    completedTodos: (state) => state.todos.filter((todo) => todo.completed),
-    incompleteTodos: (state) => state.todos.filter((todo) => !todo.completed),
-    totalCount: (state) => state.todos.length,
-    strTotalNum: (state) => state.todos.length.toString(),
-  },
-  actions: {
-    addTodo: ({ state, dispatch }, text: string) => {
-      const newTodo: Todo = {
-        id: state.nextId,
-        text,
-        completed: false,
-      };
-      dispatch('todos', [...state.todos, newTodo]);
-      dispatch('nextId', state.nextId + 1);
-    },
-    toggleTodo: ({ state, dispatch }, id: number) => {
-      const newTodos = state.todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      );
-      dispatch('todos', newTodos);
-    },
-    removeTodo: ({ state, dispatch }, id: number) => {
-      dispatch('todos', state.todos.filter((todo) => todo.id !== id));
-    },
-  },
-});
-
-// 3. フォーム状態管理
-type FormState = {
-  username: string;
-  email: string;
-  password: string;
-  touched: Record<string, boolean>;
-  isSubmitting: boolean;
-};
-
-type FormErrors = {
-  username?: string;
-  email?: string;
-  password?: string;
-};
-
-const formStore = defineStore({
-  state: {
-    username: '',
-    email: '',
-    password: '',
-    touched: {
-      username: false,
-      email: false,
-      password: false,
-    },
-    isSubmitting: false,
-  },
-  queries: {
-    errors: (state) => {
-      const errors: FormErrors = {};
-      
-      if (state.username.length < 3) {
-        errors.username = 'ユーザー名は3文字以上必要です';
-      }
-      
-      if (!state.email.includes('@')) {
-        errors.email = '有効なメールアドレスを入力してください';
-      }
-      
-      if (state.password.length < 6) {
-        errors.password = 'パスワードは6文字以上必要です';
-      }
-      
-      return errors;
-    },
-    isValid: (state) => {
-      return (
-        state.username.length >= 3 &&
-        state.email.includes('@') &&
-        state.password.length >= 6
-      );
-    },
-  },
-  actions: {
-    setField: ({ dispatch }, field: keyof FormState, value: string) => {
-      dispatch(field, value);
-    },
-    setTouched: ({ state, dispatch }, field: string) => {
-      dispatch('touched', { ...state.touched, [field]: true });
-    },
-    submitForm: async ({ state, dispatch, queries }) => {
-      if (!queries.isValid) return;
-      
-      dispatch('isSubmitting', true);
-      
-      // 擬似的な非同期処理
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      
-      console.log('Form submitted:', {
-        username: state.username,
-        email: state.email,
-        password: state.password,
-      });
-      
-      dispatch('isSubmitting', false);
-    },
-  },
-});
 
 // メインコンポーネント
 const IStateExample: React.FC = () => {
@@ -329,5 +193,5 @@ const IStateExample: React.FC = () => {
 export default () => (
   <ThemeContainer.Provider>
     <IStateExample />
-    </ThemeContainer.Provider>
-  );
+  </ThemeContainer.Provider>
+);
