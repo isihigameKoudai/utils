@@ -38,4 +38,6 @@ export type UseStoreReturn<S extends State, Q extends Queries<S>, A extends Acti
 
 export type CreateStoreReturn<S extends State, Q extends Queries<S>, A extends Actions<S>> = {
   useStore: () => UseStoreReturn<S, Q, A>;
+  Provider: React.FC<{ children: React.ReactNode }>;
+  useStoreContainer: () => UseStoreReturn<S, Q, A>;
 }

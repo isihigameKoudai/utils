@@ -1,7 +1,29 @@
-import { useCallback, useState, useMemo } from "react"
+import React from 'react';
+import { useCallback, useState, useMemo, createContext, useContext, ReactNode } from "react"
 
 import { State, Queries, Actions, Dispatch, StoreProps, CreateStoreReturn, UseStoreReturn} from './type';
 
+/**
+* ステート管理、クエリ、アクションを含むストアを作成する
+* @template S - ベースのStateを拡張したステート型
+* @template Q - ベースのQueriesを拡張したクエリ型
+* @template A - ベースのActionsを拡張したアクション型
+* @param {StoreProps<S, Q, A>} storeConfig - ストアの設定オブジェクト
+* @param {S | (() => S)} storeConfig.state - 初期ステートまたは初期ステートを返す関数
+* @param {Q} [storeConfig.queries] - クエリ関数を含むオブジェクト
+* @param {A} storeConfig.actions - アクション関数を含むオブジェクト
+* @returns {CreateStoreReturn<S, Q, A>} useStoreフック、Providerコンポーネント、useStoreContainerフックを含むストアオブジェクト
+* @example
+* const store = createStore({
+*   state: { count: 0 },
+*   queries: {
+*     doubled: (state) => state.count * 2
+*   },
+*   actions: {
+*     increment: ({ state, dispatch }) => dispatch('count', state.count + 1)
+*   }
+* })
+*/
 export const createStore = <
   S extends State,
   Q extends Queries<S>,
@@ -12,6 +34,13 @@ export const createStore = <
     ? (storeConfig.state as () => S)()
     : storeConfig.state;
 
+  const StoreContext = createContext<UseStoreReturn<S, Q, A> | null>(null);
+
+  const Provider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const store = useStore();
+    return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
+  };
+  
   const useStore = (): UseStoreReturn<S, Q, A> => {
     const [state, setState] = useState<S>(initialState);
 
@@ -49,7 +78,17 @@ export const createStore = <
     }
   };
 
+  const useStoreContainer = (): UseStoreReturn<S, Q, A> => {
+    const context = useContext(StoreContext);
+    if (!context) {
+      throw new Error('useStoreContainer must be used within a Provider');
+    }
+    return context;
+  };
+
   return {
-    useStore
+    useStore,
+    Provider,
+    useStoreContainer
   };
 };
