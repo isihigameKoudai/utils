@@ -39,7 +39,7 @@ const EMPTY: unique symbol = Symbol();
  * 
  * // ストアの使用
  * const Counter = () => {
- *   const { state, actions } = counterStore.useStoreContainer();
+ *   const { state, actions } = CounterStore.useStoreContainer();
  *   return <button onClick={actions.increment}>{state.count}</button>;
  * };
  */
