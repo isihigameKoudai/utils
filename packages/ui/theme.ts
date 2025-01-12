@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { createContainer } from "@/packages/unstated-next";
 
 export interface Theme {
@@ -123,9 +125,10 @@ let ThemeContainer: ReturnType<typeof createContainer<{ theme: Theme }, Theme>> 
 
 export const createTheme = (theme: Theme) => {
   // テーマコンテナを作成
-  ThemeContainer = createContainer<{ theme: Theme }, Theme>((initialState = theme) => ({
-    theme: initialState
-  }));
+  ThemeContainer = createContainer<{ theme: Theme }, Theme>((initialState = theme) => {
+    const [theme, setTheme] = useState(initialState);
+    return { theme, setTheme };
+  });
   
   return ThemeContainer;
 };
