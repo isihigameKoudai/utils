@@ -1,4 +1,4 @@
-import { createContainer } from "../unstated-next";
+import { createContainer } from "@/packages/unstated-next";
 
 export interface Theme {
   breakpoints: {
