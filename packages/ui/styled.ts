@@ -1,4 +1,4 @@
-import React, { forwardRef, ComponentPropsWithRef } from 'react';
+import { forwardRef, ComponentPropsWithRef, createElement } from 'react';
 import { style as _style } from 'typestyle';
 
 import { Theme, useTheme } from './theme';
@@ -21,7 +21,7 @@ export function styled<T extends keyof JSX.IntrinsicElements>(Component: T) {
           ? `${localClassName} ${parentClassName}`
           : localClassName;
 
-        return React.createElement(Component, {
+        return createElement(Component, {
           ...rest,
           ref,
           className
