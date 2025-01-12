@@ -1,8 +1,3 @@
-import { format, fromUnixTime } from 'date-fns';
-import { ja } from 'date-fns/locale';
-
-import { SeriesDataItemTypeMap, UTCTimestamp } from 'lightweight-charts';
-
 export type Trade = [
   // Open time
   number,
