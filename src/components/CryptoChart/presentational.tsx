@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { createChart, IChartApi, ISeriesApi, ColorType } from 'lightweight-charts';
+import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 
 import { CandleStick } from './model/CandleStick';
+import { createChartColor, createSeriesColor } from './module';
 
 interface CryptoChartPresenterProps {
   candleData: CandleStick[];
@@ -19,36 +20,21 @@ const CryptoChartPresentational: React.FC<CryptoChartPresenterProps> = ({
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chart = useRef<IChartApi | null>(null);
   const series = useRef<ISeriesApi<'Candlestick'> | null>(null);
+  const chartColor = createChartColor('light');
+  const seriesColor = createSeriesColor();
 
   useEffect(() => {
-    if (chartContainerRef.current) {
-      chart.current = createChart(chartContainerRef.current, {
-        width,
-        height,
-        layout: {
-          background: {
-            type: ColorType.Solid,
-            color: '#ffffff'
-          },
-          textColor: '#333',
-        },
-        grid: {
-          vertLines: { color: '#f0f0f0' },
-          horzLines: { color: '#f0f0f0' },
-        },
-      });
-
-      series.current = chart.current.addCandlestickSeries({
-        upColor: '#26a69a',
-        downColor: '#ef5350',
-        borderVisible: false,
-        wickUpColor: '#26a69a',
-        wickDownColor: '#ef5350',
-      });
-      
-      series.current.setData(candleData.map(candle => candle.series));
-     
+    if (!chartContainerRef.current) {
+      return () => {}; 
     }
+
+    chart.current = createChart(chartContainerRef.current, {
+      ...chartColor,
+      width,
+      height,
+    });
+    series.current = chart.current.addCandlestickSeries(seriesColor);
+    series.current.setData(candleData.map(candle => candle.series));
 
     return () => {
       if (chart.current) {
