@@ -45,17 +45,17 @@ const EMPTY: unique symbol = Symbol();
  */
 export const defineStore = <
   S extends State,
-  Q extends Queries<S>,
-  A extends Actions<S, Q>
+  Q extends Queries<S> = Queries<S>,
+  A extends Actions<S, Q> = Actions<S, Q>
 >(config: {
   state: S;
   queries: Q;
-  actions: A;
+  actions?: A;
 }): Store<S, Q, A> => {
   const {
     state: initialState,
     queries: queryFns,
-    actions: actionFns
+    actions: actionFns = {} as A,
   } = config;
   
   // ローカルステートとしてのストア
