@@ -1,3 +1,5 @@
+import { UTCTimestamp } from 'lightweight-charts';
+
 export type Trade = [
   // Open time
   number,
@@ -26,7 +28,7 @@ export type Trade = [
 ];
 
 export class CandleStick {
-  openTime: number;
+  time: number;
   open: number;
   high: number;
   low: number;
@@ -40,7 +42,7 @@ export class CandleStick {
   ignore: string;
 
   constructor(params: Trade) {
-    this.openTime = params[0];
+    this.time = params[0];
     
     this.open = parseFloat(params[1]);
     this.high = parseFloat(params[2]);
@@ -55,5 +57,14 @@ export class CandleStick {
     this.takerBuyQuoteAssetVolume = params[10];
     this.ignore = params[11];
   }
-
+  
+  get series() {
+    return {
+      time: (this.time / 1000) as UTCTimestamp,
+      open: this.open,
+      high: this.high,
+      low: this.low,
+      close: this.close,
+    };
+  }
 }
