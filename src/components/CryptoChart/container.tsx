@@ -16,8 +16,8 @@ interface CryptoChartContainerProps {
 export const CryptoChart: React.FC<CryptoChartContainerProps> = ({
   symbol,
   timeframe,
-  width = 600,
-  height = 400,
+  width,
+  height,
 }) => {
   const { theme } = useTheme();
   const { queries, actions } = CryptoStore.useStore();

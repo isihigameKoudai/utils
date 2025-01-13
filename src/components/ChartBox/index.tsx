@@ -27,31 +27,28 @@ export const ChartBox: React.FC<Props> = ({ symbol, timeframe }) => {
   const [size, setSize] = useState<{ width: number; height: number; }>({ width: 500, height: 500 });
   
   useEffect(() => {
-    if (ref.current && titleRef.current) {
-      setSize({
-        width: ref.current.clientWidth - 16,
-        height: ref.current.clientHeight - titleRef.current.clientHeight - 24,
-      });
+    if(!ref.current || !titleRef.current) {
+      return () => {};
     }
+    
+    setSize(() => ({
+      width: ref.current!.clientWidth - 16,
+      height: ref.current!.clientHeight - titleRef.current!.clientHeight - 24,
+    }));
   }, [symbol, timeframe]);
 
   useEffect(() => {
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect;
-        console.log(symbol, width, height);
-        setSize((prev) => ({
-          ...prev,
-          width,
+    const handleResize = () => {
+      if (ref.current && titleRef.current) {
+        setSize(() => ({
+          width: ref.current!.clientWidth - 16,
+          height: ref.current!.clientHeight - titleRef.current!.clientHeight - 24,
         }));
       }
-    });
-
-    if (ref.current) {
-      resizeObserver.observe(ref.current);
-    }
+    };
+    window.addEventListener('resize', handleResize);
     return () => {
-      resizeObserver.disconnect();
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -61,7 +58,6 @@ export const ChartBox: React.FC<Props> = ({ symbol, timeframe }) => {
       <CryptoChart
         symbol={symbol}
         timeframe={timeframe}
-        width={size.width}
         height={size.height}
       />
     </ChartWrapper>
