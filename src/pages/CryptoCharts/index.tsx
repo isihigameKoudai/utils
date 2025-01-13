@@ -17,23 +17,10 @@ const ChartGridContainer = styled('div')(() => ({
 
 const CryptoCharts = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState<'1d' | '1M'>('1d');
-  const [selectedSymbol, setSelectedSymbol] = useState<string>(SYMBOLS[0]);
 
   return (
     <StyledContainer>
       <div style={{ marginBottom: '20px' }}>
-        <select
-          value={selectedSymbol}
-          onChange={(e) => setSelectedSymbol(e.target.value)}
-          style={{ marginRight: '10px', padding: '5px' }}
-        >
-          {SYMBOLS.map((symbol) => (
-            <option key={symbol} value={symbol}>
-              {symbol}
-            </option>
-          ))}
-        </select>
-
         <select
           value={selectedTimeframe}
           onChange={(e) => setSelectedTimeframe(e.target.value as '1d' | '1M')}
