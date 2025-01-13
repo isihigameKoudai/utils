@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 
-import { CryptoTheme } from './theme';
 import { styled } from '@/packages/ui/styled';
 import { ChartBox } from '../../components/ChartBox';
-
+import { CryptoTheme } from './theme';
 import { SYMBOLS, TIMEFRAMES } from './constants';
 
 const StyledContainer = styled('div')((theme) => ({
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: theme.palette.mode === 'light' ? '#f5f5f5' : '#222',
   padding: theme.spacing(2),
 }));
 
-const ChartContainer = styled('div')(() => ({
-  display: 'flex',
-  flexWrap: 'wrap',
+const ChartGridContainer = styled('div')(() => ({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(4, minmax(300px, 1fr))',
 }));
 
 const CryptoCharts = () => {
@@ -47,13 +46,13 @@ const CryptoCharts = () => {
           ))}
         </select>
       </div>
-      <ChartContainer>
+      <ChartGridContainer>
         {
           SYMBOLS.map((symbol) => (
             <ChartBox key={symbol} symbol={symbol} timeframe={selectedTimeframe} />
           ))
         }
-      </ChartContainer>
+      </ChartGridContainer>
     </StyledContainer>
   );
 };

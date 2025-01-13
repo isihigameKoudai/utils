@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 
-import CryptoChartPresentational from './presentational';
+import { useTheme } from '@/packages/ui/theme';
 
+import CryptoChartPresentational from './presentational';
 import { CryptoStore } from './store/crypto';
 import { CryptoListParams } from './api/crypto';
 
@@ -18,6 +19,7 @@ export const CryptoChart: React.FC<CryptoChartContainerProps> = ({
   width = 600,
   height = 400,
 }) => {
+  const { theme } = useTheme();
   const { queries, actions } = CryptoStore.useStore();
 
   useEffect(() => {
@@ -40,6 +42,7 @@ export const CryptoChart: React.FC<CryptoChartContainerProps> = ({
       symbol={symbol}
       width={width}
       height={height}
+      colorTheme={theme.palette.mode }
     />
   );
 };

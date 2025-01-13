@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 
+import { ColorTheme } from '@/packages/PreferColorScheme';
+
 import { CandleStick } from './model/CandleStick';
 import { createChartColor, createSeriesColor } from './module';
 
@@ -9,6 +11,7 @@ interface CryptoChartPresenterProps {
   symbol: string;
   width?: number;
   height?: number;
+  colorTheme?: ColorTheme;
 }
 
 const CryptoChartPresentational: React.FC<CryptoChartPresenterProps> = ({
@@ -16,11 +19,12 @@ const CryptoChartPresentational: React.FC<CryptoChartPresenterProps> = ({
   symbol,
   width = 600,
   height = 400,
+  colorTheme = 'light',
 }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chart = useRef<IChartApi | null>(null);
   const series = useRef<ISeriesApi<'Candlestick'> | null>(null);
-  const chartColor = createChartColor('light');
+  const chartColor = createChartColor(colorTheme);
   const seriesColor = createSeriesColor();
 
   useEffect(() => {

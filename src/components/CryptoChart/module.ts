@@ -1,10 +1,11 @@
 import { DeepPartial, ChartOptions, ColorType, CandlestickSeriesPartialOptions } from 'lightweight-charts';
 
+import { ColorTheme } from '@/packages/PreferColorScheme';
+
 import { CHART_DARK_COLOR, CHART_LIGHT_COLOR, SERIES_COLOR } from './constants';
 
-export type Theme = 'light' | 'dark';
 
-export const createChartColor = (theme: Theme): DeepPartial<ChartOptions> => {
+export const createChartColor = (theme: ColorTheme): DeepPartial<ChartOptions> => {
   const colors = theme === 'light' ? CHART_LIGHT_COLOR : CHART_DARK_COLOR;
 
   return {

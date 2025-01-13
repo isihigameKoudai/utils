@@ -1,3 +1,5 @@
+export type ColorTheme = 'light' | 'dark';
+
 export default class PreferColorScheme {
   _mediaQueryList: MediaQueryList;
 
@@ -19,6 +21,10 @@ export default class PreferColorScheme {
 
   get isLight() {
     return !this.isDark;
+  }
+
+  get theme(): ColorTheme {
+    return this.isDark ? 'dark' : 'light';
   }
 
   subscribe(callback: (event: MediaQueryListEvent) => void) {
