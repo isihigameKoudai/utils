@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+import Box from '@/packages/ui/Box';
+
 import Menu from "../components/Menu";
 import { routeList } from "./routes";
 
@@ -8,7 +10,7 @@ export const NavigationHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header>
+    <Box as='header' zIndex={10} position="relative">
       <button style={{
         position: 'fixed',
         top: 10,
@@ -19,7 +21,7 @@ export const NavigationHeader: React.FC = () => {
           <Menu onClose={() => setIsOpen(false)} />
         )
       }
-    </header>
+    </Box>
   )
 }
 
