@@ -7,6 +7,9 @@ type StyledOptions = {
   className?: string;
 };
 
+/**
+ * @todo themeが設定されていないくても使えるようにする
+ */
 export function styled<T extends keyof JSX.IntrinsicElements>(Component: T) {
   return (themeFunction: (theme: Theme) => React.CSSProperties) => {
     type Props = ComponentPropsWithRef<T> & StyledOptions;
