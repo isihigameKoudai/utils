@@ -1,22 +1,34 @@
 import React, { useState } from 'react';
-import { CryptoChart } from '../../components/CryptoChart';
 
-const timeframes = ['1d', '1M'] as const;
-const symbols = ['BTC', 'ETH', 'BNB'] as const;
+import { CryptoTheme } from './theme';
+import { styled } from '@/packages/ui/styled';
+import { ChartBox } from '../../components/ChartBox';
+
+import { SYMBOLS, TIMEFRAMES } from './constants';
+
+const StyledContainer = styled('div')((theme) => ({
+  backgroundColor: theme.palette.background.paper,
+  padding: theme.spacing(2),
+}));
+
+const ChartContainer = styled('div')(() => ({
+  display: 'flex',
+  flexWrap: 'wrap',
+}));
 
 const CryptoCharts = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState<'1d' | '1M'>('1d');
-  const [selectedSymbol, setSelectedSymbol] = useState<string>(symbols[1]);
+  const [selectedSymbol, setSelectedSymbol] = useState<string>(SYMBOLS[0]);
 
   return (
-    <div style={{ padding: '20px' }}>
+    <StyledContainer>
       <div style={{ marginBottom: '20px' }}>
         <select
           value={selectedSymbol}
           onChange={(e) => setSelectedSymbol(e.target.value)}
           style={{ marginRight: '10px', padding: '5px' }}
         >
-          {symbols.map((symbol) => (
+          {SYMBOLS.map((symbol) => (
             <option key={symbol} value={symbol}>
               {symbol}
             </option>
@@ -28,22 +40,28 @@ const CryptoCharts = () => {
           onChange={(e) => setSelectedTimeframe(e.target.value as '1d' | '1M')}
           style={{ padding: '5px' }}
         >
-          {timeframes.map((timeframe) => (
+          {TIMEFRAMES.map((timeframe) => (
             <option key={timeframe} value={timeframe}>
               {timeframe === '1d' ? '日足' : '月足'}
             </option>
           ))}
         </select>
       </div>
-
-      <CryptoChart
-        symbol={selectedSymbol}
-        timeframe={selectedTimeframe}
-        width={800}
-        height={500}
-      />
-    </div>
+      <ChartContainer>
+        {
+          SYMBOLS.map((symbol) => (
+            <ChartBox key={symbol} symbol={symbol} timeframe={selectedTimeframe} />
+          ))
+        }
+      </ChartContainer>
+    </StyledContainer>
   );
 };
 
-export default CryptoCharts;
+export default () => {
+  return (
+    <CryptoTheme.Provider>
+      <CryptoCharts />
+    </CryptoTheme.Provider>
+  );
+};
