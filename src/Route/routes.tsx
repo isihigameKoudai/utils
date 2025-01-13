@@ -25,6 +25,7 @@ import ThemeDemo from "../pages/Examples/Theme";
 import HandPoseDetectionPage from "../pages/Examples/HandPoseDetection";
 import PoseDetectionPage from "../pages/Examples/PoseDetection";
 import IStatePage from "../pages/Examples/IState";
+import CryptoCharts from "../pages/CryptoCharts";
 
 export type IRoute = {
   title: string;
@@ -175,5 +176,10 @@ export const routeList: IRoute[] = [
     title: 'IState',
     path: '/samples/istate',
     element: <IStatePage />
+  },
+  {
+    title: 'CryptoCharts',
+    path: '/crypto-charts',
+    element: <CryptoCharts />
   }
 ];
