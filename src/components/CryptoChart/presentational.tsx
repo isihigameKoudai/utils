@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 
 import { ColorTheme } from '@/packages/PreferColorScheme';
-import { styledZero } from '@/packages/ui/styled';
+import { styled } from '@/packages/ui/styled';
 
 import { CandleStick } from './model/CandleStick';
 import { createChartColor, createSeriesColor } from './module';
 
-const FullBox = styledZero('div')({
+const FullBox = styled('div')({
   width: '100%',
   height: '100%',
 });
