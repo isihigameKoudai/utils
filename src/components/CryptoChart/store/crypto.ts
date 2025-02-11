@@ -1,4 +1,4 @@
-import { defineStore } from "../../../../packages/i-state";
+import { defineStore } from "../../../../utils/i-state";
 import { Trade } from "../model/CandleStick";
 import { fetchTradeDataList, CryptoListParams } from "../api/crypto";
 import { CandleStick } from "../model/CandleStick";

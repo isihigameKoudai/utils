@@ -1,12 +1,12 @@
 import React, { useCallback, useRef } from 'react';
 import * as THREE from 'three';
 
-import ShaderCanvas from '../../../../packages/ShaderCanvas';
-import vertex from '../../../../packages/glsl/vertex.vert?raw';
+import ShaderCanvas from '../../../../utils/ShaderCanvas';
+import vertex from '../../../../utils/glsl/vertex.vert?raw';
 import AudioCircle from './AudioCircle.frag?raw';
-import { Visualizer } from '../../../../packages/Visualizer';
-import { average } from '../../../../packages/math';
-import { splitMap } from '../../../../packages/array';
+import { Visualizer } from '../../../../utils/Visualizer';
+import { average } from '../../../../utils/math';
+import { splitMap } from '../../../../utils/array';
 
 const flatSums = (arr:number[], lengthPerArr: number) => splitMap(arr,lengthPerArr).map(items => average(items));
 

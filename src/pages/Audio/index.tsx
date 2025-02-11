@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from "react";
-import { Visualizer } from "../../../packages/Visualizer";
-import { fetchAudio } from "../../../packages/fetchFiles";
+import { Visualizer } from "../../../utils/Visualizer";
+import { fetchAudio } from "../../../utils/fetchFiles";
 import { basicParticle } from "./Mic/animation";
 
 const AudioPage: React.FC = () => {

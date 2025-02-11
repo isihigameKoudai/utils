@@ -1,4 +1,4 @@
-import { defineStore } from '../../../../../packages/i-state';
+import { defineStore } from '../../../../../utils/i-state';
 
 // 2. TODOリスト
 type Todo = {

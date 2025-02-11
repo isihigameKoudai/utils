@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 
-import { styled } from '@/packages/ui/styled';
+import { styled } from '@/utils/ui/styled';
 import { ThemeContainer } from './defaultTheme';
 
 import { counterStore } from './store/counter';

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import WebGL from "./modules/WebGL";
-import { DetectedObject, VisualDetection } from "../../../../packages/tensorflow";
+import { DetectedObject, VisualDetection } from "../../../../utils/tensorflow";
 import Mouse from "./modules/Mouse";
 import VisualDetectionView from "../../../components/VisualDetectionView";
 

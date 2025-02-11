@@ -2,7 +2,7 @@ import Common from "./Common";
 import Output from "./Output";
 import Mouse from "./Mouse";
 
-import { VisualDetection } from "../../../../../packages/tensorflow";
+import { VisualDetection } from "../../../../../utils/tensorflow";
 
 type Props = {
   $wrapper: HTMLElement;

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { FaceDetection } from '../../packages/tensorflow';
+import { FaceDetection } from '../../utils/tensorflow';
 
 interface FaceDetectionViewProps {
   width?: number;

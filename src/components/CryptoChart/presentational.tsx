@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { createChart, IChartApi, ISeriesApi, DataChangedHandler } from 'lightweight-charts';
 
-import { ColorTheme } from '@/packages/PreferColorScheme';
-import { styled } from '@/packages/ui/styled';
+import { ColorTheme } from '@/utils/PreferColorScheme';
+import { styled } from '@/utils/ui/styled';
 
 import { CandleStick } from './model/CandleStick';
 import { createChartColor, createSeriesColor } from './module';

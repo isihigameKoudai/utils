@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { styled } from '@/packages/ui/styled';
+import { styled } from '@/utils/ui/styled';
 
 import { CryptoChart, CryptoStore } from '@/src/components/CryptoChart';
 import { CryptoTheme } from '../theme';

@@ -3,7 +3,7 @@ import path from "path";
 import react from "@vitejs/plugin-react";
 import Pages from "vite-plugin-pages";
 
-import { apiMap } from "./packages/apis/config";
+import { apiMap } from "./utils/apis/config";
 
 // https://vitejs.dev/config/
 export default defineConfig({

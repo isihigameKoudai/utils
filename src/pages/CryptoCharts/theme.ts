@@ -1,5 +1,5 @@
-import { createTheme, Theme } from '@/packages/ui/theme';
-import PreferColorScheme from '@/packages/PreferColorScheme';
+import { createTheme, Theme } from '@/utils/ui/theme';
+import PreferColorScheme from '@/utils/PreferColorScheme';
 
 export const lightTheme: Theme = {
   breakpoints: {
