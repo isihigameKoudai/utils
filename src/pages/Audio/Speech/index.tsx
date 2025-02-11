@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import Speech from "../../../../packages/Speech";
+import Speech from "../../../../utils/Speech";
 
 const SpeechPage: React.FC = () => {
   const speech = new Speech();

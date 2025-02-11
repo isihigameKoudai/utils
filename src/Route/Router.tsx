@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Box from '@/packages/ui/Box';
+import Box from '@/utils/ui/Box';
 
 import Menu from "../components/Menu";
 import { routeList } from "./routes";

@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from "react";
 
-import { Visualizer } from "../../../../packages/Visualizer";
+import { Visualizer } from "../../../../utils/Visualizer";
 import { basicParticle, lineAudio } from "./animation";
 
 const MicPage: React.FC = () => {

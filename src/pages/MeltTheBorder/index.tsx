@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import * as THREE from 'three';
 import { isEmpty } from 'lodash-es';
 
-import { DetectedObject } from '../../../packages/tensorflow';
-import ShaderCanvas from '../../../packages/ShaderCanvas';
-import vertex from '../../../packages/glsl/vertex.vert?raw';
+import { DetectedObject } from '../../../utils/tensorflow';
+import ShaderCanvas from '../../../utils/ShaderCanvas';
+import vertex from '../../../utils/glsl/vertex.vert?raw';
 import fragment from './fragment.frag?raw';
 
 import DetectorView from './DetectorView';

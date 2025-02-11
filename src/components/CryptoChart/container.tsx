@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useTheme } from '@/packages/ui/theme';
+import { useTheme } from '@/utils/ui/theme';
 
 import CryptoChartPresentational from './presentational';
 import { CryptoStore } from './store/crypto';

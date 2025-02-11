@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Hand } from '../../../components/HandPoseDetectionView/type';
-import { HandPoseDetection } from '../../../../packages/tensorflow/HandPoseDetection';
+import { HandPoseDetection } from '../../../../utils/tensorflow/HandPoseDetection';
 import { HandPoseDetectionView } from '../../../components/HandPoseDetectionView';
 
 const HandPoseDetectionPage = () => {

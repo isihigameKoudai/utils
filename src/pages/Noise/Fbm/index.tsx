@@ -1,8 +1,8 @@
 import React from 'react';
 import * as THREE from 'three';
 
-import ShaderCanvas from '../../../../packages/ShaderCanvas';
-import vertex from '../../../../packages/glsl/vertex.vert?raw';
+import ShaderCanvas from '../../../../utils/ShaderCanvas';
+import vertex from '../../../../utils/glsl/vertex.vert?raw';
 import fbm from './fbm.frag?raw';
 
 const FbmNoisePage: React.FC = () => {

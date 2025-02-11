@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { fetchAudios, fetchFiles, fetchImages, fetchMovies } from '../../packages/fetchFiles'
+import { fetchAudios, fetchFiles, fetchImages, fetchMovies } from '../../utils/fetchFiles'
 
 const Index: React.FC = () => {
   const onOpenFile = useCallback(async () => {

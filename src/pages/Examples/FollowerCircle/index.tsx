@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 
-import ShaderCanvas from '../../../../packages/ShaderCanvas';
-import vertex from '../../../../packages/glsl/vertex.vert?raw';
+import ShaderCanvas from '../../../../utils/ShaderCanvas';
+import vertex from '../../../../utils/glsl/vertex.vert?raw';
 import followerCircle from './followerCircle.frag?raw';
 
 const FollowerCirclePage: React.FC = () => {

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { VisualDetection, DetectedObject } from "../../../../packages/tensorflow";
+import { VisualDetection, DetectedObject } from "../../../../utils/tensorflow";
 import VisualDetectionView from "../../../components/VisualDetectionView";
 
 export default function Detector() {

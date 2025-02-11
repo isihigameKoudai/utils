@@ -1,4 +1,4 @@
-import { defineStore } from '../../../../../packages/i-state';
+import { defineStore } from '../../../../../utils/i-state';
 
 // 1. シンプルなカウンター
 export const counterStore = defineStore({

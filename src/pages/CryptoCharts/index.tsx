@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { styled } from '@/packages/ui/styled';
+import { styled } from '@/utils/ui/styled';
 import { ChartBox } from '../../components/ChartBox';
 import { CryptoTheme } from './theme';
 import { SYMBOLS, TIMEFRAMES } from './constants';

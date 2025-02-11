@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
-import Shader from '../../../packages/Shader';
+import Shader from '../../../utils/Shader';
 
 import * as THREE from 'three';
-import vertex from '../../../packages/glsl/vertex.vert?raw';
-import roundRing from '../../../packages/glsl/roundRing.frag?raw';
+import vertex from '../../../utils/glsl/vertex.vert?raw';
+import roundRing from '../../../utils/glsl/roundRing.frag?raw';
 
 const ShaderPage: React.FC = () => {
   const $shader = useRef<HTMLDivElement>(null);

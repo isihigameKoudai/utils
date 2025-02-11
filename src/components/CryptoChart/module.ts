@@ -1,6 +1,6 @@
 import { DeepPartial, ChartOptions, ColorType, CandlestickSeriesPartialOptions } from 'lightweight-charts';
 
-import { ColorTheme } from '@/packages/PreferColorScheme';
+import { ColorTheme } from '@/utils/PreferColorScheme';
 
 import { CHART_DARK_COLOR, CHART_LIGHT_COLOR, SERIES_COLOR } from './constants';
 
