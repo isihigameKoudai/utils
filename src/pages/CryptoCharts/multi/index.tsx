@@ -35,12 +35,6 @@ const ChartGrid = styled('div')({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
   gap: '20px',
-  '@media (max-width: 1200px)': {
-    gridTemplateColumns: 'repeat(2, 1fr)',
-  },
-  '@media (max-width: 600px)': {
-    gridTemplateColumns: '1fr',
-  },
 });
 
 const ChartContainer = styled('div')({
