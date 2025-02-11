@@ -202,9 +202,11 @@ const IStateExample: React.FC = () => {
 };
 
 export default () => (
-  <todoStore.Provider>
-    <ThemeContainer.Provider>
-      <IStateExample />
-    </ThemeContainer.Provider>
-  </todoStore.Provider>
+  <formStore.Provider>
+    <todoStore.Provider>
+      <ThemeContainer.Provider>
+        <IStateExample />
+      </ThemeContainer.Provider>
+    </todoStore.Provider>
+  </formStore.Provider>
 );
