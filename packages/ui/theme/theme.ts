@@ -14,14 +14,15 @@ export const createTheme = (theme: Theme) => {
     const [theme, setTheme] = useState(initialState);
     return { theme, setTheme };
   });
-  
+
   return ThemeContainer;
 };
 
 // テーマを取得するためのヘルパー関数
 export const useTheme = () => {
-  if (!ThemeContainer) {
-    throw new Error('Theme container has not been created. Call createTheme first.');
+  try  {
+    return ThemeContainer?.useContainer();
+  } catch (error) {
+    console.error('Error in useTheme:', error);
   }
-  return ThemeContainer.useContainer();
 };
