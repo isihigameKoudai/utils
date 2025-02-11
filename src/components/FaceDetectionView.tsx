@@ -47,12 +47,10 @@ const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({ width = 640, heig
         setFace(faces[0]);
       }
     });
-    console.log(detector);
   };
 
   const handleStop = () => {
     detector.stop();
-    console.log(detector);
   };
 
   return (

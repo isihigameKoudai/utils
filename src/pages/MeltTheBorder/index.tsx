@@ -69,7 +69,6 @@ const MeltTheBorder: React.FC = () => {
     if (isEmpty(objects)) return;
 
     const object = objects[0];
-    console.log(object.center.x, object.center.y);
     mouse.x = object.center.x;
     mouse.y = -object.center.y;
   }

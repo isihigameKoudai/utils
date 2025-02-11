@@ -1,7 +1,7 @@
 import React, { forwardRef, ComponentPropsWithRef, createElement, DetailedHTMLProps } from 'react';
 import { style as _style } from 'typestyle';
 
-import { useTheme, Theme, defaultTheme } from '@/packages/ui/theme';
+import { useTheme, Theme } from '@/packages/ui/theme';
 
 type StyledOptions = {
   className?: string;
@@ -20,14 +20,12 @@ export function styled<T extends keyof JSX.IntrinsicElements>(Component: T) {
 
         const styles: React.CSSProperties = (() => {
           const isFunction = typeof _themeFunction === 'function';
-          console.log(isFunction);
 
           if (isFunction) {
             const { theme: provideTheme } = useTheme();
             return _themeFunction(provideTheme);
           }
 
-          console.log(_themeFunction);
           return _themeFunction;
         })();
 
