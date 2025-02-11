@@ -19,19 +19,19 @@ const getTimeframeLabel = (timeframe: string) => {
   }
 };
 
-const StyledContainer = styled('div')((theme) => ({
-  backgroundColor: theme.palette.mode === 'light' ? '#f5f5f5' : '#222',
-  padding: theme.spacing(2),
+const StyledContainer = styled('div')({
+  backgroundColor: '#222',
+  padding: 16,
   minHeight: '100vh',
-}));
+});
 
-const Header = styled('div')(() => ({
+const Header = styled('div')({
   marginBottom: '20px',
   display: 'flex',
   justifyContent: 'center',
-}));
+});
 
-const ChartGrid = styled('div')(() => ({
+const ChartGrid = styled('div')({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
   gap: '20px',
@@ -41,20 +41,20 @@ const ChartGrid = styled('div')(() => ({
   '@media (max-width: 600px)': {
     gridTemplateColumns: '1fr',
   },
-}));
+});
 
-const ChartContainer = styled('div')(() => ({
+const ChartContainer = styled('div')({
   backgroundColor: 'rgba(255, 255, 255, 0.05)',
   borderRadius: '8px',
   padding: '16px',
   height: '360px',
-}));
+});
 
-const ChartTitle = styled('h3')((theme) => ({
+const ChartTitle = styled('h3')({
   margin: '0 0 16px 0',
   textAlign: 'center',
-  color: theme.palette.mode === 'light' ? '#333' : '#ddd',
-}));
+  color: '#ccc',
+});
 
 interface Props {
   token: string;
