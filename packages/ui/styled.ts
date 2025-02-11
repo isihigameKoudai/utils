@@ -16,19 +16,22 @@ export function styled<T extends keyof JSX.IntrinsicElements>(Component: T) {
     
     return forwardRef<JSX.IntrinsicElements[T] extends DetailedHTMLProps<any, infer E> ? E : never, Props>(
       (props, ref) => {
-        let theme: Theme;
-        try {
-          const { theme: providedTheme } = useTheme();
-          theme = providedTheme;
-        } catch (e) {
-          console.warn('you should use & define ThemeProvider');
-          theme = defaultTheme
-        }
-
         const { className: parentClassName, ...rest } = props;
-        const themeFunction = typeof _themeFunction === 'function' ? _themeFunction : () => _themeFunction;
-        const localClassName = _style(themeFunction(theme));
-        
+
+        const styles: React.CSSProperties = (() => {
+          const isFunction = typeof _themeFunction === 'function';
+          console.log(isFunction);
+
+          if (isFunction) {
+            const { theme: provideTheme } = useTheme();
+            return _themeFunction(provideTheme);
+          }
+
+          console.log(_themeFunction);
+          return _themeFunction;
+        })();
+
+        const localClassName = _style(styles);
         const className = parentClassName
           ? `${localClassName} ${parentClassName}`
           : localClassName;
