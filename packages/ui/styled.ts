@@ -5,8 +5,16 @@ type StyledOptions = {
   className?: string;
 };
 
+
 /**
- * @todo themeが設定されていないくても使えるようにする
+ * スタイル付きコンポーネントを作成するユーティリティ関数
+ * @param {T} Component - スタイリング対象のHTML要素またはコンポーネント
+ * @returns {Object} スタイル
+ * @example
+ * const StyledDiv = styled('div')({
+ *   color: 'red',
+ *   fontSize: '16px'
+ * })
  */
 export function styled<T extends keyof JSX.IntrinsicElements>(Component: T) {
   return (style: React.CSSProperties) => {
