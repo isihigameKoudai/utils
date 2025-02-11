@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useCallback, useState, createContext } from 'react';
+import { useCallback, useState, createContext, useContext } from 'react';
 
 import { State, Queries, Actions, Store, ActionContext, StoreActions } from './type';
 
@@ -96,7 +96,7 @@ export const defineStore = <
 
   // グローバルステートとしてのストア
   const useContainer = () => {
-    const store = React.useContext(Context);
+    const store = useContext(Context);
     if (store === EMPTY) {
       throw new Error('Component must be wrapped with <Store.Provider>');
     }

@@ -5,15 +5,15 @@ import { ChartBox } from '../../components/ChartBox';
 import { CryptoTheme } from './theme';
 import { SYMBOLS, TIMEFRAMES } from './constants';
 
-const StyledContainer = styled('div')((theme) => ({
-  backgroundColor: theme.palette.mode === 'light' ? '#f5f5f5' : '#222',
-  padding: theme.spacing(2),
-}));
+const StyledContainer = styled('div')({
+  backgroundColor: '#222',
+  padding: 16,
+});
 
-const ChartGridContainer = styled('div')(() => ({
+const ChartGridContainer = styled('div')({
   display: 'grid',
   gridTemplateColumns: 'repeat(4, minmax(300px, 1fr))',
-}));
+});
 
 const CryptoCharts = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState<'1d' | '1M'>('1d');

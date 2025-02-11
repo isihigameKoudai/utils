@@ -110,7 +110,6 @@ export class Mouse {
 
   //   setInterval(() => {
   //     // i = i + 0.07;
-  //     console.log(r);
   //     const radius = 100 + Math.sin(r) * 800; // 円の半径
   //     const centerX = window.innerWidth / 2; // 画面の中心X座標
   //     const centerY = window.innerHeight / 2; // 画面の中心Y座標

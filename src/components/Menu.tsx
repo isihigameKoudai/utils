@@ -41,7 +41,7 @@ const Menu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
               <Link style={{
                 textDecoration: 'none',
                 color: '#fefefe'
-              }} to={item.path}>{ [...new Array((item.path.match(new RegExp('/', 'g')))?.length)].map(() => '- ').join(' ') }{ item.title }</Link>
+              }} to={item.menuPath || item.path}>{ [...new Array((item.path.match(new RegExp('/', 'g')))?.length)].map(() => '- ').join(' ') }{ item.title }</Link>
             </li>
           ))
         }

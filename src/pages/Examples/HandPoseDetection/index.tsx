@@ -28,7 +28,6 @@ const HandPoseDetectionPage = () => {
   const handleStart = () => {
     setIsRunning(true);
     detector.start((detectedHands: Hand[]) => {
-      console.log(detectedHands);
       setHands(detectedHands);
     });
   };

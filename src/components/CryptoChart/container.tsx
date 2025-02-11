@@ -19,7 +19,7 @@ export const CryptoChart: React.FC<CryptoChartContainerProps> = ({
   width,
   height,
 }) => {
-  const { theme } = useTheme();
+  const theme = useTheme();
   const { queries, actions } = CryptoStore.useStore();
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export const CryptoChart: React.FC<CryptoChartContainerProps> = ({
       symbol={symbol}
       width={width}
       height={height}
-      colorTheme={theme.palette.mode }
+      colorTheme={theme?.theme.palette.mode }
     />
   );
 };

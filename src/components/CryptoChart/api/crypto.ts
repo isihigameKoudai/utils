@@ -1,4 +1,5 @@
-import api from '../../../../packages/api';
+import api from '@/packages/api';
+import { apiMap } from '@/packages/apis/config';
 import { Trade } from '../model/CandleStick';
 
 export interface CryptoListParams {
@@ -9,7 +10,7 @@ export interface CryptoListParams {
 
 type CryptoList = Trade[];
 
-export const fetchTradeDataList = async ({ symbol, baseSymbol = 'USDT' ,interval }: CryptoListParams): Promise<CryptoList> => {
-  const response = await api.get<CryptoList>(`https://api.binance.com/api/v3/klines?symbol=${symbol}${baseSymbol}&interval=${interval}`);
+export const fetchTradeDataList = async ({ symbol, baseSymbol = 'USDT' , interval }: CryptoListParams): Promise<CryptoList> => {
+  const response = await api.get<CryptoList>(`${apiMap.binance.url}/api/v3/klines?symbol=${symbol}${baseSymbol}&interval=${interval}&limit=1000`);
   return response;
 };

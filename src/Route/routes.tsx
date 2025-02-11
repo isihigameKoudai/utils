@@ -21,16 +21,17 @@ import FractalNoisePage from "../pages/Noise/Fractal";
 import CellularNoisePage from "../pages/Noise/CellularNoise";
 import MeltTheBorder from "../pages/MeltTheBorder";
 import FaceLandmarkDetector from "../pages/Examples/FaceLandmarkDetector";
-import ThemeDemo from "../pages/Examples/Theme";
 import HandPoseDetectionPage from "../pages/Examples/HandPoseDetection";
 import PoseDetectionPage from "../pages/Examples/PoseDetection";
 import IStatePage from "../pages/Examples/IState";
 import CryptoCharts from "../pages/CryptoCharts";
+import MultiChartPage from "../pages/CryptoCharts/multi";
 
 export type IRoute = {
   title: string;
   path: string;
   element?: JSX.Element;
+  menuPath?: string;
 };
 
 export const routeList: IRoute[] = [
@@ -144,11 +145,6 @@ export const routeList: IRoute[] = [
     element: <FluidDetect />
   },
   {
-    title: 'theme',
-    path: '/samples/theme',
-    element: <ThemeDemo />
-  },
-  {
     title: 'ノイズ',
     path: '/noise',
   },
@@ -181,5 +177,10 @@ export const routeList: IRoute[] = [
     title: 'CryptoCharts',
     path: '/crypto-charts',
     element: <CryptoCharts />
+  },{
+    title: 'MultiChart',
+    path: '/crypto-charts/multi/:token',
+    menuPath: '/crypto-charts/multi/BTC',
+    element: <MultiChartPage />
   }
 ];

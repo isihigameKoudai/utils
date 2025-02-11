@@ -1,7 +1,6 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 
-import { styled } from '../../../../packages/ui/styled';
-import { Theme } from '../../../../packages/ui/theme';
+import { styled } from '@/packages/ui/styled';
 import { ThemeContainer } from './defaultTheme';
 
 import { counterStore } from './store/counter';
@@ -9,20 +8,20 @@ import { todoStore } from './store/todo';
 import { formStore } from './store/form';
 
 // スタイル付きコンポーネント
-const Container = styled('div')((theme: Theme) => ({
+const Container = styled('div')({
   maxWidth: '800px',
   margin: '0 auto',
   padding: '20px',
-}));
+});
 
-const Section = styled('section')((theme: Theme) => ({
+const Section = styled('section')({
   marginBottom: '40px',
   padding: '20px',
   border: '1px solid #ddd',
   borderRadius: '8px',
-}));
+});
 
-const Button = styled('button')((theme: Theme) => ({
+const Button = styled('button')({
   margin: '0 5px',
   padding: '8px 16px',
   border: 'none',
@@ -30,29 +29,22 @@ const Button = styled('button')((theme: Theme) => ({
   backgroundColor: '#007bff',
   color: 'white',
   cursor: 'pointer',
-  ':hover': {
-    backgroundColor: '#0056b3',
-  },
-  ':disabled': {
-    backgroundColor: '#ccc',
-    cursor: 'not-allowed',
-  },
-}));
+});
 
-const Input = styled('input')((theme: Theme) => ({
+const Input = styled('input')({
   margin: '5px 0',
   padding: '8px',
   border: '1px solid #ddd',
   borderRadius: '4px',
   width: '100%',
   maxWidth: '300px',
-}));
+});
 
-const ErrorText = styled('span')((theme: Theme) => ({
+const ErrorText = styled('span')({
   color: 'red',
   fontSize: '14px',
   marginLeft: '5px',
-}));
+});
 
 const Counter = () => {
   const { state: counterState, queries: counterQueries, actions: counterActions } = counterStore.useStore();
@@ -135,7 +127,9 @@ const Todo = () => {
 const IStateExample: React.FC = () => {
   
   const { state: formState, queries: formQueries, actions: formActions } = formStore.useStore();
-  
+ 
+  const { theme } = ThemeContainer.useContainer();
+  console.log(theme);
   return (
     <Container>
       <h1>i-state Examples</h1>
@@ -208,9 +202,11 @@ const IStateExample: React.FC = () => {
 };
 
 export default () => (
-  <todoStore.Provider>
-    <ThemeContainer.Provider>
-      <IStateExample />
-    </ThemeContainer.Provider>
-  </todoStore.Provider>
+  <formStore.Provider>
+    <todoStore.Provider>
+      <ThemeContainer.Provider>
+        <IStateExample />
+      </ThemeContainer.Provider>
+    </todoStore.Provider>
+  </formStore.Provider>
 );

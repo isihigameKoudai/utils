@@ -1,4 +1,4 @@
-import { defineStore } from '../../../../../packages/i-state';
+import { defineStore } from '@/packages/i-state';
 
 // 3. フォーム状態管理
 type FormState = {
@@ -67,12 +67,6 @@ export const formStore = defineStore({
       
       // 擬似的な非同期処理
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      
-      console.log('Form submitted:', {
-        username: state.username,
-        email: state.email,
-        password: state.password,
-      });
       
       dispatch('isSubmitting', false);
     },
