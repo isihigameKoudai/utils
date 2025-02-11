@@ -3,18 +3,16 @@ import React, { useEffect, useRef, useState, ComponentProps } from 'react';
 import { styled } from '@/packages/ui/styled';
 import { CryptoChart } from '../CryptoChart';
 
-const ChartWrapper = styled('div')((theme) => ({
+const ChartWrapper = styled('div')({
   boxSizing: 'border-box',
   height: 500,
-  padding: theme.spacing(1),
-  paddingBlockStart: theme.spacing(2),
-}));
+  padding: 8,
+  paddingBlockStart: 16,
+});
 
-const StyledTitle = styled('h2')((theme) => ({
-  ...theme.typography.h3,
-  color: theme.palette.text.primary,
+const StyledTitle = styled('h2')({
   margin: 0,
-}));
+});
 
 interface Props {
   symbol: string;

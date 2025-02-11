@@ -21,7 +21,6 @@ import FractalNoisePage from "../pages/Noise/Fractal";
 import CellularNoisePage from "../pages/Noise/CellularNoise";
 import MeltTheBorder from "../pages/MeltTheBorder";
 import FaceLandmarkDetector from "../pages/Examples/FaceLandmarkDetector";
-import ThemeDemo from "../pages/Examples/Theme";
 import HandPoseDetectionPage from "../pages/Examples/HandPoseDetection";
 import PoseDetectionPage from "../pages/Examples/PoseDetection";
 import IStatePage from "../pages/Examples/IState";
@@ -144,11 +143,6 @@ export const routeList: IRoute[] = [
     title: 'fluid-detect',
     path: '/samples/fluid-detect',
     element: <FluidDetect />
-  },
-  {
-    title: 'theme',
-    path: '/samples/theme',
-    element: <ThemeDemo />
   },
   {
     title: 'ノイズ',
