@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
+import { createChart, IChartApi, ISeriesApi, DataChangedHandler } from 'lightweight-charts';
 
 import { ColorTheme } from '@/packages/PreferColorScheme';
 import { styled } from '@/packages/ui/styled';
@@ -36,7 +36,7 @@ const CryptoChartPresentational: React.FC<CryptoChartPresenterProps> = ({
   const seriesColor = createSeriesColor();
 
   useEffect(() => {
-    if (!chartRef.current || !fullBoxRef.current) {
+    if (!chartRef.current || !fullBoxRef.current || !chart.current) {
       return () => {}; 
     }
     chart.current = createChart(chartRef.current, {
@@ -47,10 +47,17 @@ const CryptoChartPresentational: React.FC<CryptoChartPresenterProps> = ({
     series.current = chart.current.addCandlestickSeries(seriesColor);
     series.current.setData(candleData.map(candle => candle.series));
 
+    const handleChange: DataChangedHandler = (e) => {
+      // series.current?.setData(candleData.map(candle => candle.series));
+      console.log('subscribeDataChanged', e);
+    };
+
+    // series.current.subscribeDataChanged(handleChange);
+    
+
     return () => {
-      if (chart.current) {
-        chart.current.remove();
-      }
+      // series.current?.unsubscribeDataChanged(handleChange);
+      chart.current?.remove();
     };
   }, [candleData, symbol]);
 
