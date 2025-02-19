@@ -1,4 +1,4 @@
-# 認証情報
+# variables and secrets
 .env
 *.key
 *.pem
