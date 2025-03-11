@@ -6,7 +6,8 @@
     "dev": "vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "generate:cursorrules": "node script/generate-cursor-rules.js"
   },
   "dependencies": {
     "@react-three/drei": "^9.68.3",
