@@ -3,6 +3,11 @@ description: リポジトリ内のコーディング規約やスタイルガイ�
 globs: .tsx,.ts
 alwaysApply: false
 ---
+# src
+
+- プロダクションコードは必ずsrc配下に配置すること！！！！
+
+
 # Components
 
 - 共通利用可能なコンポーネントであること

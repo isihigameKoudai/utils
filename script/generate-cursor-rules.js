@@ -48,6 +48,28 @@ async function extractContent(filePath) {
 }
 
 /**
+ * Extract frontmatter from content if it exists
+ * @param {string} content - Content of the file
+ * @returns {Object} - Object containing frontmatter and content without frontmatter
+ */
+function extractFrontmatter(content) {
+  const frontmatterRegex = /^---\n([\s\S]*?)\n---\n/;
+  const match = content.match(frontmatterRegex);
+  
+  if (match) {
+    return {
+      frontmatter: match[0],
+      contentWithoutFrontmatter: content.replace(frontmatterRegex, '')
+    };
+  }
+  
+  return {
+    frontmatter: '',
+    contentWithoutFrontmatter: content
+  };
+}
+
+/**
  * Main function to generate cursor rules
  */
 async function generateCursorRules() {
@@ -73,7 +95,7 @@ async function generateCursorRules() {
     }
     
     // Combine all contents
-    const combinedContent = contents.join('\n\n');
+    const combinedAiMdContent = contents.join('\n\n');
     
     // Create .cursor/rules directory if it doesn't exist
     const rulesDir = path.join(rootDir, '.cursor', 'rules');
@@ -86,9 +108,23 @@ async function generateCursorRules() {
       }
     }
     
-    // Write combined content to main.mdc
+    // Check if main.mdc already exists and extract its frontmatter
     const outputPath = path.join(rulesDir, 'main.mdc');
-    await writeFileAsync(outputPath, combinedContent);
+    let existingFrontmatter = '';
+    
+    try {
+      if (fs.existsSync(outputPath)) {
+        const existingContent = await readFileAsync(outputPath, 'utf8');
+        const { frontmatter } = extractFrontmatter(existingContent);
+        existingFrontmatter = frontmatter;
+      }
+    } catch (err) {
+      console.log('No existing main.mdc file found or error reading it:', err.message);
+    }
+    
+    // Write combined content to main.mdc with the existing frontmatter
+    const finalContent = existingFrontmatter + combinedAiMdContent;
+    await writeFileAsync(outputPath, finalContent);
     
     console.log(`Successfully generated ${outputPath}`);
   } catch (error) {
