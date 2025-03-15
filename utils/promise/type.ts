@@ -20,4 +20,20 @@ export type DeferredOut<T> = {
  * @template E エラーの型
  * @template R 結果の型（単一の値または配列）
  */
-export type NodeCallback<E = Error, R = unknown> = (err: E | null, ...values: R extends any[] ? R : [R]) => void; 
+type NodeCallback<E = Error, R = unknown> = (err: E | null, ...values: R extends any[] ? R : [R]) => void;
+
+/**
+ * コールバックスタイルの関数の型
+ */
+export type CallbackStyleFunction<T = unknown, E = Error> = (...args: [...any[], NodeCallback<E, T>]) => unknown;
+
+/**
+ * Promiseを返す関数の型
+ */
+export type PromiseFunction<T = unknown> = (...args: any[]) => Promise<T>;
+
+/**
+ * 関数の引数の型を抽出する（最後のコールバック引数を除く）
+ */
+export type ArgumentsType<F> = 
+  F extends (...args: [...infer A, any]) => any ? A : never; 

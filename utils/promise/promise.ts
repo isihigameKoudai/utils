@@ -1,4 +1,4 @@
-import { CachePromiseReturn, DeferredOut, NodeCallback } from './type';
+import { CachePromiseReturn, DeferredOut, CallbackStyleFunction, PromiseFunction, ArgumentsType } from './type';
 import { isFunction, isPromiseFunction, isError } from '../is';
 
 /**
@@ -55,12 +55,12 @@ export function deferred<T>(): DeferredOut<T> {
  * 既にPromiseを返す関数の場合はそのまま返す
  * 
  * @template T 戻り値の型
- * @template Args 引数の型の配列
  * @template E エラーの型
+ * @template F 関数の型
  * 
  * @example
  * // 標準的なNodeスタイルのコールバック
- * const readFilePromise = promisify<Buffer, [string, string]>(fs.readFile);
+ * const readFilePromise = promisify<Buffer>(fs.readFile);
  * const data = await readFilePromise('file.txt', 'utf8');
  * 
  * @example
@@ -71,19 +71,20 @@ export function deferred<T>(): DeferredOut<T> {
  * @param fn コールバックスタイルの関数またはPromiseを返す関数
  * @returns Promiseを返す関数
  */
-export function promisify<T = unknown, Args extends readonly unknown[] = readonly unknown[], E = Error>(
-  fn: ((...args: [...Args, NodeCallback<E, T>]) => unknown) | ((...args: Args) => Promise<T>)
-): (...args: Args) => Promise<T> {
+export function promisify<T = unknown, E = Error>(
+  fn: CallbackStyleFunction<T, E> | PromiseFunction<T>
+): (...args: ArgumentsType<typeof fn>) => Promise<T> {
   if (!isFunction(fn)) {
     throw new TypeError('引数には関数を指定してください');
   }
   
   // 既にPromiseを返す関数の場合はそのまま返す
   if (isPromiseFunction(fn)) {
-    return fn as unknown as (...args: Args) => Promise<T>;
+    return fn as unknown as (...args: ArgumentsType<typeof fn>) => Promise<T>;
   }
   
-  return function(this: unknown, ...args: Args): Promise<T> {
+  // コールバックスタイルの関数をPromise化
+  const promisified: (...args: ArgumentsType<typeof fn>) => Promise<T> = function(this: unknown, ...args: ArgumentsType<typeof fn>) {
     return new Promise<T>((resolve, reject) => {
       const callback = (err: E | null, ...values: unknown[]) => {
         if (err) {
@@ -99,10 +100,12 @@ export function promisify<T = unknown, Args extends readonly unknown[] = readonl
       };
       
       try {
-        fn.call(this, ...args, callback);
+        (fn as CallbackStyleFunction<T, E>).call(this, ...args, callback);
       } catch (error) {
         reject(isError(error) ? error : new Error(String(error)));
       }
     });
   };
+  
+  return promisified;
 }
