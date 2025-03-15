@@ -1,4 +1,5 @@
 import { CachePromiseReturn, DeferredOut, NodeCallback } from './type';
+import { isFunction, isPromiseFunction, isError } from '../is';
 
 /**
  * キャッシュを利用したPromiseを作成する
@@ -73,12 +74,12 @@ export function deferred<T>(): DeferredOut<T> {
 export function promisify<T = unknown, Args extends readonly unknown[] = readonly unknown[], E = Error>(
   fn: ((...args: [...Args, NodeCallback<E, T>]) => unknown) | ((...args: Args) => Promise<T>)
 ): (...args: Args) => Promise<T> {
-  if (typeof fn !== 'function') {
+  if (!isFunction(fn)) {
     throw new TypeError('引数には関数を指定してください');
   }
   
   // 既にPromiseを返す関数の場合はそのまま返す
-  if (fn.toString().includes('new Promise') || fn.toString().includes('async')) {
+  if (isPromiseFunction(fn)) {
     return fn as unknown as (...args: Args) => Promise<T>;
   }
   
@@ -100,7 +101,7 @@ export function promisify<T = unknown, Args extends readonly unknown[] = readonl
       try {
         fn.call(this, ...args, callback);
       } catch (error) {
-        reject(error instanceof Error ? error : new Error(String(error)));
+        reject(isError(error) ? error : new Error(String(error)));
       }
     });
   };
