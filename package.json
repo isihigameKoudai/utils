@@ -7,7 +7,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "generate:cursorrules": "node script/generate-cursor-rules.js"
+    "generate:cursorrules": "node script/generate-cursor-rules.js \"**/*.ai.md\" \".cursor/rules/main.mdc\""
   },
   "dependencies": {
     "@react-three/drei": "^9.68.3",

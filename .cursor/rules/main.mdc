@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # src
 
-- プロダクションコードは必ずsrc配下に配置すること！！！！
+- プロダクションコードは必ずsrc配下に配置すること
 
 
 # Components
