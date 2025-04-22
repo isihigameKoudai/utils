@@ -104,9 +104,7 @@ export default () => {
 
   return (
     <CryptoTheme.Provider>
-      <CryptoStore.Provider>
-        <MultiChartPage token={validToken} />
-      </CryptoStore.Provider>
+      <MultiChartPage token={validToken} />
     </CryptoTheme.Provider>
   )
 };

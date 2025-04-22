@@ -18,7 +18,7 @@ type StyledOptions = {
  */
 export function styled<T extends keyof JSX.IntrinsicElements>(Component: T) {
   return (style: types.NestedCSSProperties) => {
-    type Props = ComponentPropsWithRef<T> | StyledOptions;
+    type Props = ComponentPropsWithRef<T> & StyledOptions;
     
     return forwardRef<JSX.IntrinsicElements[T] extends DetailedHTMLProps<any, infer E> ? E : never, Props>(
       (props, ref) => {
