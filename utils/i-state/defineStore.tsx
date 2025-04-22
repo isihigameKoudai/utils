@@ -74,21 +74,19 @@ export const defineStore = <
       {} as StoreQueries<Q>
     );
 
-    // 厳密な型を持つアクションオブジェクトを生成
-    const actions = {} as StoreActions<S, Q, A>;
-    
-    // 型情報をより正確に保持するための処理
-    (Object.keys(actionFns) as Array<keyof A>).forEach((key) => {
-      const fn = actionFns[key];
-      
-      actions[key] = ((...args: any[]) => {
-        return fn({
-          state,
-          queries,
-          dispatch,
-        }, ...args);
-      }) as StoreActions<S, Q, A>[typeof key];
-    });
+    const actions = Object.entries(actionFns).reduce(
+      (acc, [key, fn]) => ({
+        ...acc,
+        [key]: ((...args: any[]) => {
+          return fn({
+            state,
+            queries,
+            dispatch,
+          }, ...args);
+        }) as StoreActions<S, Q, A>[keyof A],
+      }),
+      {} as StoreActions<S, Q, A>
+    );
 
     return {
       state,
