@@ -1,4 +1,4 @@
-import React, { forwardRef, ComponentPropsWithRef, createElement, DetailedHTMLProps } from 'react';
+import { forwardRef, ComponentPropsWithRef, createElement, DetailedHTMLProps } from 'react';
 import { style as _style, types } from 'typestyle';
 
 type StyledOptions = {
@@ -18,21 +18,17 @@ type StyledOptions = {
  */
 export function styled<T extends keyof JSX.IntrinsicElements>(Component: T) {
   return (style: types.NestedCSSProperties) => {
-    type Props = ComponentPropsWithRef<T> & StyledOptions;
+    type Props = ComponentPropsWithRef<T> | StyledOptions;
     
     return forwardRef<JSX.IntrinsicElements[T] extends DetailedHTMLProps<any, infer E> ? E : never, Props>(
       (props, ref) => {
         const { className: parentClassName, ...rest } = props;
-
-        const localClassName = _style(style);
-        const className = parentClassName
-          ? `${localClassName} ${parentClassName}`
-          : localClassName;
+       const classNames = [_style(style), parentClassName].filter(Boolean).join(' ');
 
         return createElement(Component, {
           ...rest,
           ref,
-          className
+          className: classNames,
         });
       }
     );
