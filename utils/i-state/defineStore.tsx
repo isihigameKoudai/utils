@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { State, Queries, Actions, Store, StoreActions, Dispatch } from './type';
+import { State, Queries, Actions, Store, StoreActions, Dispatch, StoreQueries } from './type';
 
 /**
  * ステート管理のためのストアを定義するファクトリ関数（zustandベース）
@@ -71,7 +71,7 @@ export const defineStore = <
         ...acc,
         [key]: fn(state),
       }),
-      {} as { [K in keyof Q]: ReturnType<Q[K]> }
+      {} as StoreQueries<Q>
     );
 
     // 厳密な型を持つアクションオブジェクトを生成
