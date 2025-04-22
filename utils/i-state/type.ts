@@ -2,7 +2,7 @@ export type State = Record<string, any>;
 
 export type Queries<S extends State> = Record<string, (state: S) => any>;
 
-type Dispatch<S extends State> = <K extends keyof S>(key: K, value: S[K]) => void;
+export type Dispatch<S extends State> = <K extends keyof S>(key: K, value: S[K]) => void;
 
 export type ActionContext<S extends State, Q extends Queries<S>> = {
   state: S;
@@ -25,10 +25,4 @@ export type Store<S extends State, Q extends Queries<S>, A extends Actions<S, Q>
     queries: { [K in keyof Q]: ReturnType<Q[K]> };
     actions: StoreActions<S, Q, A>;
   };
-  useContainer: () => {
-    state: S;
-    queries: { [K in keyof Q]: ReturnType<Q[K]> };
-    actions: StoreActions<S, Q, A>;
-  };
-  Provider: React.ComponentType<{ children: React.ReactNode }>;
 };
