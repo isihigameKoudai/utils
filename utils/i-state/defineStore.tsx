@@ -20,7 +20,6 @@ import { State, Queries, Actions, Store, StoreActions, Dispatch, StoreQueries } 
  *     doubleCount: (state) => state.count * 2
  *   },
  *   actions: {
- *     // ペイロードの型を明示的に指定できる
  *     increment: ({ state, dispatch }) => dispatch('count', state.count + 1),
  *     incrementBy: ({ state, dispatch }, amount: number) => dispatch('count', state.count + amount)
  *   }
