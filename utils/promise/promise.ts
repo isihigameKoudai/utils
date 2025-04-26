@@ -1,7 +1,4 @@
-export interface CachePromiseReturn<T> {
-  (): Promise<T>
-  reset: () => Promise<void>
-}
+import { CachePromiseReturn, DeferredOut } from './type';
 
 /**
  * キャッシュを利用したPromiseを作成する
@@ -31,12 +28,6 @@ export function createCachePromise<T>(fn: () => Promise<T>): CachePromiseReturn<
   return wrapper
 }
 
-export type DeferredOut<T> = {
-  promise: Promise<T>;
-  resolve: (value: T | PromiseLike<T>) => void;
-  reject: (reason?: any) => void;
-};
-
 /**
  * resolveとrejectを任意のアクションで取り扱えるようにする
  * @example
@@ -55,4 +46,3 @@ export function deferred<T>(): DeferredOut<T> {
 
   return { promise, resolve, reject };
 };
-

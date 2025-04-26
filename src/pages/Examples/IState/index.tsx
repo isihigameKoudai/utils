@@ -73,7 +73,7 @@ const Todo = () => {
     state: todoState,
     queries: todoQueries,
     actions: todoActions
-  } = todoStore.useContainer();
+  } = todoStore.useStore();
 
   return (
     <Section>
@@ -202,11 +202,7 @@ const IStateExample: React.FC = () => {
 };
 
 export default () => (
-  <formStore.Provider>
-    <todoStore.Provider>
-      <ThemeContainer.Provider>
-        <IStateExample />
-      </ThemeContainer.Provider>
-    </todoStore.Provider>
-  </formStore.Provider>
+  <ThemeContainer.Provider>
+    <IStateExample />
+  </ThemeContainer.Provider>
 );

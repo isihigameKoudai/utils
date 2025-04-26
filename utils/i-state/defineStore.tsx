@@ -1,13 +1,9 @@
-import React from 'react';
+import { create } from 'zustand';
 
-import { useCallback, useState, createContext, useContext } from 'react';
-
-import { State, Queries, Actions, Store, ActionContext, StoreActions } from './type';
-
-const EMPTY: unique symbol = Symbol();
+import { State, Queries, Actions, Store, StoreActions, Dispatch, StoreQueries } from './type';
 
 /**
- * ステート管理のためのストアを定義するファクトリ関数
+ * ステート管理のためのストアを定義するファクトリ関数（zustandベース）
  * @template S - ステートの型
  * @template Q - クエリの型
  * @template A - アクションの型
@@ -17,8 +13,6 @@ const EMPTY: unique symbol = Symbol();
  * @param {A} config.actions - ステートを更新するアクション関数群
  * @returns {Object} ストアオブジェクト
  * @property {Function} useStore - フックとしてストアを使用するための関数
- * @property {React.FC} Provider - ストアのコンテキストを提供するプロバイダーコンポーネント
- * @property {Function} useStoreContainer - プロバイダー配下でストアにアクセスするためのフック
  * @example
  * const CounterStore = defineStore({
  *   state: { count: 0 },
@@ -26,21 +20,17 @@ const EMPTY: unique symbol = Symbol();
  *     doubleCount: (state) => state.count * 2
  *   },
  *   actions: {
- *     increment: ({ state, dispatch }) => dispatch('count', state.count + 1)
+ *     increment: ({ state, dispatch }) => dispatch('count', state.count + 1),
+ *     incrementBy: ({ state, dispatch }, amount: number) => dispatch('count', state.count + amount)
  *   }
  * });
  * 
- * // Providerの使用
- * const App = () => (
- *   <CounterStore.Provider>
- *     <Counter />
- *   </CounterStore.Provider>
- * );
- * 
  * // ストアの使用
  * const Counter = () => {
- *   const { state, actions } = CounterStore.useStoreContainer();
- *   return <button onClick={actions.increment}>{state.count}</button>;
+ *   const { state, actions } = CounterStore.useStore();
+ *   // actions.incrementBy(1) - OK
+ *   // actions.incrementBy('1') - 型エラー
+ *   return <button onClick={() => actions.incrementBy(1)}>{state.count}</button>;
  * };
  */
 export const defineStore = <
@@ -57,56 +47,55 @@ export const defineStore = <
     queries: queryFns,
     actions: actionFns = {} as A,
   } = config;
-  
-  // ローカルステートとしてのストア
-  const useStore = () => {
-    const [state, setState] = useState<S>(initialState);
 
+  const store = create<{
+    state: S;
+    dispatch: Dispatch<S>;
+  }>((set) => ({
+    state: initialState,
+    dispatch: <K extends keyof S>(key: K, value: S[K]) => {
+      set((prev) => ({
+        ...prev,
+        state: { ...prev.state, [key]: value }
+      }));
+    }
+  }));
+
+  // ストアを使用するためのフック（型情報を保持）
+  const useStore = () => {
+    const { state, dispatch } = store();
+    
     const queries = Object.entries(queryFns).reduce(
       (acc, [key, fn]) => ({
         ...acc,
         [key]: fn(state),
       }),
-      {} as { [K in keyof Q]: ReturnType<Q[K]> }
+      {} as StoreQueries<Q>
     );
-
-    const dispatch = useCallback(<K extends keyof S>(key: K, value: S[K]) => {
-      setState((prev) => ({ ...prev, [key]: value }));
-    }, []);
-
-    const context: ActionContext<S,Q> = { state, queries, dispatch };
 
     const actions = Object.entries(actionFns).reduce(
       (acc, [key, fn]) => ({
         ...acc,
-        [key]: (...args: any[]) => fn(context, ...args),
+        [key]: ((...args: any[]) => {
+          return fn({
+            state,
+            queries,
+            dispatch,
+          }, ...args);
+        }) as StoreActions<S, Q, A>[keyof A],
       }),
       {} as StoreActions<S, Q, A>
     );
 
-    return { state, queries, actions };
-  };
-
-  const Context = createContext<ReturnType<typeof useStore> | typeof EMPTY>(EMPTY);
-
-  const Provider = ({ children }: { children: React.ReactNode }) => {
-    const store = useStore();
-    return <Context.Provider value={store}>{children}</Context.Provider>;
-  };
-
-  // グローバルステートとしてのストア
-  const useContainer = () => {
-    const store = useContext(Context);
-    if (store === EMPTY) {
-      throw new Error('Component must be wrapped with <Store.Provider>');
-    }
-    return store;
+    return {
+      state,
+      queries,
+      actions,
+    };
   };
   
   return {
     useStore,
-    useContainer,
-    Provider,
   };
 };
 

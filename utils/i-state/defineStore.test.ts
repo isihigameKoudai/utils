@@ -92,5 +92,37 @@ describe('defineStore', () => {
 
       expect(store).toBeDefined();
     });
+
+    it('should maintain payload type safety when using generics', () => {
+      interface TestState {
+        count: number;
+      }
+
+      type TestQueries = {
+        doubled: (state: TestState) => number;
+      }
+
+      type TestActions = {
+        setValue: (context: any, value: number) => void;
+        setMultiple: (context: any, a: number, b: string) => void;
+      }
+
+      // ジェネリクスを指定した場合でもactionのpayload型が維持されるか確認
+      const store = defineStore<TestState, TestQueries, TestActions>({
+        state: { count: 0 },
+        queries: {
+          doubled: (state) => state.count * 2
+        },
+        actions: {
+          setValue: ({ dispatch }, value: number) => dispatch('count', value),
+          setMultiple: ({ dispatch }, a: number, b: string) => {
+            dispatch('count', a);
+            console.log(b);
+          }
+        }
+      });
+
+      expect(store).toBeDefined();
+    });
   });
 });

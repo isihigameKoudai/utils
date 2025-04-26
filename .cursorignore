@@ -1,0 +1,20 @@
+# variables and secrets
+.env
+*.key
+*.pem
+firebase-config.json
+
+# IDE settings
+.vscode/
+.idea/
+
+# build artifacts
+/dist/
+/build/
+/node_modules/
+/**/node_modules
+.yarn
+yarn.lock
+package-lock.json
+.npmrc
+.yarnrc
