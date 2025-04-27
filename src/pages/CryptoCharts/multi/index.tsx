@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate, useNavigate, useParams } from '@tanstack/react-router';
 import { styled } from '@/utils/ui/styled';
+import { multiChartRoute } from '../../../Route/crypto-charts/multi';
 
 import { CryptoChart } from '@/src/components/CryptoChart';
 import { CryptoTheme } from '../theme';
@@ -94,12 +95,12 @@ const MultiChartPage: React.FC<Props> = ({ token }) => {
 };
 
 export default () => {
-  const params = useParams<{ token?: string }>();
+  const params = useParams({ from: multiChartRoute.id });
   const { token } = params;
   const validToken = (SYMBOLS).some( symbolItem => symbolItem === token) ? token : DEFAULT_TOKEN;
 
   if (!SYMBOLS.some( symbolItem => symbolItem === token) || !validToken) {
-    return <Navigate to={`/crypto-charts/multi/${DEFAULT_TOKEN}`} replace />;
+    return <Navigate from={multiChartRoute.id} to={multiChartRoute.id} params={{ token: DEFAULT_TOKEN }} replace />;
   }
 
   return (

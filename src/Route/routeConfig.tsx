@@ -14,6 +14,8 @@ import { shaderPageRoute } from './three-dimension/shader';
 import { particlePageRoute } from './three-dimension/particle';
 import { stableFluidsRoute } from './stable-fluids';
 import { fivePointCircleRoute } from './samples/5star-particle';
+import { cryptoChartsRoute } from './crypto-charts';
+import { multiChartRoute } from './crypto-charts/multi';
 
 // ルート定義（メニュー用）
 export type IRoute = {
@@ -169,6 +171,8 @@ export const router = createRouter({
     particlePageRoute,
     stableFluidsRoute,
     fivePointCircleRoute,
+    cryptoChartsRoute,
+    multiChartRoute,
     // TODO: 残りのルートを追加
   ]),
   defaultPreload: 'intent',
