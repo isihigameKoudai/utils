@@ -1,8 +1,8 @@
 import React from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from '@tanstack/react-router';
 import { styled } from '@/utils/ui/styled';
 
-import { CryptoChart, CryptoStore } from '@/src/components/CryptoChart';
+import { CryptoChart } from '@/src/components/CryptoChart';
 import { CryptoTheme } from '../theme';
 import { SYMBOLS } from '../constants';
 
@@ -58,7 +58,7 @@ const MultiChartPage: React.FC<Props> = ({ token }) => {
   const navigate = useNavigate();
 
   const handleChangeToken = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    navigate(`/crypto-charts/multi/${e.target.value}`);
+    navigate({ to: `/crypto-charts/multi/${e.target.value}` });
   }
 
   return (
