@@ -8,7 +8,7 @@ export const RootLayout = createRootRoute({
     <>
       <Outlet />
       <NavigationHeader />
-      <TanStackRouterDevtools />
+      {/* <TanStackRouterDevtools /> */}
     </>
   )
 }); 
