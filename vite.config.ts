@@ -9,7 +9,13 @@ import { apiMap } from "./utils/apis/config";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
+    TanStackRouterVite({
+      target: 'react',
+      routesDirectory: './src/routes',
+      routeFileIgnorePattern: '**/_*',
+      generatedRouteTree: './src/routes/routeTree.gen.ts',
+      autoCodeSplitting: true,
+    }),
     react(),
     Pages()
   ],
