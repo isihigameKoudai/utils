@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, useNavigate, useParams } from '@tanstack/react-router';
 import { styled } from '@/utils/ui/styled';
-import { multiChartRoute } from '../../../Route/crypto-charts/multi';
+import { multiChartRoute } from '@/src/routes/crypto-charts/multi';
 
 import { CryptoChart } from '@/src/components/CryptoChart';
 import { CryptoTheme } from '../theme';

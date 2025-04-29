@@ -1,9 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
-import { rootRoute } from '../routeConfig';
+import { RootLayout } from '../__root';
 import ShaderPage from '../../pages/ThreeDimension/Shader';
 
 export const shaderPageRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => RootLayout,
   path: '/three-dimension/shader',
   component: ShaderPage,
 }); 

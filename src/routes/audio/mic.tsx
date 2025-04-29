@@ -1,9 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
-import { rootRoute } from '../routeConfig';
+import { RootLayout } from '../__root';
 import MicPage from "../../pages/Audio/Mic";
 
 export const audioMicRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => RootLayout,
   path: '/audio/mic',
   component: MicPage,
 }); 

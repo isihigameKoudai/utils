@@ -1,24 +1,5 @@
-import { createRootRoute, createRouter, Outlet } from '@tanstack/react-router';
-import { NavigationHeader } from "./NavigationLayout";
-
-// 個別のルートファイルからインポート
-import { indexRoute } from './index';
-import { playgroundRoute } from './playground';
-import { shaderRoute } from './shader';
-import { audioRoute } from './audio';
-import { audioMicRoute } from './audio/mic';
-import { audioSpeechRoute } from './audio/speech';
-import { threeDimensionRoute } from './three-dimension';
-import { shadowsRoute } from './three-dimension/shadows';
-import { shaderPageRoute } from './three-dimension/shader';
-import { particlePageRoute } from './three-dimension/particle';
-import { stableFluidsRoute } from './stable-fluids';
-import { fivePointCircleRoute } from './samples/5star-particle';
-import { cryptoChartsRoute } from './crypto-charts';
-import { multiChartRoute } from './crypto-charts/multi';
-
 // ルート定義（メニュー用）
-export type IRoute = {
+type IRoute = {
   title: string;
   path: string;
   menuPath?: string;
@@ -146,40 +127,4 @@ export const routeList: IRoute[] = [
     path: '/crypto-charts/multi/:token',
     menuPath: '/crypto-charts/multi/BTC',
   }
-];
-
-// TanStack Router設定
-export const rootRoute = createRootRoute({
-  component: () => (<>
-    <Outlet />
-    <NavigationHeader />
-    </>),
-});
-
-
-export const router = createRouter({
-  routeTree: rootRoute.addChildren([
-    indexRoute,
-    playgroundRoute,
-    shaderRoute,
-    audioRoute,
-    audioMicRoute,
-    audioSpeechRoute,
-    threeDimensionRoute,
-    shadowsRoute,
-    shaderPageRoute,
-    particlePageRoute,
-    stableFluidsRoute,
-    fivePointCircleRoute,
-    cryptoChartsRoute,
-    multiChartRoute,
-    // TODO: 残りのルートを追加
-  ]),
-  defaultPreload: 'intent',
-});
-
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router;
-  }
-} 
+]; 

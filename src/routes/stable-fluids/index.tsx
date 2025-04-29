@@ -1,9 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
-import { rootRoute } from '../routeConfig';
+import { RootLayout } from '../__root';
 import StableFluids from "../../pages/StableFluids";
 
 export const stableFluidsRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => RootLayout,
   path: '/stable-fluids',
   component: StableFluids,
 }); 

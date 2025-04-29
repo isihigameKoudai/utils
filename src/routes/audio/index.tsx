@@ -1,9 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
-import { rootRoute } from '../routeConfig';
+import { RootLayout } from '../__root';
 import AudioPage from "../../pages/Audio";
 
 export const audioRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => RootLayout,
   path: '/audio',
   component: AudioPage,
 }); 

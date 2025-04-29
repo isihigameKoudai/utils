@@ -1,9 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
-import { rootRoute } from '../routeConfig';
+import { RootLayout } from '../__root';
 import Shadows from '../../pages/ThreeDimension/Shadows';
 
 export const shadowsRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => RootLayout,
   path: '/three-dimension/shadows',
   component: Shadows,
 }); 

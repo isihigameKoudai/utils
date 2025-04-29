@@ -1,9 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
-import { rootRoute } from '../routeConfig';
+import { RootLayout } from '../__root';
 import ParticlePage from '../../pages/ThreeDimension/Particle';
 
 export const particlePageRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => RootLayout,
   path: '/three-dimension/particle',
   component: ParticlePage,
 }); 

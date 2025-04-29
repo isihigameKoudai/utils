@@ -1,5 +1,5 @@
 import { createRoute } from '@tanstack/react-router';
-import { rootRoute } from '../routeConfig';
+import { rootRoute } from '../../components/Menu/routeList';
 import FivePointCirclePage from "../../pages/Examples/FivePointCircle";
 
 export const fivePointCircleRoute = createRoute({

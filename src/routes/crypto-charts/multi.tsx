@@ -1,9 +1,9 @@
 import { createRoute } from '@tanstack/react-router';
-import { rootRoute } from '../routeConfig';
+import { RootLayout } from '../__root';
 import MultiChartPage from "../../pages/CryptoCharts/multi";
 
 export const multiChartRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => RootLayout,
   path: '/crypto-charts/multi/$token',
   component: MultiChartPage,
 }); 

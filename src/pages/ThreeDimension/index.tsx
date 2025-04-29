@@ -1,8 +1,8 @@
 import React, { useCallback, useRef, useState } from 'react';
+import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
+import * as THREE from 'three';
 
-import { Canvas, MeshProps, useFrame } from '@react-three/fiber';
-
-const Box = (props: MeshProps) => {
+const Box = (props: ThreeElements['mesh']) => {
   const ref = useRef<THREE.Mesh>(null!);
   const [hovered, setHovered] = useState<boolean>(false);
   const [clicked, setClicked] = useState<boolean>(false);
