@@ -29,7 +29,7 @@ const Scene: React.FC<Props> = ({ uniforms, vertexShader, fragmentShader, reques
     <>
       <mesh ref={$shaderRef}>
         <perspectiveCamera args={[0, window.innerWidth / window.innerHeight, 0.1, 0]} />
-        <planeBufferGeometry args={[2,2]} />
+        <planeGeometry args={[2,2]} />
         <shaderMaterial uniforms={shaderMaterialArgs.uniforms} vertexShader={vertexShader} fragmentShader={fragmentShader} />
       </mesh>
     </>

@@ -1,8 +1,9 @@
 import React, { useCallback, useRef, useState } from 'react';
 
-import { Canvas, MeshProps, useFrame } from '@react-three/fiber';
+import { Canvas, ThreeElements, useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 
-const Box = (props: MeshProps) => {
+const Box = (props: ThreeElements['mesh']) => {
   const ref = useRef<THREE.Mesh>(null!);
   const [hovered, setHovered] = useState<boolean>(false);
   const [clicked, setClicked] = useState<boolean>(false);
@@ -30,9 +31,9 @@ const ThreeDimension: React.FC = () => {
     height: '100vh'
   }}>
     <Canvas>
-      <ambientLight intensity={0.5} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-      <pointLight position={[10,10, 0]} />
+      <ambientLight intensity={Math.PI / 2} />
+      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
+      <pointLight position={[10,10, 0]} decay={0} intensity={Math.PI} />
       <Box position={[-1, 0, 0]} />
       <Box position={[1, 0, 0]}/>
     </Canvas>
