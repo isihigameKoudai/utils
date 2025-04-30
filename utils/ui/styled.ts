@@ -1,4 +1,4 @@
-import { forwardRef, ComponentPropsWithRef, createElement, DetailedHTMLProps } from 'react';
+import { forwardRef, ComponentPropsWithRef, createElement, DetailedHTMLProps, ElementType, Ref, RefObject } from 'react';
 import { style as _style, types } from 'typestyle';
 
 type StyledOptions = {
@@ -16,14 +16,15 @@ type StyledOptions = {
  *   fontSize: '16px'
  * })
  */
-export function styled<T extends keyof JSX.IntrinsicElements>(Component: T) {
+export function styled<T extends ElementType>(Component: T) {
   return (style: types.NestedCSSProperties) => {
     type Props = ComponentPropsWithRef<T> & StyledOptions;
+    type ElementRef = T extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[T] : never;
     
-    return forwardRef<JSX.IntrinsicElements[T] extends DetailedHTMLProps<any, infer E> ? E : never, Props>(
+    return forwardRef<ElementRef, Props>(
       (props, ref) => {
         const { className: parentClassName, ...rest } = props;
-       const classNames = [_style(style), parentClassName].filter(Boolean).join(' ');
+        const classNames = [_style(style), parentClassName].filter(Boolean).join(' ');
 
         return createElement(Component, {
           ...rest,

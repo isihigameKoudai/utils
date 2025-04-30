@@ -1,6 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 
-import { Canvas, MeshProps, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 
 import { DoubleSide, Mesh, DirectionalLightHelper } from 'three';
 import { OrbitControls, useHelper } from '@react-three/drei';

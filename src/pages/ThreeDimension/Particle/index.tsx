@@ -34,9 +34,7 @@ const ParticleScene: React.FC = () => {
       <bufferGeometry attach="geometry">
         <bufferAttribute
           attach="attributes-position"
-          array={planePositions}
-          itemSize={3}
-          count={planePositions.length / 3}
+          args={[planePositions, 3, false]}
         />
         <shaderMaterial
           transparent

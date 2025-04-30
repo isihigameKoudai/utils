@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import Index from "../pages";
 import Shader from '../pages/shader';
 import ThreeDimension from "../pages/ThreeDimension";
@@ -30,7 +32,7 @@ import MultiChartPage from "../pages/CryptoCharts/multi";
 export type IRoute = {
   title: string;
   path: string;
-  element?: JSX.Element;
+  element?: ReactNode;
   menuPath?: string;
 };
 
