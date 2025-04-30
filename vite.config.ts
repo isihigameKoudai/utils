@@ -12,7 +12,7 @@ export default defineConfig({
     TanStackRouterVite({
       target: 'react',
       routesDirectory: './src/routes',
-      routeFileIgnorePattern: '**/_*',
+      routeFileIgnorePattern: '_',
       generatedRouteTree: './src/routes/routeTree.gen.ts',
       autoCodeSplitting: true,
     }),
