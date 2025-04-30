@@ -5,7 +5,7 @@
  */
 
 import React, { createElement, forwardRef } from 'react';
-import { style as _style } from 'typestyle';
+import { style as _style, types } from 'typestyle';
 
 import isEmpty from '../is-empty';
 
@@ -21,7 +21,7 @@ type OwnProps<E extends React.ElementType> = {
 export type BoxProps<E extends React.ElementType>
   = OwnProps<E> 
   & Omit<React.ComponentProps<E>, keyof OwnProps<E>>
-  & React.CSSProperties;
+  & types.NestedCSSProperties;
 
 const Box = forwardRef(<E extends React.ElementType = 'div'>(
   {
@@ -33,14 +33,13 @@ const Box = forwardRef(<E extends React.ElementType = 'div'>(
   ref: React.Ref<Element>
 ) => {
   const Tag = as || 'div';
-  const style = !isEmpty(styleProps) ? _style(styleProps as React.CSSProperties) : '';
-  const className = _className ? ` ${_className}` : '';
+  const classNames = [_style(styleProps), _className].filter(Boolean).join(' ');
   
   return createElement(
     Tag,
     {
       ref,
-      className: `${style}${className}`
+      className: classNames
     },
     children
   );
