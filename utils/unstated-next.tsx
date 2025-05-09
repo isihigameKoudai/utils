@@ -2,12 +2,12 @@ import React from "react"
 
 const EMPTY: unique symbol = Symbol()
 
-export interface ContainerProviderProps<State = void> {
+interface ContainerProviderProps<State = void> {
 	initialState?: State
 	children: React.ReactNode
 }
 
-export interface Container<Value, State = void> {
+interface Container<Value, State = void> {
 	Provider: React.ComponentType<ContainerProviderProps<State>>
 	useContainer: () => Value
 }
