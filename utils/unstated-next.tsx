@@ -1,21 +1,25 @@
-import React from "react"
+/**
+ * npm i react
+ * npm i @types/react --save-dev
+ */
+import { createContext, useContext, type ComponentType, type ReactNode } from "react"
 
 const EMPTY: unique symbol = Symbol()
 
 interface ContainerProviderProps<State = void> {
 	initialState?: State
-	children: React.ReactNode
+	children: ReactNode
 }
 
 interface Container<Value, State = void> {
-	Provider: React.ComponentType<ContainerProviderProps<State>>
+	Provider: ComponentType<ContainerProviderProps<State>>
 	useContainer: () => Value
 }
 
 export function createContainer<Value, State = void>(
 	useHook: (initialState?: State) => Value,
 ): Container<Value, State> {
-	const Context = React.createContext<Value | typeof EMPTY>(EMPTY)
+	const Context = createContext<Value | typeof EMPTY>(EMPTY)
 
 	function Provider(props: ContainerProviderProps<State>) {
 		const value = useHook(props.initialState)
@@ -23,7 +27,7 @@ export function createContainer<Value, State = void>(
 	}
 
 	function useContainer(): Value {
-		const value = React.useContext(Context)
+		const value = useContext(Context)
 		if (value === EMPTY) {
 			throw new Error("Component must be wrapped with <Container.Provider>")
 		}

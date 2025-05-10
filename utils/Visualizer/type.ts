@@ -18,3 +18,11 @@ export type RenderCallBack = (props: {
   timeDomainRawArray: Float32Array;
   spectrumRawArray: Float32Array;
 }) => void;
+
+export type RenderOptions = {
+  $canvas?: HTMLCanvasElement;
+  canvasWidth?: number;
+  canvasHeight?: number;
+  smoothingTimeConstant?: number;
+  fftSize?: number;
+};
