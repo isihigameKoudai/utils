@@ -1,25 +1,25 @@
 import React, { useCallback } from 'react';
 
-import { fetchAudios, fetchFiles, fetchImages, fetchMovies } from '../../utils/fetchFiles'
+import { fetchFiles } from '@/utils/file';
 
 const Index: React.FC = () => {
   const onOpenFile = useCallback(async () => {
-    const files = await fetchFiles()
+    const { files } = await fetchFiles();
     console.log(files);
   },[])
 
   const onOpenImages = useCallback(async () => {
-    const { files } = await fetchImages();
-    console.log('orpn images',files);
+    const { files } = await fetchFiles({ accept: 'image/*' });
+    console.log('open images', files);
   },[]);
 
   const onOpenAudios = useCallback(async () => {
-    const { files } = await fetchAudios()
+    const { files } = await fetchFiles({ accept: 'audio/*' });
     console.log('open audios', files);
   },[]);
 
   const onOpenMovies = useCallback(async () => {
-    const { files } = await fetchMovies()
+    const { files } = await fetchFiles({ accept: 'video/*' });
     console.log('open movies', files);
   },[]);
 
