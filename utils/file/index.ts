@@ -1,7 +1,8 @@
 import fs from 'fs';
 import { promisify } from 'util';
 
-// ファイル読み書き系
+import { Option, FetchFiles } from './type';
+
 /**
  * ファイルを非同期で読み込む
  * @param {string} path - 読み込むファイルのパス
@@ -270,3 +271,27 @@ export const csv2json = <T = Record<string, string>>(csv: string): T[] => {
     }, {})
   ) as T[];
 }
+
+const initialOption: Option = {
+  isMultiple: false,
+  accept: '*',
+};
+
+export const fetchFiles: FetchFiles = async (option = initialOption) => {
+  return new Promise((resolve) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.multiple = option.isMultiple ?? false;
+    input.accept = option.accept ?? '*';
+
+    input.onchange = (event) => {
+      const files = Array.from((event.target as HTMLInputElement).files || []);
+      resolve({
+        status: 'success',
+        files
+      });
+    };
+
+    input.click();
+  });
+};
