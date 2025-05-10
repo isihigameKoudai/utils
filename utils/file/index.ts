@@ -277,14 +277,19 @@ const initialOption: Option = {
   accept: '*',
 };
 
+/**
+ * ファイルを選択する
+ * @param option 
+ * @returns 
+ */
 export const fetchFiles: FetchFiles = async (option = initialOption) => {
   return new Promise((resolve) => {
-    const input = document.createElement('input');
+    const input: HTMLInputElement = document.createElement('input');
     input.type = 'file';
     input.multiple = option.isMultiple ?? false;
     input.accept = option.accept ?? '*';
 
-    input.onchange = (event) => {
+    input.onchange = (event: Event) => {
       const files = Array.from((event.target as HTMLInputElement).files || []);
       resolve({
         status: 'success',
