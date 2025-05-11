@@ -122,7 +122,7 @@ export const isEmpty = (value: unknown): boolean => {
     return value.toString() === '';
   }
   if (value instanceof Boolean) {
-    return value.valueOf() === false;
+    return true;
   }
   if (value instanceof Map || value instanceof Set) {
     return value.size === 0;
