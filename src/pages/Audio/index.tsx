@@ -1,7 +1,9 @@
 import React, { useCallback, useRef } from "react";
 import { Visualizer } from "../../../utils/Visualizer";
-import { fetchAudio } from "../../../utils/fetchFiles";
+import { fetchFiles } from "../../../utils/file";
 import { basicParticle } from "./Mic/animation";
+
+const fetchAudio = async () => fetchFiles({ accept: "audio/*", isMultiple: false });
 
 const AudioPage: React.FC = () => {
   const $canvas = useRef<HTMLCanvasElement>(null);
