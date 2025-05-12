@@ -1,5 +1,5 @@
 import { Audio } from "../Media";
-import { RenderCallBack } from "./type";
+import { RenderCallBack, RenderOptions } from "./type";
 
 // requestAnimationFrame の定義を修正
 export const requestAnimationFrame = () =>
@@ -15,14 +15,7 @@ export const cancelAnimationFrame = () =>
   window.mozCancelAnimationFrame ||
   window.msCancelAnimationFrame ||
   window.oCancelAnimationFrame;
-
-type RenderOptions = {
-  $canvas?: HTMLCanvasElement;
-  canvasWidth?: number;
-  canvasHeight?: number;
-  smoothingTimeConstant?: number;
-  fftSize?: number;
-};
+  
 
 /**
  * 取り込んだ音声を任意のビジュアルに変換・描画の機能を司る

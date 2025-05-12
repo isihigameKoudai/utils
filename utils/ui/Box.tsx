@@ -7,7 +7,7 @@
 import React, { createElement, forwardRef } from 'react';
 import { style as _style, types } from 'typestyle';
 
-import isEmpty from '../is-empty';
+import { isEmpty } from '../is';
 
 // HTMLタグ名から各HTMLElementの型を取得
 // type HTMLElementMap<E extends React.ElementType> = E extends keyof HTMLElementTagNameMap

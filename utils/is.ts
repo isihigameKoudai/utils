@@ -69,3 +69,69 @@ export function isPromise<T = unknown>(value: unknown): value is Promise<T> {
 export function isError(value: unknown): value is Error {
   return value instanceof Error;
 } 
+
+/**
+ * 値が空かどうかをチェックする
+ * 
+ * @param {unknown} value - チェックする値
+ * @returns {boolean} 空であればtrue、そうでなければfalse
+ * 
+ * @example
+ * // 空と判定されるケース
+ * isEmpty({}) // true
+ * isEmpty([]) // true
+ * isEmpty(new Set()) // true
+ * isEmpty(new Map()) // true
+ * isEmpty('') // true
+ * isEmpty(0) // true
+ * isEmpty(1) // true
+ * isEmpty(true) // true
+ * isEmpty(Symbol('abc')) // true
+ * isEmpty(//) // true
+ * isEmpty(new String('')) // true
+ * isEmpty(new Boolean(true)) // true
+ * isEmpty(null) // true
+ * isEmpty(undefined) // true
+ * 
+ * @example
+ * // 空と判定されないケース
+ * isEmpty({a: 3, b: 5}) // false
+ * isEmpty([1, 2]) // false
+ * isEmpty(new Set([1, 2, 2])) // false
+ * isEmpty((new Map()).set('a', 2)) // false
+ * isEmpty('abc') // false
+ * isEmpty(new String('abc')) // false
+ */
+export const isEmpty = (value: unknown): boolean => {
+  if (value === null || value === undefined) {
+    return true;
+  }
+  if (typeof value === 'string') {
+    return value === '';
+  }
+  if (typeof value === 'number') {
+    return value === 0;
+  }
+  if (typeof value === 'boolean') {
+    return value === false;
+  }
+  if (typeof value === 'symbol') {
+    return value === Symbol();
+  }
+  if (value instanceof String) {
+    return value.toString() === '';
+  }
+  if (value instanceof Boolean) {
+    return true;
+  }
+  if (value instanceof Map || value instanceof Set) {
+    return value.size === 0;
+  }
+  if (value instanceof Object) {
+    return Object.keys(value).length === 0;
+  }
+  if (Array.isArray(value)) {
+    return value.length === 0;
+  }
+  return false;
+}

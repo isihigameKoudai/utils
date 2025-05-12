@@ -1,3 +1,6 @@
+/**
+ * npm i zustand
+ */
 import { create } from 'zustand';
 
 import { State, Queries, Actions, Store, StoreActions, Dispatch, StoreQueries } from './type';

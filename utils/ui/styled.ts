@@ -1,4 +1,9 @@
-import { forwardRef, ComponentPropsWithRef, createElement, DetailedHTMLProps, ElementType, Ref, RefObject } from 'react';
+/**
+ * npm i react typestyle
+ * npm i -D @types/react
+ */
+
+import { forwardRef, ComponentPropsWithRef, createElement, ElementType } from 'react';
 import { style as _style, types } from 'typestyle';
 
 type StyledOptions = {

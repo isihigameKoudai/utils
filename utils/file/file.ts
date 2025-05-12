@@ -1,3 +1,6 @@
+import { Option, FetchFiles } from './type';
+import { deferred } from '../promise/promise';
+
 /**
  * CSV形式のテキストを2次元配列に変換する
  * ex: csv2array('a,b,c\nd,e,f\n') => [['a','b','c'],['d','e','f']]
@@ -30,3 +33,33 @@ export const csv2json = <T = Record<string, string>>(csv: string): T[] => {
     }, {})
   ) as T[];
 }
+
+const initialOption: Option = {
+  isMultiple: false,
+  accept: '*',
+};
+
+/**
+ * ファイルを選択する
+ * @param option 
+ * @returns 
+ */
+export const fetchFiles: FetchFiles = async (option = initialOption) => {
+  const { promise, resolve } = deferred<{ status: 'success'; files: File[] }>();
+  
+  const input: HTMLInputElement = document.createElement('input');
+  input.type = 'file';
+  input.multiple = option.isMultiple ?? false;
+  input.accept = option.accept ?? '*';
+
+  input.onchange = (event: Event) => {
+    const files = Array.from((event.target as HTMLInputElement).files || []);
+    resolve({
+      status: 'success',
+      files
+    });
+  };
+
+  input.click();
+  return promise;
+};
