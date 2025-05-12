@@ -1,4 +1,4 @@
-import { createRouter, createRootRoute, createRoute } from '@tanstack/react-router'
+import { createRouter, createRootRoute, createRoute, Outlet } from '@tanstack/react-router'
 import { RootLayout } from '../components/RootLayout'
 import Index from "../pages"
 import Shader from "../pages/shader"
@@ -141,21 +141,27 @@ const followerCircleRoute = createRoute({
   component: FollowerCircle,
 })
 
-const fbmNoiseRoute = createRoute({
+const noiseRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/noise/fbm',
+  path: '/noise',
+  component: () => <Outlet />,
+})
+
+const fbmNoiseRoute = createRoute({
+  getParentRoute: () => noiseRoute,
+  path: 'fbm',
   component: FbmNoisePage,
 })
 
 const fractalNoiseRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/noise/fractal',
+  getParentRoute: () => noiseRoute,
+  path: 'fractal',
   component: FractalNoisePage,
 })
 
 const cellularNoiseRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/noise/cellular',
+  getParentRoute: () => noiseRoute,
+  path: 'cellular',
   component: CellularNoisePage,
 })
 
@@ -197,7 +203,7 @@ const cryptoChartsRoute = createRoute({
 
 const multiChartRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/crypto-charts/multi/$token',
+  path: 'crypto-charts/multi/$token',
   component: MultiChartPage,
 })
 
@@ -220,9 +226,11 @@ const routeTree = rootRoute.addChildren([
   detectorRoute,
   fluidDetectRoute,
   followerCircleRoute,
-  fbmNoiseRoute,
-  fractalNoiseRoute,
-  cellularNoiseRoute,
+  noiseRoute.addChildren([
+    fbmNoiseRoute,
+    fractalNoiseRoute,
+    cellularNoiseRoute,
+  ]),
   meltTheBorderRoute,
   faceLandmarkDetectorRoute,
   handPoseDetectionRoute,

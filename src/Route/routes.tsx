@@ -44,7 +44,7 @@ export const routeList: IRoute[] = [
   },
   {
     title: 'プレイグラウンド',
-    path: 'playground',
+    path: '/playground',
     element: <PlaygroundPage />
   },
   {
