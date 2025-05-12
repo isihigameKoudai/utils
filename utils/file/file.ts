@@ -1,4 +1,5 @@
 import { Option, FetchFiles } from './type';
+import { deferred } from '../promise/promise';
 
 /**
  * CSV形式のテキストを2次元配列に変換する
@@ -44,20 +45,21 @@ const initialOption: Option = {
  * @returns 
  */
 export const fetchFiles: FetchFiles = async (option = initialOption) => {
-  return new Promise((resolve) => {
-    const input: HTMLInputElement = document.createElement('input');
-    input.type = 'file';
-    input.multiple = option.isMultiple ?? false;
-    input.accept = option.accept ?? '*';
+  const { promise, resolve } = deferred<{ status: 'success'; files: File[] }>();
+  
+  const input: HTMLInputElement = document.createElement('input');
+  input.type = 'file';
+  input.multiple = option.isMultiple ?? false;
+  input.accept = option.accept ?? '*';
 
-    input.onchange = (event: Event) => {
-      const files = Array.from((event.target as HTMLInputElement).files || []);
-      resolve({
-        status: 'success',
-        files
-      });
-    };
+  input.onchange = (event: Event) => {
+    const files = Array.from((event.target as HTMLInputElement).files || []);
+    resolve({
+      status: 'success',
+      files
+    });
+  };
 
-    input.click();
-  });
+  input.click();
+  return promise;
 };
