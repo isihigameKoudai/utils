@@ -36,6 +36,8 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@tanstack/router-devtools": "^1.120.3",
+    "@tanstack/router-plugin": "^1.120.3",
     "@types/dat.gui": "^0.7.10",
     "@types/node": "^22.7.4",
     "@types/react": "^19.1.0",

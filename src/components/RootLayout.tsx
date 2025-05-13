@@ -1,12 +1,15 @@
 import React from 'react';
-import { Outlet } from '@tanstack/react-router';
 import { NavigationHeader } from './NavigationHeader';
 
-export const RootLayout: React.FC = () => {
+interface RootLayoutProps {
+  children: React.ReactNode;
+}
+
+export const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <>
       <NavigationHeader />
-      <Outlet />
+      {children}
     </>
   );
 }; 
