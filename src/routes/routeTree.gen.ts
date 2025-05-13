@@ -10,12 +10,12 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
-import { Route as ThreeDimensionIndexImport } from './routes/three-dimension/index'
-import { Route as AudioIndexImport } from './routes/audio/index'
-import { Route as AudioSpeechImport } from './routes/audio/speech'
-import { Route as AudioMicImport } from './routes/audio/mic'
+import { Route as rootRoute } from './__root'
+import { Route as IndexImport } from './index'
+import { Route as ThreeDimensionIndexImport } from './three-dimension/index'
+import { Route as AudioIndexImport } from './audio/index'
+import { Route as AudioSpeechImport } from './audio/speech'
+import { Route as AudioMicImport } from './audio/mic'
 
 // Create/Update Routes
 

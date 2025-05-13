@@ -9,7 +9,9 @@ import { apiMap } from "./utils/apis/config";
 export default defineConfig({
   plugins: [
     react(),
-    TanStackRouterVite(),
+    TanStackRouterVite({
+      generatedRouteTree: './src/routes/routeTree.gen.ts'
+    }),
   ],
   resolve: {
     alias: {
