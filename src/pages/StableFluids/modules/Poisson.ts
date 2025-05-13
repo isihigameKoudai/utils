@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import face_vert from "./glsl/sim/face.vert?raw";
 import poisson_frag from "./glsl/sim/poisson.frag?raw";
 

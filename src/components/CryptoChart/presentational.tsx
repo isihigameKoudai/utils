@@ -44,8 +44,9 @@ const CryptoChartPresentational: React.FC<CryptoChartPresenterProps> = ({
       width: width || fullBoxRef.current.clientWidth,
       height: height || fullBoxRef.current.clientHeight,
     });
-    series.current = chart.current.addCandlestickSeries(seriesColor);
-    series.current.setData(candleData.map(candle => candle.series));
+    // TODO: エラーになるので後で直す
+    // series.current = chart.current.addCandlestickSeries(seriesColor);
+    // series.current.setData(candleData.map(candle => candle.series));
 
     const handleChange: DataChangedHandler = (e) => {
       // series.current?.setData(candleData.map(candle => candle.series));
