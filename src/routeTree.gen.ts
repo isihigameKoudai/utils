@@ -13,6 +13,9 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as ThreeDimensionIndexImport } from './routes/three-dimension/index'
+import { Route as AudioIndexImport } from './routes/audio/index'
+import { Route as AudioSpeechImport } from './routes/audio/speech'
+import { Route as AudioMicImport } from './routes/audio/mic'
 
 // Create/Update Routes
 
@@ -28,6 +31,24 @@ const ThreeDimensionIndexRoute = ThreeDimensionIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AudioIndexRoute = AudioIndexImport.update({
+  id: '/audio/',
+  path: '/audio/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AudioSpeechRoute = AudioSpeechImport.update({
+  id: '/audio/speech',
+  path: '/audio/speech',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AudioMicRoute = AudioMicImport.update({
+  id: '/audio/mic',
+  path: '/audio/mic',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -37,6 +58,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/audio/mic': {
+      id: '/audio/mic'
+      path: '/audio/mic'
+      fullPath: '/audio/mic'
+      preLoaderRoute: typeof AudioMicImport
+      parentRoute: typeof rootRoute
+    }
+    '/audio/speech': {
+      id: '/audio/speech'
+      path: '/audio/speech'
+      fullPath: '/audio/speech'
+      preLoaderRoute: typeof AudioSpeechImport
+      parentRoute: typeof rootRoute
+    }
+    '/audio/': {
+      id: '/audio/'
+      path: '/audio'
+      fullPath: '/audio'
+      preLoaderRoute: typeof AudioIndexImport
       parentRoute: typeof rootRoute
     }
     '/three-dimension/': {
@@ -53,36 +95,62 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/audio/mic': typeof AudioMicRoute
+  '/audio/speech': typeof AudioSpeechRoute
+  '/audio': typeof AudioIndexRoute
   '/three-dimension': typeof ThreeDimensionIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/audio/mic': typeof AudioMicRoute
+  '/audio/speech': typeof AudioSpeechRoute
+  '/audio': typeof AudioIndexRoute
   '/three-dimension': typeof ThreeDimensionIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/audio/mic': typeof AudioMicRoute
+  '/audio/speech': typeof AudioSpeechRoute
+  '/audio/': typeof AudioIndexRoute
   '/three-dimension/': typeof ThreeDimensionIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/three-dimension'
+  fullPaths:
+    | '/'
+    | '/audio/mic'
+    | '/audio/speech'
+    | '/audio'
+    | '/three-dimension'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/three-dimension'
-  id: '__root__' | '/' | '/three-dimension/'
+  to: '/' | '/audio/mic' | '/audio/speech' | '/audio' | '/three-dimension'
+  id:
+    | '__root__'
+    | '/'
+    | '/audio/mic'
+    | '/audio/speech'
+    | '/audio/'
+    | '/three-dimension/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AudioMicRoute: typeof AudioMicRoute
+  AudioSpeechRoute: typeof AudioSpeechRoute
+  AudioIndexRoute: typeof AudioIndexRoute
   ThreeDimensionIndexRoute: typeof ThreeDimensionIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AudioMicRoute: AudioMicRoute,
+  AudioSpeechRoute: AudioSpeechRoute,
+  AudioIndexRoute: AudioIndexRoute,
   ThreeDimensionIndexRoute: ThreeDimensionIndexRoute,
 }
 
@@ -97,11 +165,23 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/audio/mic",
+        "/audio/speech",
+        "/audio/",
         "/three-dimension/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/audio/mic": {
+      "filePath": "audio/mic.tsx"
+    },
+    "/audio/speech": {
+      "filePath": "audio/speech.tsx"
+    },
+    "/audio/": {
+      "filePath": "audio/index.tsx"
     },
     "/three-dimension/": {
       "filePath": "three-dimension/index.tsx"
