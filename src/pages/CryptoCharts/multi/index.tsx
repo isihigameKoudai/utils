@@ -1,8 +1,8 @@
 import React from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import { styled } from '@/utils/ui/styled';
 
-import { CryptoChart, CryptoStore } from '@/src/components/CryptoChart';
+import { CryptoChart } from '@/src/components/CryptoChart';
 import { CryptoTheme } from '../theme';
 import { SYMBOLS } from '../constants';
 
@@ -50,15 +50,12 @@ const ChartTitle = styled('h3')({
   color: '#ccc',
 });
 
-interface Props {
-  token: string;
-}
-
-const MultiChartPage: React.FC<Props> = ({ token }) => {
+const MultiChartPage: React.FC = () => {
   const navigate = useNavigate();
+  const { token } = useParams({ from: '/crypto-charts/multi/$token' });
 
   const handleChangeToken = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    navigate(`/crypto-charts/multi/${e.target.value}`);
+    navigate({ to: '/crypto-charts/multi/$token', params: { token: e.target.value as typeof SYMBOLS[number] } });
   }
 
   return (
@@ -94,17 +91,18 @@ const MultiChartPage: React.FC<Props> = ({ token }) => {
 };
 
 export default () => {
-  const params = useParams<{ token?: string }>();
-  const { token } = params;
-  const validToken = (SYMBOLS).some( symbolItem => symbolItem === token) ? token : DEFAULT_TOKEN;
+  const navigate = useNavigate();
+  const { token } = useParams({ from: '/crypto-charts/multi/$token' });
+  const validToken = SYMBOLS.includes(token as typeof SYMBOLS[number]) ? token : DEFAULT_TOKEN;
 
-  if (!SYMBOLS.some( symbolItem => symbolItem === token) || !validToken) {
-    return <Navigate to={`/crypto-charts/multi/${DEFAULT_TOKEN}`} replace />;
+  if (!SYMBOLS.includes(token as typeof SYMBOLS[number])) {
+    navigate({ to: '/crypto-charts/multi/$token', params: { token: DEFAULT_TOKEN } });
+    return null;
   }
 
   return (
     <CryptoTheme.Provider>
-      <MultiChartPage token={validToken} />
+      <MultiChartPage />
     </CryptoTheme.Provider>
   )
 };
