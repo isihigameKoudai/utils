@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-
-import MicPage from '@/src/pages/Audio/Mic';
+import Mic from '@/src/pages/Audio/Mic'
 
 export const Route = createFileRoute('/audio/mic')({
-  component: MicPage,
-});
+  component: Mic,
+})
