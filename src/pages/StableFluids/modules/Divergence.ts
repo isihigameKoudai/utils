@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import face_vert from "./glsl/sim/face.vert?raw";
 import divergence_frag from "./glsl/sim/divergence.frag?raw";
 

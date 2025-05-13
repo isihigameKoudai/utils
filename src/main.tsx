@@ -1,13 +1,29 @@
-import React from 'react'
+import React from 'react';
 import { createRoot } from 'react-dom/client';
-import './index.css'
-import Router from './Route/Router';
+import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { routeTree } from './generated/routeTree.gen';
+import './index.css';
 import './App.css';
 
-const $root = document.getElementById('root');
-const root = createRoot($root!);
-root.render(
-  <React.StrictMode>
-    <Router />
-  </React.StrictMode>
-);
+const router = createRouter({ routeTree })
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
+}
+
+(() => {
+  const $root = document.getElementById('root');
+  if(!$root) {
+    throw new Error('rootが見つかりません');
+  }
+
+  const root = createRoot($root);
+  root.render(
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>,
+  )
+})();
+

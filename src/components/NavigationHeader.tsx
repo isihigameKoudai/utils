@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-
 import Box from '@/utils/ui/Box';
-
-import Menu from "../components/Menu";
-import { routeList } from "./routes";
+import Menu from "./Menu";
 
 export const NavigationHeader: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,19 +19,4 @@ export const NavigationHeader: React.FC = () => {
       }
     </Box>
   )
-}
-
-const Router: React.FC = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        {
-          routeList.map((item, i) => <Route key={`route-${i}`} index={item.title === '/'} path={item.path} element={item.element} />)
-        }
-      </Routes>
-      <NavigationHeader />
-    </BrowserRouter>
-  )
-};
-
-export default Router;
+} 
