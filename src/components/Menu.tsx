@@ -1,5 +1,5 @@
 import React from 'react';
-import { routeList } from '../Route/routes';
+import { routeList } from '../constants/routes';
 import { Link } from '@tanstack/react-router';
 
 const Menu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
