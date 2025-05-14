@@ -125,5 +125,9 @@ export const routeList: IRoute[] = [
     title: 'MultiChart',
     path: '/crypto-charts/multi/:token',
     menuPath: '/crypto-charts/multi/BTC',
+  },
+  {
+    title: 'クレジットカード集計',
+    path: '/aggregate-bill',
   }
 ];
