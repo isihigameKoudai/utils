@@ -18,7 +18,12 @@ type StyledOptions = {
  * @example
  * const StyledDiv = styled('div')({
  *   color: 'red',
- *   fontSize: '16px'
+ *   fontSize: '16px',
+ *   $nest: {
+ *     '&:hover': {
+ *       color: 'blue',
+ *     }
+ *   }
  * })
  */
 export function styled<T extends ElementType>(Component: T) {

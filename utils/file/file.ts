@@ -43,23 +43,50 @@ const initialOption: Option = {
  * ファイルを選択する
  * @param option 
  * @returns 
+ * @example
+ * 
+ * const files = await fetchFiles();
+ * 
  */
-export const fetchFiles: FetchFiles = async (option = initialOption) => {
-  const { promise, resolve } = deferred<{ status: 'success'; files: File[] }>();
-  
-  const input: HTMLInputElement = document.createElement('input');
-  input.type = 'file';
-  input.multiple = option.isMultiple ?? false;
-  input.accept = option.accept ?? '*';
+export const fetchFiles: FetchFiles = ({
+  isMultiple = false,
+  accept = '*',
+} = initialOption) => {
+  return new Promise((resolve, reject) => {
+    const isAvailable: boolean = !!(
+      window.File &&
+      window.FileReader &&
+      window.FileList &&
+      window.Blob
+    );
+    if (!isAvailable) {
+      reject({
+        status: "The File APIs are not fully supported in this browser.",
+        files: [],
+      });
+      return;
+    }
 
-  input.onchange = (event: Event) => {
-    const files = Array.from((event.target as HTMLInputElement).files || []);
-    resolve({
-      status: 'success',
-      files
-    });
-  };
+    const $input: HTMLInputElement = document.createElement("input");
+    $input.type = "file";
+    $input.multiple = isMultiple;
+    $input.accept = accept;
+    $input.onchange = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      if (!target || !target.files) {
+        reject({
+          status: "error",
+          files: [],
+        });
+        return;
+      }
 
-  input.click();
-  return promise;
+      const files = [...target.files];
+      resolve({
+        status: "success",
+        files,
+      });
+    };
+    $input.click();
+  });
 };
