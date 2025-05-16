@@ -8,7 +8,7 @@ import { deferred } from '../promise/promise';
  * @param csv 
  * @returns 
  */
-export const csv2array = (csv: string) =>
+export const csv2array = (csv: string): string[][] =>
   csv
     .replaceAll("\r", "")
     .split("\n")
@@ -52,41 +52,48 @@ export const fetchFiles: FetchFiles = ({
   isMultiple = false,
   accept = '*',
 } = initialOption) => {
-  return new Promise((resolve, reject) => {
-    const isAvailable: boolean = !!(
-      window.File &&
-      window.FileReader &&
-      window.FileList &&
-      window.Blob
-    );
-    if (!isAvailable) {
+  const { promise, resolve, reject } = deferred<{
+    status: 'success' | 'error';
+    files: File[];
+  }>();
+
+  const isAvailable: boolean = !!(
+    window.File &&
+    window.FileReader &&
+    window.FileList &&
+    window.Blob
+  );
+
+  if (!isAvailable) {
+    reject({
+      status: "The File APIs are not fully supported in this browser.",
+      files: [],
+    });
+    return promise;
+  }
+
+  const $input: HTMLInputElement = document.createElement("input");
+  $input.type = "file";
+  $input.multiple = isMultiple;
+  $input.accept = accept;
+  $input.onchange = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    console.log(target);
+    if (!target || !target.files) {
       reject({
-        status: "The File APIs are not fully supported in this browser.",
+        status: "error",
         files: [],
       });
       return;
     }
 
-    const $input: HTMLInputElement = document.createElement("input");
-    $input.type = "file";
-    $input.multiple = isMultiple;
-    $input.accept = accept;
-    $input.onchange = (e: Event) => {
-      const target = e.target as HTMLInputElement;
-      if (!target || !target.files) {
-        reject({
-          status: "error",
-          files: [],
-        });
-        return;
-      }
+    const files = [...target.files];
+    resolve({
+      status: "success",
+      files,
+    });
+  };
+  $input.click();
 
-      const files = [...target.files];
-      resolve({
-        status: "success",
-        files,
-      });
-    };
-    $input.click();
-  });
+  return promise;
 };
