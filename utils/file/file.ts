@@ -1,5 +1,6 @@
 import { Option, FetchFiles } from './type';
 import { deferred } from '../promise/promise';
+import { isTruthy } from '../guards';
 
 /**
  * CSV形式のテキストを2次元配列に変換する
@@ -8,11 +9,11 @@ import { deferred } from '../promise/promise';
  * @param csv 
  * @returns 
  */
-export const csv2array = (csv: string): string[][] =>
-  csv
-    .replaceAll("\r", "")
-    .split("\n")
-    .map((row) => row.split(","));
+export const csv2array = (csv: string): string[][] => csv
+  .replaceAll("\r", "")
+  .split("\n")
+  .filter(isTruthy)
+  .map((row) => row.split(","));
 
 /**
  * CSV形式のテキストをjsonに変換する
@@ -88,6 +89,7 @@ export const fetchFiles: FetchFiles = ({
     }
 
     const files = [...target.files];
+    console.log(files);
     resolve({
       status: "success",
       files,
