@@ -1,4 +1,4 @@
-export class CSV<C extends string> {
+export class CSV<C extends string = string> {
   /**
    * 元となるCSVデータ
    * 
@@ -41,16 +41,9 @@ export class CSV<C extends string> {
   /**
    * CSVデータに該当しない場合エラーにする
    * 
-   * ・空の場合
    * ・カラムの数が一致しない場合
-   * ・ヘッダーに値する文字列が存在しない場合
    */
   validate(csv: string[][]) {
-    // 空の場合
-    if (csv.length === 0) {
-      throw new Error('CSV is empty');
-    } 
-
     // カラムの数が一致しない場合
     const isDiffColumnCount = csv.some((row) => row.length !== csv[0].length);
     if (isDiffColumnCount) {

@@ -9,13 +9,17 @@ describe('CSV', () => {
   ];
 
   describe('constructor', () => {
-    it('正常なCSVデータでインスタンスを作成できる', () => {
-      const csv = new CSV<'header1' | 'header2' | 'header3'>(validCsvData);
+    it('型推論を使用してインスタンスを作成できる', () => {
+      const csv = new CSV(validCsvData);
       expect(csv.value).toEqual(validCsvData);
+      // 型推論で 'header1' | 'header2' | 'header3' が推論される
+      const column = csv.getColumn('header1');
+      expect(column).toEqual(['value1-1', 'value2-1']);
     });
 
-    it('空のCSVデータでエラーをスローする', () => {
-      expect(() => new CSV([])).toThrow('CSV is empty');
+    it('明示的な型指定でインスタンスを作成できる', () => {
+      const csv = new CSV<'header1' | 'header2' | 'header3'>(validCsvData);
+      expect(csv.value).toEqual(validCsvData);
     });
 
     it('カラム数が一致しないCSVデータでエラーをスローする', () => {
