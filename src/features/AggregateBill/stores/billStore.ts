@@ -1,37 +1,50 @@
 import { defineStore } from '@/utils/i-state';
-import { Bill } from '../types/bill';
+import type { Brand } from '../types/brand';
+import { BRANDS } from '../constants/brand';
+import { csv2array, fetchFiles } from '@/utils/file';
+import { fromEntries } from '@/utils/object';
+import { CSV } from '@/utils/file/csv';
 
-interface BillState {
-  bills: Bill[];
-  loading: boolean;
-  error: string | null;
+type BrandState = {
+  [key in Brand]: CSV | null;
 }
 
-const initialState: BillState = {
-  bills: [],
-  loading: false,
-  error: null
-};
+type BillState = {
+  totalRecords: CSV | null;
+} & BrandState;
+
+const initialState = {
+  totalRecords: null,
+  ...fromEntries<{ [key in Brand]: CSV | null }>(
+    BRANDS.map(brand => [
+      brand,
+      null
+    ])
+  )
+} satisfies BillState;
 
 export const BillStore = defineStore({
   state: initialState,
   queries: {
-    bills: (state) => state.bills,
-    loading: (state) => state.loading,
-    error: (state) => state.error
+    totalRecords: (state) => state.totalRecords,
+    ...fromEntries<{ [key in `${Brand}Records`]: (state: BillState) => CSV | null }>(
+    BRANDS.map(brand => [
+      `${brand}Records`,
+      (state) => state[brand]
+    ]))
   },
   actions: {
-    addBills({ dispatch, state }, bills: Bill[]) {
-      dispatch('bills', [...state.bills, ...bills]);
-    },
-    removeBill({ dispatch, state }, id: string) {
-      dispatch('bills', state.bills.filter(bill => bill.id !== id));
-    },
-    setLoading({ dispatch }, loading: boolean) {
-      dispatch('loading', loading);
-    },
-    setError({ dispatch }, error: string | null) {
-      dispatch('error', error);
+    async fetchCSVRecords({ dispatch }, { brand }: { brand: Brand }) {
+      try {
+        const { files } = await fetchFiles({
+          isMultiple: true,
+          accept: '.csv'
+        });
+        const records = csv2array(await files[0].text());
+        dispatch(brand, new CSV(records));
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
-}); 
+});
