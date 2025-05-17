@@ -59,7 +59,7 @@ export class CSV<C extends string> {
   }
 
   createMap(csv: string[][]): Map<C, string>[] {
-    return csv.map((row) => {
+    return csv.slice(1).map((row) => {
       return new Map<C, string>(row.map((value, index) => [this.headers[index] as C, value]));
     });
   }
