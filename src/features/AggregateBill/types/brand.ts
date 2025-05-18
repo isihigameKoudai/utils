@@ -1,3 +1,3 @@
-import { BRANDS } from '../constants/brand';
+import { BRAND } from '../constants/brand';
 
-export type Brand = typeof BRANDS[number];
+export type Brand = keyof typeof BRAND;

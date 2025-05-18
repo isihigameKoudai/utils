@@ -1,6 +1,6 @@
 import { defineStore } from '@/utils/i-state';
 import type { Brand } from '../types/brand';
-import { BRANDS } from '../constants/brand';
+import { BRAND } from '../constants/brand';
 import { csv2array, fetchFiles } from '@/utils/file';
 import { fromEntries } from '@/utils/object';
 import { CSV } from '@/utils/file/csv';
@@ -16,8 +16,8 @@ type BillState = {
 const initialState = {
   totalRecords: null,
   ...fromEntries<{ [key in Brand]: CSV | null }>(
-    BRANDS.map(brand => [
-      brand,
+    Object.values(BRAND).map(brand => [
+      brand.value,
       null
     ])
   )
@@ -28,9 +28,9 @@ export const BillStore = defineStore({
   queries: {
     totalRecords: (state) => state.totalRecords,
     ...fromEntries<{ [key in `${Brand}Records`]: (state: BillState) => CSV | null }>(
-    BRANDS.map(brand => [
-      `${brand}Records`,
-      (state) => state[brand]
+    Object.values(BRAND).map(brand => [
+      `${brand.value}Records`,
+      (state) => state[brand.value as Brand]
     ]))
   },
   actions: {
