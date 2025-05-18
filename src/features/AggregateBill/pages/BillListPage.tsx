@@ -1,6 +1,7 @@
 import { BRAND } from '../constants/brand';
 import { BillStore } from '../stores/billStore';
 import { styled } from '@/utils/ui/styled';
+import { BillList } from '../components/BillList';
 
 const Container = styled('div')({
   display: 'flex',
@@ -19,6 +20,7 @@ const ImportArea = styled('div')({
 const ResultArea = styled('div')({
   flex: '1',
   padding: '1rem',
+  overflow: 'auto',
 });
 
 const BrandFileOpener = styled('div')({
@@ -81,7 +83,7 @@ export const BillListPage = () => {
       </ImportArea>
       <ResultArea>
         <h2>集計結果</h2>
-        {/* ここに集計結果の表示を実装 */}
+        <BillList bills={queries.totalRecords} />
       </ResultArea>
     </Container>
   );
