@@ -84,25 +84,6 @@ export class CSV<C extends string = string> {
    *  ['value2-1', 'value2-2', 'value2-3'],
    * ]);
    * 
-   * const columns = csv.getColumn('header1');
-   * => ['value1-1', 'value2-1']
-   */
-  getColumn(key: C): string[] {
-    if (!this._mapList.some((map) => map.has(key))) {
-      throw new Error('Column not found');
-    }
-
-    return this._mapList.map((map) => map.get(key) || '');
-  }
-
-  /**
-   * @example
-   * const csv = new Map<{'header1' | 'header2' | 'header3'}>([
-   *  ['header1', 'header2', 'header3'],
-   *  ['value1-1', 'value1-2', 'value1-3'],
-   *  ['value2-1', 'value2-2', 'value2-3'],
-   * ]);
-   * 
    * const columns = csv.getColumns(['header2', 'header3']);
    * => [
    *  ['value1-2', 'value1-3'],
@@ -110,6 +91,8 @@ export class CSV<C extends string = string> {
    * ]
    */
   getColumns(keys: C[]): string[][] {
-    return keys.map((key) => this.getColumn(key));
+    return this._mapList.map((map) => {
+      return keys.map((key) => map.get(key) || '');
+    });
   }
 }

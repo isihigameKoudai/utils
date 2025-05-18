@@ -12,9 +12,6 @@ describe('CSV', () => {
     it('型推論を使用してインスタンスを作成できる', () => {
       const csv = new CSV(validCsvData);
       expect(csv.value).toEqual(validCsvData);
-      // 型推論で 'header1' | 'header2' | 'header3' が推論される
-      const column = csv.getColumn('header1');
-      expect(column).toEqual(['value1-1', 'value2-1']);
     });
 
     it('明示的な型指定でインスタンスを作成できる', () => {
@@ -51,26 +48,13 @@ describe('CSV', () => {
     });
   });
 
-  describe('getColumn', () => {
-    it('指定したカラムの値を取得できる', () => {
-      const csv = new CSV<'header1' | 'header2' | 'header3'>(validCsvData);
-      const column = csv.getColumn('header1');
-      expect(column).toEqual(['value1-1', 'value2-1']);
-    });
-
-    it('存在しないカラムでエラーをスローする', () => {
-      const csv = new CSV<'header1' | 'header2' | 'header3'>(validCsvData);
-      expect(() => csv.getColumn('non-existent' as any)).toThrow('Column not found');
-    });
-  });
-
   describe('getColumns', () => {
     it('指定した複数のカラムの値を取得できる', () => {
       const csv = new CSV<'header1' | 'header2' | 'header3'>(validCsvData);
       const columns = csv.getColumns(['header2', 'header3']);
       expect(columns).toEqual([
-        ['value1-2', 'value2-2'],
-        ['value1-3', 'value2-3'],
+        ['value1-2', 'value1-3'],
+        ['value2-2', 'value2-3'],
       ]);
     });
   });
