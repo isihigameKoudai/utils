@@ -15,6 +15,7 @@ import { Route as StableFluidsImport } from './../routes/stable-fluids'
 import { Route as ShaderImport } from './../routes/shader'
 import { Route as PlaygroundImport } from './../routes/playground'
 import { Route as MeltTheBorderImport } from './../routes/melt-the-border'
+import { Route as AggregateBillImport } from './../routes/aggregate-bill'
 import { Route as IndexImport } from './../routes/index'
 import { Route as ThreeDimensionIndexImport } from './../routes/three-dimension/index'
 import { Route as NoiseIndexImport } from './../routes/noise/index'
@@ -64,6 +65,12 @@ const PlaygroundRoute = PlaygroundImport.update({
 const MeltTheBorderRoute = MeltTheBorderImport.update({
   id: '/melt-the-border',
   path: '/melt-the-border',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AggregateBillRoute = AggregateBillImport.update({
+  id: '/aggregate-bill',
+  path: '/aggregate-bill',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -227,6 +234,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/aggregate-bill': {
+      id: '/aggregate-bill'
+      path: '/aggregate-bill'
+      fullPath: '/aggregate-bill'
+      preLoaderRoute: typeof AggregateBillImport
       parentRoute: typeof rootRoute
     }
     '/melt-the-border': {
@@ -432,6 +446,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/aggregate-bill': typeof AggregateBillRoute
   '/melt-the-border': typeof MeltTheBorderRoute
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
@@ -464,6 +479,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/aggregate-bill': typeof AggregateBillRoute
   '/melt-the-border': typeof MeltTheBorderRoute
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
@@ -497,6 +513,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/aggregate-bill': typeof AggregateBillRoute
   '/melt-the-border': typeof MeltTheBorderRoute
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
@@ -531,6 +548,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/aggregate-bill'
     | '/melt-the-border'
     | '/playground'
     | '/shader'
@@ -562,6 +580,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/aggregate-bill'
     | '/melt-the-border'
     | '/playground'
     | '/shader'
@@ -593,6 +612,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/aggregate-bill'
     | '/melt-the-border'
     | '/playground'
     | '/shader'
@@ -626,6 +646,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AggregateBillRoute: typeof AggregateBillRoute
   MeltTheBorderRoute: typeof MeltTheBorderRoute
   PlaygroundRoute: typeof PlaygroundRoute
   ShaderRoute: typeof ShaderRoute
@@ -658,6 +679,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AggregateBillRoute: AggregateBillRoute,
   MeltTheBorderRoute: MeltTheBorderRoute,
   PlaygroundRoute: PlaygroundRoute,
   ShaderRoute: ShaderRoute,
@@ -699,6 +721,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/aggregate-bill",
         "/melt-the-border",
         "/playground",
         "/shader",
@@ -731,6 +754,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/aggregate-bill": {
+      "filePath": "aggregate-bill.tsx"
     },
     "/melt-the-border": {
       "filePath": "melt-the-border.tsx"
