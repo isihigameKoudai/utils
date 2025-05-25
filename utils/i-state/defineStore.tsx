@@ -2,6 +2,7 @@
  * npm i zustand
  */
 import { create } from 'zustand';
+import { fromEntries } from '@/utils/object';
 
 import { StateProps, QueriesProps, ActionsProps, Store, Actions, Dispatch, Queries } from './type';
 
@@ -92,13 +93,11 @@ export const defineStore = <
   const useStore = () => {
     const { state, dispatch } = store();
     
-    const queries = Object.entries(queryFns).reduce(
-      (acc, [key, fn]) => ({
-        ...acc,
-        [key]: fn(state),
-      }),
-      {} as Queries<Q>
-    ) satisfies Queries<Q>;
+    const queries = fromEntries<Queries<Q>>(
+      Object.entries(queryFns).map(
+        ([key, fn]) => [key as keyof Q, fn(state)]
+      )
+    );
 
     const actions = Object.entries(actionFns).reduce(
       (acc, [key, fn]) => ({
@@ -109,7 +108,7 @@ export const defineStore = <
             queries,
             dispatch,
           }, ...args);
-        }) as Actions<S, Q, A>[keyof A],
+        }) as Actions<S, typeof queries, A>[keyof A],
       }),
       {} as Actions<S, Q, A>
     ) satisfies Actions<S, Q, A>;
