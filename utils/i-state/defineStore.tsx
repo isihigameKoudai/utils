@@ -3,7 +3,7 @@
  */
 import { create } from 'zustand';
 
-import { StateProps, Queries, Actions, Store, StoreActions, Dispatch, StoreQueries } from './type';
+import { StateProps, QueriesProps, Actions, Store, StoreActions, Dispatch, StoreQueries } from './type';
 
 /**
  * ステート管理のためのストアを定義するファクトリ関数（zustandベース）
@@ -62,7 +62,7 @@ import { StateProps, Queries, Actions, Store, StoreActions, Dispatch, StoreQueri
  */
 export const defineStore = <
   S extends StateProps,
-  Q extends Queries<S> = Queries<S>,
+  Q extends QueriesProps<S> = QueriesProps<S>,
   A extends Actions<S, Q> = Actions<S, Q>
 >(config: {
   state: S;
