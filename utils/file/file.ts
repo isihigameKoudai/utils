@@ -1,5 +1,6 @@
 import { Option, FetchFiles } from './type';
 import { deferred } from '../promise/promise';
+import { isTruthy } from '../guards';
 
 /**
  * CSV形式のテキストを2次元配列に変換する
@@ -8,11 +9,26 @@ import { deferred } from '../promise/promise';
  * @param csv 
  * @returns 
  */
-export const csv2array = (csv: string) =>
-  csv
-    .replaceAll("\r", "")
-    .split("\n")
-    .map((row) => row.split(","));
+export const csv2array = (csv: string): string[][] => csv
+  .replaceAll("\r", "")
+  .split("\n")
+  .filter(isTruthy)
+  .map((row) => row.split(","));
+
+/**
+ * 2次元配列をCSV形式のテキストに変換する
+ * 
+ * @example
+ * array2csv([
+ *  ['header1','header2','header3'],
+ *  ['ddddddd','eeeeeee','fffffff']
+ *  ['ggggggg','hhhhhhh','iiiiiii']
+ * ]);
+ * => 'header1,header2,header3\nddddddd,eeeeeee,fffffff\nggggggg,hhhhhhh,iiiiiii'
+ */
+export const array2csv = (array: string[][]): string => array
+  .map((row) => row.join(","))
+  .join("\n");
 
 /**
  * CSV形式のテキストをjsonに変換する
@@ -43,23 +59,58 @@ const initialOption: Option = {
  * ファイルを選択する
  * @param option 
  * @returns 
+ * @example
+ * 
+ * const files = await fetchFiles();
+ * 
  */
-export const fetchFiles: FetchFiles = async (option = initialOption) => {
-  const { promise, resolve } = deferred<{ status: 'success'; files: File[] }>();
-  
-  const input: HTMLInputElement = document.createElement('input');
-  input.type = 'file';
-  input.multiple = option.isMultiple ?? false;
-  input.accept = option.accept ?? '*';
+export const fetchFiles: FetchFiles = ({
+  isMultiple = false,
+  accept = '*',
+} = initialOption) => {
+  const { promise, resolve, reject } = deferred<{
+    status: 'success' | 'error';
+    files: File[];
+  }>();
 
-  input.onchange = (event: Event) => {
-    const files = Array.from((event.target as HTMLInputElement).files || []);
+  const isAvailable: boolean = !!(
+    window.File &&
+    window.FileReader &&
+    window.FileList &&
+    window.Blob
+  );
+
+  if (!isAvailable) {
+    reject({
+      status: "The File APIs are not fully supported in this browser.",
+      files: [],
+    });
+    return promise;
+  }
+
+  const $input: HTMLInputElement = document.createElement("input");
+  $input.type = "file";
+  $input.multiple = isMultiple;
+  $input.accept = accept;
+  $input.onchange = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    console.log(target);
+    if (!target || !target.files) {
+      reject({
+        status: "error",
+        files: [],
+      });
+      return;
+    }
+
+    const files = [...target.files];
+    console.log(files);
     resolve({
-      status: 'success',
-      files
+      status: "success",
+      files,
     });
   };
+  $input.click();
 
-  input.click();
   return promise;
 };

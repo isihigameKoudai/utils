@@ -16,6 +16,7 @@ import { State, Queries, Actions, Store, StoreActions, Dispatch, StoreQueries } 
  * @param {A} config.actions - ステートを更新するアクション関数群
  * @returns {Object} ストアオブジェクト
  * @property {Function} useStore - フックとしてストアを使用するための関数
+ * 
  * @example
  * const CounterStore = defineStore({
  *   state: { count: 0 },
@@ -26,6 +27,29 @@ import { State, Queries, Actions, Store, StoreActions, Dispatch, StoreQueries } 
  *     increment: ({ state, dispatch }) => dispatch('count', state.count + 1),
  *     incrementBy: ({ state, dispatch }, amount: number) => dispatch('count', state.count + amount)
  *   }
+ * });
+ * 
+ * @example
+ * type CounterState = {
+ *  count: number;
+ * }
+ * 
+ * const state: CounterState = {
+ *  count: 0,
+ * }
+ * const queries = {
+ *   doubleCount: (state) => state.count * 2
+ * } satisfies Queries<CounterState>;
+ * 
+ * const actions = {
+ *   increment: ({ state, dispatch }) => dispatch('count', state.count + 1),
+ *   incrementBy: ({ state, dispatch }, amount: number) => dispatch('count', state.count + amount)
+ * } satisfies Actions<CounterState, typeof queries>;
+ * 
+ * const CounterStore = defineStore<CounterState, typeof queries, typeof actions>({
+ *   state,
+ *   queries,
+ *   actions
  * });
  * 
  * // ストアの使用
@@ -74,7 +98,7 @@ export const defineStore = <
         [key]: fn(state),
       }),
       {} as StoreQueries<Q>
-    );
+    ) satisfies StoreQueries<Q>;
 
     const actions = Object.entries(actionFns).reduce(
       (acc, [key, fn]) => ({
@@ -88,7 +112,7 @@ export const defineStore = <
         }) as StoreActions<S, Q, A>[keyof A],
       }),
       {} as StoreActions<S, Q, A>
-    );
+    ) satisfies StoreActions<S, Q, A>;
 
     return {
       state,
