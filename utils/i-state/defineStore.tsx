@@ -4,7 +4,7 @@
 import { create } from 'zustand';
 import { fromEntries } from '@/utils/object';
 
-import { StateProps, QueriesProps, ActionsProps, Store, Actions, Dispatch, Queries } from './type';
+import { StateProps, QueriesProps, ActionsProps, Actions, Dispatch, Queries } from './type';
 
 /**
  * ステート管理のためのストアを定義するファクトリ関数（zustandベース）
@@ -69,7 +69,7 @@ export const defineStore = <
   state: S;
   queries: Q;
   actions?: A;
-}): Store<S, Q, A> => {
+}) => {
   const {
     state: initialState,
     queries: queryFns,
@@ -99,19 +99,16 @@ export const defineStore = <
       )
     );
 
-    const actions = Object.entries(actionFns).reduce(
-      (acc, [key, fn]) => ({
-        ...acc,
-        [key]: ((...args: any[]) => {
-          return fn({
-            state,
-            queries,
-            dispatch,
-          }, ...args);
-        }) as Actions<S, typeof queries, A>[keyof A],
-      }),
-      {} as Actions<S, Q, A>
-    ) satisfies Actions<S, Q, A>;
+    const actions = fromEntries<Actions<S, typeof queries, A>>(
+      Object.entries(actionFns).map(([key, fn]) => [
+        key as keyof A,
+        ((...args: any[]) => fn({
+          state,
+          queries,
+          dispatch,
+        }, ...args)) as Actions<S, typeof queries, A>[keyof A]
+      ])
+    );
 
     return {
       state,

@@ -3,7 +3,7 @@ export type StateProps = Record<string, any>;
 
 export type QueriesProps<S extends StateProps> = Record<string, (state: S) => any>;
 
-type Context<S extends StateProps, Q extends QueriesProps<S>> = {
+export type Context<S extends StateProps, Q extends QueriesProps<S>> = {
   state: S;
   queries: Queries<Q>;
   dispatch: Dispatch<S>;
@@ -22,15 +22,7 @@ export type Queries<Q extends QueriesProps<any>> = {
 }
 
 export type Actions<S extends StateProps, Q extends QueriesProps<S>, A extends ActionsProps<S, Q>> = {
-  [K in keyof A]: A[K] extends (context: any, ...args: infer P) => any 
+  [K in keyof A]: A[K] extends (context: Context<S, Q>, ...args: infer P) => any 
     ? (...args: P) => ReturnType<A[K]> 
     : never;
-};
-
-export type Store<S extends StateProps, Q extends QueriesProps<S>, A extends ActionsProps<S, Q>> = {
-  useStore: () => {
-    state: S;
-    queries: Queries<Q>;
-    actions: Actions<S, Q, A>;
-  };
 };
