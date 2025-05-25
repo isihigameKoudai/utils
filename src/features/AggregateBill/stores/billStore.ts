@@ -1,7 +1,7 @@
 import { defineStore } from '@/utils/i-state';
 import type { Brand } from '../types/brand';
 import { BRAND } from '../constants/brand';
-import { csv2array, fetchFiles } from '@/utils/file';
+import { array2csv, csv2array, fetchFiles } from '@/utils/file';
 import { fromEntries } from '@/utils/object';
 import { CSV } from '@/utils/file/csv';
 import { isTruthy } from '@/utils/guards';
@@ -35,6 +35,7 @@ export const BillStore = defineStore({
       (state) => state[brand.value as Brand]
     ])),
     isEmptyAllRecords: (state) => Object.values(BRAND).every(brand => !state[brand.value]?.value.length),
+    isEmptyTotalRecords: (state) => state.totalRecords.length <= 0,
   },
   actions: {
     async fetchCSVRecords({ dispatch }, { brand }: { brand: Brand }) {
@@ -63,6 +64,45 @@ export const BillStore = defineStore({
         throw new Error('集計するデータがありません');
       }
       dispatch('totalRecords', allRecords.flat() as BillState['totalRecords']);
+    },
+    saveTotalRecords({ queries }) {
+      try {
+        const totalRecords = queries.totalRecords as Bill[];
+        const isEmptyTotalRecords = queries.isEmptyTotalRecords;
+
+        if (isEmptyTotalRecords) {
+          throw new Error('保存するデータがありません');
+        }
+
+        // CSV文字列を生成
+        const csvContent = array2csv([
+          ['date', 'store', 'amount'],
+          ...totalRecords.map(bill => [
+            bill.dateLabel, // yyyy-mm-dd形式
+            bill.store,
+            bill.amount.toString()
+          ])
+        ]);
+
+        const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+        // Blobを作成してダウンロード
+        const blob = new Blob([bom, csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        
+        if (link.download !== undefined) {
+          const url = URL.createObjectURL(blob);
+          link.setAttribute('href', url);
+          link.setAttribute('download', `total_records_${new Date().toISOString().split('T')[0]}.csv`);
+          link.style.visibility = 'hidden';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }
+      } catch (error) {
+        console.error('CSVファイルの保存に失敗しました:', error);
+        throw error;
+      }
     }
   },
 });

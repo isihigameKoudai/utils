@@ -16,6 +16,21 @@ export const csv2array = (csv: string): string[][] => csv
   .map((row) => row.split(","));
 
 /**
+ * 2次元配列をCSV形式のテキストに変換する
+ * 
+ * @example
+ * array2csv([
+ *  ['header1','header2','header3'],
+ *  ['ddddddd','eeeeeee','fffffff']
+ *  ['ggggggg','hhhhhhh','iiiiiii']
+ * ]);
+ * => 'header1,header2,header3\nddddddd,eeeeeee,fffffff\nggggggg,hhhhhhh,iiiiiii'
+ */
+export const array2csv = (array: string[][]): string => array
+  .map((row) => row.join(","))
+  .join("\n");
+
+/**
  * CSV形式のテキストをjsonに変換する
  * ex: csv2json('name,amount,date\nAlice,100,2021-01-01\nBob,200,2021-01-02\n')
  * => [

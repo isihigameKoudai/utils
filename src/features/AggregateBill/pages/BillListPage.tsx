@@ -56,6 +56,17 @@ const AggregateButton = styled('button')({
   opacity: 1,
 });
 
+const SaveButton = styled('button')({
+  padding: '0.5rem 1rem',
+  backgroundColor: '#4caf50',
+  color: 'white',
+  border: 'none',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  marginTop: '1rem',
+  opacity: 1,
+});
+
 export const BillListPage = () => {
   const { queries, actions } = BillStore.useStore();
   return (
@@ -80,6 +91,14 @@ export const BillListPage = () => {
         >
           集計実行
         </AggregateButton>
+        <SaveButton
+          type="button"
+          disabled={queries.isEmptyTotalRecords}
+          onClick={() => actions.saveTotalRecords()}
+          style={{ opacity: queries.isEmptyTotalRecords ? 0.5 : 1 }}
+        >
+          集計結果を保存
+        </SaveButton>
       </ImportArea>
       <ResultArea>
         <h2>集計結果</h2>
