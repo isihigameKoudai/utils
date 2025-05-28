@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { BRAND } from '../constants/brand';
 import { BillStore } from '../stores/billStore';
 import { styled } from '@/utils/ui/styled';
@@ -69,6 +71,22 @@ const SaveButton = styled('button')({
 
 export const BillListPage = () => {
   const { queries, actions } = BillStore.useStore();
+  
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (!queries.isEmptyTotalRecords) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+      return;
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [queries.isEmptyTotalRecords]);
+
   return (
     <Container>
       <ImportArea>
