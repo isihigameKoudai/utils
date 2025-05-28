@@ -15,12 +15,12 @@ import { Route as StableFluidsImport } from './../routes/stable-fluids'
 import { Route as ShaderImport } from './../routes/shader'
 import { Route as PlaygroundImport } from './../routes/playground'
 import { Route as MeltTheBorderImport } from './../routes/melt-the-border'
-import { Route as AggregateBillImport } from './../routes/aggregate-bill'
 import { Route as IndexImport } from './../routes/index'
 import { Route as ThreeDimensionIndexImport } from './../routes/three-dimension/index'
 import { Route as NoiseIndexImport } from './../routes/noise/index'
 import { Route as CryptoChartsIndexImport } from './../routes/crypto-charts/index'
 import { Route as AudioIndexImport } from './../routes/audio/index'
+import { Route as AggregateBillIndexImport } from './../routes/aggregate-bill/index'
 import { Route as ThreeDimensionShadowsImport } from './../routes/three-dimension/shadows'
 import { Route as ThreeDimensionShaderImport } from './../routes/three-dimension/shader'
 import { Route as ThreeDimensionParticleImport } from './../routes/three-dimension/particle'
@@ -68,12 +68,6 @@ const MeltTheBorderRoute = MeltTheBorderImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AggregateBillRoute = AggregateBillImport.update({
-  id: '/aggregate-bill',
-  path: '/aggregate-bill',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
@@ -101,6 +95,12 @@ const CryptoChartsIndexRoute = CryptoChartsIndexImport.update({
 const AudioIndexRoute = AudioIndexImport.update({
   id: '/audio/',
   path: '/audio/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AggregateBillIndexRoute = AggregateBillIndexImport.update({
+  id: '/aggregate-bill/',
+  path: '/aggregate-bill/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -234,13 +234,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/aggregate-bill': {
-      id: '/aggregate-bill'
-      path: '/aggregate-bill'
-      fullPath: '/aggregate-bill'
-      preLoaderRoute: typeof AggregateBillImport
       parentRoute: typeof rootRoute
     }
     '/melt-the-border': {
@@ -404,6 +397,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThreeDimensionShadowsImport
       parentRoute: typeof rootRoute
     }
+    '/aggregate-bill/': {
+      id: '/aggregate-bill/'
+      path: '/aggregate-bill'
+      fullPath: '/aggregate-bill'
+      preLoaderRoute: typeof AggregateBillIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/audio/': {
       id: '/audio/'
       path: '/audio'
@@ -446,7 +446,6 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/aggregate-bill': typeof AggregateBillRoute
   '/melt-the-border': typeof MeltTheBorderRoute
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
@@ -470,6 +469,7 @@ export interface FileRoutesByFullPath {
   '/three-dimension/particle': typeof ThreeDimensionParticleRoute
   '/three-dimension/shader': typeof ThreeDimensionShaderRoute
   '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute
+  '/aggregate-bill': typeof AggregateBillIndexRoute
   '/audio': typeof AudioIndexRoute
   '/crypto-charts': typeof CryptoChartsIndexRoute
   '/noise': typeof NoiseIndexRoute
@@ -479,7 +479,6 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/aggregate-bill': typeof AggregateBillRoute
   '/melt-the-border': typeof MeltTheBorderRoute
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
@@ -503,6 +502,7 @@ export interface FileRoutesByTo {
   '/three-dimension/particle': typeof ThreeDimensionParticleRoute
   '/three-dimension/shader': typeof ThreeDimensionShaderRoute
   '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute
+  '/aggregate-bill': typeof AggregateBillIndexRoute
   '/audio': typeof AudioIndexRoute
   '/crypto-charts': typeof CryptoChartsIndexRoute
   '/noise': typeof NoiseIndexRoute
@@ -513,7 +513,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/aggregate-bill': typeof AggregateBillRoute
   '/melt-the-border': typeof MeltTheBorderRoute
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
@@ -537,6 +536,7 @@ export interface FileRoutesById {
   '/three-dimension/particle': typeof ThreeDimensionParticleRoute
   '/three-dimension/shader': typeof ThreeDimensionShaderRoute
   '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute
+  '/aggregate-bill/': typeof AggregateBillIndexRoute
   '/audio/': typeof AudioIndexRoute
   '/crypto-charts/': typeof CryptoChartsIndexRoute
   '/noise/': typeof NoiseIndexRoute
@@ -548,7 +548,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/aggregate-bill'
     | '/melt-the-border'
     | '/playground'
     | '/shader'
@@ -572,6 +571,7 @@ export interface FileRouteTypes {
     | '/three-dimension/particle'
     | '/three-dimension/shader'
     | '/three-dimension/shadows'
+    | '/aggregate-bill'
     | '/audio'
     | '/crypto-charts'
     | '/noise'
@@ -580,7 +580,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/aggregate-bill'
     | '/melt-the-border'
     | '/playground'
     | '/shader'
@@ -604,6 +603,7 @@ export interface FileRouteTypes {
     | '/three-dimension/particle'
     | '/three-dimension/shader'
     | '/three-dimension/shadows'
+    | '/aggregate-bill'
     | '/audio'
     | '/crypto-charts'
     | '/noise'
@@ -612,7 +612,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/aggregate-bill'
     | '/melt-the-border'
     | '/playground'
     | '/shader'
@@ -636,6 +635,7 @@ export interface FileRouteTypes {
     | '/three-dimension/particle'
     | '/three-dimension/shader'
     | '/three-dimension/shadows'
+    | '/aggregate-bill/'
     | '/audio/'
     | '/crypto-charts/'
     | '/noise/'
@@ -646,7 +646,6 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AggregateBillRoute: typeof AggregateBillRoute
   MeltTheBorderRoute: typeof MeltTheBorderRoute
   PlaygroundRoute: typeof PlaygroundRoute
   ShaderRoute: typeof ShaderRoute
@@ -670,6 +669,7 @@ export interface RootRouteChildren {
   ThreeDimensionParticleRoute: typeof ThreeDimensionParticleRoute
   ThreeDimensionShaderRoute: typeof ThreeDimensionShaderRoute
   ThreeDimensionShadowsRoute: typeof ThreeDimensionShadowsRoute
+  AggregateBillIndexRoute: typeof AggregateBillIndexRoute
   AudioIndexRoute: typeof AudioIndexRoute
   CryptoChartsIndexRoute: typeof CryptoChartsIndexRoute
   NoiseIndexRoute: typeof NoiseIndexRoute
@@ -679,7 +679,6 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AggregateBillRoute: AggregateBillRoute,
   MeltTheBorderRoute: MeltTheBorderRoute,
   PlaygroundRoute: PlaygroundRoute,
   ShaderRoute: ShaderRoute,
@@ -703,6 +702,7 @@ const rootRouteChildren: RootRouteChildren = {
   ThreeDimensionParticleRoute: ThreeDimensionParticleRoute,
   ThreeDimensionShaderRoute: ThreeDimensionShaderRoute,
   ThreeDimensionShadowsRoute: ThreeDimensionShadowsRoute,
+  AggregateBillIndexRoute: AggregateBillIndexRoute,
   AudioIndexRoute: AudioIndexRoute,
   CryptoChartsIndexRoute: CryptoChartsIndexRoute,
   NoiseIndexRoute: NoiseIndexRoute,
@@ -721,7 +721,6 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/aggregate-bill",
         "/melt-the-border",
         "/playground",
         "/shader",
@@ -745,6 +744,7 @@ export const routeTree = rootRoute
         "/three-dimension/particle",
         "/three-dimension/shader",
         "/three-dimension/shadows",
+        "/aggregate-bill/",
         "/audio/",
         "/crypto-charts/",
         "/noise/",
@@ -754,9 +754,6 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/aggregate-bill": {
-      "filePath": "aggregate-bill.tsx"
     },
     "/melt-the-border": {
       "filePath": "melt-the-border.tsx"
@@ -826,6 +823,9 @@ export const routeTree = rootRoute
     },
     "/three-dimension/shadows": {
       "filePath": "three-dimension/shadows.tsx"
+    },
+    "/aggregate-bill/": {
+      "filePath": "aggregate-bill/index.tsx"
     },
     "/audio/": {
       "filePath": "audio/index.tsx"
