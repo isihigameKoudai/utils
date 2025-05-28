@@ -40,6 +40,7 @@ import { Route as NoiseFbmImport } from './../routes/noise/fbm'
 import { Route as NoiseCellularImport } from './../routes/noise/cellular'
 import { Route as AudioSpeechImport } from './../routes/audio/speech'
 import { Route as AudioMicImport } from './../routes/audio/mic'
+import { Route as AggregateBillSummaryImport } from './../routes/aggregate-bill/summary'
 import { Route as CryptoChartsMultiTokenImport } from './../routes/crypto-charts/multi/$token'
 
 // Create/Update Routes
@@ -219,6 +220,12 @@ const AudioMicRoute = AudioMicImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AggregateBillSummaryRoute = AggregateBillSummaryImport.update({
+  id: '/aggregate-bill/summary',
+  path: '/aggregate-bill/summary',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const CryptoChartsMultiTokenRoute = CryptoChartsMultiTokenImport.update({
   id: '/crypto-charts/multi/$token',
   path: '/crypto-charts/multi/$token',
@@ -262,6 +269,13 @@ declare module '@tanstack/react-router' {
       path: '/stable-fluids'
       fullPath: '/stable-fluids'
       preLoaderRoute: typeof StableFluidsImport
+      parentRoute: typeof rootRoute
+    }
+    '/aggregate-bill/summary': {
+      id: '/aggregate-bill/summary'
+      path: '/aggregate-bill/summary'
+      fullPath: '/aggregate-bill/summary'
+      preLoaderRoute: typeof AggregateBillSummaryImport
       parentRoute: typeof rootRoute
     }
     '/audio/mic': {
@@ -450,6 +464,7 @@ export interface FileRoutesByFullPath {
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
   '/stable-fluids': typeof StableFluidsRoute
+  '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
   '/noise/cellular': typeof NoiseCellularRoute
@@ -483,6 +498,7 @@ export interface FileRoutesByTo {
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
   '/stable-fluids': typeof StableFluidsRoute
+  '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
   '/noise/cellular': typeof NoiseCellularRoute
@@ -517,6 +533,7 @@ export interface FileRoutesById {
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
   '/stable-fluids': typeof StableFluidsRoute
+  '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
   '/noise/cellular': typeof NoiseCellularRoute
@@ -552,6 +569,7 @@ export interface FileRouteTypes {
     | '/playground'
     | '/shader'
     | '/stable-fluids'
+    | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
     | '/noise/cellular'
@@ -584,6 +602,7 @@ export interface FileRouteTypes {
     | '/playground'
     | '/shader'
     | '/stable-fluids'
+    | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
     | '/noise/cellular'
@@ -616,6 +635,7 @@ export interface FileRouteTypes {
     | '/playground'
     | '/shader'
     | '/stable-fluids'
+    | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
     | '/noise/cellular'
@@ -650,6 +670,7 @@ export interface RootRouteChildren {
   PlaygroundRoute: typeof PlaygroundRoute
   ShaderRoute: typeof ShaderRoute
   StableFluidsRoute: typeof StableFluidsRoute
+  AggregateBillSummaryRoute: typeof AggregateBillSummaryRoute
   AudioMicRoute: typeof AudioMicRoute
   AudioSpeechRoute: typeof AudioSpeechRoute
   NoiseCellularRoute: typeof NoiseCellularRoute
@@ -683,6 +704,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlaygroundRoute: PlaygroundRoute,
   ShaderRoute: ShaderRoute,
   StableFluidsRoute: StableFluidsRoute,
+  AggregateBillSummaryRoute: AggregateBillSummaryRoute,
   AudioMicRoute: AudioMicRoute,
   AudioSpeechRoute: AudioSpeechRoute,
   NoiseCellularRoute: NoiseCellularRoute,
@@ -725,6 +747,7 @@ export const routeTree = rootRoute
         "/playground",
         "/shader",
         "/stable-fluids",
+        "/aggregate-bill/summary",
         "/audio/mic",
         "/audio/speech",
         "/noise/cellular",
@@ -766,6 +789,9 @@ export const routeTree = rootRoute
     },
     "/stable-fluids": {
       "filePath": "stable-fluids.tsx"
+    },
+    "/aggregate-bill/summary": {
+      "filePath": "aggregate-bill/summary.tsx"
     },
     "/audio/mic": {
       "filePath": "audio/mic.tsx"

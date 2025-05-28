@@ -3,7 +3,7 @@ import type { Brand } from '../types/brand';
 import { BRAND } from '../constants/brand';
 import { array2csv, csv2array, fetchFiles } from '@/utils/file';
 import { fromEntries } from '@/utils/object';
-import { CSV } from '@/utils/file/csv';
+import { CSV } from '@/utils/file/csv/csv';
 import { isTruthy } from '@/utils/guards';
 import { Bill, BillProps } from '../models/Bill';
 

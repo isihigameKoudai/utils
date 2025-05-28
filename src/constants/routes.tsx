@@ -129,5 +129,9 @@ export const routeList: IRoute[] = [
   {
     title: 'クレジットカード集計',
     path: '/aggregate-bill',
+  },
+  {
+    title: 'クレジットカード集計サマリー',
+    path: '/aggregate-bill/summary',
   }
 ];
