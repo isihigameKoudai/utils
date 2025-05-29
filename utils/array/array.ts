@@ -67,23 +67,13 @@ export const sortByKey = <T = any>(arr: T[], key: keyof T, order: 'desc' | 'asc'
  * keyごとに並び替えをし、同じkeyのvalueを合計する
  * 
  * ex: sumByKey([
- *  { key: 'a', value: 1 },
- *  { key: 'b', value: 2 },
- *  { key: 'a', value: 3 }
+ *  { text: 'a', amount: 1, num: 10 },
+ *  { text: 'b', amount: 2, num: 10 },
+ *  { text: 'a', amount: 3, num: 10 }
  * ])
  * => [
- *  { key: 'a', value: 4 },
- *  { key: 'b', value: 2 }
+ *  { text: 'a', amount: 4 },
+ *  { text: 'b', amount: 2 }
  * ]
  */
-export const sumByKey = <T extends ListItem>(array: ListItem[]): T[] => {
-  type MapValue = Omit<T, 'key'>;
-  const map = new Map<string, Omit<T,'key'>>();
-  array.forEach(({ key, value: valueOrigin, ...others}) => {
-    const currentValue = map.get(key);
-    const value = currentValue ? currentValue.value + valueOrigin : valueOrigin;
-    map.set(key, { value, ...others }as MapValue);
-  });
-
-  return Array.from(map).map(([key, value]) => ({ key, ...value }) as T);
-}
+export const sumByKey = <T = any>(array: T[], key: keyof T) => {}
