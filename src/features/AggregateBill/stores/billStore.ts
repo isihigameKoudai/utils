@@ -103,6 +103,6 @@ export const BillStore = defineStore({
         console.error('CSVファイルの保存に失敗しました:', error);
         throw error;
       }
-    }
+    },
   },
 });

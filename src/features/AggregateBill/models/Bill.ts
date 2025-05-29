@@ -59,6 +59,9 @@ export class Bill {
   }
 
   static isEmpty(props: [string, string, string]): boolean {
+    if(props.length !== 3) {
+      return true;
+    }
     return !isTruthy(props[0]) || !isTruthy(props[1]);
   }
 }

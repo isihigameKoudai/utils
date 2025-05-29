@@ -50,11 +50,8 @@ export const unique = (arr: (number | string | undefined)[]) => [
  *  { key: 'b', value: 2 }
  * ]
  */
-type ListItem = { key: string; value: number };
-export const sortByKey = <T extends ListItem>(arr: T[],orderKey?: keyof T, orderOrigin?: 'desc' | 'asc'): T[] => {
-  const key = orderKey || 'key';
-  const order = orderOrigin || 'desc';
-  
+export type ListItem = { key: string; value: number };
+export const sortByKey = <T = any>(arr: T[], key: keyof T, order: 'desc' | 'asc'): T[] => {  
   return arr.sort((a, b) => {
     if (a[key] < b[key]) {
       return order === 'desc' ? 1 : -1;
