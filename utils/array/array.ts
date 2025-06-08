@@ -63,6 +63,12 @@ export const sortByKey = <T = any>(arr: T[], key: keyof T, order: 'desc' | 'asc'
   });
 }
 
+type SumResult<T, K extends keyof T, N extends keyof T> = {
+  [P in K]: T[K]
+} & {
+  [P in N]: number
+}
+
 /**
  * keyごとに並び替えをし、同じkeyのvalueを合計する
  * 
@@ -70,10 +76,27 @@ export const sortByKey = <T = any>(arr: T[], key: keyof T, order: 'desc' | 'asc'
  *  { text: 'a', amount: 1, num: 10 },
  *  { text: 'b', amount: 2, num: 10 },
  *  { text: 'a', amount: 3, num: 10 }
- * ])
+ * ], {
+ *  orderKey: 'text',
+ *  numKey: 'amount'
+ * })
  * => [
  *  { text: 'a', amount: 4 },
  *  { text: 'b', amount: 2 }
  * ]
  */
-export const sumByKey = <T = any>(array: T[], key: keyof T) => {}
+export const sumByKey = <T = any>(array: T[], { orderKey, numKey }: { orderKey: keyof T, numKey: keyof T }): {
+  [key in string]: T[keyof T] | number;
+}[] => {
+  const map = new Map<T[keyof T], { [key in string]: T[keyof T] | number }>();
+  array.forEach((item) => {
+    const keyValue = item[orderKey];
+    const existingItem = map.get(keyValue);
+    if (existingItem) {
+      map.set(keyValue, { ...existingItem, [numKey]: existingItem[numKey] + item[numKey] });
+    } else {
+      map.set(keyValue, { [orderKey]: item[orderKey], [numKey]: item[numKey] });
+    }
+  });
+  return Array.from(map.values());
+}

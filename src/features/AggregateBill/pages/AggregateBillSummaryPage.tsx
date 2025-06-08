@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { styled } from '@/utils/ui/styled';
 import { BillSummaryStore } from '../stores/billSummaryStore';
 import { BillTable } from '../components/BillTable';
-import { SummaryTable } from '../components/SummaryTable';
 import type { SortKey } from '../stores/type';
 
 const Container = styled('div')({
