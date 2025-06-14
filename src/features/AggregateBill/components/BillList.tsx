@@ -22,6 +22,14 @@ const Th = styled('th')({
   }
 });
 
+const Tr = styled('tr')({
+  $nest: {
+    '&:hover': {
+      backgroundColor: '#f5f5f5',
+    }
+  }
+});
+
 const Td = styled('td')({
   padding: '0.75rem',
   borderBottom: '1px solid #e0e0e0',
@@ -51,7 +59,7 @@ export const BillList = ({ bills }: Props) => {
     }
   };
 
-  const sortedBills = [...bills].sort((a, b) => {
+  const sortedBills = bills.sort((a, b) => {
     const multiplier = sortOrder === 'asc' ? 1 : -1;
     switch (sortKey) {
       case 'date':
@@ -81,12 +89,17 @@ export const BillList = ({ bills }: Props) => {
       </thead>
       <tbody>
         {sortedBills.map((bill, index) => (
-          <tr key={index}>
+          <Tr key={index}>
             <Td>{bill.dateLabel}</Td>
             <Td style={{ textAlign: 'right' }}>{bill.amountLabel}</Td>
             <Td>{bill.store}</Td>
-          </tr>
+          </Tr>
         ))}
+        <Tr>
+          <Td>合計</Td>
+          <Td style={{ textAlign: 'right' }}>{sortedBills.reduce((acc, bill) => acc + bill.amount, 0).toLocaleString()}</Td>
+          <Td></Td>
+        </Tr>
       </tbody>
     </Table>
   );

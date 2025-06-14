@@ -2,13 +2,15 @@ import { defineStore } from '@/utils/i-state';
 import { Bill, BillProps } from '../models/Bill';
 import { csv2array, fetchFiles } from '@/utils/file/file';
 import type { SortKey, SortOrder } from './type';
+import { Dayjs } from 'dayjs';
 
 type BillSummaryState = {
   summaryRecords: BillProps[];
   sort: {
     target: SortKey;
     order: SortOrder;
-  }
+  };
+  isGrouped: boolean;
 }
 
 const initialState: BillSummaryState = {
@@ -17,21 +19,50 @@ const initialState: BillSummaryState = {
     target: 'date',
     order: 'desc',
   },
+  isGrouped: false,
 };
 
 export const BillSummaryStore = defineStore({
   state: initialState,
   queries: {
     sort: (state) => state.sort,
+    isGrouped: (state) => state.isGrouped,
     summaryRecords: (state) => {
       const records = state.summaryRecords
-        // title行を削除
         .slice(1)
         .filter(record => !Bill.isEmpty(record))
         .map(record => new Bill(record));
       
+      if (state.isGrouped) {
+        const groupedRecords = records.reduce((acc, record) => {
+          const store = record.store;
+          const existingRecord = acc[store];
+          
+          return {
+            ...acc,
+            [store]: existingRecord
+              ? {
+                  date: record.date,
+                  store,
+                  amount: existingRecord.amount + record.amount,
+                }
+              : {
+                  date: record.date,
+                  store,
+                  amount: record.amount,
+                },
+          };
+        }, {} as Record<string, { date: Dayjs; store: string; amount: number }>);
+        
+        return Object.values(groupedRecords)
+          .map(record => new Bill([
+            record.date.format('YYYY-MM-DD'),
+            record.store,
+            record.amount.toString(),
+          ]));
+      }
+      
       return records;
-      // return sortByKey(records, state.sort.target, state.sort.order);
     },
     isEmptySummaryRecords: (state) => state.summaryRecords.length <= 0,
   },
@@ -52,6 +83,9 @@ export const BillSummaryStore = defineStore({
     },
     setSort({ dispatch }, payload: BillSummaryState['sort']) {
       dispatch('sort', payload);
+    },
+    toggleGrouping({ dispatch, state }) {
+      dispatch('isGrouped', !state.isGrouped);
     }
   },
 }); 

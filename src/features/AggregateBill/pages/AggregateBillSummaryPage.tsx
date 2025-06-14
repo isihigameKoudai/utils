@@ -11,7 +11,13 @@ const Container = styled('div')({
   boxSizing: 'border-box',
 });
 
-const ImportButton = styled('button')({
+const ButtonGroup = styled('div')({
+  display: 'flex',
+  gap: '1rem',
+  marginBottom: '1rem',
+});
+
+const Button = styled('button')({
   padding: '0.5rem 1rem',
   backgroundColor: '#4a90e2',
   color: 'white',
@@ -19,7 +25,9 @@ const ImportButton = styled('button')({
   borderRadius: '4px',
   cursor: 'pointer',
   fontSize: '1rem',
-  marginBottom: '1rem',
+  '&.active': {
+    backgroundColor: '#2c5282',
+  },
 });
 
 const AggregateBillSummaryPage = () => {
@@ -33,14 +41,27 @@ const AggregateBillSummaryPage = () => {
     }
   };
 
+  const handleToggleGrouping = () => {
+    actions.toggleGrouping();
+  };
+
   return (
     <>
       <Header />
       <Container>
         <h2>集計結果一覧</h2>
-        <ImportButton type="button" onClick={handleImport}>
-          CSVファイルを読み込む
-        </ImportButton>
+        <ButtonGroup>
+          <Button type="button" onClick={handleImport}>
+            CSVファイルを読み込む
+          </Button>
+          <Button 
+            type="button" 
+            onClick={handleToggleGrouping}
+            className={queries.isGrouped ? 'active' : ''}
+          >
+            {queries.isGrouped ? '個別表示' : '名前ごとに集計'}
+          </Button>
+        </ButtonGroup>
         {
           queries.isEmptySummaryRecords ? (
             <div>データがありません</div>
