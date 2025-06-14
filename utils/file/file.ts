@@ -50,6 +50,43 @@ export const csv2json = <T = Record<string, string>>(csv: string): T[] => {
   ) as T[];
 }
 
+/**
+ * @example
+ * ex1:
+ * const csv1 = 'name,amount,date\nAlice,100,2021-01-01\nBob,200,2021-01-02\n';
+ * const csv2 = 'name,amount,date\nAlice,200,2022-01-01\nBob,300,2024-01-02\n';
+ * const mergedCsv = mergeCsvs([csv1, csv2]);
+ * => [
+ *  ['name', 'amount', 'date'],
+ *  ['Alice', '100', '2021-01-01'],
+ *  ['Bob', '200', '2021-01-02'],
+ *  ['Alice', '200', '2022-01-01'],
+ *  ['Bob', '300', '2024-01-02'],
+ * ];
+ */
+export const mergeStringifyCSVs = (_csvs: string[]): string[][] => {
+  if (_csvs.length === 0) return [];
+  const csvs = _csvs.map((csv) => csv2array(csv));
+  const header = csvs[0][0];
+  const rows = csvs.map((csv) => csv.slice(1));
+  return [header, ...rows.flat()];
+}
+
+/**
+ * @example
+ * ex1:
+ * const csv1 = 'name,amount,date\nAlice,100,2021-01-01\nBob,200,2021-01-02\n';
+ * const csv2 = 'name,amount,date\nAlice,200,2022-01-01\nBob,300,2024-01-02\n';
+ * const mergedCsv = mergeCsvs([csv1, csv2]);
+ * => 'name,amount,date\nAlice,100,2021-01-01\nBob,200,2021-01-02\nAlice,200,2022-01-01\nBob,300,2024-01-02\n'
+ */
+export const mergeArrayedCSVs = (_csvs: string[][][]): string[][] => {
+  if (_csvs.length === 0) return [];
+  const header = _csvs[0][0];
+  const rows = _csvs.map((csv) => csv.slice(1));
+  return [header, ...rows.flat()];
+}
+
 const initialOption: Option = {
   isMultiple: false,
   accept: '*',
@@ -94,7 +131,6 @@ export const fetchFiles: FetchFiles = ({
   $input.accept = accept;
   $input.onchange = (e: Event) => {
     const target = e.target as HTMLInputElement;
-    console.log(target);
     if (!target || !target.files) {
       reject({
         status: "error",
@@ -104,7 +140,6 @@ export const fetchFiles: FetchFiles = ({
     }
 
     const files = [...target.files];
-    console.log(files);
     resolve({
       status: "success",
       files,
