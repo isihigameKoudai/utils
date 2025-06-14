@@ -1,6 +1,6 @@
 export type Option = {
   isMultiple?: boolean;
-  accept?: '*' | 'image/*' | 'audio/*' | 'video/*' | 'application/*';
+  accept?: string;
 };
 
 export type FetchFiles = (option?: Option) => Promise<{

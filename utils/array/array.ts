@@ -50,11 +50,8 @@ export const unique = (arr: (number | string | undefined)[]) => [
  *  { key: 'b', value: 2 }
  * ]
  */
-type ListItem = { key: string; value: number };
-export const sortByKey = <T extends ListItem>(arr: T[],orderKey?: keyof T, orderOrigin?: 'desc' | 'asc'): T[] => {
-  const key = orderKey || 'key';
-  const order = orderOrigin || 'desc';
-  
+export type ListItem = { key: string; value: number };
+export const sortByKey = <T = any>(arr: T[], key: keyof T, order: 'desc' | 'asc'): T[] => {  
   return arr.sort((a, b) => {
     if (a[key] < b[key]) {
       return order === 'desc' ? 1 : -1;
@@ -66,27 +63,40 @@ export const sortByKey = <T extends ListItem>(arr: T[],orderKey?: keyof T, order
   });
 }
 
+type SumResult<T, K extends keyof T, N extends keyof T> = {
+  [P in K]: T[K]
+} & {
+  [P in N]: number
+}
+
 /**
  * keyごとに並び替えをし、同じkeyのvalueを合計する
  * 
  * ex: sumByKey([
- *  { key: 'a', value: 1 },
- *  { key: 'b', value: 2 },
- *  { key: 'a', value: 3 }
- * ])
+ *  { text: 'a', amount: 1, num: 10 },
+ *  { text: 'b', amount: 2, num: 10 },
+ *  { text: 'a', amount: 3, num: 10 }
+ * ], {
+ *  orderKey: 'text',
+ *  numKey: 'amount'
+ * })
  * => [
- *  { key: 'a', value: 4 },
- *  { key: 'b', value: 2 }
+ *  { text: 'a', amount: 4 },
+ *  { text: 'b', amount: 2 }
  * ]
  */
-export const sumByKey = <T extends ListItem>(array: ListItem[]): T[] => {
-  type MapValue = Omit<T, 'key'>;
-  const map = new Map<string, Omit<T,'key'>>();
-  array.forEach(({ key, value: valueOrigin, ...others}) => {
-    const currentValue = map.get(key);
-    const value = currentValue ? currentValue.value + valueOrigin : valueOrigin;
-    map.set(key, { value, ...others }as MapValue);
+export const sumByKey = <T = any>(array: T[], { orderKey, numKey }: { orderKey: keyof T, numKey: keyof T }): {
+  [key in string]: T[keyof T] | number;
+}[] => {
+  const map = new Map<T[keyof T], { [key in string]: T[keyof T] | number }>();
+  array.forEach((item) => {
+    const keyValue = item[orderKey];
+    const existingItem = map.get(keyValue);
+    if (existingItem) {
+      map.set(keyValue, { ...existingItem, [numKey]: existingItem[numKey] + item[numKey] });
+    } else {
+      map.set(keyValue, { [orderKey]: item[orderKey], [numKey]: item[numKey] });
+    }
   });
-
-  return Array.from(map).map(([key, value]) => ({ key, ...value }) as T);
+  return Array.from(map.values());
 }
