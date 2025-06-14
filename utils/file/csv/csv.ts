@@ -45,8 +45,8 @@ export class CSV<C extends string = string> {
    */
   validate(csv: string[][]) {
     // カラムの数が一致しない場合
-    const isDiffColumnCount = csv.some((row) => row.length !== csv[0].length);
-    if (isDiffColumnCount) {
+    const hasDiffColumnCount = csv.some((row) => row.length !== csv[0].length);
+    if (hasDiffColumnCount) {
       throw new Error('The number of columns does not match');
     }
   }

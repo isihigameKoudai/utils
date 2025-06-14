@@ -1,7 +1,7 @@
 import { defineStore } from '@/utils/i-state';
 import type { Brand } from '../types/brand';
 import { BRAND } from '../constants/brand';
-import { array2csv, csv2array, fetchFiles } from '@/utils/file';
+import { array2csv, csv2array, fetchFiles, mergeCSVs } from '@/utils/file';
 import { fromEntries } from '@/utils/object';
 import { CSV } from '@/utils/file/csv/csv';
 import { isTruthy } from '@/utils/guards';
@@ -38,7 +38,7 @@ export const BillStore = defineStore({
     isEmptyTotalRecords: (state) => state.totalRecords.length <= 0,
   },
   actions: {
-    async fetchCSVRecords({ dispatch }, { brand }: { brand: Brand }) {
+    async fetchCSVFile({ dispatch }, { brand }: { brand: Brand }) {
       try {
         const { files } = await fetchFiles({
           isMultiple: true,
@@ -46,6 +46,23 @@ export const BillStore = defineStore({
         });
         const records = csv2array(await files[0].text());
         dispatch(brand, new CSV(records));
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async fetchCSVFiles({ dispatch }, { brand }: { brand: Brand }) {
+      try {
+        const { files } = await fetchFiles({
+          isMultiple: true,
+          accept: '.csv'
+        });
+        const records = await Promise.all(files.map(async file => csv2array(await file.text())));
+        const mergedRecords = mergeCSVs(records);
+        const hasDiffColumnCount = mergedRecords.some((row) => row.length !== mergedRecords[0].length);
+        if (hasDiffColumnCount) {
+          throw new Error('カラム数が一致しません');
+        }
+        dispatch(brand, new CSV(mergedRecords));
       } catch (error) {
         console.error(error);
       }

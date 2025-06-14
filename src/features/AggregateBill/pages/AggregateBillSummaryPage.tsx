@@ -3,6 +3,7 @@ import { styled } from '@/utils/ui/styled';
 import { BillSummaryStore } from '../stores/billSummaryStore';
 import { BillTable } from '../components/BillTable';
 import type { SortKey } from '../stores/type';
+import { Header } from '../components/Header';
 
 const Container = styled('div')({
   padding: '2rem',
@@ -10,12 +11,6 @@ const Container = styled('div')({
   boxSizing: 'border-box',
 });
 
-const SummarySection = styled('div')({
-  marginTop: '2rem',
-  padding: '1rem',
-  backgroundColor: '#f5f5f5',
-  borderRadius: '4px',
-});
 
 const AggregateBillSummaryPage = () => {
   const { queries, actions } = BillSummaryStore.useStore();
@@ -41,16 +36,19 @@ const AggregateBillSummaryPage = () => {
   }
 
   return (
-    <Container>
-      <h2>集計結果一覧</h2>
-      <BillTable
-        bills={queries.summaryRecords}
-        sortKey={queries.sort.target}
-        sortOrder={queries.sort.order}
-        onSort={handleSort}
-        formatAmount={formatAmount}
-      />
-    </Container>
+    <>
+      <Header />
+      <Container>
+        <h2>集計結果一覧</h2>
+        <BillTable
+          bills={queries.summaryRecords}
+          sortKey={queries.sort.target}
+          sortOrder={queries.sort.order}
+          onSort={handleSort}
+          formatAmount={formatAmount}
+        />
+      </Container>
+    </>
   );
 };
 

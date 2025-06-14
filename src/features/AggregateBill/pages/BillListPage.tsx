@@ -4,6 +4,7 @@ import { BRAND } from '../constants/brand';
 import { BillStore } from '../stores/billStore';
 import { styled } from '@/utils/ui/styled';
 import { BillList } from '../components/BillList';
+import { Header } from '../components/Header';
 
 const Container = styled('div')({
   display: 'flex',
@@ -88,40 +89,43 @@ export const BillListPage = () => {
   }, [queries.isEmptyTotalRecords]);
 
   return (
-    <Container>
-      <ImportArea>
-        <h2>CSV取り込み</h2>
-        {Object.values(BRAND).map(brand => (
-          <BrandFileOpener key={brand.value}>
-            <ImportButton type="button" onClick={() => actions.fetchCSVRecords({ brand: brand.value })}>
-              {brand.label}CSV取り込み
-            </ImportButton>
-            {queries[`${brand.value}Records`]?.value && (
-              <ImportedLabel>✓ 取り込み済み</ImportedLabel>
-            )}
-          </BrandFileOpener>
-        ))}
-        <AggregateButton
-          type="button"
-          disabled={queries.isEmptyAllRecords}
-          onClick={() => actions.adaptTotalRecords()}
-          style={{ opacity: queries.isEmptyAllRecords ? 0.5 : 1 }}
-        >
-          集計実行
-        </AggregateButton>
-        <SaveButton
-          type="button"
-          disabled={queries.isEmptyTotalRecords}
-          onClick={() => actions.saveTotalRecords()}
-          style={{ opacity: queries.isEmptyTotalRecords ? 0.5 : 1 }}
-        >
-          集計結果を保存
-        </SaveButton>
-      </ImportArea>
-      <ResultArea>
-        <h2>集計結果</h2>
-        <BillList bills={queries.totalRecords} />
-      </ResultArea>
-    </Container>
+    <>
+      <Header />
+      <Container>
+        <ImportArea>
+          <h2>CSV取り込み</h2>
+          {Object.values(BRAND).map(brand => (
+            <BrandFileOpener key={brand.value}>
+              <ImportButton type="button" onClick={() => actions.fetchCSVFiles({ brand: brand.value })}>
+                {brand.label}CSV取り込み
+              </ImportButton>
+              {queries[`${brand.value}Records`]?.value && (
+                <ImportedLabel>✓ 取り込み済み</ImportedLabel>
+              )}
+            </BrandFileOpener>
+          ))}
+          <AggregateButton
+            type="button"
+            disabled={queries.isEmptyAllRecords}
+            onClick={() => actions.adaptTotalRecords()}
+            style={{ opacity: queries.isEmptyAllRecords ? 0.5 : 1 }}
+          >
+            集計実行
+          </AggregateButton>
+          <SaveButton
+            type="button"
+            disabled={queries.isEmptyTotalRecords}
+            onClick={() => actions.saveTotalRecords()}
+            style={{ opacity: queries.isEmptyTotalRecords ? 0.5 : 1 }}
+          >
+            集計結果を保存
+          </SaveButton>
+        </ImportArea>
+        <ResultArea>
+          <h2>集計結果</h2>
+          <BillList bills={queries.totalRecords} />
+        </ResultArea>
+      </Container>
+    </>
   );
 }; 

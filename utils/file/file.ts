@@ -87,6 +87,13 @@ export const mergeArrayedCSVs = (_csvs: string[][][]): string[][] => {
   return [header, ...rows.flat()];
 }
 
+export const mergeCSVs = (csvs: string[] | string[][][]): string[][] => {
+  if (Array.isArray(csvs[0])) {
+    return mergeArrayedCSVs(csvs as string[][][]);
+  }
+  return mergeStringifyCSVs(csvs as string[]);
+}
+
 const initialOption: Option = {
   isMultiple: false,
   accept: '*',
