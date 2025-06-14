@@ -5,6 +5,7 @@ import { isTruthy } from '../guards';
 /**
  * CSV形式のテキストを2次元配列に変換する
  * ex: csv2array('a,b,c\nd,e,f\n') => [['a','b','c'],['d','e','f']]
+ * ex: csv2array('"a","b","c"\nd,e,f\n') => [['a','b','c'],['d','e','f']]
  * 
  * @param csv 
  * @returns 
@@ -13,7 +14,7 @@ export const csv2array = (csv: string): string[][] => csv
   .replaceAll("\r", "")
   .split("\n")
   .filter(isTruthy)
-  .map((row) => row.split(","));
+  .map((row) => row.split(",").map(cell => cell.replace(/^"|"$/g, '')));
 
 /**
  * 2次元配列をCSV形式のテキストに変換する
