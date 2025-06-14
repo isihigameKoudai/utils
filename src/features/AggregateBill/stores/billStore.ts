@@ -38,18 +38,6 @@ export const BillStore = defineStore({
     isEmptyTotalRecords: (state) => state.totalRecords.length <= 0,
   },
   actions: {
-    async fetchCSVFile({ dispatch }, { brand }: { brand: Brand }) {
-      try {
-        const { files } = await fetchFiles({
-          isMultiple: true,
-          accept: '.csv'
-        });
-        const records = csv2array(await files[0].text());
-        dispatch(brand, new CSV(records));
-      } catch (error) {
-        console.error(error);
-      }
-    },
     async fetchCSVFiles({ dispatch }, { brand }: { brand: Brand }) {
       try {
         const { files } = await fetchFiles({

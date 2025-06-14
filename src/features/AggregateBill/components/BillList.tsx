@@ -9,7 +9,7 @@ const Table = styled('table')({
 });
 
 const Th = styled('th')({
-  padding: '0.75rem',
+  padding: '8px 12px',
   textAlign: 'left',
   borderBottom: '2px solid #e0e0e0',
   backgroundColor: '#f5f5f5',

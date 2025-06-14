@@ -1,7 +1,6 @@
 import { defineStore } from '@/utils/i-state';
 import { Bill, BillProps } from '../models/Bill';
-import { sortByKey, sumByKey } from '@/utils/array/array';
-import { csv2array } from '@/utils/file/file';
+import { csv2array, fetchFiles } from '@/utils/file/file';
 import type { SortKey, SortOrder } from './type';
 
 type BillSummaryState = {
@@ -26,20 +25,26 @@ export const BillSummaryStore = defineStore({
     sort: (state) => state.sort,
     summaryRecords: (state) => {
       const records = state.summaryRecords
+        // title行を削除
+        .slice(1)
         .filter(record => !Bill.isEmpty(record))
         .map(record => new Bill(record));
       
-      return sortByKey(records, state.sort.target, state.sort.order);
+      return records;
+      // return sortByKey(records, state.sort.target, state.sort.order);
     },
     isEmptySummaryRecords: (state) => state.summaryRecords.length <= 0,
   },
   actions: {
     async loadSummaryRecords({ dispatch }) {
       try {
-        const response = await fetch('/total_records.csv');
-        const text = await response.text();
-        const records = csv2array(text);
-        dispatch('summaryRecords', records.slice(1) as BillSummaryState['summaryRecords']);
+        const { files } = await fetchFiles({
+          isMultiple: false,
+          accept: '.csv'
+        });
+        const records = csv2array(await files[0].text());
+        console.log(records);
+        dispatch('summaryRecords', records as BillProps[]);
       } catch (error) {
         console.error('CSVファイルの読み込みに失敗しました:', error);
         throw error;
