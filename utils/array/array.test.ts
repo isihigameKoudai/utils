@@ -50,9 +50,10 @@ describe('Array functions', () => {
     ];
 
     it('デフォルトの降順でkeyによってソートする', () => {
-      expect(sortByKey(testArray)).toEqual([
+      expect(sortByKey(testArray, 'key', 'desc')).toEqual([
         { key: 'b', value: 2 },
         { key: 'a', value: 1 },
+
         { key: 'a', value: 3, foo: 'bar' }
       ]);
     });
@@ -74,20 +75,20 @@ describe('Array functions', () => {
     });
 
     it('空の配列をソートする', () => {
-      expect(sortByKey([])).toEqual([]);
+      expect(sortByKey([], 'key', 'desc')).toEqual([]);
     });
   });
 
   describe('sumByKey', () => {
     it('同じkeyを持つ要素のvalueを合計する', () => {
       const input = [
-        { key: 'a', value: 1 },
-        { key: 'b', value: 2 },
-        { key: 'a', value: 3 }
+        { text: 'a', amount: 1, num: 10 },
+        { text: 'b', amount: 2 },
+        { text: 'a', amount: 3, num: 11 }
       ];
-      expect(sumByKey(input)).toEqual([
-        { key: 'a', value: 4 },
-        { key: 'b', value: 2 }
+      expect(sumByKey(input, { orderKey: 'text', numKey: 'amount' })).toEqual([
+        { text: 'a', amount: 4 },
+        { text: 'b', amount: 2 }
       ]);
     });
 
@@ -97,14 +98,14 @@ describe('Array functions', () => {
         { key: 'b', value: 2, extra: 'y' },
         { key: 'a', value: 3, extra: 'z' }
       ];
-      expect(sumByKey(input)).toEqual([
+      expect(sumByKey(input, { orderKey: 'key', numKey: 'value' })).toEqual([
         { key: 'a', value: 4, extra: 'z' },
         { key: 'b', value: 2, extra: 'y' }
       ]);
     });
 
     it('空の配列を処理する', () => {
-      expect(sumByKey([])).toEqual([]);
+      expect(sumByKey([], { orderKey: 'key', numKey: 'value' })).toEqual([]);
     });
 
     it('すべての要素が一意のkeyを持つ場合', () => {
@@ -113,7 +114,7 @@ describe('Array functions', () => {
         { key: 'b', value: 2 },
         { key: 'c', value: 3 }
       ];
-      expect(sumByKey(input)).toEqual(input);
+      expect(sumByKey(input, { orderKey: 'key', numKey: 'value' })).toEqual(input);
     });
   });
 });
