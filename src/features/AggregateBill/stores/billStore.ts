@@ -48,6 +48,8 @@ export const BillStore = defineStore({
         const mergedRecords = mergeCSVs(records);
         const hasDiffColumnCount = mergedRecords.some((row) => row.length !== mergedRecords[0].length);
         if (hasDiffColumnCount) {
+          const invalidRecords = mergedRecords.filter(row => row.length !== mergedRecords[0].length);
+          console.table(invalidRecords);
           throw new Error('カラム数が一致しません');
         }
         dispatch(brand, new CSV(mergedRecords));
