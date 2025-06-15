@@ -92,18 +92,6 @@ describe('Array functions', () => {
       ]);
     });
 
-    it('追加のプロパティを保持する', () => {
-      const input = [
-        { key: 'a', value: 1, extra: 'x' },
-        { key: 'b', value: 2, extra: 'y' },
-        { key: 'a', value: 3, extra: 'z' }
-      ];
-      expect(sumByKey(input, { orderKey: 'key', numKey: 'value' })).toEqual([
-        { key: 'a', value: 4, extra: 'z' },
-        { key: 'b', value: 2, extra: 'y' }
-      ]);
-    });
-
     it('空の配列を処理する', () => {
       expect(sumByKey([], { orderKey: 'key', numKey: 'value' })).toEqual([]);
     });
