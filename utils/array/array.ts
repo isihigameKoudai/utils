@@ -102,10 +102,8 @@ export const sumByKey = <T = any>(
   // Mapを配列に変換し、キーでソート
   return Array.from(sumMap.entries())
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([key, value]) => {
-      const result = {} as { [key in string]: T[keyof T] | number };
-      result[orderKey as string] = key as T[keyof T];
-      result[numKey as string] = value;
-      return result;
-    });
+    .map(([key, value]) => ({
+      [String(orderKey)]: key as T[keyof T],
+      [String(numKey)]: value as number
+    }));
 }
