@@ -25,8 +25,10 @@ const Button = styled('button')({
   borderRadius: '4px',
   cursor: 'pointer',
   fontSize: '1rem',
-  '&.active': {
-    backgroundColor: '#2c5282',
+  $nest: {
+    '&.active': {
+      backgroundColor: '#2c5282',
+    },
   },
 });
 
@@ -41,8 +43,8 @@ const AggregateBillSummaryPage = () => {
     }
   };
 
-  const handleToggleGrouping = () => {
-    actions.toggleGrouping();
+  const handleGroupingChange = (type: 'none' | 'store' | 'month') => {
+    actions.setGroupingType(type);
   };
 
   return (
@@ -56,10 +58,24 @@ const AggregateBillSummaryPage = () => {
           </Button>
           <Button 
             type="button" 
-            onClick={handleToggleGrouping}
-            className={queries.isGrouped ? 'active' : ''}
+            onClick={() => handleGroupingChange('none')}
+            className={queries.groupingType === 'none' ? 'active' : ''}
           >
-            {queries.isGrouped ? '個別表示' : '名前ごとに集計'}
+            個別表示
+          </Button>
+          <Button 
+            type="button" 
+            onClick={() => handleGroupingChange('store')}
+            className={queries.groupingType === 'store' ? 'active' : ''}
+          >
+            店舗ごとに集計
+          </Button>
+          <Button 
+            type="button" 
+            onClick={() => handleGroupingChange('month')}
+            className={queries.groupingType === 'month' ? 'active' : ''}
+          >
+            月ごとに集計
           </Button>
         </ButtonGroup>
         {

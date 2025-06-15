@@ -4,13 +4,15 @@ import { csv2array, fetchFiles } from '@/utils/file/file';
 import type { SortKey, SortOrder } from './type';
 import { Dayjs } from 'dayjs';
 
+type GroupingType = 'none' | 'store' | 'month';
+
 type BillSummaryState = {
   summaryRecords: BillProps[];
   sort: {
     target: SortKey;
     order: SortOrder;
   };
-  isGrouped: boolean;
+  groupingType: GroupingType;
 }
 
 const initialState: BillSummaryState = {
@@ -19,50 +21,61 @@ const initialState: BillSummaryState = {
     target: 'date',
     order: 'desc',
   },
-  isGrouped: false,
+  groupingType: 'none',
 };
 
 export const BillSummaryStore = defineStore({
   state: initialState,
   queries: {
     sort: (state) => state.sort,
-    isGrouped: (state) => state.isGrouped,
+    groupingType: (state) => state.groupingType,
     summaryRecords: (state) => {
       const records = state.summaryRecords
         .slice(1)
         .filter(record => !Bill.isEmpty(record))
         .map(record => new Bill(record));
       
-      if (state.isGrouped) {
-        const groupedRecords = records.reduce((acc, record) => {
-          const store = record.store;
-          const existingRecord = acc[store];
-          
-          return {
-            ...acc,
-            [store]: existingRecord
-              ? {
-                  date: record.date,
-                  store,
-                  amount: existingRecord.amount + record.amount,
-                }
-              : {
-                  date: record.date,
-                  store,
-                  amount: record.amount,
-                },
-          };
-        }, {} as Record<string, { date: Dayjs; store: string; amount: number }>);
-        
-        return Object.values(groupedRecords)
-          .map(record => new Bill([
-            record.date.format('YYYY-MM-DD'),
-            record.store,
-            record.amount.toString(),
-          ]));
+      if (state.groupingType === 'none') {
+        return records;
       }
-      
-      return records;
+
+      const groupedRecords = records.reduce((acc, record) => {
+        let key: string;
+        switch (state.groupingType) {
+          case 'store':
+            key = record.store;
+            break;
+          case 'month':
+            key = record.date.format('YYYY-MM');
+            break;
+          default:
+            key = record.store;
+        }
+
+        const existingRecord = acc[key];
+        
+        return {
+          ...acc,
+          [key]: existingRecord
+            ? {
+                date: record.date,
+                store: state.groupingType === 'store' ? key : '集計',
+                amount: existingRecord.amount + record.amount,
+              }
+            : {
+                date: record.date,
+                store: state.groupingType === 'store' ? key : '集計',
+                amount: record.amount,
+              },
+        };
+      }, {} as Record<string, { date: Dayjs; store: string; amount: number }>);
+
+      return Object.values(groupedRecords)
+        .map(record => new Bill([
+          record.date.format('YYYY-MM-DD'),
+          record.store,
+          record.amount.toString(),
+        ]));
     },
     isEmptySummaryRecords: (state) => state.summaryRecords.length <= 0,
   },
@@ -74,7 +87,6 @@ export const BillSummaryStore = defineStore({
           accept: '.csv'
         });
         const records = csv2array(await files[0].text());
-        console.log(records);
         dispatch('summaryRecords', records as BillProps[]);
       } catch (error) {
         console.error('CSVファイルの読み込みに失敗しました:', error);
@@ -84,8 +96,8 @@ export const BillSummaryStore = defineStore({
     setSort({ dispatch }, payload: BillSummaryState['sort']) {
       dispatch('sort', payload);
     },
-    toggleGrouping({ dispatch, state }) {
-      dispatch('isGrouped', !state.isGrouped);
+    setGroupingType({ dispatch }, groupingType: GroupingType) {
+      dispatch('groupingType', groupingType);
     }
   },
 }); 

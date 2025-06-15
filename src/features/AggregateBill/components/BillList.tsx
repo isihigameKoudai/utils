@@ -95,7 +95,7 @@ export const BillList = ({ bills }: Props) => {
             <Td>{bill.store}</Td>
           </Tr>
         ))}
-        <Tr>
+        <Tr style={{ backgroundColor: '#eee', borderTop: '2px solid #aaa' }}>
           <Td>合計</Td>
           <Td style={{ textAlign: 'right' }}>{sortedBills.reduce((acc, bill) => acc + bill.amount, 0).toLocaleString()}</Td>
           <Td></Td>
