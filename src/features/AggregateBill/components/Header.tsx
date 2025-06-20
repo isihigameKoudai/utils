@@ -30,7 +30,7 @@ export const Header = () => {
   return (
     <HeaderContainer>
       <Nav>
-        <StyledLink to="/aggregate-bill">集計結果</StyledLink>
+        <StyledLink to="/aggregate-bill">請求一覧</StyledLink>
         <StyledLink to="/aggregate-bill/summary">集計結果</StyledLink>
       </Nav>
     </HeaderContainer>
