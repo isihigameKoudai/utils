@@ -50,11 +50,8 @@ export const unique = (arr: (number | string | undefined)[]) => [
  *  { key: 'b', value: 2 }
  * ]
  */
-type ListItem = { key: string; value: number };
-export const sortByKey = <T extends ListItem>(arr: T[],orderKey?: keyof T, orderOrigin?: 'desc' | 'asc'): T[] => {
-  const key = orderKey || 'key';
-  const order = orderOrigin || 'desc';
-  
+export type ListItem = { key: string; value: number };
+export const sortByKey = <T = any>(arr: T[], key: keyof T, order: 'desc' | 'asc'): T[] => {  
   return arr.sort((a, b) => {
     if (a[key] < b[key]) {
       return order === 'desc' ? 1 : -1;
@@ -67,26 +64,46 @@ export const sortByKey = <T extends ListItem>(arr: T[],orderKey?: keyof T, order
 }
 
 /**
- * keyごとに並び替えをし、同じkeyのvalueを合計する
+ * 同じkeyのvalueを合計し、keyごとに並び替えをする
  * 
  * ex: sumByKey([
- *  { key: 'a', value: 1 },
- *  { key: 'b', value: 2 },
- *  { key: 'a', value: 3 }
- * ])
+ *  { text: 'a', amount: 1, num: 10 },
+ *  { text: 'b', amount: 2, num: 10 },
+ *  { text: 'a', amount: 3, num: 10 }
+ * ], {
+ *  orderKey: 'text',
+ *  numKey: 'amount'
+ * })
  * => [
- *  { key: 'a', value: 4 },
- *  { key: 'b', value: 2 }
+ *  { text: 'a', amount: 4 },
+ *  { text: 'b', amount: 2 }
  * ]
  */
-export const sumByKey = <T extends ListItem>(array: ListItem[]): T[] => {
-  type MapValue = Omit<T, 'key'>;
-  const map = new Map<string, Omit<T,'key'>>();
-  array.forEach(({ key, value: valueOrigin, ...others}) => {
-    const currentValue = map.get(key);
-    const value = currentValue ? currentValue.value + valueOrigin : valueOrigin;
-    map.set(key, { value, ...others }as MapValue);
+export const sumByKey = <T = any>(
+  array: T[],
+  { orderKey, numKey }: { orderKey: keyof T, numKey: keyof T }
+): {
+  [key in string]: T[keyof T] | number;
+}[] => {
+  // キーごとの合計を格納するMapを作成
+  const sumMap = new Map<string, number>();
+  
+  // 各要素を処理して合計を計算
+  array.forEach((item) => {
+    const key = String(item[orderKey]);
+    const value = Number(item[numKey]);
+    
+    if (!Number.isNaN(value)) {
+      const currentSum = sumMap.get(key) || 0;
+      sumMap.set(key, currentSum + value);
+    }
   });
 
-  return Array.from(map).map(([key, value]) => ({ key, ...value }) as T);
+  // Mapを配列に変換し、キーでソート
+  return Array.from(sumMap.entries())
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, value]) => ({
+      [String(orderKey)]: key as T[keyof T],
+      [String(numKey)]: value as number
+    }));
 }

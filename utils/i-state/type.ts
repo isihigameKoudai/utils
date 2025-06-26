@@ -1,36 +1,28 @@
 // Store作成時に設定値として注釈される型
-export type State = Record<string, any>;
+export type StateProps = Record<string, any>;
 
-export type Queries<S extends State> = Record<string, (state: S) => any>;
+export type QueriesProps<S extends StateProps> = Record<string, (state: S) => any>;
 
-type Context<S extends State, Q extends Queries<S>> = {
+export type Context<S extends StateProps, Q extends QueriesProps<S>> = {
   state: S;
-  queries: StoreQueries<Q>;
+  queries: Queries<Q>;
   dispatch: Dispatch<S>;
 };
 
-export type Actions<S extends State, Q extends Queries<S>> = {
+export type ActionsProps<S extends StateProps, Q extends QueriesProps<S>> = {
   [key: string]: (context: Context<S, Q>, ...args: any[]) => void | Promise<void>;
 };
 
-export type Dispatch<S extends State> = <K extends keyof S>(key: K, value: S[K]) => void;
+export type Dispatch<S extends StateProps> = <K extends keyof S>(key: K, value: S[K]) => void;
 
 // Storeから提供される型
 
-export type StoreQueries<Q extends Queries<any>> = {
+export type Queries<Q extends QueriesProps<any>> = {
   [K in keyof Q]: ReturnType<Q[K]>
 }
 
-export type StoreActions<S extends State, Q extends Queries<S>, A extends Actions<S, Q>> = {
-  [K in keyof A]: A[K] extends (context: any, ...args: infer P) => any 
+export type Actions<S extends StateProps, Q extends QueriesProps<S>, A extends ActionsProps<S, Q>> = {
+  [K in keyof A]: A[K] extends (context: Context<S, Q>, ...args: infer P) => any 
     ? (...args: P) => ReturnType<A[K]> 
     : never;
-};
-
-export type Store<S extends State, Q extends Queries<S>, A extends Actions<S, Q>> = {
-  useStore: () => {
-    state: S;
-    queries: StoreQueries<Q>;
-    actions: StoreActions<S, Q, A>;
-  };
 };
