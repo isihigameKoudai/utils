@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import MultiChart from '@/src/pages/CryptoCharts/multi'
+import MultiChart from '../../../features/CryptoCharts/pages/MultiChart'
 
 export const Route = createFileRoute('/crypto-charts/multi/$token')({
   component: MultiChart,
