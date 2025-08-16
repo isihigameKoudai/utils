@@ -193,4 +193,4 @@ const colorScheme = new PreferColorScheme();
 const initialTheme = colorScheme.isDark ? darkTheme : lightTheme;
 
 // テーマコンテナを作成
-export const CryptoTheme = createTheme(initialTheme);
+export const CryptoTheme = createTheme(initialTheme); 

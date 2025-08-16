@@ -1,6 +1,6 @@
 export class Media {
 
-  _stream: MediaStream | null;
+  private _stream: MediaStream | null;
 
   constructor() {
     this._stream = null;

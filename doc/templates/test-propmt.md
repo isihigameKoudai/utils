@@ -26,11 +26,6 @@ Generate robust and maintainable test code based on the specification of [functi
 ## Examples
 [Expected test cases and input/output examples.]
 
-## Process steps 1.
-1. create normal system tests 2.
-Create edge cases and anomaly tests 3.
-Use mocks and stubs as needed
-
 ## Exception handling
 - Test for invalid inputs and exceptions
 - Verify error handling

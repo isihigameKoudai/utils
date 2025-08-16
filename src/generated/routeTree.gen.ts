@@ -20,6 +20,7 @@ import { Route as ThreeDimensionIndexImport } from './../routes/three-dimension/
 import { Route as NoiseIndexImport } from './../routes/noise/index'
 import { Route as CryptoChartsIndexImport } from './../routes/crypto-charts/index'
 import { Route as AudioIndexImport } from './../routes/audio/index'
+import { Route as AggregateBillIndexImport } from './../routes/aggregate-bill/index'
 import { Route as ThreeDimensionShadowsImport } from './../routes/three-dimension/shadows'
 import { Route as ThreeDimensionShaderImport } from './../routes/three-dimension/shader'
 import { Route as ThreeDimensionParticleImport } from './../routes/three-dimension/particle'
@@ -39,6 +40,7 @@ import { Route as NoiseFbmImport } from './../routes/noise/fbm'
 import { Route as NoiseCellularImport } from './../routes/noise/cellular'
 import { Route as AudioSpeechImport } from './../routes/audio/speech'
 import { Route as AudioMicImport } from './../routes/audio/mic'
+import { Route as AggregateBillSummaryImport } from './../routes/aggregate-bill/summary'
 import { Route as CryptoChartsMultiTokenImport } from './../routes/crypto-charts/multi/$token'
 
 // Create/Update Routes
@@ -94,6 +96,12 @@ const CryptoChartsIndexRoute = CryptoChartsIndexImport.update({
 const AudioIndexRoute = AudioIndexImport.update({
   id: '/audio/',
   path: '/audio/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AggregateBillIndexRoute = AggregateBillIndexImport.update({
+  id: '/aggregate-bill/',
+  path: '/aggregate-bill/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -212,6 +220,12 @@ const AudioMicRoute = AudioMicImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AggregateBillSummaryRoute = AggregateBillSummaryImport.update({
+  id: '/aggregate-bill/summary',
+  path: '/aggregate-bill/summary',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const CryptoChartsMultiTokenRoute = CryptoChartsMultiTokenImport.update({
   id: '/crypto-charts/multi/$token',
   path: '/crypto-charts/multi/$token',
@@ -255,6 +269,13 @@ declare module '@tanstack/react-router' {
       path: '/stable-fluids'
       fullPath: '/stable-fluids'
       preLoaderRoute: typeof StableFluidsImport
+      parentRoute: typeof rootRoute
+    }
+    '/aggregate-bill/summary': {
+      id: '/aggregate-bill/summary'
+      path: '/aggregate-bill/summary'
+      fullPath: '/aggregate-bill/summary'
+      preLoaderRoute: typeof AggregateBillSummaryImport
       parentRoute: typeof rootRoute
     }
     '/audio/mic': {
@@ -390,6 +411,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThreeDimensionShadowsImport
       parentRoute: typeof rootRoute
     }
+    '/aggregate-bill/': {
+      id: '/aggregate-bill/'
+      path: '/aggregate-bill'
+      fullPath: '/aggregate-bill'
+      preLoaderRoute: typeof AggregateBillIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/audio/': {
       id: '/audio/'
       path: '/audio'
@@ -436,6 +464,7 @@ export interface FileRoutesByFullPath {
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
   '/stable-fluids': typeof StableFluidsRoute
+  '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
   '/noise/cellular': typeof NoiseCellularRoute
@@ -455,6 +484,7 @@ export interface FileRoutesByFullPath {
   '/three-dimension/particle': typeof ThreeDimensionParticleRoute
   '/three-dimension/shader': typeof ThreeDimensionShaderRoute
   '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute
+  '/aggregate-bill': typeof AggregateBillIndexRoute
   '/audio': typeof AudioIndexRoute
   '/crypto-charts': typeof CryptoChartsIndexRoute
   '/noise': typeof NoiseIndexRoute
@@ -468,6 +498,7 @@ export interface FileRoutesByTo {
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
   '/stable-fluids': typeof StableFluidsRoute
+  '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
   '/noise/cellular': typeof NoiseCellularRoute
@@ -487,6 +518,7 @@ export interface FileRoutesByTo {
   '/three-dimension/particle': typeof ThreeDimensionParticleRoute
   '/three-dimension/shader': typeof ThreeDimensionShaderRoute
   '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute
+  '/aggregate-bill': typeof AggregateBillIndexRoute
   '/audio': typeof AudioIndexRoute
   '/crypto-charts': typeof CryptoChartsIndexRoute
   '/noise': typeof NoiseIndexRoute
@@ -501,6 +533,7 @@ export interface FileRoutesById {
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
   '/stable-fluids': typeof StableFluidsRoute
+  '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
   '/noise/cellular': typeof NoiseCellularRoute
@@ -520,6 +553,7 @@ export interface FileRoutesById {
   '/three-dimension/particle': typeof ThreeDimensionParticleRoute
   '/three-dimension/shader': typeof ThreeDimensionShaderRoute
   '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute
+  '/aggregate-bill/': typeof AggregateBillIndexRoute
   '/audio/': typeof AudioIndexRoute
   '/crypto-charts/': typeof CryptoChartsIndexRoute
   '/noise/': typeof NoiseIndexRoute
@@ -535,6 +569,7 @@ export interface FileRouteTypes {
     | '/playground'
     | '/shader'
     | '/stable-fluids'
+    | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
     | '/noise/cellular'
@@ -554,6 +589,7 @@ export interface FileRouteTypes {
     | '/three-dimension/particle'
     | '/three-dimension/shader'
     | '/three-dimension/shadows'
+    | '/aggregate-bill'
     | '/audio'
     | '/crypto-charts'
     | '/noise'
@@ -566,6 +602,7 @@ export interface FileRouteTypes {
     | '/playground'
     | '/shader'
     | '/stable-fluids'
+    | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
     | '/noise/cellular'
@@ -585,6 +622,7 @@ export interface FileRouteTypes {
     | '/three-dimension/particle'
     | '/three-dimension/shader'
     | '/three-dimension/shadows'
+    | '/aggregate-bill'
     | '/audio'
     | '/crypto-charts'
     | '/noise'
@@ -597,6 +635,7 @@ export interface FileRouteTypes {
     | '/playground'
     | '/shader'
     | '/stable-fluids'
+    | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
     | '/noise/cellular'
@@ -616,6 +655,7 @@ export interface FileRouteTypes {
     | '/three-dimension/particle'
     | '/three-dimension/shader'
     | '/three-dimension/shadows'
+    | '/aggregate-bill/'
     | '/audio/'
     | '/crypto-charts/'
     | '/noise/'
@@ -630,6 +670,7 @@ export interface RootRouteChildren {
   PlaygroundRoute: typeof PlaygroundRoute
   ShaderRoute: typeof ShaderRoute
   StableFluidsRoute: typeof StableFluidsRoute
+  AggregateBillSummaryRoute: typeof AggregateBillSummaryRoute
   AudioMicRoute: typeof AudioMicRoute
   AudioSpeechRoute: typeof AudioSpeechRoute
   NoiseCellularRoute: typeof NoiseCellularRoute
@@ -649,6 +690,7 @@ export interface RootRouteChildren {
   ThreeDimensionParticleRoute: typeof ThreeDimensionParticleRoute
   ThreeDimensionShaderRoute: typeof ThreeDimensionShaderRoute
   ThreeDimensionShadowsRoute: typeof ThreeDimensionShadowsRoute
+  AggregateBillIndexRoute: typeof AggregateBillIndexRoute
   AudioIndexRoute: typeof AudioIndexRoute
   CryptoChartsIndexRoute: typeof CryptoChartsIndexRoute
   NoiseIndexRoute: typeof NoiseIndexRoute
@@ -662,6 +704,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlaygroundRoute: PlaygroundRoute,
   ShaderRoute: ShaderRoute,
   StableFluidsRoute: StableFluidsRoute,
+  AggregateBillSummaryRoute: AggregateBillSummaryRoute,
   AudioMicRoute: AudioMicRoute,
   AudioSpeechRoute: AudioSpeechRoute,
   NoiseCellularRoute: NoiseCellularRoute,
@@ -681,6 +724,7 @@ const rootRouteChildren: RootRouteChildren = {
   ThreeDimensionParticleRoute: ThreeDimensionParticleRoute,
   ThreeDimensionShaderRoute: ThreeDimensionShaderRoute,
   ThreeDimensionShadowsRoute: ThreeDimensionShadowsRoute,
+  AggregateBillIndexRoute: AggregateBillIndexRoute,
   AudioIndexRoute: AudioIndexRoute,
   CryptoChartsIndexRoute: CryptoChartsIndexRoute,
   NoiseIndexRoute: NoiseIndexRoute,
@@ -703,6 +747,7 @@ export const routeTree = rootRoute
         "/playground",
         "/shader",
         "/stable-fluids",
+        "/aggregate-bill/summary",
         "/audio/mic",
         "/audio/speech",
         "/noise/cellular",
@@ -722,6 +767,7 @@ export const routeTree = rootRoute
         "/three-dimension/particle",
         "/three-dimension/shader",
         "/three-dimension/shadows",
+        "/aggregate-bill/",
         "/audio/",
         "/crypto-charts/",
         "/noise/",
@@ -743,6 +789,9 @@ export const routeTree = rootRoute
     },
     "/stable-fluids": {
       "filePath": "stable-fluids.tsx"
+    },
+    "/aggregate-bill/summary": {
+      "filePath": "aggregate-bill/summary.tsx"
     },
     "/audio/mic": {
       "filePath": "audio/mic.tsx"
@@ -800,6 +849,9 @@ export const routeTree = rootRoute
     },
     "/three-dimension/shadows": {
       "filePath": "three-dimension/shadows.tsx"
+    },
+    "/aggregate-bill/": {
+      "filePath": "aggregate-bill/index.tsx"
     },
     "/audio/": {
       "filePath": "audio/index.tsx"

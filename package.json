@@ -7,7 +7,9 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "generate:cursorrules": "node script/generate-cursor-rules.js \"**/*.ai.md\" \".cursor/rules/main.mdc\""
+    "claude": "npx tsx script/claude.ts",
+    "generate:cursorrules": "node script/generate-cursor-rules.js \"**/*.ai.md\" \".cursor/rules/main.mdc\"",
+    "tsr": "npx tsr -w 'src/main\\.ts$' '.*\\.test\\.ts$'"
   },
   "dependencies": {
     "@react-three/drei": "^10.0.7",
@@ -25,6 +27,7 @@
     "@tensorflow/tfjs-core": "^4.22.0",
     "@types/lodash-es": "^4.17.12",
     "dat.gui": "^0.7.9",
+    "dayjs": "^1.11.13",
     "lightweight-charts": "^5.0.6",
     "lodash-es": "^4.17.21",
     "react": "^19.1.0",
@@ -34,6 +37,7 @@
     "zustand": "^5.0.4"
   },
   "devDependencies": {
+    "@anthropic-ai/claude-code": "^1.0.51",
     "@tanstack/router-devtools": "^1.120.3",
     "@tanstack/router-plugin": "^1.120.3",
     "@types/dat.gui": "^0.7.13",
