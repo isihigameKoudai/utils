@@ -3,7 +3,7 @@
  * npm i -D @types/react
  */
 
-import { forwardRef, ComponentPropsWithRef, createElement, ElementType } from 'react';
+import { forwardRef, createElement, ElementType, ComponentRef } from 'react';
 import { style as _style, types } from 'typestyle';
 
 type StyledOptions = {
@@ -27,14 +27,13 @@ type StyledOptions = {
  * })
  */
 export function styled<T extends ElementType>(Component: T) {
-  return (style: types.NestedCSSProperties) => {
-    type Props = ComponentPropsWithRef<T> & StyledOptions;
-    type ElementRef = T extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[T] : never;
+  return (styleProps: types.NestedCSSProperties) => {
+    const css = _style(styleProps);
     
-    return forwardRef<ElementRef, Props>(
+    return forwardRef<ComponentRef<T>, StyledOptions>(
       (props, ref) => {
         const { className: parentClassName, ...rest } = props;
-        const classNames = [_style(style), parentClassName].filter(Boolean).join(' ');
+        const classNames = [css, parentClassName].filter(Boolean).join(' ');
 
         return createElement(Component, {
           ...rest,
