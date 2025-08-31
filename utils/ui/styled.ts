@@ -3,7 +3,7 @@
  * npm i -D @types/react
  */
 
-import { forwardRef, createElement, ElementType, ComponentRef } from 'react';
+import { forwardRef, createElement, ElementType, ComponentRef, ComponentPropsWithRef } from 'react';
 import { style as _style, types } from 'typestyle';
 
 type StyledOptions = {
@@ -28,9 +28,10 @@ type StyledOptions = {
  */
 export function styled<T extends ElementType>(Component: T) {
   return (styleProps: types.NestedCSSProperties) => {
+    type Props = ComponentPropsWithRef<T> & StyledOptions;
     const css = _style(styleProps);
-    
-    return forwardRef<ComponentRef<T>, StyledOptions>(
+
+    return forwardRef<ComponentRef<T>, Props>(
       (props, ref) => {
         const { className: parentClassName, ...rest } = props;
         const classNames = [css, parentClassName].filter(Boolean).join(' ');
