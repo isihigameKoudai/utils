@@ -1,5 +1,5 @@
 import { Audio } from "../Media";
-import { RenderCallBack, RenderOptions } from "./type";
+import type { RenderCallBack, RenderOptions } from "./type";
 
 // requestAnimationFrame の定義を修正
 export const requestAnimationFrame = () =>
