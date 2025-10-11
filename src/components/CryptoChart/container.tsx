@@ -42,7 +42,7 @@ export const CryptoChart: React.FC<CryptoChartContainerProps> = ({
       symbol={symbol}
       width={width}
       height={height}
-      colorTheme={theme?.theme.palette.mode }
+      colorTheme={theme?.theme.palette.mode}
     />
   );
 };

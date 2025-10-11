@@ -32,4 +32,4 @@ export interface TimeframeSelectorProps {
 export interface TokenSelectorProps {
   selectedToken: Symbol;
   onTokenChange: (token: Symbol) => void;
-} 
+}

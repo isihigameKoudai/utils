@@ -72,7 +72,7 @@ const SaveButton = styled('button')({
 
 export const BillListPage = () => {
   const { queries, actions } = BillStore.useStore();
-  
+
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (!queries.isEmptyTotalRecords) {
@@ -94,9 +94,12 @@ export const BillListPage = () => {
       <Container>
         <ImportArea>
           <h2>CSV取り込み</h2>
-          {Object.values(BRAND).map(brand => (
+          {Object.values(BRAND).map((brand) => (
             <BrandFileOpener key={brand.value}>
-              <ImportButton type="button" onClick={() => actions.fetchCSVFiles({ brand: brand.value })}>
+              <ImportButton
+                type="button"
+                onClick={() => actions.fetchCSVFiles({ brand: brand.value })}
+              >
                 {brand.label}CSV取り込み
               </ImportButton>
               {queries[`${brand.value}Records`]?.value && (
@@ -128,4 +131,4 @@ export const BillListPage = () => {
       </Container>
     </>
   );
-}; 
+};

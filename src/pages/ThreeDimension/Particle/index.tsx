@@ -10,26 +10,29 @@ import fragmentShader from './fragmentShader.frag?raw';
 // TODO:
 const ParticleScene: React.FC = () => {
   const planePositions = useMemo(() => {
-    const planeGeometry = new THREE.PlaneGeometry(6,6,128,128);
+    const planeGeometry = new THREE.PlaneGeometry(6, 6, 128, 128);
     const positions = planeGeometry.attributes.position.array;
     return positions;
-  },[]);
+  }, []);
 
-  const shaderArgs = useMemo(() => ({
-    uniforms: {
-      uTime: {
-        value: 0
-      }
-    },
-    vertexShader,
-    fragmentShader
-  }),[]);
+  const shaderArgs = useMemo(
+    () => ({
+      uniforms: {
+        uTime: {
+          value: 0,
+        },
+      },
+      vertexShader,
+      fragmentShader,
+    }),
+    [],
+  );
 
   useFrame(() => {
     shaderArgs.uniforms.uTime.value++;
   });
 
-  return ( 
+  return (
     <points rotation={[-Math.PI / 2, 0, 0]}>
       <bufferGeometry attach="geometry">
         <bufferAttribute
@@ -44,21 +47,24 @@ const ParticleScene: React.FC = () => {
         />
       </bufferGeometry>
     </points>
-  )
-}
+  );
+};
 
 const ParticlePage: React.FC = () => {
   return (
-    <Canvas dpr={2} style={{
-      width: '100%',
-      height: '100vh'
-    }}>
+    <Canvas
+      dpr={2}
+      style={{
+        width: '100%',
+        height: '100vh',
+      }}
+    >
       <color attach="background" args={[0xf5f3fd]} />
       <OrbitControls makeDefault />
       <Stats />
       <ParticleScene />
     </Canvas>
-  )
-}
+  );
+};
 
 export default ParticlePage;

@@ -56,35 +56,33 @@ const AggregateBillSummaryPage = () => {
           <Button type="button" onClick={handleImport}>
             CSVファイルを読み込む
           </Button>
-          <Button 
-            type="button" 
+          <Button
+            type="button"
             onClick={() => handleGroupingChange('none')}
             className={queries.groupingType === 'none' ? 'active' : ''}
           >
             個別表示
           </Button>
-          <Button 
-            type="button" 
+          <Button
+            type="button"
             onClick={() => handleGroupingChange('store')}
             className={queries.groupingType === 'store' ? 'active' : ''}
           >
             店舗ごとに集計
           </Button>
-          <Button 
-            type="button" 
+          <Button
+            type="button"
             onClick={() => handleGroupingChange('month')}
             className={queries.groupingType === 'month' ? 'active' : ''}
           >
             月ごとに集計
           </Button>
         </ButtonGroup>
-        {
-          queries.isEmptySummaryRecords ? (
-            <div>データがありません</div>
-          ) : (
-            <BillList bills={queries.summaryRecords} />
-          )
-        }
+        {queries.isEmptySummaryRecords ? (
+          <div>データがありません</div>
+        ) : (
+          <BillList bills={queries.summaryRecords} />
+        )}
       </Container>
     </>
   );

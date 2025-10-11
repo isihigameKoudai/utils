@@ -1,5 +1,5 @@
-import { Audio } from "../Media";
-import type { RenderCallBack, RenderOptions } from "./type";
+import { Audio } from '../Media';
+import type { RenderCallBack, RenderOptions } from './type';
 
 // requestAnimationFrame の定義を修正
 export const requestAnimationFrame = () =>
@@ -15,7 +15,6 @@ export const cancelAnimationFrame = () =>
   window.mozCancelAnimationFrame ||
   window.msCancelAnimationFrame ||
   window.oCancelAnimationFrame;
-  
 
 /**
  * 取り込んだ音声を任意のビジュアルに変換・描画の機能を司る
@@ -60,7 +59,7 @@ export class Visualizer extends Audio {
       canvasHeight = window.innerHeight,
       smoothingTimeConstant = 0.5,
       fftSize = 2048,
-    }: RenderOptions
+    }: RenderOptions,
   ) {
     // 音声の再生
     super.play();
@@ -97,7 +96,7 @@ export class Visualizer extends Audio {
    */
   render(renderCallBack: RenderCallBack) {
     if (!this.analyzer) {
-      throw new Error("analyzer is null");
+      throw new Error('analyzer is null');
     }
 
     // その時点での波形データを元にした配列を取得
@@ -116,7 +115,7 @@ export class Visualizer extends Audio {
     });
 
     this.requestAnimationFrameId = window.requestAnimationFrame(
-      this.render.bind(this, renderCallBack)
+      this.render.bind(this, renderCallBack),
     );
   }
 

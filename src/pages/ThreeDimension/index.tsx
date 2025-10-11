@@ -15,29 +15,47 @@ const Box = (props: ThreeElements['mesh']) => {
 
   const handleClick = useCallback(() => {
     setClicked(!clicked);
-  },[clicked]);
+  }, [clicked]);
 
   return (
-    <mesh {...props} ref={ref} scale={clicked ? 2 : 1} onClick={handleClick} onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
-      <boxGeometry args={[1,1,1]} />
+    <mesh
+      {...props}
+      ref={ref}
+      scale={clicked ? 2 : 1}
+      onClick={handleClick}
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+    >
+      <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial color={hovered ? '#ff0000' : '#0000ff'} />
     </mesh>
   );
-}
+};
 
 const ThreeDimension: React.FC = () => {
-  return <div id="3D" style={{
-    width: '100%',
-    height: '100vh'
-  }}>
-    <Canvas>
-      <ambientLight intensity={Math.PI / 2} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
-      <pointLight position={[10,10, 0]} decay={0} intensity={Math.PI} />
-      <Box position={[-1, 0, 0]} />
-      <Box position={[1, 0, 0]}/>
-    </Canvas>
-  </div>;
-}
+  return (
+    <div
+      id="3D"
+      style={{
+        width: '100%',
+        height: '100vh',
+      }}
+    >
+      <Canvas>
+        <ambientLight intensity={Math.PI / 2} />
+        <spotLight
+          position={[10, 10, 10]}
+          angle={0.15}
+          penumbra={1}
+          decay={0}
+          intensity={Math.PI}
+        />
+        <pointLight position={[10, 10, 0]} decay={0} intensity={Math.PI} />
+        <Box position={[-1, 0, 0]} />
+        <Box position={[1, 0, 0]} />
+      </Canvas>
+    </div>
+  );
+};
 
 export default ThreeDimension;

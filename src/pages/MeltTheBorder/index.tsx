@@ -10,20 +10,19 @@ import fragment from './fragment.frag?raw';
 import DetectorView from './DetectorView';
 import { DETECTOR_OPACITY } from './const';
 
-
 const MeltTheBorder: React.FC = () => {
   const uniforms = {
     time: {
-      value: 0
+      value: 0,
     },
     resolution: {
-      value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+      value: new THREE.Vector2(window.innerWidth, window.innerHeight),
     },
     x: {
-      value: window.innerWidth / 2
+      value: window.innerWidth / 2,
     },
     y: {
-      value: -window.innerHeight / 2
+      value: -window.innerHeight / 2,
     },
   };
 
@@ -32,11 +31,11 @@ const MeltTheBorder: React.FC = () => {
    */
   const follower = {
     x: 0,
-    y: 0
+    y: 0,
   };
   const mouse = {
     x: 0,
-    y: 0
+    y: 0,
   };
   const delay = 100;
 
@@ -45,24 +44,24 @@ const MeltTheBorder: React.FC = () => {
       const rect = (e.target as HTMLCanvasElement).getBoundingClientRect();
       mouse.x = Math.floor(e.clientX - rect.left);
       mouse.y = Math.floor(e.screenY - rect.top);
-    }
+    };
     // document.addEventListener('mousemove', mouseEvent);
 
     const intervalTimer = setInterval(() => {
       // 汎用フォローカーソルの座標計算
-      follower.x = (mouse.x + delay * follower.x) / (delay+1);
-      follower.y = (mouse.y + delay * follower.y) / (delay+1);
+      follower.x = (mouse.x + delay * follower.x) / (delay + 1);
+      follower.y = (mouse.y + delay * follower.y) / (delay + 1);
 
       uniforms.x.value = follower.x;
       // y軸調整
       // uniforms.y.value = follower.y - window.innerHeight - 150;
       uniforms.y.value = follower.y;
-    },10);
-    
+    }, 10);
+
     return () => {
       document.removeEventListener('mousemove', mouseEvent);
       clearInterval(intervalTimer);
-    }
+    };
   }, []);
 
   const handleDetect = (objects: DetectedObject[]) => {
@@ -71,22 +70,27 @@ const MeltTheBorder: React.FC = () => {
     const object = objects[0];
     mouse.x = object.center.x;
     mouse.y = -object.center.y;
-  }
+  };
 
-  return <div id="3D" style={{
-    width: '100%',
-    height: '100svh',
-    position: 'relative'
-  }}>
-    <ShaderCanvas
-      uniforms={uniforms}
-      vertexShader={vertex}
-      fragmentShader={fragment}
-    />
-    <div style={{ position: 'absolute', top: 0, width: '100%' }}>
-      <DetectorView opacity={DETECTOR_OPACITY} onDetect={handleDetect} />
+  return (
+    <div
+      id="3D"
+      style={{
+        width: '100%',
+        height: '100svh',
+        position: 'relative',
+      }}
+    >
+      <ShaderCanvas
+        uniforms={uniforms}
+        vertexShader={vertex}
+        fragmentShader={fragment}
+      />
+      <div style={{ position: 'absolute', top: 0, width: '100%' }}>
+        <DetectorView opacity={DETECTOR_OPACITY} onDetect={handleDetect} />
+      </div>
     </div>
-  </div>;
-}
+  );
+};
 
 export default MeltTheBorder;

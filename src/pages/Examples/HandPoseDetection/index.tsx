@@ -7,7 +7,7 @@ const HandPoseDetectionPage = () => {
   const videoRef = useRef<HTMLVideoElement>(null!);
   const [hands, setHands] = useState<Hand[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isRunning, setIsRunning] = useState(false);  
+  const [isRunning, setIsRunning] = useState(false);
   const [detector] = useState<HandPoseDetection>(() => new HandPoseDetection());
 
   useEffect(() => {
@@ -45,14 +45,12 @@ const HandPoseDetectionPage = () => {
         {isLoaded && !isRunning && (
           <button onClick={handleStart}>Start Detection</button>
         )}
-        {isRunning && (
-          <button onClick={handleStop}>Stop Detection</button>
-        )}
+        {isRunning && <button onClick={handleStop}>Stop Detection</button>}
       </div>
-      <HandPoseDetectionView 
+      <HandPoseDetectionView
         ref={videoRef}
-        width={640} 
-        height={480} 
+        width={640}
+        height={480}
         hands={hands}
       />
     </div>

@@ -47,7 +47,11 @@ const ErrorText = styled('span')({
 });
 
 const Counter = () => {
-  const { state: counterState, queries: counterQueries, actions: counterActions } = counterStore.useStore();
+  const {
+    state: counterState,
+    queries: counterQueries,
+    actions: counterActions,
+  } = counterStore.useStore();
 
   return (
     <Section>
@@ -65,14 +69,14 @@ const Counter = () => {
         <Button onClick={() => counterActions.reset()}>リセット</Button>
       </div>
     </Section>
-  )
+  );
 };
 
 const Todo = () => {
   const {
     state: todoState,
     queries: todoQueries,
-    actions: todoActions
+    actions: todoActions,
   } = todoStore.useStore();
 
   return (
@@ -82,21 +86,19 @@ const Todo = () => {
         <form
           onSubmit={(e: FormEvent<HTMLFormElement>) => {
             e.preventDefault();
-            const input = e.currentTarget.elements.namedItem('todoText') as HTMLInputElement;
+            const input = e.currentTarget.elements.namedItem(
+              'todoText',
+            ) as HTMLInputElement;
             if (input.value.trim()) {
               todoActions.addTodo(input.value.trim());
               input.value = '';
             }
           }}
         >
-          <Input
-            type="text"
-            name="todoText"
-            placeholder="新しいTODOを入力"
-          />
+          <Input type="text" name="todoText" placeholder="新しいTODOを入力" />
           <Button type="submit">追加</Button>
         </form>
-        
+
         <div>
           <p>全てのTODO ({todoQueries.totalCount})</p>
           <ul>
@@ -107,10 +109,16 @@ const Todo = () => {
                   checked={todo.completed}
                   onChange={() => todoActions.toggleTodo(todo.id)}
                 />
-                <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+                <span
+                  style={{
+                    textDecoration: todo.completed ? 'line-through' : 'none',
+                  }}
+                >
                   {todo.text}
                 </span>
-                <Button onClick={() => todoActions.removeTodo(todo.id)}>削除</Button>
+                <Button onClick={() => todoActions.removeTodo(todo.id)}>
+                  削除
+                </Button>
               </li>
             ))}
           </ul>
@@ -119,15 +127,17 @@ const Todo = () => {
         </div>
       </div>
     </Section>
-  )
-}
-
+  );
+};
 
 // メインコンポーネント
 const IStateExample: React.FC = () => {
-  
-  const { state: formState, queries: formQueries, actions: formActions } = formStore.useStore();
- 
+  const {
+    state: formState,
+    queries: formQueries,
+    actions: formActions,
+  } = formStore.useStore();
+
   const { theme } = ThemeContainer.useContainer();
   console.log(theme);
   return (
@@ -135,9 +145,11 @@ const IStateExample: React.FC = () => {
       <h1>i-state Examples</h1>
       <Counter />
       <Todo />
-      
+
       <Section>
-        <h2>3. フォーム状態管理（親コンポーネントローカルステート: useStore）</h2>
+        <h2>
+          3. フォーム状態管理（親コンポーネントローカルステート: useStore）
+        </h2>
         <form
           onSubmit={(e: FormEvent<HTMLFormElement>) => {
             e.preventDefault();
@@ -150,7 +162,9 @@ const IStateExample: React.FC = () => {
               <Input
                 type="text"
                 value={formState.username}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => formActions.setField('username', e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  formActions.setField('username', e.target.value)
+                }
                 onBlur={() => formActions.setTouched('username')}
               />
               {formState.touched.username && formQueries.errors.username && (
@@ -158,14 +172,16 @@ const IStateExample: React.FC = () => {
               )}
             </label>
           </div>
-          
+
           <div>
             <label>
               メールアドレス:
               <Input
                 type="email"
                 value={formState.email}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => formActions.setField('email', e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  formActions.setField('email', e.target.value)
+                }
                 onBlur={() => formActions.setTouched('email')}
               />
               {formState.touched.email && formQueries.errors.email && (
@@ -173,14 +189,16 @@ const IStateExample: React.FC = () => {
               )}
             </label>
           </div>
-          
+
           <div>
             <label>
               パスワード:
               <Input
                 type="password"
                 value={formState.password}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => formActions.setField('password', e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  formActions.setField('password', e.target.value)
+                }
                 onBlur={() => formActions.setTouched('password')}
               />
               {formState.touched.password && formQueries.errors.password && (
@@ -188,7 +206,7 @@ const IStateExample: React.FC = () => {
               )}
             </label>
           </div>
-          
+
           <Button
             type="submit"
             disabled={!formQueries.isValid || formState.isSubmitting}

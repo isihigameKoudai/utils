@@ -16,9 +16,9 @@ const MultiChartPage: React.FC = () => {
   const { token } = useParams({ from: '/crypto-charts/multi/$token' });
 
   const handleChangeToken = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    navigate({ 
-      to: '/crypto-charts/multi/$token', 
-      params: { token: e.target.value as Symbol } 
+    navigate({
+      to: '/crypto-charts/multi/$token',
+      params: { token: e.target.value as Symbol },
     });
   };
 
@@ -27,9 +27,9 @@ const MultiChartPage: React.FC = () => {
       <TokenSelector
         selectedToken={token as Symbol}
         onTokenChange={(newToken) => {
-          navigate({ 
-            to: '/crypto-charts/multi/$token', 
-            params: { token: newToken } 
+          navigate({
+            to: '/crypto-charts/multi/$token',
+            params: { token: newToken },
           });
         }}
       />
@@ -38,4 +38,4 @@ const MultiChartPage: React.FC = () => {
   );
 };
 
-export default MultiChartPage; 
+export default MultiChartPage;

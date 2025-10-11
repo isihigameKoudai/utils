@@ -1,4 +1,4 @@
-import { Media } from "./Media";
+import { Media } from './Media';
 
 declare global {
   interface Window {
@@ -54,7 +54,9 @@ export class Audio extends Media {
    * メディアデバイス（マイク等）の登録
    * @returns MediaStream
    */
-  async getAudioStream(constraints: MediaStreamConstraints = { audio: true, video: false }): Promise<MediaStream> {
+  async getAudioStream(
+    constraints: MediaStreamConstraints = { audio: true, video: false },
+  ): Promise<MediaStream> {
     const stream = await this.getUserMedia(constraints);
     this._context = createAudioContext();
     this._mediaSource = this._context.createMediaStreamSource(stream);

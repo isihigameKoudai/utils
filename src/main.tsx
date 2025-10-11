@@ -5,17 +5,17 @@ import { routeTree } from './generated/routeTree.gen';
 import './index.css';
 import './App.css';
 
-const router = createRouter({ routeTree })
+const router = createRouter({ routeTree });
 
 declare module '@tanstack/react-router' {
   interface Register {
-    router: typeof router
+    router: typeof router;
   }
 }
 
 (() => {
   const $root = document.getElementById('root');
-  if(!$root) {
+  if (!$root) {
     throw new Error('rootが見つかりません');
   }
 
@@ -24,6 +24,5 @@ declare module '@tanstack/react-router' {
     <React.StrictMode>
       <RouterProvider router={router} />
     </React.StrictMode>,
-  )
+  );
 })();
-

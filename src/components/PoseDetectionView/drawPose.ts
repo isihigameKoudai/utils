@@ -32,9 +32,9 @@ export const drawPose = ($canvas: HTMLCanvasElement, poses: Pose[]) => {
     ['nose', 'right_ear'],
   ];
 
-  poses.forEach(pose => {
+  poses.forEach((pose) => {
     // キーポイントを描画
-    pose.keypoints.forEach(keypoint => {
+    pose.keypoints.forEach((keypoint) => {
       if (keypoint.score && keypoint.score > 0.3) {
         ctx.beginPath();
         ctx.arc(keypoint.x, keypoint.y, 5, 0, 2 * Math.PI);
@@ -45,12 +45,17 @@ export const drawPose = ($canvas: HTMLCanvasElement, poses: Pose[]) => {
 
     // 骨格線を描画
     connections.forEach(([start, end]) => {
-      const startPoint = pose.keypoints.find(kp => kp.name === start);
-      const endPoint = pose.keypoints.find(kp => kp.name === end);
+      const startPoint = pose.keypoints.find((kp) => kp.name === start);
+      const endPoint = pose.keypoints.find((kp) => kp.name === end);
 
-      if (startPoint && endPoint && 
-          startPoint.score && endPoint.score && 
-          startPoint.score > 0.3 && endPoint.score > 0.3) {
+      if (
+        startPoint &&
+        endPoint &&
+        startPoint.score &&
+        endPoint.score &&
+        startPoint.score > 0.3 &&
+        endPoint.score > 0.3
+      ) {
         ctx.beginPath();
         ctx.moveTo(startPoint.x, startPoint.y);
         ctx.lineTo(endPoint.x, endPoint.y);

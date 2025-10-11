@@ -4,15 +4,15 @@
 import * as tf from '@tensorflow/tfjs';
 import * as faceDetection from '@tensorflow-models/face-detection';
 
-import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media/constants';
 import {
-  RenderCallBack
-} from './type';
+  INITIAL_VIDEO_EL_WIDTH,
+  INITIAL_VIDEO_EL_HEIGHT,
+} from '../../Media/constants';
+import { RenderCallBack } from './type';
 import { Video } from '../../Media/Video';
 import { ElOption } from '../type';
 
 export class FaceDetection extends Video {
-
   _model: faceDetection.SupportedModels;
 
   _detector: faceDetection.FaceDetector | null;
@@ -46,7 +46,7 @@ export class FaceDetection extends Video {
   }
 
   get detectedFaces(): faceDetection.Face[] {
-    return this.detectedRawFaces.map(face => {
+    return this.detectedRawFaces.map((face) => {
       const { x: timesX, y: timesY } = this.magnification;
       return {
         box: {
@@ -55,17 +55,17 @@ export class FaceDetection extends Video {
           xMin: face.box.xMin * timesX,
           xMax: face.box.xMax * timesX,
           yMin: face.box.yMin * timesY,
-          yMax: face.box.yMax * timesY
+          yMax: face.box.yMax * timesY,
         },
-        keypoints: face.keypoints.map(keypoint => {
+        keypoints: face.keypoints.map((keypoint) => {
           return {
             x: keypoint.x * timesX,
             y: keypoint.y * timesY,
-            name: keypoint.name
-          }
-        })
-      }
-    })
+            name: keypoint.name,
+          };
+        }),
+      };
+    });
   }
 
   async loadModel() {
@@ -85,10 +85,13 @@ export class FaceDetection extends Video {
   async loadEl({
     $video,
     width = INITIAL_VIDEO_EL_WIDTH,
-    height = INITIAL_VIDEO_EL_HEIGHT
+    height = INITIAL_VIDEO_EL_HEIGHT,
   }: ElOption): Promise<HTMLVideoElement> {
     await this.getVideoStream();
-    this.setMagnification({ x: width / INITIAL_VIDEO_EL_WIDTH, y: height / INITIAL_VIDEO_EL_HEIGHT });
+    this.setMagnification({
+      x: width / INITIAL_VIDEO_EL_WIDTH,
+      y: height / INITIAL_VIDEO_EL_HEIGHT,
+    });
 
     const videoEl = $video || document.createElement('video');
     videoEl.muted = true;
@@ -105,25 +108,27 @@ export class FaceDetection extends Video {
   }
 
   async start(renderCallBack?: RenderCallBack) {
-    if(!this.detector) {
+    if (!this.detector) {
       console.error('detector is empty. you should load model');
-      return
+      return;
     }
 
-    if(!this.$video) {
+    if (!this.$video) {
       console.error('$video is empty.');
-      return
+      return;
     }
 
     const faces = await this.detector.estimateFaces(this.$video, {
-      flipHorizontal: false
+      flipHorizontal: false,
     });
 
     this._detectedRawFaces = faces;
 
     renderCallBack?.(this.detectedFaces);
-    
-    this._requestAnimationFrameId = window.requestAnimationFrame(this.start.bind(this, renderCallBack));
+
+    this._requestAnimationFrameId = window.requestAnimationFrame(
+      this.start.bind(this, renderCallBack),
+    );
   }
 
   stop() {

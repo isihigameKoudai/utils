@@ -17,14 +17,14 @@ export class AudioContextMock {
     return this.mockAnalyser;
   }
 
-  createBufferSource(){
+  createBufferSource() {
     return {
       buffer: null,
       connect: vi.fn(),
       start: vi.fn(),
       stop: vi.fn(), // stopメソッドを明示的にモック
       disconnect: vi.fn(),
-    }
+    };
   }
 
   createMediaStreamSource() {

@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 
-import face_vert from "./glsl/sim/face.vert?raw";
-import poisson_frag from "./glsl/sim/poisson.frag?raw";
+import face_vert from './glsl/sim/face.vert?raw';
+import poisson_frag from './glsl/sim/poisson.frag?raw';
 
-import ShaderPass from "./ShaderPass";
-import { SimProps } from "./types/Sim";
+import ShaderPass from './ShaderPass';
+import { SimProps } from './types/Sim';
 
 interface Props extends SimProps {
   boundarySpace: THREE.Vector2;
@@ -44,7 +44,7 @@ export default class Poisson extends ShaderPass {
   updatePoisson({ iterations }: { iterations: number }) {
     let p_in, p_out;
 
-    for (var i = 0; i < iterations; i++) {
+    for (let i = 0; i < iterations; i++) {
       const isOdd = i % 2 === 0;
 
       p_in = isOdd ? this.props.output0 : this.props.output1;

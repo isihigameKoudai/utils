@@ -1,4 +1,3 @@
-
 /**
  * kebab-caseに変換
  * ex:
@@ -8,7 +7,7 @@
 export const toKebabCase = (inputString: string): string => {
   return inputString.replace(
     /[A-Z]/g,
-    (match, offset) => (offset > 0 ? '-' : '') + match.toLowerCase()
+    (match, offset) => (offset > 0 ? '-' : '') + match.toLowerCase(),
   );
 };
 

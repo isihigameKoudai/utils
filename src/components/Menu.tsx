@@ -3,7 +3,6 @@ import { routeList } from '../constants/routes';
 import { Link } from '@tanstack/react-router';
 
 const Menu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-
   return (
     <div
       style={{
@@ -14,7 +13,7 @@ const Menu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         right: 0,
         zIndex: 0,
         display: 'grid',
-        gridTemplateColumns: '1fr 320px'
+        gridTemplateColumns: '1fr 320px',
       }}
     >
       <div
@@ -24,31 +23,42 @@ const Menu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           backdropFilter: 'blur(4px)',
         }}
       />
-      <nav style={{
-        background: '#222222',
-        margin: 0,
-        padding: '64px 24px',
-        overflowY: 'scroll'
-      }}>
+      <nav
+        style={{
+          background: '#222222',
+          margin: 0,
+          padding: '64px 24px',
+          overflowY: 'scroll',
+        }}
+      >
         <ul style={{ margin: 0, padding: 0 }}>
-        {
-          routeList.map((item, i) => (
-            <li style={{
-              listStyle: 'none',
-              fontSize: 18,
-              padding: 4,
-            }} key={`link-${i}`}>
-              <Link style={{
-                textDecoration: 'none',
-                color: '#fefefe'
-              }} to={item.menuPath || item.path}>{ [...new Array((item.path.match(new RegExp('/', 'g')))?.length)].map(() => '- ').join(' ') }{ item.title }</Link>
+          {routeList.map((item, i) => (
+            <li
+              style={{
+                listStyle: 'none',
+                fontSize: 18,
+                padding: 4,
+              }}
+              key={`link-${i}`}
+            >
+              <Link
+                style={{
+                  textDecoration: 'none',
+                  color: '#fefefe',
+                }}
+                to={item.menuPath || item.path}
+              >
+                {[...new Array(item.path.match(new RegExp('/', 'g'))?.length)]
+                  .map(() => '- ')
+                  .join(' ')}
+                {item.title}
+              </Link>
             </li>
-          ))
-        }
+          ))}
         </ul>
       </nav>
     </div>
-  )
-}
+  );
+};
 
 export default Menu;

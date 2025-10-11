@@ -33,14 +33,14 @@ export const MultiChartGrid: React.FC<MultiChartGridProps> = ({ token }) => {
       {MULTI_TIMEFRAMES.map((timeframe) => (
         <ChartContainer key={timeframe}>
           <ChartTitle>{getTimeframeLabel(timeframe)}</ChartTitle>
-          <CryptoChart 
-            key={`${token}-${timeframe}`} 
-            symbol={token} 
-            timeframe={timeframe} 
+          <CryptoChart
+            key={`${token}-${timeframe}`}
+            symbol={token}
+            timeframe={timeframe}
             height={300}
           />
         </ChartContainer>
       ))}
     </StyledChartGrid>
   );
-}; 
+};

@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
 type Props = {
   $target: HTMLElement;
@@ -45,7 +45,7 @@ class Shader {
       0,
       window.innerWidth / window.innerHeight,
       0.1,
-      0
+      0,
     );
     // シェーダーの設定
     this.material = new THREE.ShaderMaterial({
@@ -69,7 +69,7 @@ class Shader {
   init() {
     this.scene.add(this.mesh);
     this.clock.start();
-    window.addEventListener("resize", this.resize.bind(this));
+    window.addEventListener('resize', this.resize.bind(this));
   }
 
   loop() {
@@ -88,7 +88,7 @@ class Shader {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.material.uniforms.resolution.value.set(
       window.innerWidth,
-      window.innerHeight
+      window.innerHeight,
     );
   }
 }

@@ -1,8 +1,8 @@
-import Common from "./Common";
-import Output from "./Output";
-import Mouse from "./Mouse";
+import Common from './Common';
+import Output from './Output';
+import Mouse from './Mouse';
 
-import { VisualDetection } from "../../../../../utils/tensorflow";
+import { VisualDetection } from '../../../../../utils/tensorflow';
 
 type Props = {
   $wrapper: HTMLElement;
@@ -23,7 +23,7 @@ export default class WebGL {
     this.output = new Output();
     this.loop();
 
-    window.addEventListener("resize", this.resize.bind(this));
+    window.addEventListener('resize', this.resize.bind(this));
   }
 
   resize() {

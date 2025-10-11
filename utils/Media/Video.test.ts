@@ -46,7 +46,9 @@ describe('Video', () => {
 
   test('setVideoがstreamがない場合にエラーをログ出力すること', () => {
     const mockVideo = {} as HTMLVideoElement;
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
 
     video.setVideo(mockVideo);
 

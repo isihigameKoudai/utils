@@ -5,22 +5,22 @@ import { fetchFiles } from '@/utils/file';
 const Index: React.FC = () => {
   const onOpenFile = useCallback(async () => {
     const { files } = await fetchFiles();
-  },[])
+  }, []);
 
   const onOpenImages = useCallback(async () => {
     const { files } = await fetchFiles({ accept: 'image/*' });
     console.log('open images', files);
-  },[]);
+  }, []);
 
   const onOpenAudios = useCallback(async () => {
     const { files } = await fetchFiles({ accept: 'audio/*' });
     console.log('open audios', files);
-  },[]);
+  }, []);
 
   const onOpenMovies = useCallback(async () => {
     const { files } = await fetchFiles({ accept: 'video/*' });
     console.log('open movies', files);
-  },[]);
+  }, []);
 
   return (
     <div id="index-page">
@@ -39,7 +39,7 @@ const Index: React.FC = () => {
         </button>
       </p>
     </div>
-  )
+  );
 };
 
 export default Index;

@@ -6,44 +6,44 @@ type IRoute = {
 
 export const routeList: IRoute[] = [
   {
-    title: "TOP",
-    path: "/",
+    title: 'TOP',
+    path: '/',
   },
   {
     title: 'プレイグラウンド',
     path: '/playground',
   },
   {
-    title: "Shader",
-    path: "/shader",
+    title: 'Shader',
+    path: '/shader',
   },
   {
-    title: "オーディオ",
-    path: "/audio",
+    title: 'オーディオ',
+    path: '/audio',
   },
   {
-    title: "オーディオ（マイク）",
-    path: "/audio/mic",
+    title: 'オーディオ（マイク）',
+    path: '/audio/mic',
   },
   {
-    title: "オーディオ（音声認識）",
-    path: "/audio/speech",
+    title: 'オーディオ（音声認識）',
+    path: '/audio/speech',
   },
   {
-    title: "3D",
-    path: "/three-dimension",
+    title: '3D',
+    path: '/three-dimension',
   },
   {
-    title: "3D（影）",
-    path: "/three-dimension/shadows",
+    title: '3D（影）',
+    path: '/three-dimension/shadows',
   },
   {
-    title: "3D（シェーダー）",
-    path: "/three-dimension/shader",
+    title: '3D（シェーダー）',
+    path: '/three-dimension/shader',
   },
   {
-    title: "3D（パーティクル）",
-    path: "/three-dimension/particle",
+    title: '3D（パーティクル）',
+    path: '/three-dimension/particle',
   },
   {
     title: 'stable fluids',
@@ -51,7 +51,7 @@ export const routeList: IRoute[] = [
   },
   {
     title: 'サンプル',
-    path: '/'
+    path: '/',
   },
   {
     title: '5スター',
@@ -133,5 +133,5 @@ export const routeList: IRoute[] = [
   {
     title: 'クレジットカード集計サマリー',
     path: '/aggregate-bill/summary',
-  }
+  },
 ];

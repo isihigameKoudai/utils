@@ -26,7 +26,9 @@ export const TokenSelector: React.FC<TokenSelectorProps> = ({
     <Header>
       <StyledSelect
         value={selectedToken}
-        onChange={(e) => onTokenChange(e.target.value as typeof SYMBOLS[number])}
+        onChange={(e) =>
+          onTokenChange(e.target.value as (typeof SYMBOLS)[number])
+        }
       >
         {SYMBOLS.map((symbol) => (
           <option key={symbol} value={symbol}>
@@ -36,4 +38,4 @@ export const TokenSelector: React.FC<TokenSelectorProps> = ({
       </StyledSelect>
     </Header>
   );
-}; 
+};

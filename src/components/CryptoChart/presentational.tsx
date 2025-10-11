@@ -1,5 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { createChart, IChartApi, ISeriesApi, DataChangedHandler } from 'lightweight-charts';
+import {
+  createChart,
+  IChartApi,
+  ISeriesApi,
+  DataChangedHandler,
+} from 'lightweight-charts';
 
 import { ColorTheme } from '@/utils/PreferColorScheme';
 import { styled } from '@/utils/ui/styled';
@@ -31,13 +36,13 @@ const CryptoChartPresentational: React.FC<CryptoChartPresenterProps> = ({
   const chartRef = useRef<HTMLDivElement>(null);
   const chart = useRef<IChartApi | null>(null);
   const series = useRef<ISeriesApi<'Candlestick'> | null>(null);
-  
+
   const chartColor = createChartColor(colorTheme);
   const seriesColor = createSeriesColor();
 
   useEffect(() => {
     if (!chartRef.current || !fullBoxRef.current || !chart.current) {
-      return () => {}; 
+      return () => {};
     }
     chart.current = createChart(chartRef.current, {
       ...chartColor,
@@ -54,7 +59,6 @@ const CryptoChartPresentational: React.FC<CryptoChartPresenterProps> = ({
     };
 
     // series.current.subscribeDataChanged(handleChange);
-    
 
     return () => {
       // series.current?.unsubscribeDataChanged(handleChange);
@@ -63,23 +67,21 @@ const CryptoChartPresentational: React.FC<CryptoChartPresenterProps> = ({
   }, [candleData, symbol]);
 
   useEffect(() => {
-    let initialized = false;
+    const initialized = false;
 
-    if(initialized) {
+    if (initialized) {
       return () => {};
     }
 
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
-        const {
-          width: currentWidth,
-          height: currentHeight
-        } = entry.contentRect;
+        const { width: currentWidth, height: currentHeight } =
+          entry.contentRect;
 
         const resizeWidth = width || currentWidth;
         const resizeHeight = height || currentHeight;
 
-        if(fullBoxRef.current) {
+        if (fullBoxRef.current) {
           fullBoxRef.current.style.height = `${resizeHeight}px`;
         }
 
@@ -97,9 +99,11 @@ const CryptoChartPresentational: React.FC<CryptoChartPresenterProps> = ({
     };
   }, [width, height]);
 
-  return <FullBox className='full-box' ref={fullBoxRef}>
-    <div className={`crypto-chart-${symbol}`} ref={chartRef} />
-  </FullBox>;
+  return (
+    <FullBox className="full-box" ref={fullBoxRef}>
+      <div className={`crypto-chart-${symbol}`} ref={chartRef} />
+    </FullBox>
+  );
 };
 
 CryptoChartPresentational.displayName = 'CryptoChartPresentational';

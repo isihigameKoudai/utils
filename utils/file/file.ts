@@ -6,19 +6,20 @@ import { isTruthy } from '../guards';
  * CSV形式のテキストを2次元配列に変換する
  * ex: csv2array('a,b,c\nd,e,f\n') => [['a','b','c'],['d','e','f']]
  * ex: csv2array('"a","b","c"\nd,e,f\n') => [['a','b','c'],['d','e','f']]
- * 
- * @param csv 
- * @returns 
+ *
+ * @param csv
+ * @returns
  */
-export const csv2array = (csv: string): string[][] => csv
-  .replaceAll("\r", "")
-  .split("\n")
-  .filter(isTruthy)
-  .map((row) => row.split(",").map(cell => cell.replace(/^"|"$/g, '')));
+export const csv2array = (csv: string): string[][] =>
+  csv
+    .replaceAll('\r', '')
+    .split('\n')
+    .filter(isTruthy)
+    .map((row) => row.split(',').map((cell) => cell.replace(/^"|"$/g, '')));
 
 /**
  * 2次元配列をCSV形式のテキストに変換する
- * 
+ *
  * @example
  * array2csv([
  *  ['header1','header2','header3'],
@@ -27,9 +28,8 @@ export const csv2array = (csv: string): string[][] => csv
  * ]);
  * => 'header1,header2,header3\nddddddd,eeeeeee,fffffff\nggggggg,hhhhhhh,iiiiiii'
  */
-export const array2csv = (array: string[][]): string => array
-  .map((row) => row.join(","))
-  .join("\n");
+export const array2csv = (array: string[][]): string =>
+  array.map((row) => row.join(',')).join('\n');
 
 /**
  * CSV形式のテキストをjsonに変換する
@@ -45,11 +45,11 @@ export const csv2json = <T = Record<string, string>>(csv: string): T[] => {
     row.reduce((acc, cur, i) => {
       return {
         ...acc,
-        [header[i]]: cur
+        [header[i]]: cur,
       };
-    }, {})
+    }, {}),
   ) as T[];
-}
+};
 
 /**
  * @example
@@ -71,7 +71,7 @@ export const mergeStringifyCSVs = (_csvs: string[]): string[][] => {
   const header = csvs[0][0];
   const rows = csvs.map((csv) => csv.slice(1));
   return [header, ...rows.flat()];
-}
+};
 
 /**
  * @example
@@ -86,14 +86,14 @@ export const mergeArrayedCSVs = (_csvs: string[][][]): string[][] => {
   const header = _csvs[0][0];
   const rows = _csvs.map((csv) => csv.slice(1));
   return [header, ...rows.flat()];
-}
+};
 
 export const mergeCSVs = (csvs: string[] | string[][][]): string[][] => {
   if (Array.isArray(csvs[0])) {
     return mergeArrayedCSVs(csvs as string[][][]);
   }
   return mergeStringifyCSVs(csvs as string[]);
-}
+};
 
 const initialOption: Option = {
   isMultiple: false,
@@ -102,12 +102,12 @@ const initialOption: Option = {
 
 /**
  * ファイルを選択する
- * @param option 
- * @returns 
+ * @param option
+ * @returns
  * @example
- * 
+ *
  * const files = await fetchFiles();
- * 
+ *
  */
 export const fetchFiles: FetchFiles = ({
   isMultiple = false,
@@ -127,21 +127,21 @@ export const fetchFiles: FetchFiles = ({
 
   if (!isAvailable) {
     reject({
-      status: "The File APIs are not fully supported in this browser.",
+      status: 'The File APIs are not fully supported in this browser.',
       files: [],
     });
     return promise;
   }
 
-  const $input: HTMLInputElement = document.createElement("input");
-  $input.type = "file";
+  const $input: HTMLInputElement = document.createElement('input');
+  $input.type = 'file';
   $input.multiple = isMultiple;
   $input.accept = accept;
   $input.onchange = (e: Event) => {
     const target = e.target as HTMLInputElement;
     if (!target || !target.files) {
       reject({
-        status: "error",
+        status: 'error',
         files: [],
       });
       return;
@@ -149,7 +149,7 @@ export const fetchFiles: FetchFiles = ({
 
     const files = [...target.files];
     resolve({
-      status: "success",
+      status: 'success',
       files,
     });
   };

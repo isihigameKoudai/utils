@@ -1,7 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/noise/')({
-  component: () => (
-    <div>ノイズページ</div>
-  ),
-}) 
+  component: () => <div>ノイズページ</div>,
+});

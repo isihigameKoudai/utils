@@ -21,4 +21,4 @@ export const ChartGrid: React.FC<ChartGridProps> = ({ timeframe }) => {
       ))}
     </StyledChartGrid>
   );
-}; 
+};

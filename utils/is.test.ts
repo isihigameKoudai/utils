@@ -1,10 +1,16 @@
 import { describe, it, expect } from 'vitest';
-import { isFunction, isPromiseFunction, isPromise, isError, isEmpty } from './is';
+import {
+  isFunction,
+  isPromiseFunction,
+  isPromise,
+  isError,
+  isEmpty,
+} from './is';
 
 describe('isFunction', () => {
   it('関数を正しく判定できる', () => {
     expect(isFunction(() => {})).toBe(true);
-    expect(isFunction(function() {})).toBe(true);
+    expect(isFunction(function () {})).toBe(true);
     expect(isFunction(async () => {})).toBe(true);
   });
 
@@ -89,4 +95,4 @@ describe('isEmpty', () => {
     expect(isEmpty(true)).toBe(false);
     expect(isEmpty(new String('hello'))).toBe(false);
   });
-}); 
+});

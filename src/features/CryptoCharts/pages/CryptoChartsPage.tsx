@@ -23,4 +23,4 @@ const CryptoChartsPage: React.FC = () => {
   );
 };
 
-export default CryptoChartsPage; 
+export default CryptoChartsPage;

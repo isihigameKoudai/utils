@@ -33,14 +33,14 @@ describe('promise utils', () => {
     it('should wait for previous promise to complete before reset', async () => {
       let resolveFirst: (value: string) => void;
       const mockFn = vi.fn().mockImplementation(() => {
-        return new Promise<string>(resolve => {
+        return new Promise<string>((resolve) => {
           resolveFirst = resolve;
         });
       });
 
       const cachedPromise = createCachePromise(mockFn);
       const firstPromise = cachedPromise();
-      
+
       const resetPromise = cachedPromise.reset();
       resolveFirst!('test');
 
@@ -53,21 +53,17 @@ describe('promise utils', () => {
       // const testError: TestError = { message: 'test error' };
       // const mockFn = vi.fn().mockRejectedValue(testError);
       // const cachedPromise = createCachePromise(mockFn);
-
       // try {
       //   await cachedPromise();
       // } catch (error) {
       //   expect(error).toEqual(testError);
       // }
-
       // await cachedPromise.reset();
-
       // try {
       //   await cachedPromise();
       // } catch (error) {
       //   expect(error).toEqual(testError);
       // }
-
       // expect(mockFn).toHaveBeenCalledTimes(2);
     });
   });

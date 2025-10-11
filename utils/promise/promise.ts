@@ -2,18 +2,20 @@ import { CachePromiseReturn, DeferredOut } from './type';
 
 /**
  * キャッシュを利用したPromiseを作成する
- * @param fn 
- * @returns 
+ * @param fn
+ * @returns
  */
-export function createCachePromise<T>(fn: () => Promise<T>): CachePromiseReturn<T> {
-  let _p: Promise<T> | undefined
+export function createCachePromise<T>(
+  fn: () => Promise<T>,
+): CachePromiseReturn<T> {
+  let _p: Promise<T> | undefined;
 
   function wrapper() {
     if (!_p) {
-      console.log('create cache promise');  
-      _p = fn()
+      console.log('create cache promise');
+      _p = fn();
     }
-    return _p
+    return _p;
   }
 
   wrapper.reset = async () => {
@@ -23,9 +25,9 @@ export function createCachePromise<T>(fn: () => Promise<T>): CachePromiseReturn<
     if (_prev) {
       await _prev;
     }
-  }
+  };
 
-  return wrapper
+  return wrapper;
 }
 
 /**
@@ -45,4 +47,4 @@ export function deferred<T>(): DeferredOut<T> {
   });
 
   return { promise, resolve, reject };
-};
+}

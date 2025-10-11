@@ -4,7 +4,7 @@ import { styled } from '@/utils/ui/styled';
 
 const Button = styled('button')({
   padding: '10px 20px',
-  borderRadius: '5px'
+  borderRadius: '5px',
 });
 
 const PlaygroundPage: React.FC = () => {
@@ -17,7 +17,9 @@ const PlaygroundPage: React.FC = () => {
 
   return (
     <div>
-      <Button type='button' onClick={() => setOpen(!open)}>Click me</Button>
+      <Button type="button" onClick={() => setOpen(!open)}>
+        Click me
+      </Button>
     </div>
   );
 };

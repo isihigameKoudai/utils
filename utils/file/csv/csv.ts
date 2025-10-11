@@ -1,7 +1,7 @@
 export class CSV<C extends string = string> {
   /**
    * 元となるCSVデータ
-   * 
+   *
    * @example
    * const csv = [
    *  ['header1', 'header2', 'header3'],
@@ -12,9 +12,9 @@ export class CSV<C extends string = string> {
   readonly _value: string[][];
 
   /**
-   * 
+   *
    * Mapを使ったCSVデータ
-   * 
+   *
    * @example
    * const csv = [
    *  new Map<string, string>([['header1', 'value1-1'], ['header2', 'value1-2'], ['header3', 'value1-3']]),
@@ -40,7 +40,7 @@ export class CSV<C extends string = string> {
 
   /**
    * CSVデータに該当しない場合エラーにする
-   * 
+   *
    * ・カラムの数が一致しない場合
    */
   validate(csv: string[][]) {
@@ -53,7 +53,9 @@ export class CSV<C extends string = string> {
 
   createMap(csv: string[][]): Map<C, string>[] {
     return csv.slice(1).map((row) => {
-      return new Map<C, string>(row.map((value, index) => [this.headers[index] as C, value]));
+      return new Map<C, string>(
+        row.map((value, index) => [this.headers[index] as C, value]),
+      );
     });
   }
 
@@ -64,7 +66,7 @@ export class CSV<C extends string = string> {
    *  ['value1-1', 'value1-2', 'value1-3'],
    *  ['value2-1', 'value2-2', 'value2-3'],
    * ]);
-   * 
+   *
    * const record = csv.getRecord('header1', 'value1-1');
    * => ['value1-1', 'value1-2', 'value1-3']
    */
@@ -83,7 +85,7 @@ export class CSV<C extends string = string> {
    *  ['value1-1', 'value1-2', 'value1-3'],
    *  ['value2-1', 'value2-2', 'value2-3'],
    * ]);
-   * 
+   *
    * const columns = csv.getColumns(['header2', 'header3']);
    * => [
    *  ['value1-2', 'value1-3'],

@@ -10,7 +10,6 @@ import { ElOption } from '../type';
 import { RenderCallBack } from './type';
 
 export class FaceLandmarkDetection extends Video {
-  
   _model: faceLandmarksDetection.SupportedModels;
   _detector: faceLandmarksDetection.FaceLandmarksDetector | null;
   _detectedRawFaces: faceLandmarksDetection.Face[];
@@ -47,7 +46,7 @@ export class FaceLandmarkDetection extends Video {
       await tf.ready();
       this._detector = await faceLandmarksDetection.createDetector(this.model, {
         runtime: 'tfjs',
-        refineLandmarks: true
+        refineLandmarks: true,
       });
     } catch (error) {
       console.error('モデル読み込みエラー:', error);
@@ -58,10 +57,13 @@ export class FaceLandmarkDetection extends Video {
   async loadEl({
     $video,
     width = INITIAL_VIDEO_EL_WIDTH,
-    height = INITIAL_VIDEO_EL_HEIGHT
+    height = INITIAL_VIDEO_EL_HEIGHT,
   }: ElOption): Promise<HTMLVideoElement> {
     await this.getVideoStream();
-    this.setMagnification({ x: width / INITIAL_VIDEO_EL_WIDTH, y: height / INITIAL_VIDEO_EL_HEIGHT });
+    this.setMagnification({
+      x: width / INITIAL_VIDEO_EL_WIDTH,
+      y: height / INITIAL_VIDEO_EL_HEIGHT,
+    });
 
     const videoEl = $video || document.createElement('video');
     videoEl.muted = true;
@@ -69,7 +71,7 @@ export class FaceLandmarkDetection extends Video {
     videoEl.width = width;
     videoEl.height = height;
     this.setVideo(videoEl);
-  
+
     return videoEl;
   }
 
@@ -79,18 +81,18 @@ export class FaceLandmarkDetection extends Video {
   }
 
   async start(renderCallBack?: RenderCallBack) {
-    if(!this.detector) {
+    if (!this.detector) {
       console.error('detector is empty. you should load model');
-      return
+      return;
     }
 
-    if(!this.$video) {
+    if (!this.$video) {
       console.error('$video is empty.');
-      return
+      return;
     }
 
     const detectedRawFaces = await this.detector.estimateFaces(this.$video, {
-      flipHorizontal: false
+      flipHorizontal: false,
     });
 
     this._detectedRawFaces = detectedRawFaces;
@@ -98,7 +100,9 @@ export class FaceLandmarkDetection extends Video {
     // TODO: detectedRawFacesを使ったgettersをrenderCallBackに渡す
     renderCallBack?.(this.detectedRawFaces);
 
-    this._requestAnimationFrameId = window.requestAnimationFrame(this.start.bind(this, renderCallBack));
+    this._requestAnimationFrameId = window.requestAnimationFrame(
+      this.start.bind(this, renderCallBack),
+    );
   }
   stop() {
     this.stopVideo();

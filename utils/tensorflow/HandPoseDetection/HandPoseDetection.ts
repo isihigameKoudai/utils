@@ -4,7 +4,11 @@
 import * as tf from '@tensorflow/tfjs';
 import * as handPoseDetection from '@tensorflow-models/hand-pose-detection';
 
-import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH, Video } from '../../Media';
+import {
+  INITIAL_VIDEO_EL_HEIGHT,
+  INITIAL_VIDEO_EL_WIDTH,
+  Video,
+} from '../../Media';
 import { ElOption } from '../type';
 import { RenderCallBack } from './type';
 
@@ -28,11 +32,11 @@ export class HandPoseDetection extends Video {
 
   get detector() {
     return this._detector;
-  } 
+  }
 
   get detectedRawHands() {
     return this._detectedRawHands;
-  } 
+  }
 
   get requestAnimationFrameId() {
     return this._requestAnimationFrameId;
@@ -53,10 +57,13 @@ export class HandPoseDetection extends Video {
   async loadEl({
     $video,
     width = INITIAL_VIDEO_EL_WIDTH,
-    height = INITIAL_VIDEO_EL_HEIGHT
+    height = INITIAL_VIDEO_EL_HEIGHT,
   }: ElOption): Promise<HTMLVideoElement> {
     await this.getVideoStream();
-    this.setMagnification({ x: width / INITIAL_VIDEO_EL_WIDTH, y: height / INITIAL_VIDEO_EL_HEIGHT });
+    this.setMagnification({
+      x: width / INITIAL_VIDEO_EL_WIDTH,
+      y: height / INITIAL_VIDEO_EL_HEIGHT,
+    });
 
     const videoEl = $video || document.createElement('video');
     videoEl.muted = true;
@@ -73,25 +80,27 @@ export class HandPoseDetection extends Video {
   }
 
   async start(renderCallBack?: RenderCallBack) {
-    if(!this.detector) {
+    if (!this.detector) {
       console.error('detector is empty. you should load model');
-      return
+      return;
     }
 
-    if(!this.$video) {
+    if (!this.$video) {
       console.error('$video is empty.');
-      return
+      return;
     }
 
     const hands = await this.detector.estimateHands(this.$video, {
-      flipHorizontal: false
+      flipHorizontal: false,
     });
 
     this._detectedRawHands = hands;
 
     renderCallBack?.(this.detectedRawHands);
 
-    this._requestAnimationFrameId = window.requestAnimationFrame(this.start.bind(this, renderCallBack));
+    this._requestAnimationFrameId = window.requestAnimationFrame(
+      this.start.bind(this, renderCallBack),
+    );
   }
 
   stop() {

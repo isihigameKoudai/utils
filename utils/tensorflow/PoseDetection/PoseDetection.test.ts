@@ -3,17 +3,21 @@ import * as poseDetection from '@tensorflow-models/pose-detection';
 import * as tf from '@tensorflow/tfjs';
 
 import { PoseDetection } from './PoseDetection';
-import { documentMock, navigatorMock, windowMock } from '../../__test__/mocks/global';
+import {
+  documentMock,
+  navigatorMock,
+  windowMock,
+} from '../../__test__/mocks/global';
 
 vi.mock('@tensorflow/tfjs', () => ({
-  ready: vi.fn().mockResolvedValue(undefined)
+  ready: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock('@tensorflow-models/pose-detection', () => ({
   SupportedModels: {
     MoveNet: 'MoveNet',
     BlazePose: 'BlazePose',
-    PoseNet: 'PoseNet'
+    PoseNet: 'PoseNet',
   },
   createDetector: vi.fn().mockResolvedValue({
     estimatePoses: vi.fn().mockResolvedValue([
@@ -21,17 +25,17 @@ vi.mock('@tensorflow-models/pose-detection', () => ({
         keypoints: [
           { x: 0, y: 0, score: 0.9, name: 'nose' },
           { x: 10, y: 10, score: 0.8, name: 'left_eye' },
-          { x: 20, y: 20, score: 0.85, name: 'right_eye' }
+          { x: 20, y: 20, score: 0.85, name: 'right_eye' },
         ],
-        score: 0.9
-      }
-    ])
+        score: 0.9,
+      },
+    ]),
   }),
   movenet: {
     modelType: {
-      SINGLEPOSE_LIGHTNING: 'SINGLEPOSE_LIGHTNING'
-    }
-  }
+      SINGLEPOSE_LIGHTNING: 'SINGLEPOSE_LIGHTNING',
+    },
+  },
 }));
 
 describe('PoseDetection', () => {
@@ -70,7 +74,7 @@ describe('PoseDetection', () => {
       const error = new Error('Model loading failed');
       vi.mocked(poseDetection.createDetector).mockRejectedValueOnce(error);
       const consoleSpy = vi.spyOn(console, 'error');
-      
+
       await expect(detector.loadDetector()).rejects.toThrow(error);
       expect(consoleSpy).toHaveBeenCalledWith(error);
     });
@@ -80,7 +84,7 @@ describe('PoseDetection', () => {
     it('should load video element and model', async () => {
       const mockVideo = document.createElement('video');
       await detector.load({ $video: mockVideo });
-      
+
       expect(detector.detector).not.toBeNull();
       expect(detector.$video).toBe(mockVideo);
       expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalled();
@@ -88,7 +92,7 @@ describe('PoseDetection', () => {
 
     it('should create new video element if none provided', async () => {
       await detector.load();
-      
+
       expect(detector.$video).not.toBeNull();
       expect(document.createElement).toHaveBeenCalledWith('video');
     });
@@ -98,7 +102,7 @@ describe('PoseDetection', () => {
     it('should start pose detection and call renderCallback', async () => {
       const mockVideo = document.createElement('video');
       const renderCallback = vi.fn();
-      
+
       await detector.load({ $video: mockVideo });
       await detector.start(renderCallback);
 
@@ -110,17 +114,19 @@ describe('PoseDetection', () => {
     it('should not start if detector is not loaded', async () => {
       const consoleSpy = vi.spyOn(console, 'error');
       await detector.start();
-      
-      expect(consoleSpy).toHaveBeenCalledWith('detector is empty. you should load detector');
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'detector is empty. you should load detector',
+      );
       expect(detector.detectedPoses).toHaveLength(0);
     });
 
     it('should not start if video is not loaded', async () => {
       await detector.loadDetector();
       const consoleSpy = vi.spyOn(console, 'error');
-      
+
       await detector.start();
-      
+
       expect(consoleSpy).toHaveBeenCalledWith('$video is empty.');
     });
   });

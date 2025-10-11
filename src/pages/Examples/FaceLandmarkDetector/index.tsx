@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { FaceLandmarkDetection } from "../../../../utils/tensorflow";
-import FaceMesh, { Face } from "../../../components/FaceMesh";
+import { FaceLandmarkDetection } from '../../../../utils/tensorflow';
+import FaceMesh, { Face } from '../../../components/FaceMesh';
 
 export default function Detector() {
   const [isShow, setIsShow] = useState<boolean>(true);
@@ -12,29 +12,27 @@ export default function Detector() {
     await detector.start((faces) => {
       setFaces(faces);
     });
-  },[]);
+  }, []);
 
   const handleStop = useCallback(() => {
     detector.stop();
-  },[]);
-  
+  }, []);
 
   useEffect(() => {
     // モデルのロード
     (async () => {
       await detector.load({
-        $video: $video.current
+        $video: $video.current,
       });
       setIsShow(true);
     })();
-  },[]);
-
+  }, []);
 
   return (
     <div>
-      { isShow && <button onClick={handleDetect}>start detect</button>}
+      {isShow && <button onClick={handleDetect}>start detect</button>}
       <button onClick={handleStop}>stop detect</button>
       <FaceMesh ref={$video} objects={faces} />
     </div>
-  )
+  );
 }

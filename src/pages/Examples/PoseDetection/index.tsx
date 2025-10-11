@@ -6,8 +6,10 @@ const PoseDetectionPage = () => {
   const videoRef = useRef<HTMLVideoElement>(null!);
   const [poses, setPose] = useState<Pose[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isRunning, setIsRunning] = useState(false);  
-  const [detector] = useState<PoseDetection>(() => new PoseDetection('BlazePose'));
+  const [isRunning, setIsRunning] = useState(false);
+  const [detector] = useState<PoseDetection>(
+    () => new PoseDetection('BlazePose'),
+  );
 
   useEffect(() => {
     (async () => {
@@ -44,14 +46,12 @@ const PoseDetectionPage = () => {
         {isLoaded && !isRunning && (
           <button onClick={handleStart}>Start Detection</button>
         )}
-        {isRunning && (
-          <button onClick={handleStop}>Stop Detection</button>
-        )}
+        {isRunning && <button onClick={handleStop}>Stop Detection</button>}
       </div>
-      <PoseDetectionView 
+      <PoseDetectionView
         ref={videoRef}
-        width={640} 
-        height={480} 
+        width={640}
+        height={480}
         poses={poses}
       />
     </div>

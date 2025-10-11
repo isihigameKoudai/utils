@@ -1,5 +1,5 @@
-import * as THREE from "three";
-import Common from "./Common";
+import * as THREE from 'three';
+import Common from './Common';
 
 export class Mouse {
   mouseMoved: boolean;
@@ -20,19 +20,19 @@ export class Mouse {
 
   init() {
     document.body.addEventListener(
-      "mousemove",
+      'mousemove',
       this.onDocumentMouseMove.bind(this),
-      false
+      false,
     );
     document.body.addEventListener(
-      "touchstart",
+      'touchstart',
       this.onDocumentTouchStart.bind(this),
-      false
+      false,
     );
     document.body.addEventListener(
-      "touchmove",
+      'touchmove',
       this.onDocumentTouchMove.bind(this),
-      false
+      false,
     );
   }
 

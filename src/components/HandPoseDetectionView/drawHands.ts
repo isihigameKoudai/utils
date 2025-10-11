@@ -11,12 +11,12 @@ const fingerLookupIndices = {
 const HAND_COLORS = {
   Left: {
     keypoint: '#00ff00', // 緑
-    connection: '#00cc00'
+    connection: '#00cc00',
   },
   Right: {
     keypoint: '#ff0000', // 赤
-    connection: '#cc0000'
-  }
+    connection: '#cc0000',
+  },
 };
 
 export const drawHands = (canvas: HTMLCanvasElement, hands: Hand[]) => {
@@ -45,7 +45,7 @@ export const drawHands = (canvas: HTMLCanvasElement, hands: Hand[]) => {
 
       ctx.beginPath();
       ctx.moveTo(points[0].x, points[0].y);
-      
+
       points.forEach((point) => {
         ctx.lineTo(point.x, point.y);
       });
@@ -55,4 +55,4 @@ export const drawHands = (canvas: HTMLCanvasElement, hands: Hand[]) => {
       ctx.stroke();
     });
   });
-}; 
+};

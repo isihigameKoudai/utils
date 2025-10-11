@@ -2,8 +2,8 @@
  * キャッシュされたPromiseを返す関数の型
  */
 export interface CachePromiseReturn<T> {
-  (): Promise<T>
-  reset: () => Promise<void>
+  (): Promise<T>;
+  reset: () => Promise<void>;
 }
 
 /**
@@ -14,4 +14,3 @@ export type DeferredOut<T> = {
   resolve: (value: T | PromiseLike<T>) => void;
   reject: (reason?: any) => void;
 };
-

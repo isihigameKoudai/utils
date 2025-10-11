@@ -6,11 +6,16 @@ interface FaceDetectionViewProps {
   height?: number;
 }
 
-const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({ width = 640, height = 480 }) => {
+const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({
+  width = 640,
+  height = 480,
+}) => {
   const detector = new FaceDetection();
   const $video = useRef<HTMLVideoElement>(null);
   const $face = useRef<HTMLDivElement>(null);
-  const [points, setPoints] = useState<{ x: number; y: number; name: string }[]>([]);
+  const [points, setPoints] = useState<
+    { x: number; y: number; name: string }[]
+  >([]);
 
   const setFace = (face: FaceDetection['detectedFaces'][number]) => {
     if (!$face.current) return;
@@ -23,25 +28,26 @@ const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({ width = 640, heig
     faceElement.style.height = `${height}px`;
 
     const { keypoints } = face;
-    setPoints(keypoints.map(point => ({
-      x: point.x,
-      y: point.y,
-      name: point.name || ''
-    })));
+    setPoints(
+      keypoints.map((point) => ({
+        x: point.x,
+        y: point.y,
+        name: point.name || '',
+      })),
+    );
   };
 
   const handleLoad = async () => {
     if (!$video.current) return;
-      
-      await detector.load({
-        $video: $video.current,
-        width,
-        height,
-      });
+
+    await detector.load({
+      $video: $video.current,
+      width,
+      height,
+    });
   };
 
   const handleStart = async () => {
-    
     detector.start((faces) => {
       if (faces.length > 0) {
         setFace(faces[0]);
@@ -58,7 +64,13 @@ const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({ width = 640, heig
       <button onClick={handleLoad}>Load</button>
       <button onClick={handleStart}>Start</button>
       <button onClick={handleStop}>Stop</button>
-      <div style={{ width: `${width}px`, height: `${height}px`, position: 'relative' }}>
+      <div
+        style={{
+          width: `${width}px`,
+          height: `${height}px`,
+          position: 'relative',
+        }}
+      >
         <video
           ref={$video}
           width={width}
@@ -73,7 +85,7 @@ const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({ width = 640, heig
             position: 'absolute',
             background: 'transparent',
             border: 'solid 2px #ff2b2b',
-            pointerEvents: 'none'
+            pointerEvents: 'none',
           }}
         />
         {points.map((point, index) => (
@@ -87,7 +99,7 @@ const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({ width = 640, heig
               top: point.y - 2,
               left: point.x - 2,
               background: '#ccc',
-              borderRadius: '50%'
+              borderRadius: '50%',
             }}
           />
         ))}
@@ -96,4 +108,3 @@ const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({ width = 640, heig
   );
 };
 export default FaceDetectionView;
-

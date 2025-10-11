@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 
-import face_vert from "./glsl/sim/face.vert?raw";
-import viscous_frag from "./glsl/sim/viscous.frag?raw";
+import face_vert from './glsl/sim/face.vert?raw';
+import viscous_frag from './glsl/sim/viscous.frag?raw';
 
-import ShaderPass from "./ShaderPass";
+import ShaderPass from './ShaderPass';
 
 // boundarySpace
 type Props = {
@@ -68,7 +68,7 @@ export default class Viscous extends ShaderPass {
       this.uniforms.v.value = viscous;
     }
 
-    for (var i = 0; i < iterations; i++) {
+    for (let i = 0; i < iterations; i++) {
       const isOdd = i % 2 == 0;
       const fbo_in = isOdd ? this.props.output0! : this.props.output1!;
       const fbo_out = isOdd ? this.props.output1! : this.props.output0!;

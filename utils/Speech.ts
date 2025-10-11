@@ -61,7 +61,7 @@ export default class Speech {
   recognition: ISpeechRecognition;
   constructor() {
     const recognition = new SpeechRecognition();
-    recognition.lang = "ja-JP";
+    recognition.lang = 'ja-JP';
     this.recognition = recognition;
   }
 

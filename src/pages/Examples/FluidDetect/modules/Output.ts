@@ -1,9 +1,9 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
-import Common from "./Common";
-import Simulation from "./Simulation";
-import face_vert from "./glsl/sim/face.vert?raw";
-import color_frag from "./glsl/sim/color.frag?raw";
+import Common from './Common';
+import Simulation from './Simulation';
+import face_vert from './glsl/sim/face.vert?raw';
+import color_frag from './glsl/sim/color.frag?raw';
 
 export default class Output {
   simulation: Simulation;
@@ -29,7 +29,7 @@ export default class Output {
             value: new THREE.Vector2(),
           },
         },
-      })
+      }),
     );
 
     this.scene.add(this.output);

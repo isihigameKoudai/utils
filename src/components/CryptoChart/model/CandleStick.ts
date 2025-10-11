@@ -14,7 +14,7 @@ export type Trade = [
   // Volume
   string,
   // Close time
-  number, 
+  number,
   // base asset volume
   string,
   // Number of trades
@@ -43,7 +43,7 @@ export class CandleStick {
 
   constructor(params: Trade) {
     this.time = params[0];
-    
+
     this.open = parseFloat(params[1]);
     this.high = parseFloat(params[2]);
     this.low = parseFloat(params[3]);
@@ -57,7 +57,7 @@ export class CandleStick {
     this.takerBuyQuoteAssetVolume = params[10];
     this.ignore = params[11];
   }
-  
+
   get series() {
     return {
       time: (this.time / 1000) as UTCTimestamp,

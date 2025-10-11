@@ -4,7 +4,10 @@
 import * as tf from '@tensorflow/tfjs';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
-import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media/constants';
+import {
+  INITIAL_VIDEO_EL_WIDTH,
+  INITIAL_VIDEO_EL_HEIGHT,
+} from '../../Media/constants';
 import { DetectedObject, RenderCallBack } from './type';
 import { Video } from '../../Media/Video';
 import { ElOption } from '../type';
@@ -35,7 +38,7 @@ export class VisualDetection extends Video {
   }
 
   get detectedObjects(): DetectedObject[] {
-    return (this.detectedRawObjects || []).map(obj => {
+    return (this.detectedRawObjects || []).map((obj) => {
       const { x: timesX, y: timesY } = this.magnification;
       const left = obj.bbox[0] * timesX;
       const top = obj.bbox[1] * timesY;
@@ -43,7 +46,7 @@ export class VisualDetection extends Video {
       const height = obj.bbox[3] * timesY;
       const centerX = (obj.bbox[0] + obj.bbox[2] / 2) * timesX;
       const centerY = (obj.bbox[1] + obj.bbox[3] / 2) * timesY;
-      
+
       return {
         left,
         top,
@@ -53,10 +56,10 @@ export class VisualDetection extends Video {
         score: obj.score,
         center: {
           x: centerX,
-          y: centerY
-        }
-      }
-    })
+          y: centerY,
+        },
+      };
+    });
   }
 
   async loadModel(config: cocoSsd.ModelConfig = {}) {
@@ -64,7 +67,7 @@ export class VisualDetection extends Video {
       await tf.ready();
       this._model = await cocoSsd.load(config);
       return this.model;
-    } catch(e) {
+    } catch (e) {
       console.error(e);
       throw e;
     }
@@ -73,10 +76,13 @@ export class VisualDetection extends Video {
   async loadEl({
     $video,
     width = INITIAL_VIDEO_EL_WIDTH,
-    height = INITIAL_VIDEO_EL_HEIGHT
+    height = INITIAL_VIDEO_EL_HEIGHT,
   }: ElOption): Promise<HTMLVideoElement> {
     await this.getVideoStream();
-    this.setMagnification({ x: width / INITIAL_VIDEO_EL_WIDTH, y: height / INITIAL_VIDEO_EL_HEIGHT });
+    this.setMagnification({
+      x: width / INITIAL_VIDEO_EL_WIDTH,
+      y: height / INITIAL_VIDEO_EL_HEIGHT,
+    });
 
     const videoEl = $video || document.createElement('video');
     videoEl.muted = true;
@@ -89,7 +95,7 @@ export class VisualDetection extends Video {
 
   async load(
     elConfig?: ElOption,
-    modelConfig: cocoSsd.ModelConfig = {}
+    modelConfig: cocoSsd.ModelConfig = {},
   ): Promise<HTMLVideoElement> {
     const $video = await this.loadEl(elConfig || {});
     await this.loadModel(modelConfig);
@@ -97,24 +103,26 @@ export class VisualDetection extends Video {
   }
 
   async start(renderCallBack?: RenderCallBack) {
-    if(!this.model) {
+    if (!this.model) {
       console.error('model is empty. you should load model');
-      return
+      return;
     }
 
-    if(!this.$video) {
+    if (!this.$video) {
       console.error('$video is empty.');
-      return
+      return;
     }
 
     const detectedRawObjects = await this.model.detect(this.$video);
     this._detectedRawObjects = detectedRawObjects;
 
-    if(renderCallBack) {
+    if (renderCallBack) {
       renderCallBack(this.detectedObjects);
     }
-    
-    this._requestAnimationFrameId = window.requestAnimationFrame(this.start.bind(this, renderCallBack));
+
+    this._requestAnimationFrameId = window.requestAnimationFrame(
+      this.start.bind(this, renderCallBack),
+    );
   }
 
   stop() {

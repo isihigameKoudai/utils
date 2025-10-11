@@ -1,6 +1,6 @@
 /**
  * 楽天カードの明細データのカラム定義
- * 
+ *
  * 利用日
  * 利用店名・商品名
  * 利用者
@@ -14,34 +14,34 @@
 export const RAKUTEN_RECORD = {
   DATE: {
     label: '利用日',
-    value: 'date'
+    value: 'date',
   },
   STORE_NAME: {
     label: '利用店名・商品名',
-    value: 'storeName'
+    value: 'storeName',
   },
   USER: {
     label: '利用者',
-    value: 'user'
+    value: 'user',
   },
   PAYMENT_METHOD: {
     label: '支払方法',
-    value: 'paymentMethod'
+    value: 'paymentMethod',
   },
   AMOUNT: {
     label: '利用金額',
-    value: 'amount'
+    value: 'amount',
   },
   FEE: {
     label: '支払手数料',
-    value: 'fee'
+    value: 'fee',
   },
   TOTAL_AMOUNT: {
     label: '支払総額',
-    value: 'totalAmount'
+    value: 'totalAmount',
   },
   NEW_SIGN: {
     label: '新規サイン',
-    value: 'newSign'
-  }
+    value: 'newSign',
+  },
 } as const;

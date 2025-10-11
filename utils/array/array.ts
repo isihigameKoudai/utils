@@ -11,7 +11,7 @@
  */
 export const splitMap = (
   originArray: number[],
-  sliceNum: number
+  sliceNum: number,
 ): number[][] => {
   const array: number[][] = [];
   for (let i = 0; i * sliceNum < originArray.length; i++) {
@@ -32,7 +32,7 @@ export const unique = (arr: (number | string | undefined)[]) => [
   ...new Set(
     arr
       .map((item) => Number(item))
-      .filter((item) => item !== undefined && !Number.isNaN(item))
+      .filter((item) => item !== undefined && !Number.isNaN(item)),
   ),
 ];
 
@@ -51,7 +51,11 @@ export const unique = (arr: (number | string | undefined)[]) => [
  * ]
  */
 export type ListItem = { key: string; value: number };
-export const sortByKey = <T = any>(arr: T[], key: keyof T, order: 'desc' | 'asc'): T[] => {  
+export const sortByKey = <T = any>(
+  arr: T[],
+  key: keyof T,
+  order: 'desc' | 'asc',
+): T[] => {
   return arr.sort((a, b) => {
     if (a[key] < b[key]) {
       return order === 'desc' ? 1 : -1;
@@ -61,11 +65,11 @@ export const sortByKey = <T = any>(arr: T[], key: keyof T, order: 'desc' | 'asc'
     }
     return 0;
   });
-}
+};
 
 /**
  * 同じkeyのvalueを合計し、keyごとに並び替えをする
- * 
+ *
  * ex: sumByKey([
  *  { text: 'a', amount: 1, num: 10 },
  *  { text: 'b', amount: 2, num: 10 },
@@ -81,18 +85,18 @@ export const sortByKey = <T = any>(arr: T[], key: keyof T, order: 'desc' | 'asc'
  */
 export const sumByKey = <T = any>(
   array: T[],
-  { orderKey, numKey }: { orderKey: keyof T, numKey: keyof T }
+  { orderKey, numKey }: { orderKey: keyof T; numKey: keyof T },
 ): {
   [key in string]: T[keyof T] | number;
 }[] => {
   // キーごとの合計を格納するMapを作成
   const sumMap = new Map<string, number>();
-  
+
   // 各要素を処理して合計を計算
   array.forEach((item) => {
     const key = String(item[orderKey]);
     const value = Number(item[numKey]);
-    
+
     if (!Number.isNaN(value)) {
       const currentSum = sumMap.get(key) || 0;
       sumMap.set(key, currentSum + value);
@@ -104,6 +108,6 @@ export const sumByKey = <T = any>(
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([key, value]) => ({
       [String(orderKey)]: key as T[keyof T],
-      [String(numKey)]: value as number
+      [String(numKey)]: value as number,
     }));
-}
+};
