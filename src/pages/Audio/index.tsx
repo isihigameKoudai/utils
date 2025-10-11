@@ -8,9 +8,10 @@ const fetchAudio = async () =>
 
 const AudioPage: React.FC = () => {
   const $canvas = useRef<HTMLCanvasElement>(null);
-  const visualizer = new Visualizer();
+  const visualizerRef = useRef(new Visualizer());
 
   const onPlayAudio = useCallback(async () => {
+    const visualizer = visualizerRef.current;
     const { files } = await fetchAudio();
     const buffer = await files[0].arrayBuffer();
     visualizer.setAudio(buffer);
@@ -25,11 +26,11 @@ const AudioPage: React.FC = () => {
   }, []);
 
   const onPauseAudio = useCallback(() => {
-    visualizer.pause();
+    visualizerRef.current.pause();
   }, []);
 
   const onStopAudio = useCallback(() => {
-    visualizer.stop();
+    visualizerRef.current.stop();
   }, []);
 
   return (

@@ -8,7 +8,7 @@ class Common {
   breakpoint: number;
   fboWidth: number | null;
   fboHeight: number | null;
-  resizeFunc: Function;
+  resizeFunc: () => void;
   time: number;
   delta: number;
   pixelRatio?: number;

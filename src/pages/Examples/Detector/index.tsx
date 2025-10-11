@@ -1,23 +1,28 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { VisualDetection, DetectedObject } from '../../../../utils/tensorflow';
+import {
+  VisualDetection,
+  type DetectedObject,
+} from '../../../../utils/tensorflow';
 import VisualDetectionView from '../../../components/VisualDetectionView';
 
 export default function Detector() {
-  const detector = new VisualDetection();
+  const detectorRef = useRef(new VisualDetection());
   const $videoContainer = useRef<HTMLDivElement>(null);
   const [objects, setObjects] = useState<DetectedObject[]>([]);
   const [isShow, setIsShow] = useState<boolean>(false);
 
   const handleDetect = useCallback(() => {
+    const detector = detectorRef.current;
     if (detector.$video && detector._$video) {
       $videoContainer.current?.appendChild(detector.$video);
     }
     detector.start((objects) => {
       setObjects(objects);
     });
-  }, [$videoContainer]);
+  }, []);
 
   useEffect(() => {
+    const detector = detectorRef.current;
     const init = async () => {
       await detector.load({
         width: window.innerWidth,

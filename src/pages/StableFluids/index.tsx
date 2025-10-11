@@ -3,14 +3,14 @@ import WebGL from './modules/WebGL';
 
 const StableFluids: React.FC = () => {
   const $ref = useRef<HTMLDivElement>(null!);
-  let isInit = true;
+  const isInitRef = useRef(true);
 
   useEffect(() => {
-    if (isInit) {
+    if (isInitRef.current) {
       new WebGL({
         $wrapper: $ref.current,
       });
-      isInit = false;
+      isInitRef.current = false;
     }
   }, []);
 

@@ -4,7 +4,8 @@ import { useTheme } from '@/utils/ui/theme';
 
 import CryptoChartPresentational from './presentational';
 import { CryptoStore } from './store/crypto';
-import { CryptoListParams } from './api/crypto';
+import { type CryptoListParams } from './api/crypto';
+import { CandleStick } from './model/CandleStick';
 
 interface CryptoChartContainerProps {
   symbol: string;
@@ -34,11 +35,11 @@ export const CryptoChart: React.FC<CryptoChartContainerProps> = ({
     const intervalId = setInterval(fetchData, 60 * 1000);
 
     return () => clearInterval(intervalId);
-  }, [symbol, timeframe]);
+  }, [actions, symbol, timeframe]);
 
   return (
     <CryptoChartPresentational
-      candleData={queries.candleSticks}
+      candleData={queries.candleSticks as CandleStick[]}
       symbol={symbol}
       width={width}
       height={height}

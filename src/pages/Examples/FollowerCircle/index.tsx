@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
 import ShaderCanvas from '../../../../utils/ShaderCanvas';
@@ -12,36 +6,42 @@ import vertex from '../../../../utils/glsl/vertex.vert?raw';
 import followerCircle from './followerCircle.frag?raw';
 
 const FollowerCirclePage: React.FC = () => {
-  const uniforms = {
-    time: {
-      value: 0,
-    },
-    resolution: {
-      value: new THREE.Vector2(window.innerWidth, window.innerHeight),
-    },
-    x: {
-      value: window.innerWidth / 2,
-    },
-    y: {
-      value: -window.innerHeight / 2,
-    },
-  };
+  const uniforms = useMemo(
+    () => ({
+      time: {
+        value: 0,
+      },
+      resolution: {
+        value: new THREE.Vector2(window.innerWidth, window.innerHeight),
+      },
+      x: {
+        value: window.innerWidth / 2,
+      },
+      y: {
+        value: -window.innerHeight / 2,
+      },
+    }),
+    [],
+  );
 
   /**
    * マウス操作から追従するフォロワーカーソルを計算する
    * TODO: あとでhooks化する
    */
-  const follower = {
+  const followerRef = useRef({
     x: 0,
     y: 0,
-  };
-  const mouse = {
+  });
+  const mouseRef = useRef({
     x: 0,
     y: 0,
-  };
+  });
   const delay = 100;
 
   const init = () => {
+    const follower = followerRef.current;
+    const mouse = mouseRef.current;
+
     const mouseEvent = (e: MouseEvent) => {
       const rect = (e.target as HTMLCanvasElement).getBoundingClientRect();
       mouse.x = Math.floor(e.clientX - rect.left);
@@ -65,7 +65,7 @@ const FollowerCirclePage: React.FC = () => {
       clearInterval(intervalTimer);
     };
   };
-  useEffect(init, []);
+  useEffect(init, [uniforms]);
 
   return (
     <div

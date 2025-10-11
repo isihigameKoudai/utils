@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React from 'react';
 import * as THREE from 'three';
 
 import ShaderCanvas from '../../../../utils/ShaderCanvas';

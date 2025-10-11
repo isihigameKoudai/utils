@@ -107,6 +107,7 @@ export const defineStore = <
     const actions = fromEntries<Actions<S, typeof queries, A>>(
       Object.entries(actionFns).map(([key, fn]) => [
         key as keyof A,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ((...args: any[]) =>
           fn(
             {

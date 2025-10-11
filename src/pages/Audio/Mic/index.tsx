@@ -7,12 +7,16 @@ const MicPage: React.FC = () => {
   const $particle = useRef<HTMLCanvasElement>(null!);
   const $lineAudio = useRef<HTMLCanvasElement>(null!);
 
-  const particleVisualizer = new Visualizer();
-  const lineVisualizer = new Visualizer();
+  const particleVisualizerRef = useRef(new Visualizer());
+  const lineVisualizerRef = useRef(new Visualizer());
+
   const onActivateMic = useCallback(async () => {
+    const particleVisualizer = particleVisualizerRef.current;
+    const lineVisualizer = lineVisualizerRef.current;
+
     await particleVisualizer.getAudioStream();
     particleVisualizer.start(
-      ({ $canvas, timeDomainArray, frequencyBinCount, timeDomainRawArray }) => {
+      ({ $canvas, timeDomainArray, frequencyBinCount }) => {
         basicParticle({ $canvas, timeDomainArray, frequencyBinCount });
       },
       {
@@ -38,8 +42,8 @@ const MicPage: React.FC = () => {
   }, []);
 
   const onStopDeviceAudio = useCallback(() => {
-    particleVisualizer.stop();
-    lineVisualizer.stop();
+    particleVisualizerRef.current.stop();
+    lineVisualizerRef.current.stop();
   }, []);
 
   return (

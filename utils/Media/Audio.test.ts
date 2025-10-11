@@ -40,8 +40,11 @@ describe('Audio', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (global as any).window;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (global as any).AudioContext;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (global as any).navigator;
   });
 

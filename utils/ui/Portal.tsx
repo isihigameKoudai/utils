@@ -5,6 +5,7 @@ interface Props {
   id: string;
 }
 
+// eslint-disable-next-line react/prop-types
 const Portal: React.FC<Props> = ({ children, id }) => {
   const targetEl = document.getElementById(id);
 
@@ -14,5 +15,7 @@ const Portal: React.FC<Props> = ({ children, id }) => {
 
   return createPortal(children, targetEl);
 };
+
+Portal.displayName = 'Portal';
 
 export default Portal;

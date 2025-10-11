@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import { Visualizer } from './Visualizer';
-import { RenderCallBack } from './type';
+import type { RenderCallBack } from './type';
 import {
   analyzerMock,
   windowMock,
@@ -11,6 +11,7 @@ import { AudioContextMock } from '../__test__/mocks/media';
 
 describe('Visualizer', () => {
   let visualizer: Visualizer;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let mockAudioContext: AudioContext;
   let mockAnalyser: AnalyserNode;
 
@@ -47,6 +48,7 @@ describe('Visualizer', () => {
     });
 
     // renderメソッドをモックする
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (visualizer as any).render = vi
       .fn()
       .mockImplementation((renderCallback) => {
@@ -65,8 +67,11 @@ describe('Visualizer', () => {
         });
 
         // requestAnimationFrameを呼び出す
+        const visualizerWithRender = visualizer as unknown as {
+          render: (callback: RenderCallBack) => void;
+        };
         window.requestAnimationFrame(
-          (visualizer as any).render.bind(visualizer, renderCallback),
+          visualizerWithRender.render.bind(visualizer, renderCallback),
         );
       });
 
@@ -79,15 +84,20 @@ describe('Visualizer', () => {
       mockAudioPlay(); // super.play() の呼び出しをシミュレート
       visualizer.analyzer = mockAnalyser;
       visualizer.$canvas = options.$canvas;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (visualizer as any).render(renderCallback); // renderメソッドを直接呼び出す
     });
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (global as any).window;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (global as any).document;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (global as any).AudioContext;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (global as any).webkitAudioContext;
   });
 
@@ -114,6 +124,7 @@ describe('Visualizer', () => {
 
     expect(visualizer.analyzer).toBe(mockAnalyser);
     expect(visualizer.$canvas).toBe(mockCanvas);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect((visualizer as any).render).toHaveBeenCalledWith(mockRenderCallback);
   });
 
@@ -142,6 +153,7 @@ describe('Visualizer', () => {
       mockRequestAnimationFrame,
     );
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (visualizer as any).render(mockRenderCallback);
 
     expect(mockAnalyser.getByteTimeDomainData).toHaveBeenCalled();

@@ -9,7 +9,9 @@
  *   maybeFunction();
  * }
  */
-export function isFunction(value: unknown): value is Function {
+export function isFunction(
+  value: unknown,
+): value is (...args: unknown[]) => unknown {
   return typeof value === 'function';
 }
 
@@ -26,7 +28,7 @@ export function isFunction(value: unknown): value is Function {
  */
 export function isPromiseFunction(
   fn: unknown,
-): fn is (...args: any[]) => Promise<unknown> {
+): fn is (...args: unknown[]) => Promise<unknown> {
   if (!isFunction(fn)) {
     return false;
   }
@@ -52,9 +54,9 @@ export function isPromise<T = unknown>(value: unknown): value is Promise<T> {
     (value !== null &&
       typeof value === 'object' &&
       'then' in value &&
-      isFunction((value as any).then) &&
+      isFunction((value as Record<string, unknown>).then) &&
       'catch' in value &&
-      isFunction((value as any).catch))
+      isFunction((value as Record<string, unknown>).catch))
   );
 }
 

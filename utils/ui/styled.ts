@@ -37,7 +37,7 @@ export function styled<T extends ElementType>(Component: T) {
       ? HTMLElementTagNameMap[T]
       : never;
 
-    return forwardRef<ElementRef, Props>((props, ref) => {
+    const StyledComponent = forwardRef<ElementRef, Props>((props, ref) => {
       const { className: parentClassName, ...rest } = props;
       const classNames = [_style(style), parentClassName]
         .filter(Boolean)
@@ -49,5 +49,9 @@ export function styled<T extends ElementType>(Component: T) {
         className: classNames,
       });
     });
+
+    StyledComponent.displayName = `Styled(${typeof Component === 'string' ? Component : Component.displayName || Component.name || 'Component'})`;
+
+    return StyledComponent;
   };
 }

@@ -3,7 +3,7 @@ import { forwardRef, useEffect, useRef } from 'react';
 import { Video } from '../../components/Video';
 import { drawPose } from './drawPose';
 
-import { PoseDetectionViewProps } from './type';
+import { type PoseDetectionViewProps } from './type';
 
 export const PoseDetectionView = forwardRef<
   HTMLVideoElement,
@@ -23,7 +23,7 @@ export const PoseDetectionView = forwardRef<
 
       drawPose(canvasRef.current, poses);
     })();
-  }, [poses]);
+  }, [poses, videoRef]);
 
   return (
     <div style={{ position: 'relative', width, height }}>

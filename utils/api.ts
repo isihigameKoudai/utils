@@ -1,4 +1,4 @@
-const request = async <T = any>(
+const request = async <T = unknown>(
   url: RequestInfo | URL,
   options?: RequestInit,
 ): Promise<T> => {
@@ -20,25 +20,25 @@ const request = async <T = any>(
 
 const api = {
   request,
-  get: async <T = any>(
+  get: async <T = unknown>(
     url: RequestInfo | URL,
     options?: RequestInit,
   ): Promise<T> => {
     return request(url, { ...options, method: 'GET' });
   },
-  post: async <T = any>(
+  post: async <T = unknown>(
     url: RequestInfo | URL,
     options?: RequestInit,
   ): Promise<T> => {
     return request(url, { ...options, method: 'POST' });
   },
-  put: async <T = any>(
+  put: async <T = unknown>(
     url: RequestInfo | URL,
     options?: RequestInit,
   ): Promise<T> => {
     return request(url, { ...options, method: 'PUT' });
   },
-  delete: async <T = any>(
+  delete: async <T = unknown>(
     url: RequestInfo | URL,
     options?: RequestInit,
   ): Promise<T> => {

@@ -219,8 +219,12 @@ const IStateExample: React.FC = () => {
   );
 };
 
-export default () => (
+const IStateExampleWrapper = () => (
   <ThemeContainer.Provider>
     <IStateExample />
   </ThemeContainer.Provider>
 );
+
+IStateExampleWrapper.displayName = 'IStateExampleWrapper';
+
+export default IStateExampleWrapper;

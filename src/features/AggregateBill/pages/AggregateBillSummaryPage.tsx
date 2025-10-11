@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react';
 import { styled } from '@/utils/ui/styled';
 import { BillSummaryStore } from '../stores/billSummaryStore';
-import type { SortKey } from '../stores/type';
 import { Header } from '../components/Header';
 import { BillList } from '../components/BillList';
 

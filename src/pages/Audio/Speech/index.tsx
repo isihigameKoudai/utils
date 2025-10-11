@@ -1,9 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import Speech from '../../../../utils/Speech';
 
 const SpeechPage: React.FC = () => {
-  const speech = new Speech();
+  const speechRef = useRef(new Speech());
+
   const onStartSpeech = useCallback(() => {
+    const speech = speechRef.current;
     speech.setOnResult((e) => {
       console.log(e, e.results[0][0]?.transcript);
     });
@@ -11,7 +13,7 @@ const SpeechPage: React.FC = () => {
   }, []);
 
   const onStopSpeech = useCallback(() => {
-    speech.stop();
+    speechRef.current.stop();
   }, []);
 
   return (

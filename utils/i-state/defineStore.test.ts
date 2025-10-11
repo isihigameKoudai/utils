@@ -59,6 +59,7 @@ describe('defineStore', () => {
         text: string;
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const store = defineStore<TestState, any, any>({
         state: { count: 0, text: '' },
         queries: {},
@@ -105,7 +106,9 @@ describe('defineStore', () => {
       };
 
       type TestActions = {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setValue: (context: any, value: number) => void;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setMultiple: (context: any, a: number, b: string) => void;
       };
 

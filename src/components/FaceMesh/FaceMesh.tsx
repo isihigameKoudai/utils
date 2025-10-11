@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useRef } from 'react';
 
-import { Face } from './type';
+import type { Face } from './type';
 import { drawMesh } from './drawMesh';
 
 interface Props {
@@ -52,5 +52,7 @@ const FaceMesh = forwardRef<HTMLVideoElement, Props>(({ objects }, ref) => {
     </div>
   );
 });
+
+FaceMesh.displayName = 'FaceMesh';
 
 export default FaceMesh;

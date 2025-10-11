@@ -1,12 +1,9 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useRef,
-  ComponentType,
-} from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 
-import { DetectedObject, VisualDetection } from '../../../../utils/tensorflow';
+import {
+  type DetectedObject,
+  VisualDetection,
+} from '../../../../utils/tensorflow';
 import VisualDetectionView from '../../../components/VisualDetectionView';
 import { DETECTOR_OPACITY } from '../const';
 
@@ -18,19 +15,21 @@ const DetectorView: React.FC<DetectorViewProps> = ({
   opacity = 1.0,
   onDetect = () => {},
 }) => {
-  let isInit = true;
-  const detector = new VisualDetection();
+  const isInitRef = useRef(true);
+  const detectorRef = useRef(new VisualDetection());
   const $videoContainer = useRef<HTMLDivElement>(null);
   const [objects, setObjects] = useState<DetectedObject[]>([]);
   const [isShow, setIsShow] = useState(false);
 
   const handleDetect = useCallback(async () => {
+    const detector = detectorRef.current;
     if (detector.$video && detector._$video && detector.model) {
-      detector.$video.style.position = 'absolute';
-      detector.$video.style.top = '0px';
-      detector.$video.style.left = '0px';
-      detector.$video.style.opacity = `${DETECTOR_OPACITY}`;
-      $videoContainer.current?.appendChild(detector?.$video);
+      const video = detector.$video;
+      video.style.position = 'absolute';
+      video.style.top = '0px';
+      video.style.left = '0px';
+      video.style.opacity = `${DETECTOR_OPACITY}`;
+      $videoContainer.current?.appendChild(video);
     }
     await detector.start((objectList) => {
       const objects = objectList.filter((obj) => obj.class === 'person');
@@ -38,12 +37,13 @@ const DetectorView: React.FC<DetectorViewProps> = ({
       onDetect(objects);
     });
     setIsShow(false);
-  }, [$videoContainer]);
+  }, [onDetect]);
 
   useEffect(() => {
+    const detector = detectorRef.current;
     const init = async () => {
-      if (isInit) {
-        isInit = false;
+      if (isInitRef.current) {
+        isInitRef.current = false;
         await detector.load({
           width: window.innerWidth,
           height: window.innerHeight,

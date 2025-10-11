@@ -51,7 +51,9 @@ export const unique = (arr: (number | string | undefined)[]) => [
  * ]
  */
 export type ListItem = { key: string; value: number };
-export const sortByKey = <T = any>(
+export const sortByKey = <
+  T extends Record<string, unknown> = Record<string, unknown>,
+>(
   arr: T[],
   key: keyof T,
   order: 'desc' | 'asc',
@@ -83,7 +85,9 @@ export const sortByKey = <T = any>(
  *  { text: 'b', amount: 2 }
  * ]
  */
-export const sumByKey = <T = any>(
+export const sumByKey = <
+  T extends Record<string, unknown> = Record<string, unknown>,
+>(
   array: T[],
   { orderKey, numKey }: { orderKey: keyof T; numKey: keyof T },
 ): {

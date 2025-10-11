@@ -17,9 +17,9 @@ const VisualDetectionView = forwardRef<HTMLDivElement, Props>(
           position: 'relative',
         }}
       >
-        {objects.map((obj, i) => {
+        {objects.map((obj, index) => {
           return (
-            <>
+            <React.Fragment key={index}>
               <p
                 style={{
                   position: 'absolute',
@@ -57,12 +57,14 @@ const VisualDetectionView = forwardRef<HTMLDivElement, Props>(
                   }}
                 ></div>
               )}
-            </>
+            </React.Fragment>
           );
         })}
       </div>
     );
   },
 );
+
+VisualDetectionView.displayName = 'VisualDetectionView';
 
 export default VisualDetectionView;

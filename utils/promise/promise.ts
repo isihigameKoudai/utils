@@ -39,7 +39,7 @@ export function createCachePromise<T>(
  */
 export function deferred<T>(): DeferredOut<T> {
   let resolve!: (value: T | PromiseLike<T>) => void;
-  let reject!: (reason?: any) => void;
+  let reject!: (reason?: unknown) => void;
 
   const promise = new Promise<T>((res, rej) => {
     resolve = res;

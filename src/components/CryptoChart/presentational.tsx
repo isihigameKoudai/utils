@@ -1,16 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import {
-  createChart,
-  IChartApi,
-  ISeriesApi,
-  DataChangedHandler,
-} from 'lightweight-charts';
+import { createChart, type IChartApi } from 'lightweight-charts';
 
-import { ColorTheme } from '@/utils/PreferColorScheme';
+import { type ColorTheme } from '@/utils/PreferColorScheme';
 import { styled } from '@/utils/ui/styled';
 
-import { CandleStick } from './model/CandleStick';
-import { createChartColor, createSeriesColor } from './module';
+import { type CandleStick } from './model/CandleStick';
+import { createChartColor } from './module';
 
 const FullBox = styled('div')({
   width: '100%',
@@ -35,10 +30,8 @@ const CryptoChartPresentational: React.FC<CryptoChartPresenterProps> = ({
   const fullBoxRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<HTMLDivElement>(null);
   const chart = useRef<IChartApi | null>(null);
-  const series = useRef<ISeriesApi<'Candlestick'> | null>(null);
 
   const chartColor = createChartColor(colorTheme);
-  const seriesColor = createSeriesColor();
 
   useEffect(() => {
     if (!chartRef.current || !fullBoxRef.current || !chart.current) {
@@ -50,21 +43,22 @@ const CryptoChartPresentational: React.FC<CryptoChartPresenterProps> = ({
       height: height || fullBoxRef.current.clientHeight,
     });
     // TODO: エラーになるので後で直す
-    // series.current = chart.current.addCandlestickSeries(seriesColor);
-    // series.current.setData(candleData.map(candle => candle.series));
+    // const seriesColor = createSeriesColor();
+    // const series = chart.current.addCandlestickSeries(seriesColor);
+    // series.setData(candleData.map(candle => candle.series));
 
-    const handleChange: DataChangedHandler = (e) => {
-      // series.current?.setData(candleData.map(candle => candle.series));
-      console.log('subscribeDataChanged', e);
-    };
+    // const handleChange: DataChangedHandler = (e) => {
+    //   series?.setData(candleData.map(candle => candle.series));
+    //   console.log('subscribeDataChanged', e);
+    // };
 
-    // series.current.subscribeDataChanged(handleChange);
+    // series.subscribeDataChanged(handleChange);
 
     return () => {
-      // series.current?.unsubscribeDataChanged(handleChange);
+      // series?.unsubscribeDataChanged(handleChange);
       chart.current?.remove();
     };
-  }, [candleData, symbol]);
+  }, [candleData, symbol, chartColor, width, height]);
 
   useEffect(() => {
     const initialized = false;

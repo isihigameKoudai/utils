@@ -29,20 +29,29 @@ const ParticleScene: React.FC = () => {
   );
 
   useFrame(() => {
+    // eslint-disable-next-line react-hooks/immutability
     shaderArgs.uniforms.uTime.value++;
   });
 
   return (
+    // eslint-disable-next-line react/no-unknown-property
     <points rotation={[-Math.PI / 2, 0, 0]}>
+      {/* eslint-disable-next-line react/no-unknown-property */}
       <bufferGeometry attach="geometry">
         <bufferAttribute
+          // eslint-disable-next-line react/no-unknown-property
           attach="attributes-position"
+          // eslint-disable-next-line react/no-unknown-property
           args={[planePositions, 3, false]}
         />
         <shaderMaterial
+          // eslint-disable-next-line react/no-unknown-property
           transparent
+          // eslint-disable-next-line react/no-unknown-property
           depthTest={false}
+          // eslint-disable-next-line react/no-unknown-property
           depthWrite={false}
+          // eslint-disable-next-line react/no-unknown-property
           args={[shaderArgs]}
         />
       </bufferGeometry>
@@ -59,6 +68,7 @@ const ParticlePage: React.FC = () => {
         height: '100vh',
       }}
     >
+      {/* eslint-disable-next-line react/no-unknown-property */}
       <color attach="background" args={[0xf5f3fd]} />
       <OrbitControls makeDefault />
       <Stats />

@@ -60,7 +60,7 @@ export const formStore = defineStore({
     setTouched: ({ state, dispatch }, field: string) => {
       dispatch('touched', { ...state.touched, [field]: true });
     },
-    submitForm: async ({ state, dispatch, queries }) => {
+    submitForm: async ({ dispatch, queries }) => {
       if (!queries.isValid) return;
 
       dispatch('isSubmitting', true);

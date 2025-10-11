@@ -3,7 +3,7 @@ import { Symbol, Timeframe, MultiTimeframe } from '../constants';
 export interface ChartData {
   symbol: Symbol;
   timeframe: Timeframe | MultiTimeframe;
-  data: any[];
+  data: unknown[];
 }
 
 export interface ChartConfig {
