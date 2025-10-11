@@ -5,7 +5,6 @@ import { fetchFiles } from '@/utils/file';
 const Index: React.FC = () => {
   const onOpenFile = useCallback(async () => {
     const { files } = await fetchFiles();
-    console.log(files);
   },[])
 
   const onOpenImages = useCallback(async () => {
