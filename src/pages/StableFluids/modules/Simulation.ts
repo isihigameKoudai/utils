@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import Common from './Common';
-import Controls, { ControlProps } from './Controls';
+import Controls, { type ControlProps } from './Controls';
 
 import Advection from './Advection';
 import ExternalForce from './ExternalForce';
@@ -9,7 +9,7 @@ import Divergence from './Divergence';
 import Poisson from './Poisson';
 import Pressure from './Pressure';
 
-import { Fbos, createFbos } from './utils/cretateFbos';
+import { type Fbos, createFbos } from './utils/cretateFbos';
 
 export default class Simulation {
   options: ControlProps;

@@ -4,7 +4,7 @@
 import { create } from 'zustand';
 import { fromEntries } from '@/utils/object';
 
-import {
+import type {
   StateProps,
   QueriesProps,
   ActionsProps,
@@ -101,10 +101,13 @@ export const defineStore = <
     const { state, dispatch } = store();
 
     const queries = fromEntries<Queries<Q>>(
-      Object.entries(queryFns).map(([key, fn]) => [key as keyof Q, fn(state)]),
+      Object.entries(queryFns).map(([key, fn]) => [
+        key as keyof Q,
+        fn(state),
+      ]) as [keyof Q, Queries<Q>[keyof Q]][],
     );
 
-    const actions = fromEntries<Actions<S, typeof queries, A>>(
+    const actions = fromEntries<Actions<S, Q, A>>(
       Object.entries(actionFns).map(([key, fn]) => [
         key as keyof A,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -116,7 +119,7 @@ export const defineStore = <
               dispatch,
             },
             ...args,
-          )) as Actions<S, typeof queries, A>[keyof A],
+          )) as Actions<S, Q, A>[keyof A],
       ]),
     );
 

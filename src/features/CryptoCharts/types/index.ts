@@ -1,4 +1,4 @@
-import { Symbol, Timeframe, MultiTimeframe } from '../constants';
+import type { Symbol, Timeframe, MultiTimeframe } from '../constants';
 
 export interface ChartData {
   symbol: Symbol;

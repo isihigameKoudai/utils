@@ -8,299 +8,299 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './../routes/__root';
-import { Route as StableFluidsRouteImport } from './../routes/stable-fluids';
-import { Route as ShaderRouteImport } from './../routes/shader';
-import { Route as PlaygroundRouteImport } from './../routes/playground';
-import { Route as MeltTheBorderRouteImport } from './../routes/melt-the-border';
-import { Route as IndexRouteImport } from './../routes/index';
-import { Route as ThreeDimensionIndexRouteImport } from './../routes/three-dimension/index';
-import { Route as NoiseIndexRouteImport } from './../routes/noise/index';
-import { Route as CryptoChartsIndexRouteImport } from './../routes/crypto-charts/index';
-import { Route as AudioIndexRouteImport } from './../routes/audio/index';
-import { Route as AggregateBillIndexRouteImport } from './../routes/aggregate-bill/index';
-import { Route as ThreeDimensionShadowsRouteImport } from './../routes/three-dimension/shadows';
-import { Route as ThreeDimensionShaderRouteImport } from './../routes/three-dimension/shader';
-import { Route as ThreeDimensionParticleRouteImport } from './../routes/three-dimension/particle';
-import { Route as SamplesSquareAparkRouteImport } from './../routes/samples/square-apark';
-import { Route as SamplesPoseDetectionRouteImport } from './../routes/samples/pose-detection';
-import { Route as SamplesNormalCircleRouteImport } from './../routes/samples/normal-circle';
-import { Route as SamplesIstateRouteImport } from './../routes/samples/istate';
-import { Route as SamplesHandPoseDetectionRouteImport } from './../routes/samples/hand-pose-detection';
-import { Route as SamplesFollowerCircleRouteImport } from './../routes/samples/follower-circle';
-import { Route as SamplesFluidDetectRouteImport } from './../routes/samples/fluid-detect';
-import { Route as SamplesFaceLandmarkDetectorRouteImport } from './../routes/samples/face-landmark-detector';
-import { Route as SamplesDetectorRouteImport } from './../routes/samples/detector';
-import { Route as SamplesAudioCircleRouteImport } from './../routes/samples/audio-circle';
-import { Route as Samples5starParticleRouteImport } from './../routes/samples/5star-particle';
-import { Route as NoiseFractalRouteImport } from './../routes/noise/fractal';
-import { Route as NoiseFbmRouteImport } from './../routes/noise/fbm';
-import { Route as NoiseCellularRouteImport } from './../routes/noise/cellular';
-import { Route as AudioSpeechRouteImport } from './../routes/audio/speech';
-import { Route as AudioMicRouteImport } from './../routes/audio/mic';
-import { Route as AggregateBillSummaryRouteImport } from './../routes/aggregate-bill/summary';
-import { Route as CryptoChartsMultiTokenRouteImport } from './../routes/crypto-charts/multi/$token';
+import { Route as rootRouteImport } from './../routes/__root'
+import { Route as StableFluidsRouteImport } from './../routes/stable-fluids'
+import { Route as ShaderRouteImport } from './../routes/shader'
+import { Route as PlaygroundRouteImport } from './../routes/playground'
+import { Route as MeltTheBorderRouteImport } from './../routes/melt-the-border'
+import { Route as IndexRouteImport } from './../routes/index'
+import { Route as ThreeDimensionIndexRouteImport } from './../routes/three-dimension/index'
+import { Route as NoiseIndexRouteImport } from './../routes/noise/index'
+import { Route as CryptoChartsIndexRouteImport } from './../routes/crypto-charts/index'
+import { Route as AudioIndexRouteImport } from './../routes/audio/index'
+import { Route as AggregateBillIndexRouteImport } from './../routes/aggregate-bill/index'
+import { Route as ThreeDimensionShadowsRouteImport } from './../routes/three-dimension/shadows'
+import { Route as ThreeDimensionShaderRouteImport } from './../routes/three-dimension/shader'
+import { Route as ThreeDimensionParticleRouteImport } from './../routes/three-dimension/particle'
+import { Route as SamplesSquareAparkRouteImport } from './../routes/samples/square-apark'
+import { Route as SamplesPoseDetectionRouteImport } from './../routes/samples/pose-detection'
+import { Route as SamplesNormalCircleRouteImport } from './../routes/samples/normal-circle'
+import { Route as SamplesIstateRouteImport } from './../routes/samples/istate'
+import { Route as SamplesHandPoseDetectionRouteImport } from './../routes/samples/hand-pose-detection'
+import { Route as SamplesFollowerCircleRouteImport } from './../routes/samples/follower-circle'
+import { Route as SamplesFluidDetectRouteImport } from './../routes/samples/fluid-detect'
+import { Route as SamplesFaceLandmarkDetectorRouteImport } from './../routes/samples/face-landmark-detector'
+import { Route as SamplesDetectorRouteImport } from './../routes/samples/detector'
+import { Route as SamplesAudioCircleRouteImport } from './../routes/samples/audio-circle'
+import { Route as Samples5starParticleRouteImport } from './../routes/samples/5star-particle'
+import { Route as NoiseFractalRouteImport } from './../routes/noise/fractal'
+import { Route as NoiseFbmRouteImport } from './../routes/noise/fbm'
+import { Route as NoiseCellularRouteImport } from './../routes/noise/cellular'
+import { Route as AudioSpeechRouteImport } from './../routes/audio/speech'
+import { Route as AudioMicRouteImport } from './../routes/audio/mic'
+import { Route as AggregateBillSummaryRouteImport } from './../routes/aggregate-bill/summary'
+import { Route as CryptoChartsMultiTokenRouteImport } from './../routes/crypto-charts/multi/$token'
 
 const StableFluidsRoute = StableFluidsRouteImport.update({
   id: '/stable-fluids',
   path: '/stable-fluids',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ShaderRoute = ShaderRouteImport.update({
   id: '/shader',
   path: '/shader',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const PlaygroundRoute = PlaygroundRouteImport.update({
   id: '/playground',
   path: '/playground',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const MeltTheBorderRoute = MeltTheBorderRouteImport.update({
   id: '/melt-the-border',
   path: '/melt-the-border',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ThreeDimensionIndexRoute = ThreeDimensionIndexRouteImport.update({
   id: '/three-dimension/',
   path: '/three-dimension/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const NoiseIndexRoute = NoiseIndexRouteImport.update({
   id: '/noise/',
   path: '/noise/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const CryptoChartsIndexRoute = CryptoChartsIndexRouteImport.update({
   id: '/crypto-charts/',
   path: '/crypto-charts/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AudioIndexRoute = AudioIndexRouteImport.update({
   id: '/audio/',
   path: '/audio/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AggregateBillIndexRoute = AggregateBillIndexRouteImport.update({
   id: '/aggregate-bill/',
   path: '/aggregate-bill/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ThreeDimensionShadowsRoute = ThreeDimensionShadowsRouteImport.update({
   id: '/three-dimension/shadows',
   path: '/three-dimension/shadows',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ThreeDimensionShaderRoute = ThreeDimensionShaderRouteImport.update({
   id: '/three-dimension/shader',
   path: '/three-dimension/shader',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ThreeDimensionParticleRoute = ThreeDimensionParticleRouteImport.update({
   id: '/three-dimension/particle',
   path: '/three-dimension/particle',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const SamplesSquareAparkRoute = SamplesSquareAparkRouteImport.update({
   id: '/samples/square-apark',
   path: '/samples/square-apark',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const SamplesPoseDetectionRoute = SamplesPoseDetectionRouteImport.update({
   id: '/samples/pose-detection',
   path: '/samples/pose-detection',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const SamplesNormalCircleRoute = SamplesNormalCircleRouteImport.update({
   id: '/samples/normal-circle',
   path: '/samples/normal-circle',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const SamplesIstateRoute = SamplesIstateRouteImport.update({
   id: '/samples/istate',
   path: '/samples/istate',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const SamplesHandPoseDetectionRoute =
   SamplesHandPoseDetectionRouteImport.update({
     id: '/samples/hand-pose-detection',
     path: '/samples/hand-pose-detection',
     getParentRoute: () => rootRouteImport,
-  } as any);
+  } as any)
 const SamplesFollowerCircleRoute = SamplesFollowerCircleRouteImport.update({
   id: '/samples/follower-circle',
   path: '/samples/follower-circle',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const SamplesFluidDetectRoute = SamplesFluidDetectRouteImport.update({
   id: '/samples/fluid-detect',
   path: '/samples/fluid-detect',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const SamplesFaceLandmarkDetectorRoute =
   SamplesFaceLandmarkDetectorRouteImport.update({
     id: '/samples/face-landmark-detector',
     path: '/samples/face-landmark-detector',
     getParentRoute: () => rootRouteImport,
-  } as any);
+  } as any)
 const SamplesDetectorRoute = SamplesDetectorRouteImport.update({
   id: '/samples/detector',
   path: '/samples/detector',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const SamplesAudioCircleRoute = SamplesAudioCircleRouteImport.update({
   id: '/samples/audio-circle',
   path: '/samples/audio-circle',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const Samples5starParticleRoute = Samples5starParticleRouteImport.update({
   id: '/samples/5star-particle',
   path: '/samples/5star-particle',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const NoiseFractalRoute = NoiseFractalRouteImport.update({
   id: '/noise/fractal',
   path: '/noise/fractal',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const NoiseFbmRoute = NoiseFbmRouteImport.update({
   id: '/noise/fbm',
   path: '/noise/fbm',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const NoiseCellularRoute = NoiseCellularRouteImport.update({
   id: '/noise/cellular',
   path: '/noise/cellular',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AudioSpeechRoute = AudioSpeechRouteImport.update({
   id: '/audio/speech',
   path: '/audio/speech',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AudioMicRoute = AudioMicRouteImport.update({
   id: '/audio/mic',
   path: '/audio/mic',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AggregateBillSummaryRoute = AggregateBillSummaryRouteImport.update({
   id: '/aggregate-bill/summary',
   path: '/aggregate-bill/summary',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const CryptoChartsMultiTokenRoute = CryptoChartsMultiTokenRouteImport.update({
   id: '/crypto-charts/multi/$token',
   path: '/crypto-charts/multi/$token',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute;
-  '/melt-the-border': typeof MeltTheBorderRoute;
-  '/playground': typeof PlaygroundRoute;
-  '/shader': typeof ShaderRoute;
-  '/stable-fluids': typeof StableFluidsRoute;
-  '/aggregate-bill/summary': typeof AggregateBillSummaryRoute;
-  '/audio/mic': typeof AudioMicRoute;
-  '/audio/speech': typeof AudioSpeechRoute;
-  '/noise/cellular': typeof NoiseCellularRoute;
-  '/noise/fbm': typeof NoiseFbmRoute;
-  '/noise/fractal': typeof NoiseFractalRoute;
-  '/samples/5star-particle': typeof Samples5starParticleRoute;
-  '/samples/audio-circle': typeof SamplesAudioCircleRoute;
-  '/samples/detector': typeof SamplesDetectorRoute;
-  '/samples/face-landmark-detector': typeof SamplesFaceLandmarkDetectorRoute;
-  '/samples/fluid-detect': typeof SamplesFluidDetectRoute;
-  '/samples/follower-circle': typeof SamplesFollowerCircleRoute;
-  '/samples/hand-pose-detection': typeof SamplesHandPoseDetectionRoute;
-  '/samples/istate': typeof SamplesIstateRoute;
-  '/samples/normal-circle': typeof SamplesNormalCircleRoute;
-  '/samples/pose-detection': typeof SamplesPoseDetectionRoute;
-  '/samples/square-apark': typeof SamplesSquareAparkRoute;
-  '/three-dimension/particle': typeof ThreeDimensionParticleRoute;
-  '/three-dimension/shader': typeof ThreeDimensionShaderRoute;
-  '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute;
-  '/aggregate-bill': typeof AggregateBillIndexRoute;
-  '/audio': typeof AudioIndexRoute;
-  '/crypto-charts': typeof CryptoChartsIndexRoute;
-  '/noise': typeof NoiseIndexRoute;
-  '/three-dimension': typeof ThreeDimensionIndexRoute;
-  '/crypto-charts/multi/$token': typeof CryptoChartsMultiTokenRoute;
+  '/': typeof IndexRoute
+  '/melt-the-border': typeof MeltTheBorderRoute
+  '/playground': typeof PlaygroundRoute
+  '/shader': typeof ShaderRoute
+  '/stable-fluids': typeof StableFluidsRoute
+  '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
+  '/audio/mic': typeof AudioMicRoute
+  '/audio/speech': typeof AudioSpeechRoute
+  '/noise/cellular': typeof NoiseCellularRoute
+  '/noise/fbm': typeof NoiseFbmRoute
+  '/noise/fractal': typeof NoiseFractalRoute
+  '/samples/5star-particle': typeof Samples5starParticleRoute
+  '/samples/audio-circle': typeof SamplesAudioCircleRoute
+  '/samples/detector': typeof SamplesDetectorRoute
+  '/samples/face-landmark-detector': typeof SamplesFaceLandmarkDetectorRoute
+  '/samples/fluid-detect': typeof SamplesFluidDetectRoute
+  '/samples/follower-circle': typeof SamplesFollowerCircleRoute
+  '/samples/hand-pose-detection': typeof SamplesHandPoseDetectionRoute
+  '/samples/istate': typeof SamplesIstateRoute
+  '/samples/normal-circle': typeof SamplesNormalCircleRoute
+  '/samples/pose-detection': typeof SamplesPoseDetectionRoute
+  '/samples/square-apark': typeof SamplesSquareAparkRoute
+  '/three-dimension/particle': typeof ThreeDimensionParticleRoute
+  '/three-dimension/shader': typeof ThreeDimensionShaderRoute
+  '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute
+  '/aggregate-bill': typeof AggregateBillIndexRoute
+  '/audio': typeof AudioIndexRoute
+  '/crypto-charts': typeof CryptoChartsIndexRoute
+  '/noise': typeof NoiseIndexRoute
+  '/three-dimension': typeof ThreeDimensionIndexRoute
+  '/crypto-charts/multi/$token': typeof CryptoChartsMultiTokenRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute;
-  '/melt-the-border': typeof MeltTheBorderRoute;
-  '/playground': typeof PlaygroundRoute;
-  '/shader': typeof ShaderRoute;
-  '/stable-fluids': typeof StableFluidsRoute;
-  '/aggregate-bill/summary': typeof AggregateBillSummaryRoute;
-  '/audio/mic': typeof AudioMicRoute;
-  '/audio/speech': typeof AudioSpeechRoute;
-  '/noise/cellular': typeof NoiseCellularRoute;
-  '/noise/fbm': typeof NoiseFbmRoute;
-  '/noise/fractal': typeof NoiseFractalRoute;
-  '/samples/5star-particle': typeof Samples5starParticleRoute;
-  '/samples/audio-circle': typeof SamplesAudioCircleRoute;
-  '/samples/detector': typeof SamplesDetectorRoute;
-  '/samples/face-landmark-detector': typeof SamplesFaceLandmarkDetectorRoute;
-  '/samples/fluid-detect': typeof SamplesFluidDetectRoute;
-  '/samples/follower-circle': typeof SamplesFollowerCircleRoute;
-  '/samples/hand-pose-detection': typeof SamplesHandPoseDetectionRoute;
-  '/samples/istate': typeof SamplesIstateRoute;
-  '/samples/normal-circle': typeof SamplesNormalCircleRoute;
-  '/samples/pose-detection': typeof SamplesPoseDetectionRoute;
-  '/samples/square-apark': typeof SamplesSquareAparkRoute;
-  '/three-dimension/particle': typeof ThreeDimensionParticleRoute;
-  '/three-dimension/shader': typeof ThreeDimensionShaderRoute;
-  '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute;
-  '/aggregate-bill': typeof AggregateBillIndexRoute;
-  '/audio': typeof AudioIndexRoute;
-  '/crypto-charts': typeof CryptoChartsIndexRoute;
-  '/noise': typeof NoiseIndexRoute;
-  '/three-dimension': typeof ThreeDimensionIndexRoute;
-  '/crypto-charts/multi/$token': typeof CryptoChartsMultiTokenRoute;
+  '/': typeof IndexRoute
+  '/melt-the-border': typeof MeltTheBorderRoute
+  '/playground': typeof PlaygroundRoute
+  '/shader': typeof ShaderRoute
+  '/stable-fluids': typeof StableFluidsRoute
+  '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
+  '/audio/mic': typeof AudioMicRoute
+  '/audio/speech': typeof AudioSpeechRoute
+  '/noise/cellular': typeof NoiseCellularRoute
+  '/noise/fbm': typeof NoiseFbmRoute
+  '/noise/fractal': typeof NoiseFractalRoute
+  '/samples/5star-particle': typeof Samples5starParticleRoute
+  '/samples/audio-circle': typeof SamplesAudioCircleRoute
+  '/samples/detector': typeof SamplesDetectorRoute
+  '/samples/face-landmark-detector': typeof SamplesFaceLandmarkDetectorRoute
+  '/samples/fluid-detect': typeof SamplesFluidDetectRoute
+  '/samples/follower-circle': typeof SamplesFollowerCircleRoute
+  '/samples/hand-pose-detection': typeof SamplesHandPoseDetectionRoute
+  '/samples/istate': typeof SamplesIstateRoute
+  '/samples/normal-circle': typeof SamplesNormalCircleRoute
+  '/samples/pose-detection': typeof SamplesPoseDetectionRoute
+  '/samples/square-apark': typeof SamplesSquareAparkRoute
+  '/three-dimension/particle': typeof ThreeDimensionParticleRoute
+  '/three-dimension/shader': typeof ThreeDimensionShaderRoute
+  '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute
+  '/aggregate-bill': typeof AggregateBillIndexRoute
+  '/audio': typeof AudioIndexRoute
+  '/crypto-charts': typeof CryptoChartsIndexRoute
+  '/noise': typeof NoiseIndexRoute
+  '/three-dimension': typeof ThreeDimensionIndexRoute
+  '/crypto-charts/multi/$token': typeof CryptoChartsMultiTokenRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  '/': typeof IndexRoute;
-  '/melt-the-border': typeof MeltTheBorderRoute;
-  '/playground': typeof PlaygroundRoute;
-  '/shader': typeof ShaderRoute;
-  '/stable-fluids': typeof StableFluidsRoute;
-  '/aggregate-bill/summary': typeof AggregateBillSummaryRoute;
-  '/audio/mic': typeof AudioMicRoute;
-  '/audio/speech': typeof AudioSpeechRoute;
-  '/noise/cellular': typeof NoiseCellularRoute;
-  '/noise/fbm': typeof NoiseFbmRoute;
-  '/noise/fractal': typeof NoiseFractalRoute;
-  '/samples/5star-particle': typeof Samples5starParticleRoute;
-  '/samples/audio-circle': typeof SamplesAudioCircleRoute;
-  '/samples/detector': typeof SamplesDetectorRoute;
-  '/samples/face-landmark-detector': typeof SamplesFaceLandmarkDetectorRoute;
-  '/samples/fluid-detect': typeof SamplesFluidDetectRoute;
-  '/samples/follower-circle': typeof SamplesFollowerCircleRoute;
-  '/samples/hand-pose-detection': typeof SamplesHandPoseDetectionRoute;
-  '/samples/istate': typeof SamplesIstateRoute;
-  '/samples/normal-circle': typeof SamplesNormalCircleRoute;
-  '/samples/pose-detection': typeof SamplesPoseDetectionRoute;
-  '/samples/square-apark': typeof SamplesSquareAparkRoute;
-  '/three-dimension/particle': typeof ThreeDimensionParticleRoute;
-  '/three-dimension/shader': typeof ThreeDimensionShaderRoute;
-  '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute;
-  '/aggregate-bill/': typeof AggregateBillIndexRoute;
-  '/audio/': typeof AudioIndexRoute;
-  '/crypto-charts/': typeof CryptoChartsIndexRoute;
-  '/noise/': typeof NoiseIndexRoute;
-  '/three-dimension/': typeof ThreeDimensionIndexRoute;
-  '/crypto-charts/multi/$token': typeof CryptoChartsMultiTokenRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/melt-the-border': typeof MeltTheBorderRoute
+  '/playground': typeof PlaygroundRoute
+  '/shader': typeof ShaderRoute
+  '/stable-fluids': typeof StableFluidsRoute
+  '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
+  '/audio/mic': typeof AudioMicRoute
+  '/audio/speech': typeof AudioSpeechRoute
+  '/noise/cellular': typeof NoiseCellularRoute
+  '/noise/fbm': typeof NoiseFbmRoute
+  '/noise/fractal': typeof NoiseFractalRoute
+  '/samples/5star-particle': typeof Samples5starParticleRoute
+  '/samples/audio-circle': typeof SamplesAudioCircleRoute
+  '/samples/detector': typeof SamplesDetectorRoute
+  '/samples/face-landmark-detector': typeof SamplesFaceLandmarkDetectorRoute
+  '/samples/fluid-detect': typeof SamplesFluidDetectRoute
+  '/samples/follower-circle': typeof SamplesFollowerCircleRoute
+  '/samples/hand-pose-detection': typeof SamplesHandPoseDetectionRoute
+  '/samples/istate': typeof SamplesIstateRoute
+  '/samples/normal-circle': typeof SamplesNormalCircleRoute
+  '/samples/pose-detection': typeof SamplesPoseDetectionRoute
+  '/samples/square-apark': typeof SamplesSquareAparkRoute
+  '/three-dimension/particle': typeof ThreeDimensionParticleRoute
+  '/three-dimension/shader': typeof ThreeDimensionShaderRoute
+  '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute
+  '/aggregate-bill/': typeof AggregateBillIndexRoute
+  '/audio/': typeof AudioIndexRoute
+  '/crypto-charts/': typeof CryptoChartsIndexRoute
+  '/noise/': typeof NoiseIndexRoute
+  '/three-dimension/': typeof ThreeDimensionIndexRoute
+  '/crypto-charts/multi/$token': typeof CryptoChartsMultiTokenRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/melt-the-border'
@@ -332,8 +332,8 @@ export interface FileRouteTypes {
     | '/crypto-charts'
     | '/noise'
     | '/three-dimension'
-    | '/crypto-charts/multi/$token';
-  fileRoutesByTo: FileRoutesByTo;
+    | '/crypto-charts/multi/$token'
+  fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/melt-the-border'
@@ -365,7 +365,7 @@ export interface FileRouteTypes {
     | '/crypto-charts'
     | '/noise'
     | '/three-dimension'
-    | '/crypto-charts/multi/$token';
+    | '/crypto-charts/multi/$token'
   id:
     | '__root__'
     | '/'
@@ -398,262 +398,262 @@ export interface FileRouteTypes {
     | '/crypto-charts/'
     | '/noise/'
     | '/three-dimension/'
-    | '/crypto-charts/multi/$token';
-  fileRoutesById: FileRoutesById;
+    | '/crypto-charts/multi/$token'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  MeltTheBorderRoute: typeof MeltTheBorderRoute;
-  PlaygroundRoute: typeof PlaygroundRoute;
-  ShaderRoute: typeof ShaderRoute;
-  StableFluidsRoute: typeof StableFluidsRoute;
-  AggregateBillSummaryRoute: typeof AggregateBillSummaryRoute;
-  AudioMicRoute: typeof AudioMicRoute;
-  AudioSpeechRoute: typeof AudioSpeechRoute;
-  NoiseCellularRoute: typeof NoiseCellularRoute;
-  NoiseFbmRoute: typeof NoiseFbmRoute;
-  NoiseFractalRoute: typeof NoiseFractalRoute;
-  Samples5starParticleRoute: typeof Samples5starParticleRoute;
-  SamplesAudioCircleRoute: typeof SamplesAudioCircleRoute;
-  SamplesDetectorRoute: typeof SamplesDetectorRoute;
-  SamplesFaceLandmarkDetectorRoute: typeof SamplesFaceLandmarkDetectorRoute;
-  SamplesFluidDetectRoute: typeof SamplesFluidDetectRoute;
-  SamplesFollowerCircleRoute: typeof SamplesFollowerCircleRoute;
-  SamplesHandPoseDetectionRoute: typeof SamplesHandPoseDetectionRoute;
-  SamplesIstateRoute: typeof SamplesIstateRoute;
-  SamplesNormalCircleRoute: typeof SamplesNormalCircleRoute;
-  SamplesPoseDetectionRoute: typeof SamplesPoseDetectionRoute;
-  SamplesSquareAparkRoute: typeof SamplesSquareAparkRoute;
-  ThreeDimensionParticleRoute: typeof ThreeDimensionParticleRoute;
-  ThreeDimensionShaderRoute: typeof ThreeDimensionShaderRoute;
-  ThreeDimensionShadowsRoute: typeof ThreeDimensionShadowsRoute;
-  AggregateBillIndexRoute: typeof AggregateBillIndexRoute;
-  AudioIndexRoute: typeof AudioIndexRoute;
-  CryptoChartsIndexRoute: typeof CryptoChartsIndexRoute;
-  NoiseIndexRoute: typeof NoiseIndexRoute;
-  ThreeDimensionIndexRoute: typeof ThreeDimensionIndexRoute;
-  CryptoChartsMultiTokenRoute: typeof CryptoChartsMultiTokenRoute;
+  IndexRoute: typeof IndexRoute
+  MeltTheBorderRoute: typeof MeltTheBorderRoute
+  PlaygroundRoute: typeof PlaygroundRoute
+  ShaderRoute: typeof ShaderRoute
+  StableFluidsRoute: typeof StableFluidsRoute
+  AggregateBillSummaryRoute: typeof AggregateBillSummaryRoute
+  AudioMicRoute: typeof AudioMicRoute
+  AudioSpeechRoute: typeof AudioSpeechRoute
+  NoiseCellularRoute: typeof NoiseCellularRoute
+  NoiseFbmRoute: typeof NoiseFbmRoute
+  NoiseFractalRoute: typeof NoiseFractalRoute
+  Samples5starParticleRoute: typeof Samples5starParticleRoute
+  SamplesAudioCircleRoute: typeof SamplesAudioCircleRoute
+  SamplesDetectorRoute: typeof SamplesDetectorRoute
+  SamplesFaceLandmarkDetectorRoute: typeof SamplesFaceLandmarkDetectorRoute
+  SamplesFluidDetectRoute: typeof SamplesFluidDetectRoute
+  SamplesFollowerCircleRoute: typeof SamplesFollowerCircleRoute
+  SamplesHandPoseDetectionRoute: typeof SamplesHandPoseDetectionRoute
+  SamplesIstateRoute: typeof SamplesIstateRoute
+  SamplesNormalCircleRoute: typeof SamplesNormalCircleRoute
+  SamplesPoseDetectionRoute: typeof SamplesPoseDetectionRoute
+  SamplesSquareAparkRoute: typeof SamplesSquareAparkRoute
+  ThreeDimensionParticleRoute: typeof ThreeDimensionParticleRoute
+  ThreeDimensionShaderRoute: typeof ThreeDimensionShaderRoute
+  ThreeDimensionShadowsRoute: typeof ThreeDimensionShadowsRoute
+  AggregateBillIndexRoute: typeof AggregateBillIndexRoute
+  AudioIndexRoute: typeof AudioIndexRoute
+  CryptoChartsIndexRoute: typeof CryptoChartsIndexRoute
+  NoiseIndexRoute: typeof NoiseIndexRoute
+  ThreeDimensionIndexRoute: typeof ThreeDimensionIndexRoute
+  CryptoChartsMultiTokenRoute: typeof CryptoChartsMultiTokenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/stable-fluids': {
-      id: '/stable-fluids';
-      path: '/stable-fluids';
-      fullPath: '/stable-fluids';
-      preLoaderRoute: typeof StableFluidsRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/stable-fluids'
+      path: '/stable-fluids'
+      fullPath: '/stable-fluids'
+      preLoaderRoute: typeof StableFluidsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/shader': {
-      id: '/shader';
-      path: '/shader';
-      fullPath: '/shader';
-      preLoaderRoute: typeof ShaderRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/shader'
+      path: '/shader'
+      fullPath: '/shader'
+      preLoaderRoute: typeof ShaderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/playground': {
-      id: '/playground';
-      path: '/playground';
-      fullPath: '/playground';
-      preLoaderRoute: typeof PlaygroundRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/playground'
+      path: '/playground'
+      fullPath: '/playground'
+      preLoaderRoute: typeof PlaygroundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/melt-the-border': {
-      id: '/melt-the-border';
-      path: '/melt-the-border';
-      fullPath: '/melt-the-border';
-      preLoaderRoute: typeof MeltTheBorderRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/melt-the-border'
+      path: '/melt-the-border'
+      fullPath: '/melt-the-border'
+      preLoaderRoute: typeof MeltTheBorderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
-      id: '/';
-      path: '/';
-      fullPath: '/';
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/three-dimension/': {
-      id: '/three-dimension/';
-      path: '/three-dimension';
-      fullPath: '/three-dimension';
-      preLoaderRoute: typeof ThreeDimensionIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/three-dimension/'
+      path: '/three-dimension'
+      fullPath: '/three-dimension'
+      preLoaderRoute: typeof ThreeDimensionIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/noise/': {
-      id: '/noise/';
-      path: '/noise';
-      fullPath: '/noise';
-      preLoaderRoute: typeof NoiseIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/noise/'
+      path: '/noise'
+      fullPath: '/noise'
+      preLoaderRoute: typeof NoiseIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/crypto-charts/': {
-      id: '/crypto-charts/';
-      path: '/crypto-charts';
-      fullPath: '/crypto-charts';
-      preLoaderRoute: typeof CryptoChartsIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/crypto-charts/'
+      path: '/crypto-charts'
+      fullPath: '/crypto-charts'
+      preLoaderRoute: typeof CryptoChartsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/audio/': {
-      id: '/audio/';
-      path: '/audio';
-      fullPath: '/audio';
-      preLoaderRoute: typeof AudioIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/audio/'
+      path: '/audio'
+      fullPath: '/audio'
+      preLoaderRoute: typeof AudioIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/aggregate-bill/': {
-      id: '/aggregate-bill/';
-      path: '/aggregate-bill';
-      fullPath: '/aggregate-bill';
-      preLoaderRoute: typeof AggregateBillIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/aggregate-bill/'
+      path: '/aggregate-bill'
+      fullPath: '/aggregate-bill'
+      preLoaderRoute: typeof AggregateBillIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/three-dimension/shadows': {
-      id: '/three-dimension/shadows';
-      path: '/three-dimension/shadows';
-      fullPath: '/three-dimension/shadows';
-      preLoaderRoute: typeof ThreeDimensionShadowsRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/three-dimension/shadows'
+      path: '/three-dimension/shadows'
+      fullPath: '/three-dimension/shadows'
+      preLoaderRoute: typeof ThreeDimensionShadowsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/three-dimension/shader': {
-      id: '/three-dimension/shader';
-      path: '/three-dimension/shader';
-      fullPath: '/three-dimension/shader';
-      preLoaderRoute: typeof ThreeDimensionShaderRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/three-dimension/shader'
+      path: '/three-dimension/shader'
+      fullPath: '/three-dimension/shader'
+      preLoaderRoute: typeof ThreeDimensionShaderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/three-dimension/particle': {
-      id: '/three-dimension/particle';
-      path: '/three-dimension/particle';
-      fullPath: '/three-dimension/particle';
-      preLoaderRoute: typeof ThreeDimensionParticleRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/three-dimension/particle'
+      path: '/three-dimension/particle'
+      fullPath: '/three-dimension/particle'
+      preLoaderRoute: typeof ThreeDimensionParticleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/samples/square-apark': {
-      id: '/samples/square-apark';
-      path: '/samples/square-apark';
-      fullPath: '/samples/square-apark';
-      preLoaderRoute: typeof SamplesSquareAparkRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/samples/square-apark'
+      path: '/samples/square-apark'
+      fullPath: '/samples/square-apark'
+      preLoaderRoute: typeof SamplesSquareAparkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/samples/pose-detection': {
-      id: '/samples/pose-detection';
-      path: '/samples/pose-detection';
-      fullPath: '/samples/pose-detection';
-      preLoaderRoute: typeof SamplesPoseDetectionRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/samples/pose-detection'
+      path: '/samples/pose-detection'
+      fullPath: '/samples/pose-detection'
+      preLoaderRoute: typeof SamplesPoseDetectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/samples/normal-circle': {
-      id: '/samples/normal-circle';
-      path: '/samples/normal-circle';
-      fullPath: '/samples/normal-circle';
-      preLoaderRoute: typeof SamplesNormalCircleRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/samples/normal-circle'
+      path: '/samples/normal-circle'
+      fullPath: '/samples/normal-circle'
+      preLoaderRoute: typeof SamplesNormalCircleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/samples/istate': {
-      id: '/samples/istate';
-      path: '/samples/istate';
-      fullPath: '/samples/istate';
-      preLoaderRoute: typeof SamplesIstateRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/samples/istate'
+      path: '/samples/istate'
+      fullPath: '/samples/istate'
+      preLoaderRoute: typeof SamplesIstateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/samples/hand-pose-detection': {
-      id: '/samples/hand-pose-detection';
-      path: '/samples/hand-pose-detection';
-      fullPath: '/samples/hand-pose-detection';
-      preLoaderRoute: typeof SamplesHandPoseDetectionRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/samples/hand-pose-detection'
+      path: '/samples/hand-pose-detection'
+      fullPath: '/samples/hand-pose-detection'
+      preLoaderRoute: typeof SamplesHandPoseDetectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/samples/follower-circle': {
-      id: '/samples/follower-circle';
-      path: '/samples/follower-circle';
-      fullPath: '/samples/follower-circle';
-      preLoaderRoute: typeof SamplesFollowerCircleRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/samples/follower-circle'
+      path: '/samples/follower-circle'
+      fullPath: '/samples/follower-circle'
+      preLoaderRoute: typeof SamplesFollowerCircleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/samples/fluid-detect': {
-      id: '/samples/fluid-detect';
-      path: '/samples/fluid-detect';
-      fullPath: '/samples/fluid-detect';
-      preLoaderRoute: typeof SamplesFluidDetectRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/samples/fluid-detect'
+      path: '/samples/fluid-detect'
+      fullPath: '/samples/fluid-detect'
+      preLoaderRoute: typeof SamplesFluidDetectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/samples/face-landmark-detector': {
-      id: '/samples/face-landmark-detector';
-      path: '/samples/face-landmark-detector';
-      fullPath: '/samples/face-landmark-detector';
-      preLoaderRoute: typeof SamplesFaceLandmarkDetectorRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/samples/face-landmark-detector'
+      path: '/samples/face-landmark-detector'
+      fullPath: '/samples/face-landmark-detector'
+      preLoaderRoute: typeof SamplesFaceLandmarkDetectorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/samples/detector': {
-      id: '/samples/detector';
-      path: '/samples/detector';
-      fullPath: '/samples/detector';
-      preLoaderRoute: typeof SamplesDetectorRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/samples/detector'
+      path: '/samples/detector'
+      fullPath: '/samples/detector'
+      preLoaderRoute: typeof SamplesDetectorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/samples/audio-circle': {
-      id: '/samples/audio-circle';
-      path: '/samples/audio-circle';
-      fullPath: '/samples/audio-circle';
-      preLoaderRoute: typeof SamplesAudioCircleRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/samples/audio-circle'
+      path: '/samples/audio-circle'
+      fullPath: '/samples/audio-circle'
+      preLoaderRoute: typeof SamplesAudioCircleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/samples/5star-particle': {
-      id: '/samples/5star-particle';
-      path: '/samples/5star-particle';
-      fullPath: '/samples/5star-particle';
-      preLoaderRoute: typeof Samples5starParticleRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/samples/5star-particle'
+      path: '/samples/5star-particle'
+      fullPath: '/samples/5star-particle'
+      preLoaderRoute: typeof Samples5starParticleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/noise/fractal': {
-      id: '/noise/fractal';
-      path: '/noise/fractal';
-      fullPath: '/noise/fractal';
-      preLoaderRoute: typeof NoiseFractalRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/noise/fractal'
+      path: '/noise/fractal'
+      fullPath: '/noise/fractal'
+      preLoaderRoute: typeof NoiseFractalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/noise/fbm': {
-      id: '/noise/fbm';
-      path: '/noise/fbm';
-      fullPath: '/noise/fbm';
-      preLoaderRoute: typeof NoiseFbmRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/noise/fbm'
+      path: '/noise/fbm'
+      fullPath: '/noise/fbm'
+      preLoaderRoute: typeof NoiseFbmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/noise/cellular': {
-      id: '/noise/cellular';
-      path: '/noise/cellular';
-      fullPath: '/noise/cellular';
-      preLoaderRoute: typeof NoiseCellularRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/noise/cellular'
+      path: '/noise/cellular'
+      fullPath: '/noise/cellular'
+      preLoaderRoute: typeof NoiseCellularRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/audio/speech': {
-      id: '/audio/speech';
-      path: '/audio/speech';
-      fullPath: '/audio/speech';
-      preLoaderRoute: typeof AudioSpeechRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/audio/speech'
+      path: '/audio/speech'
+      fullPath: '/audio/speech'
+      preLoaderRoute: typeof AudioSpeechRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/audio/mic': {
-      id: '/audio/mic';
-      path: '/audio/mic';
-      fullPath: '/audio/mic';
-      preLoaderRoute: typeof AudioMicRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/audio/mic'
+      path: '/audio/mic'
+      fullPath: '/audio/mic'
+      preLoaderRoute: typeof AudioMicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/aggregate-bill/summary': {
-      id: '/aggregate-bill/summary';
-      path: '/aggregate-bill/summary';
-      fullPath: '/aggregate-bill/summary';
-      preLoaderRoute: typeof AggregateBillSummaryRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/aggregate-bill/summary'
+      path: '/aggregate-bill/summary'
+      fullPath: '/aggregate-bill/summary'
+      preLoaderRoute: typeof AggregateBillSummaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/crypto-charts/multi/$token': {
-      id: '/crypto-charts/multi/$token';
-      path: '/crypto-charts/multi/$token';
-      fullPath: '/crypto-charts/multi/$token';
-      preLoaderRoute: typeof CryptoChartsMultiTokenRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/crypto-charts/multi/$token'
+      path: '/crypto-charts/multi/$token'
+      fullPath: '/crypto-charts/multi/$token'
+      preLoaderRoute: typeof CryptoChartsMultiTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -689,7 +689,7 @@ const rootRouteChildren: RootRouteChildren = {
   NoiseIndexRoute: NoiseIndexRoute,
   ThreeDimensionIndexRoute: ThreeDimensionIndexRoute,
   CryptoChartsMultiTokenRoute: CryptoChartsMultiTokenRoute,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()

@@ -1,4 +1,4 @@
-import { createTheme, Theme } from '@/utils/ui/theme';
+import { createTheme, type Theme } from '@/utils/ui/theme';
 
 const defaultTheme: Theme = {
   breakpoints: {

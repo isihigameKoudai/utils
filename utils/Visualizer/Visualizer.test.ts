@@ -11,22 +11,15 @@ import { AudioContextMock } from '../__test__/mocks/media';
 
 describe('Visualizer', () => {
   let visualizer: Visualizer;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let mockAudioContext: AudioContext;
+
   let mockAnalyser: AnalyserNode;
 
   beforeEach(() => {
     mockAnalyser = analyzerMock;
 
-    mockAudioContext = new AudioContextMock(
-      mockAnalyser,
-    ) as unknown as AudioContext;
-
     global.window = windowMock;
     global.document = documentMock;
     global.AudioContext = AudioContextMock as unknown as typeof AudioContext;
-    global.webkitAudioContext =
-      AudioContextMock as unknown as typeof AudioContext;
 
     // requestAnimationFrameのモックを追加
     const mockRequestAnimationFrame = vi.fn();

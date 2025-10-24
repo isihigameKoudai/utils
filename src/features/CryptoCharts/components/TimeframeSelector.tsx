@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@/utils/ui/styled';
 import { TIMEFRAMES } from '../constants';
-import { TimeframeSelectorProps } from '../types';
+import type { TimeframeSelectorProps } from '../types';
 
 const SelectContainer = styled('div')({
   marginBottom: '20px',

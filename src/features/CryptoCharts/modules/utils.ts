@@ -1,4 +1,4 @@
-import { Timeframe, MultiTimeframe } from '../constants';
+import type { Timeframe, MultiTimeframe } from '../constants';
 
 export const getTimeframeLabel = (
   timeframe: Timeframe | MultiTimeframe,

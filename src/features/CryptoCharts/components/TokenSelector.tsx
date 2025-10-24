@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@/utils/ui/styled';
 import { SYMBOLS } from '../constants';
-import { TokenSelectorProps } from '../types';
+import type { TokenSelectorProps } from '../types';
 
 const Header = styled('div')({
   marginBottom: '20px',

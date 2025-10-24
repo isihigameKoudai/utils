@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import WebGL from './modules/WebGL';
 import {
   type DetectedObject,
@@ -10,7 +10,7 @@ import VisualDetectionView from '../../../components/VisualDetectionView';
 export default function FluidDetect() {
   const $ref = useRef<HTMLDivElement>(null!);
   const isInitRef = useRef(true);
-  const glRef = useRef<WebGL>();
+  const glRef = useRef<WebGL>(null!);
   const [detectorInstance, setDetectorInstance] = useState<VisualDetection>();
   const [objects, setObjects] = useState<DetectedObject[]>([]);
   const [isShow, setIsShow] = useState(true);

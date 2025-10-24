@@ -1,4 +1,4 @@
-import { Pose } from '../../../utils/tensorflow/PoseDetection';
+import type { Pose } from '../../../utils/tensorflow/PoseDetection';
 
 export interface PoseDetectionViewProps {
   width?: number;

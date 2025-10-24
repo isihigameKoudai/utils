@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, ComponentProps } from 'react';
+import React, { useEffect, useRef, useState, type ComponentProps } from 'react';
 
 import { styled } from '@/utils/ui/styled';
 import { CryptoChart } from '../CryptoChart';
@@ -29,7 +29,7 @@ export const ChartBox: React.FC<Props> = ({ symbol, timeframe }) => {
 
   useEffect(() => {
     if (!ref.current || !titleRef.current) {
-      return () => {};
+      return;
     }
 
     setSize(() => ({

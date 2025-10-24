@@ -1,4 +1,4 @@
-import { CachePromiseReturn, DeferredOut } from './type';
+import type { CachePromiseReturn, DeferredOut } from './type';
 
 /**
  * キャッシュを利用したPromiseを作成する

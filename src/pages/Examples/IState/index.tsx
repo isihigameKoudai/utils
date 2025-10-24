@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent } from 'react';
+import React, { type ChangeEvent, type FormEvent } from 'react';
 
 import { styled } from '@/utils/ui/styled';
 import { ThemeContainer } from './defaultTheme';

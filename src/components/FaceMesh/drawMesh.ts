@@ -1,4 +1,4 @@
-import { Face } from './type';
+import type { Face } from './type';
 
 const MESH_CONFIG = {
   point: {

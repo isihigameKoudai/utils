@@ -9,8 +9,8 @@ import {
   INITIAL_VIDEO_EL_WIDTH,
   Video,
 } from '../../Media';
-import { ElOption } from '../type';
-import { RenderCallBack } from './type';
+import type { ElOption } from '../type';
+import type { RenderCallBack } from './type';
 
 export class HandPoseDetection extends Video {
   private _model: handPoseDetection.SupportedModels;

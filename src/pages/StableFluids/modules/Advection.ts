@@ -4,8 +4,8 @@ import face_vert from './glsl/sim/face.vert?raw';
 import line_vert from './glsl/sim/line.vert?raw';
 import advection_frag from './glsl/sim/advection.frag?raw';
 import ShaderPass from './ShaderPass';
-import { ControlProps } from './Controls';
-import { SimProps } from './types/Sim';
+import type { ControlProps } from './Controls';
+import type { SimProps } from './types/Sim';
 
 interface Props extends SimProps {
   fboSize: THREE.Vector2;

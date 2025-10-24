@@ -21,10 +21,10 @@ export const cancelAnimationFrame = () =>
  */
 export class Visualizer extends Audio {
   analyzer: AnalyserNode | null;
-  timeDomainArray: Uint8Array;
-  spectrumArray: Uint8Array;
-  timeDomainRawArray: Float32Array;
-  spectrumRawArray: Float32Array;
+  timeDomainArray: Uint8Array<ArrayBuffer>;
+  spectrumArray: Uint8Array<ArrayBuffer>;
+  timeDomainRawArray: Float32Array<ArrayBuffer>;
+  spectrumRawArray: Float32Array<ArrayBuffer>;
   $canvas: HTMLCanvasElement | null;
   requestAnimationFrameId: number;
 

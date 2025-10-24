@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { createContainer } from '@/utils/unstated-next';
 
-import { Theme } from './type';
+import type { Theme } from './type';
 
 // グローバルなテーマコンテナを保持する変数
 let ThemeContainer:

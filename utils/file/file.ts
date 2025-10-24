@@ -1,4 +1,4 @@
-import { Option, FetchFiles } from './type';
+import type { Option, FetchFiles } from './type';
 import { deferred } from '../promise/promise';
 import { isTruthy } from '../guards';
 

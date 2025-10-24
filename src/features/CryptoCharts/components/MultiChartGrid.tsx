@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@/utils/ui/styled';
 import { CryptoChart } from '@/src/components/CryptoChart';
-import { MULTI_TIMEFRAMES, Symbol } from '../constants';
+import { MULTI_TIMEFRAMES, type Symbol } from '../constants';
 import { getTimeframeLabel } from '../modules/utils';
 
 const StyledChartGrid = styled('div')({

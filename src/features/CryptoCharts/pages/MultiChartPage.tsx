@@ -3,7 +3,7 @@ import { useNavigate, useParams } from '@tanstack/react-router';
 import { styled } from '@/utils/ui/styled';
 import { TokenSelector } from '../components/TokenSelector';
 import { MultiChartGrid } from '../components/MultiChartGrid';
-import { Symbol } from '../constants';
+import type { Symbol } from '../constants';
 
 const StyledContainer = styled('div')({
   backgroundColor: '#222',

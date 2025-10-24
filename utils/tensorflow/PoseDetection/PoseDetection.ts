@@ -9,8 +9,8 @@ import {
   INITIAL_VIDEO_EL_WIDTH,
   INITIAL_VIDEO_EL_HEIGHT,
 } from '../../Media';
-import { ElOption } from '../type';
-import { ModelType, RenderCallBack, Pose } from './type';
+import type { ElOption } from '../type';
+import type { ModelType, RenderCallBack, Pose } from './type';
 import { createConfig } from './module';
 
 export class PoseDetection extends Video {

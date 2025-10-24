@@ -8,9 +8,9 @@ import {
   INITIAL_VIDEO_EL_WIDTH,
   INITIAL_VIDEO_EL_HEIGHT,
 } from '../../Media/constants';
-import { RenderCallBack } from './type';
+import type { RenderCallBack } from './type';
 import { Video } from '../../Media/Video';
-import { ElOption } from '../type';
+import type { ElOption } from '../type';
 
 export class FaceDetection extends Video {
   _model: faceDetection.SupportedModels;

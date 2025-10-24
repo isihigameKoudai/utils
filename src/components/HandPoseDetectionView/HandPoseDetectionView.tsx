@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useRef } from 'react';
 import { drawHands } from './drawHands';
 import { Video } from '../Video';
-import { HandPoseDetectionViewProps } from './type';
+import type { HandPoseDetectionViewProps } from './type';
 
 export const HandPoseDetectionView = forwardRef<
   HTMLVideoElement,

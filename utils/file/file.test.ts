@@ -19,8 +19,7 @@ describe('csv2array', () => {
 
   it('改行のみのCSV文字列を処理できる', () => {
     const input = '\n\n';
-    const expected = [];
-    expect(csv2array(input)).toEqual(expected);
+    expect(csv2array(input)).toEqual([]);
   });
 
   it('CRLFの改行コードを処理できる', () => {

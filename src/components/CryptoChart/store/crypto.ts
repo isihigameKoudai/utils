@@ -1,6 +1,6 @@
 import { defineStore } from '../../../../utils/i-state';
-import { Trade } from '../model/CandleStick';
-import { fetchTradeDataList, CryptoListParams } from '../api/crypto';
+import type { Trade } from '../model/CandleStick';
+import { fetchTradeDataList, type CryptoListParams } from '../api/crypto';
 import { CandleStick } from '../model/CandleStick';
 
 interface CryptoState {

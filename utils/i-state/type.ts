@@ -1,5 +1,5 @@
 // Store作成時に設定値として注釈される型
-export type StateProps = Record<string, unknown>;
+export type StateProps = object;
 
 export type QueriesProps<S extends StateProps> = Record<
   string,

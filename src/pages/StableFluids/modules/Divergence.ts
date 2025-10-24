@@ -4,7 +4,7 @@ import face_vert from './glsl/sim/face.vert?raw';
 import divergence_frag from './glsl/sim/divergence.frag?raw';
 
 import ShaderPass from './ShaderPass';
-import { SimProps } from './types/Sim';
+import type { SimProps } from './types/Sim';
 
 interface Props extends SimProps {
   boundarySpace: THREE.Vector2;

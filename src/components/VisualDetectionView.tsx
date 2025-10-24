@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 
-import { DetectedObject } from '../../utils/tensorflow';
+import type { DetectedObject } from '../../utils/tensorflow';
 
 interface Props {
   objects: DetectedObject[];

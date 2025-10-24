@@ -8,9 +8,9 @@ import {
   INITIAL_VIDEO_EL_WIDTH,
   INITIAL_VIDEO_EL_HEIGHT,
 } from '../../Media/constants';
-import { DetectedObject, RenderCallBack } from './type';
+import type { DetectedObject, RenderCallBack } from './type';
 import { Video } from '../../Media/Video';
-import { ElOption } from '../type';
+import type { ElOption } from '../type';
 
 /**
  * Detect some objects by using camera;

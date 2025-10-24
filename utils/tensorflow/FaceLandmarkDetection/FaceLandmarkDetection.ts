@@ -6,8 +6,8 @@ import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detec
 
 import { Video } from '../../Media/Video';
 import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH } from '../../Media';
-import { ElOption } from '../type';
-import { RenderCallBack } from './type';
+import type { ElOption } from '../type';
+import type { RenderCallBack } from './type';
 
 export class FaceLandmarkDetection extends Video {
   _model: faceLandmarksDetection.SupportedModels;
