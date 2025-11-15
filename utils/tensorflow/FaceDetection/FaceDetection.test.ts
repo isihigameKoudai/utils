@@ -1,11 +1,15 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { FaceDetection } from './FaceDetection';
 import * as faceDetection from '@tensorflow-models/face-detection';
-import { documentMock, navigatorMock, windowMock } from '../../__test__/mocks/global';
+import {
+  documentMock,
+  navigatorMock,
+  windowMock,
+} from '../../__test__/mocks/global';
 
 vi.mock('@tensorflow-models/face-detection', () => ({
   SupportedModels: {
-    MediaPipeFaceDetector: 'MediaPipeFaceDetector'
+    MediaPipeFaceDetector: 'MediaPipeFaceDetector',
   },
   createDetector: vi.fn().mockResolvedValue({
     estimateFaces: vi.fn().mockResolvedValue([
@@ -16,16 +20,16 @@ vi.mock('@tensorflow-models/face-detection', () => ({
           xMin: 0,
           xMax: 100,
           yMin: 0,
-          yMax: 100
+          yMax: 100,
         },
         keypoints: [
           { x: 50, y: 50, name: 'nose' },
           { x: 30, y: 30, name: 'leftEye' },
-          { x: 70, y: 30, name: 'rightEye' }
-        ]
-      }
-    ])
-  })
+          { x: 70, y: 30, name: 'rightEye' },
+        ],
+      },
+    ]),
+  }),
 }));
 
 describe('FaceDetection', () => {
@@ -45,7 +49,9 @@ describe('FaceDetection', () => {
 
   describe('constructor', () => {
     it('should initialize with default values', () => {
-      expect(detector.model).toBe(faceDetection.SupportedModels.MediaPipeFaceDetector);
+      expect(detector.model).toBe(
+        faceDetection.SupportedModels.MediaPipeFaceDetector,
+      );
       expect(detector.detector).toBeNull();
       expect(detector.detectedRawFaces).toEqual([]);
       expect(detector.requestAnimationFrameId).toBe(0);
@@ -59,8 +65,9 @@ describe('FaceDetection', () => {
         detector.model,
         {
           runtime: 'mediapipe',
-          solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_detection'
-        }
+          solutionPath:
+            'https://cdn.jsdelivr.net/npm/@mediapipe/face_detection',
+        },
       );
       expect(detector.detector).not.toBeNull();
     });
@@ -70,7 +77,7 @@ describe('FaceDetection', () => {
     it('should load video element and model', async () => {
       const mockVideo = document.createElement('video');
       await detector.load({ $video: mockVideo });
-      
+
       expect(detector.detector).not.toBeNull();
       expect(detector.$video).toBe(mockVideo);
       expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalled();
@@ -81,7 +88,7 @@ describe('FaceDetection', () => {
     it('should start face detection and call renderCallback', async () => {
       const mockVideo = document.createElement('video');
       const renderCallback = vi.fn();
-      
+
       await detector.load({ $video: mockVideo });
       await detector.start(renderCallback);
 
@@ -93,8 +100,10 @@ describe('FaceDetection', () => {
     it('should not start if detector is not loaded', async () => {
       const consoleSpy = vi.spyOn(console, 'error');
       await detector.start();
-      
-      expect(consoleSpy).toHaveBeenCalledWith('detector is empty. you should load model');
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'detector is empty. you should load model',
+      );
       expect(detector.detectedRawFaces).toHaveLength(0);
     });
   });
@@ -128,7 +137,7 @@ describe('FaceDetection', () => {
         xMin: 0,
         xMax: 100,
         yMin: 0,
-        yMax: 100
+        yMax: 100,
       });
       expect(faces[0].keypoints).toHaveLength(3);
     });

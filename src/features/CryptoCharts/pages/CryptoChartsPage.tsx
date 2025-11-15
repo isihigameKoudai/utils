@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { styled } from '@/utils/ui/styled';
 import { TimeframeSelector } from '../components/TimeframeSelector';
 import { ChartGrid } from '../components/ChartGrid';
-import { TIMEFRAMES, Timeframe } from '../constants';
+import type { Timeframe } from '../constants';
 
 const StyledContainer = styled('div')({
   backgroundColor: '#222',
@@ -23,4 +23,4 @@ const CryptoChartsPage: React.FC = () => {
   );
 };
 
-export default CryptoChartsPage; 
+export default CryptoChartsPage;

@@ -40,11 +40,15 @@ describe('Media', () => {
       },
     });
 
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
 
     const constraints: MediaStreamConstraints = { audio: true, video: true };
-    
-    await expect(media.getUserMedia(constraints)).rejects.toThrow('getUserMedia error');
+
+    await expect(media.getUserMedia(constraints)).rejects.toThrow(
+      'getUserMedia error',
+    );
 
     expect(mockGetUserMedia).toHaveBeenCalledWith(constraints);
     expect(media.stream).toBeNull();

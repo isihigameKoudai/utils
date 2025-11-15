@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@/utils/ui/styled';
 import { CryptoChart } from '@/src/components/CryptoChart';
-import { MULTI_TIMEFRAMES, Symbol } from '../constants';
+import { MULTI_TIMEFRAMES, type Symbol } from '../constants';
 import { getTimeframeLabel } from '../modules/utils';
 
 const StyledChartGrid = styled('div')({
@@ -33,14 +33,14 @@ export const MultiChartGrid: React.FC<MultiChartGridProps> = ({ token }) => {
       {MULTI_TIMEFRAMES.map((timeframe) => (
         <ChartContainer key={timeframe}>
           <ChartTitle>{getTimeframeLabel(timeframe)}</ChartTitle>
-          <CryptoChart 
-            key={`${token}-${timeframe}`} 
-            symbol={token} 
-            timeframe={timeframe} 
+          <CryptoChart
+            key={`${token}-${timeframe}`}
+            symbol={token}
+            timeframe={timeframe}
             height={300}
           />
         </ChartContainer>
       ))}
     </StyledChartGrid>
   );
-}; 
+};

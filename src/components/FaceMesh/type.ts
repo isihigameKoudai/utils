@@ -1,3 +1,3 @@
-import { Face as FaceLandmarks } from '@tensorflow-models/face-landmarks-detection';
+import type { Face as FaceLandmarks } from '@tensorflow-models/face-landmarks-detection';
 
 export type Face = FaceLandmarks;

@@ -1,4 +1,4 @@
-import { createTheme, Theme } from '@/utils/ui/theme';
+import { createTheme, type Theme } from '@/utils/ui/theme';
 import PreferColorScheme from '@/utils/PreferColorScheme';
 
 export const lightTheme: Theme = {
@@ -9,7 +9,7 @@ export const lightTheme: Theme = {
       md: 900,
       lg: 1200,
       xl: 1536,
-    }
+    },
   },
   palette: {
     mode: 'light',
@@ -193,4 +193,4 @@ const colorScheme = new PreferColorScheme();
 const initialTheme = colorScheme.isDark ? darkTheme : lightTheme;
 
 // テーマコンテナを作成
-export const CryptoTheme = createTheme(initialTheme); 
+export const CryptoTheme = createTheme(initialTheme);

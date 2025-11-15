@@ -18,16 +18,16 @@ const Th = styled('th')({
   $nest: {
     '&:hover': {
       backgroundColor: '#e0e0e0',
-    }
-  }
+    },
+  },
 });
 
 const Tr = styled('tr')({
   $nest: {
     '&:hover': {
       backgroundColor: '#f5f5f5',
-    }
-  }
+    },
+  },
 });
 
 const Td = styled('td')({
@@ -47,7 +47,9 @@ export const BillList = ({ bills }: Props) => {
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
 
   if (bills.length === 0) {
-    return <p>集計データがありません。CSVを取り込んで集計を実行してください。</p>;
+    return (
+      <p>集計データがありません。CSVを取り込んで集計を実行してください。</p>
+    );
   }
 
   const handleSort = (key: SortKey) => {
@@ -82,9 +84,18 @@ export const BillList = ({ bills }: Props) => {
     <Table>
       <thead>
         <tr>
-          <Th onClick={() => handleSort('date')}>日付{getSortIndicator('date')}</Th>
-          <Th onClick={() => handleSort('amount')} style={{ textAlign: 'right' }}>金額{getSortIndicator('amount')}</Th>
-          <Th onClick={() => handleSort('store')}>店舗{getSortIndicator('store')}</Th>
+          <Th onClick={() => handleSort('date')}>
+            日付{getSortIndicator('date')}
+          </Th>
+          <Th
+            onClick={() => handleSort('amount')}
+            style={{ textAlign: 'right' }}
+          >
+            金額{getSortIndicator('amount')}
+          </Th>
+          <Th onClick={() => handleSort('store')}>
+            店舗{getSortIndicator('store')}
+          </Th>
         </tr>
       </thead>
       <tbody>
@@ -97,10 +108,14 @@ export const BillList = ({ bills }: Props) => {
         ))}
         <Tr style={{ backgroundColor: '#eee', borderTop: '2px solid #aaa' }}>
           <Td>合計</Td>
-          <Td style={{ textAlign: 'right' }}>{sortedBills.reduce((acc, bill) => acc + bill.amount, 0).toLocaleString()}</Td>
+          <Td style={{ textAlign: 'right' }}>
+            {sortedBills
+              .reduce((acc, bill) => acc + bill.amount, 0)
+              .toLocaleString()}
+          </Td>
           <Td></Td>
         </Tr>
       </tbody>
     </Table>
   );
-}; 
+};

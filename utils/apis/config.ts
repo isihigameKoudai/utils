@@ -6,5 +6,5 @@ export const apiMap = {
   binance: {
     url: '/binance',
     originUrl: 'https://api.binance.com',
-  }
+  },
 } as const;

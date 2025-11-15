@@ -1,9 +1,9 @@
-import { Symbol, Timeframe, MultiTimeframe } from '../constants';
+import type { Symbol, Timeframe, MultiTimeframe } from '../constants';
 
 export interface ChartData {
   symbol: Symbol;
   timeframe: Timeframe | MultiTimeframe;
-  data: any[];
+  data: unknown[];
 }
 
 export interface ChartConfig {
@@ -32,4 +32,4 @@ export interface TimeframeSelectorProps {
 export interface TokenSelectorProps {
   selectedToken: Symbol;
   onTokenChange: (token: Symbol) => void;
-} 
+}

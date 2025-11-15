@@ -9,11 +9,11 @@ export const basicParticle = ({
   frequencyBinCount,
   timeDomainArray,
 }: Props) => {
-  const $gl = $canvas.getContext("2d");
+  const $gl = $canvas.getContext('2d');
   const barWidth = window.innerWidth / frequencyBinCount;
 
   //  1フレームごとにリセット
-  $gl!.fillStyle = "rgba(0, 0, 0, 1)";
+  $gl!.fillStyle = 'rgba(0, 0, 0, 1)';
   $gl!.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
   // analyserNode.frequencyBinCountはanalyserNode.fftSize / 2の数値。よって今回は1024。
@@ -65,7 +65,7 @@ type LineAudioProps = {
 const createVbo = (
   gl: WebGL2RenderingContext,
   array: Float32Array,
-  usage: number
+  usage: number,
 ) => {
   const vbo = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
@@ -78,7 +78,7 @@ const createVbo = (
 const createShader = function (
   gl: WebGL2RenderingContext,
   source: string,
-  type: number
+  type: number,
 ) {
   const shader = gl.createShader(type)!;
   gl.shaderSource(shader!, source);
@@ -94,7 +94,7 @@ const createShader = function (
 const createProgram = function (
   gl: WebGL2RenderingContext,
   vertShader: WebGLShader,
-  fragShader: WebGLShader
+  fragShader: WebGLShader,
 ) {
   const program = gl.createProgram()!;
   gl.attachShader(program!, vertShader);
@@ -102,7 +102,7 @@ const createProgram = function (
   gl.linkProgram(program!);
 
   if (!gl.getProgramParameter(program!, gl.LINK_STATUS)) {
-    throw new Error(gl.getProgramInfoLog(program!) || "");
+    throw new Error(gl.getProgramInfoLog(program!) || '');
   }
 
   return program;
@@ -111,7 +111,7 @@ const createProgram = function (
 const getUniformLocs = function (
   gl: WebGL2RenderingContext,
   program: WebGLProgram,
-  names: string[]
+  names: string[],
 ) {
   const map = new Map();
   names.forEach((name) => map.set(name, gl.getUniformLocation(program, name)));
@@ -139,16 +139,16 @@ const injectWaveArray = ({
   const program = createProgram(
     $gl,
     createShader($gl, renderLineVertex, $gl.VERTEX_SHADER),
-    createShader($gl, renderLineFragment, $gl.FRAGMENT_SHADER)
+    createShader($gl, renderLineFragment, $gl.FRAGMENT_SHADER),
   );
   $gl?.useProgram(program);
   const uniformKeys = Object.keys(uniforms);
-  const uniformLocs = getUniformLocs($gl, program, [...uniformKeys, "u_color"]);
+  const uniformLocs = getUniformLocs($gl, program, [...uniformKeys, 'u_color']);
   // TODO: vec2やvec3などのプリミティブではない値だった場合、自動で出し分けるようにする
   uniformKeys.forEach((uniformKey) => {
     $gl.uniform1f(uniformLocs.get(uniformKey), uniforms[uniformKey]);
   });
-  $gl.uniform3f(uniformLocs.get("u_color"), color.r, color.g, color.b);
+  $gl.uniform3f(uniformLocs.get('u_color'), color.r, color.g, color.b);
 
   $gl.enableVertexAttribArray(0);
   $gl.vertexAttribPointer(0, 1, $gl.FLOAT, false, 0, 0);
@@ -161,7 +161,7 @@ export const lineAudio = ({
   timeDomainRawArray,
   spectrumRawArray,
 }: LineAudioProps) => {
-  const $gl = $canvas.getContext("webgl2");
+  const $gl = $canvas.getContext('webgl2');
   if (!$gl) return;
 
   $gl.clear($gl.COLOR_BUFFER_BIT | $gl.DEPTH_BUFFER_BIT);

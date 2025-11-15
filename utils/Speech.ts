@@ -10,7 +10,7 @@ interface ISpeechRecognitionEvent {
   }[];
 }
 
-interface ISpeechRecognition extends EventTarget {
+interface ISpeechRecognitionInstance extends EventTarget {
   // properties
   grammars: string;
   lang: string;
@@ -39,7 +39,7 @@ interface ISpeechRecognition extends EventTarget {
 }
 
 interface ISpeechRecognition {
-  new (): ISpeechRecognition;
+  new (): ISpeechRecognitionInstance;
 }
 
 //windowにISpeechRecognitionConstructorを定義にもつSpeechRecognitionとwebkitSpeechRecognitionを追加
@@ -58,10 +58,10 @@ const SpeechRecognition =
  * https://developer.mozilla.org/ja/docs/Web/API/Web_Speech_API
  */
 export default class Speech {
-  recognition: ISpeechRecognition;
+  recognition: ISpeechRecognitionInstance;
   constructor() {
     const recognition = new SpeechRecognition();
-    recognition.lang = "ja-JP";
+    recognition.lang = 'ja-JP';
     this.recognition = recognition;
   }
 

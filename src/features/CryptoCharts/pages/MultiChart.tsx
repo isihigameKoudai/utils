@@ -7,10 +7,12 @@ import { SYMBOLS, DEFAULT_TOKEN } from '../constants';
 const MultiChart: React.FC = () => {
   const navigate = useNavigate();
   const { token } = useParams({ from: '/crypto-charts/multi/$token' });
-  const validToken = SYMBOLS.includes(token as typeof SYMBOLS[number]) ? token : DEFAULT_TOKEN;
 
-  if (!SYMBOLS.includes(token as typeof SYMBOLS[number])) {
-    navigate({ to: '/crypto-charts/multi/$token', params: { token: DEFAULT_TOKEN } });
+  if (!SYMBOLS.includes(token as (typeof SYMBOLS)[number])) {
+    navigate({
+      to: '/crypto-charts/multi/$token',
+      params: { token: DEFAULT_TOKEN },
+    });
     return null;
   }
 
@@ -21,4 +23,4 @@ const MultiChart: React.FC = () => {
   );
 };
 
-export default MultiChart; 
+export default MultiChart;

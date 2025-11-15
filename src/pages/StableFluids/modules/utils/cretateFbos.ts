@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
 type NullableFbos = {
   vel_0: THREE.WebGLRenderTarget | null;

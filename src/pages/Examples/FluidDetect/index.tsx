@@ -1,45 +1,62 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import WebGL from "./modules/WebGL";
-import { DetectedObject, VisualDetection } from "../../../../utils/tensorflow";
-import Mouse from "./modules/Mouse";
-import VisualDetectionView from "../../../components/VisualDetectionView";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import WebGL from './modules/WebGL';
+import {
+  type DetectedObject,
+  VisualDetection,
+} from '../../../../utils/tensorflow';
+import Mouse from './modules/Mouse';
+import VisualDetectionView from '../../../components/VisualDetectionView';
 
 export default function FluidDetect() {
   const $ref = useRef<HTMLDivElement>(null!);
-  let isInit = true;
-  const [gl, setGl] = useState<WebGL>();
-  const [detectorInstance, setDetectorInstance] = useState<VisualDetection>()
+  const isInitRef = useRef(true);
+  const glRef = useRef<WebGL>(null!);
+  const [detectorInstance, setDetectorInstance] = useState<VisualDetection>();
   const [objects, setObjects] = useState<DetectedObject[]>([]);
   const [isShow, setIsShow] = useState(true);
 
   const handleDetect = useCallback(async () => {
-    if(detectorInstance?.$video && detectorInstance._$video) {
-      detectorInstance.$video.style.position = 'absolute';
-      detectorInstance.$video.style.top = '0px';
-      detectorInstance.$video.style.left = '0px';
-      detectorInstance.$video.style.opacity = '0.1';
-      $ref.current.appendChild(detectorInstance?.$video);
-    }
-    await detectorInstance?.start((objectList) => {
-      const objects = objectList
-        .filter(obj => obj.class === 'person');
-      objects.forEach(obj => {
-        Mouse.setCoords(obj.center.x,obj.center.y);
-      })
+    if (!detectorInstance) return;
+
+    // ビデオ要素の設定をuseEffectまたは別の場所で行う
+    await detectorInstance.start((objectList) => {
+      const objects = objectList.filter((obj) => obj.class === 'person');
+      objects.forEach((obj) => {
+        Mouse.setCoords(obj.center.x, obj.center.y);
+      });
       setObjects(objects);
     });
     setIsShow(false);
-  },[$ref, detectorInstance, gl]);
+  }, [detectorInstance]);
+
+  // ビデオ要素のスタイル設定
+  useEffect(() => {
+    if (detectorInstance?.$video && detectorInstance._$video) {
+      // DOM操作なので、stateの変更ではない
+      /* eslint-disable react-hooks/immutability */
+      const video = detectorInstance.$video;
+      video.style.position = 'absolute';
+      video.style.top = '0px';
+      video.style.left = '0px';
+      video.style.opacity = '0.1';
+      /* eslint-enable react-hooks/immutability */
+      if ($ref.current && !$ref.current.contains(video)) {
+        $ref.current.appendChild(video);
+      }
+    }
+  }, [detectorInstance]);
 
   useEffect(() => {
+    let detector: VisualDetection | undefined;
+
     (async () => {
-      if (isInit) {
+      if (isInitRef.current) {
         const gl = new WebGL({
-          $wrapper: $ref.current
+          $wrapper: $ref.current,
         });
-        setGl(gl);
-        isInit = false;
-        const detector = await gl.initDetector({
+        glRef.current = gl;
+        isInitRef.current = false;
+        detector = await gl.initDetector({
           width: window.innerWidth,
           height: window.innerHeight,
         });
@@ -49,18 +66,22 @@ export default function FluidDetect() {
     })();
 
     return () => {
-      detectorInstance?.stop();
-    }
-  },[]);
+      detector?.stop();
+    };
+  }, []);
 
   return (
     <div>
-      { isShow && <button type="button" onClick={handleDetect}>start detect</button>}
+      {isShow && (
+        <button type="button" onClick={handleDetect}>
+          start detect
+        </button>
+      )}
       <VisualDetectionView
         ref={$ref}
-        objects={objects.filter(obj => obj.class === 'person')}
+        objects={objects.filter((obj) => obj.class === 'person')}
         opacity={0.4}
       />
     </div>
-  )
+  );
 }

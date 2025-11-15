@@ -1,4 +1,4 @@
-import { Media } from "./Media";
+import { Media } from './Media';
 
 const INITIAL_MAGNIFICATION = { x: 1, y: 1 };
 export class Video extends Media {
@@ -43,7 +43,7 @@ export class Video extends Media {
   }
 
   stopVideo() {
-    if(!this._$video) return;
+    if (!this._$video) return;
 
     this.deleteStream();
     this._$video.pause();

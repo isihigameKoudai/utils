@@ -1,43 +1,50 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { VisualDetection, DetectedObject } from "../../../../utils/tensorflow";
-import VisualDetectionView from "../../../components/VisualDetectionView";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  VisualDetection,
+  type DetectedObject,
+} from '../../../../utils/tensorflow';
+import VisualDetectionView from '../../../components/VisualDetectionView';
 
 export default function Detector() {
-  const detector = new VisualDetection();
+  const detectorRef = useRef(new VisualDetection());
   const $videoContainer = useRef<HTMLDivElement>(null);
   const [objects, setObjects] = useState<DetectedObject[]>([]);
   const [isShow, setIsShow] = useState<boolean>(false);
 
   const handleDetect = useCallback(() => {
-    if(detector.$video && detector._$video) {
+    const detector = detectorRef.current;
+    if (detector.$video && detector._$video) {
       $videoContainer.current?.appendChild(detector.$video);
     }
     detector.start((objects) => {
       setObjects(objects);
     });
-  },[$videoContainer]);
+  }, []);
 
   useEffect(() => {
+    const detector = detectorRef.current;
     const init = async () => {
-      await detector.load({ width: window.innerWidth, height: window.innerHeight });
+      await detector.load({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
       setIsShow(true);
-    }
+    };
     init();
 
     return () => {
       detector.stop();
-    }
-  },[]);
-
+    };
+  }, []);
 
   return (
     <div>
-      { isShow && <button onClick={handleDetect}>start detect</button>}
+      {isShow && <button onClick={handleDetect}>start detect</button>}
       <VisualDetectionView
         ref={$videoContainer}
-        objects={objects.filter(obj => obj.class === 'person')}
+        objects={objects.filter((obj) => obj.class === 'person')}
         opacity={0.3}
       />
     </div>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { createTheme, Theme } from '@/utils/ui/theme';
+import { createTheme, type Theme } from '@/utils/ui/theme';
 
 const defaultTheme: Theme = {
   breakpoints: {
@@ -8,7 +8,7 @@ const defaultTheme: Theme = {
       md: 900,
       lg: 1200,
       xl: 1536,
-    }
+    },
   },
   palette: {
     mode: 'light',
@@ -190,6 +190,6 @@ const defaultTheme: Theme = {
     snackbar: 1400,
     tooltip: 1600,
   },
-}; 
+};
 
 export const ThemeContainer = createTheme(defaultTheme);

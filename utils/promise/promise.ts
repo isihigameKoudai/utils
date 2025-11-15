@@ -1,19 +1,21 @@
-import { CachePromiseReturn, DeferredOut } from './type';
+import type { CachePromiseReturn, DeferredOut } from './type';
 
 /**
  * キャッシュを利用したPromiseを作成する
- * @param fn 
- * @returns 
+ * @param fn
+ * @returns
  */
-export function createCachePromise<T>(fn: () => Promise<T>): CachePromiseReturn<T> {
-  let _p: Promise<T> | undefined
+export function createCachePromise<T>(
+  fn: () => Promise<T>,
+): CachePromiseReturn<T> {
+  let _p: Promise<T> | undefined;
 
   function wrapper() {
     if (!_p) {
-      console.log('create cache promise');  
-      _p = fn()
+      console.log('create cache promise');
+      _p = fn();
     }
-    return _p
+    return _p;
   }
 
   wrapper.reset = async () => {
@@ -23,9 +25,9 @@ export function createCachePromise<T>(fn: () => Promise<T>): CachePromiseReturn<
     if (_prev) {
       await _prev;
     }
-  }
+  };
 
-  return wrapper
+  return wrapper;
 }
 
 /**
@@ -37,7 +39,7 @@ export function createCachePromise<T>(fn: () => Promise<T>): CachePromiseReturn<
  */
 export function deferred<T>(): DeferredOut<T> {
   let resolve!: (value: T | PromiseLike<T>) => void;
-  let reject!: (reason?: any) => void;
+  let reject!: (reason?: unknown) => void;
 
   const promise = new Promise<T>((res, rej) => {
     resolve = res;
@@ -45,4 +47,4 @@ export function deferred<T>(): DeferredOut<T> {
   });
 
   return { promise, resolve, reject };
-};
+}

@@ -24,7 +24,9 @@ describe('CSV', () => {
         ['header1', 'header2', 'header3'],
         ['value1-1', 'value1-2'], // カラム数が少ない
       ];
-      expect(() => new CSV(invalidCsvData)).toThrow('The number of columns does not match');
+      expect(() => new CSV(invalidCsvData)).toThrow(
+        'The number of columns does not match',
+      );
     });
   });
 
@@ -44,7 +46,9 @@ describe('CSV', () => {
 
     it('存在しないレコードでエラーをスローする', () => {
       const csv = new CSV<'header1' | 'header2' | 'header3'>(validCsvData);
-      expect(() => csv.getRecords('header1', 'non-existent')).toThrow('Record not found');
+      expect(() => csv.getRecords('header1', 'non-existent')).toThrow(
+        'Record not found',
+      );
     });
   });
 

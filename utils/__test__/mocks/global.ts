@@ -1,21 +1,20 @@
 import { vi } from 'vitest';
-import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH } from '../../Media/constants';
+import {
+  INITIAL_VIDEO_EL_HEIGHT,
+  INITIAL_VIDEO_EL_WIDTH,
+} from '../../Media/constants';
 
 import { AudioContextMock } from './media';
 
 export const streamMock = {
-  getVideoTracks: vi.fn().mockReturnValue([
-    { enabled: true, stop: vi.fn() }
-  ]),
-  getAudioTracks: vi.fn().mockReturnValue([
-    { enabled: true, stop: vi.fn() }
-  ])
+  getVideoTracks: vi.fn().mockReturnValue([{ enabled: true, stop: vi.fn() }]),
+  getAudioTracks: vi.fn().mockReturnValue([{ enabled: true, stop: vi.fn() }]),
 };
 
 export const navigatorMock = {
   mediaDevices: {
-    getUserMedia: vi.fn().mockResolvedValue(streamMock)
-  }
+    getUserMedia: vi.fn().mockResolvedValue(streamMock),
+  },
 } as unknown as Navigator;
 
 export const windowMock = {
@@ -42,7 +41,7 @@ export const documentMock = {
     nodeType: 1,
     ELEMENT_NODE: 1,
   }),
-} as unknown as Document
+} as unknown as Document;
 
 export const analyzerMock = {
   connect: vi.fn(),

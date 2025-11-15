@@ -4,9 +4,13 @@
 import * as tf from '@tensorflow/tfjs';
 import * as poseDetection from '@tensorflow-models/pose-detection';
 
-import { Video, INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media';
-import { ElOption } from '../type';
-import { ModelType, RenderCallBack, Pose } from './type';
+import {
+  Video,
+  INITIAL_VIDEO_EL_WIDTH,
+  INITIAL_VIDEO_EL_HEIGHT,
+} from '../../Media';
+import type { ElOption } from '../type';
+import type { ModelType, RenderCallBack, Pose } from './type';
 import { createConfig } from './module';
 
 export class PoseDetection extends Video {
@@ -47,7 +51,7 @@ export class PoseDetection extends Video {
       const config = createConfig(this.model);
       this._detector = await poseDetection.createDetector(this.model, config);
       return this.detector;
-    } catch(e) {
+    } catch (e) {
       console.error(e);
       throw e;
     }
@@ -56,10 +60,13 @@ export class PoseDetection extends Video {
   async loadEl({
     $video,
     width = INITIAL_VIDEO_EL_WIDTH,
-    height = INITIAL_VIDEO_EL_HEIGHT
+    height = INITIAL_VIDEO_EL_HEIGHT,
   }: ElOption): Promise<HTMLVideoElement> {
     await this.getVideoStream();
-    this.setMagnification({ x: width / INITIAL_VIDEO_EL_WIDTH, y: height / INITIAL_VIDEO_EL_HEIGHT });
+    this.setMagnification({
+      x: width / INITIAL_VIDEO_EL_WIDTH,
+      y: height / INITIAL_VIDEO_EL_HEIGHT,
+    });
 
     const videoEl = $video || document.createElement('video');
     videoEl.muted = true;
@@ -76,12 +83,12 @@ export class PoseDetection extends Video {
   }
 
   async start(renderCallBack?: RenderCallBack) {
-    if(!this.detector) {
+    if (!this.detector) {
       console.error('detector is empty. you should load detector');
       return;
     }
 
-    if(!this.$video) {
+    if (!this.$video) {
       console.error('$video is empty.');
       return;
     }
@@ -89,11 +96,13 @@ export class PoseDetection extends Video {
     const poses = await this.detector.estimatePoses(this.$video);
     this._detectedPoses = poses;
 
-    if(renderCallBack) {
+    if (renderCallBack) {
       renderCallBack(poses);
     }
 
-    this._requestAnimationFrameId = window.requestAnimationFrame(this.start.bind(this, renderCallBack));
+    this._requestAnimationFrameId = window.requestAnimationFrame(
+      this.start.bind(this, renderCallBack),
+    );
   }
 
   stop() {

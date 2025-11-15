@@ -4,7 +4,10 @@ export default class PreferColorScheme {
   _mediaQueryList: MediaQueryList;
 
   constructor() {
-    if(typeof window === 'undefined' || typeof window.matchMedia === 'undefined') {
+    if (
+      typeof window === 'undefined' ||
+      typeof window.matchMedia === 'undefined'
+    ) {
       throw new Error('window.matchMedia is not defined');
     }
 
@@ -28,14 +31,16 @@ export default class PreferColorScheme {
   }
 
   subscribe(callback: (event: MediaQueryListEvent) => void) {
-    callback(new MediaQueryListEvent('change', {
-      matches: this.mediaQueryList.matches,
-      media: this.mediaQueryList.media
-    }));
-    
+    callback(
+      new MediaQueryListEvent('change', {
+        matches: this.mediaQueryList.matches,
+        media: this.mediaQueryList.media,
+      }),
+    );
+
     this.mediaQueryList.addEventListener('change', callback);
     return () => {
-      this.mediaQueryList.removeEventListener('change', callback)
+      this.mediaQueryList.removeEventListener('change', callback);
     };
   }
-};
+}

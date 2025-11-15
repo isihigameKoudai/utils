@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from 'dayjs';
 
 import { isTruthy } from '@/utils/guards';
 
@@ -19,7 +19,7 @@ export class Bill {
    */
   constructor(props: BillProps) {
     const { date, amount, store } = this.validate(props);
-    
+
     this.date = date;
     this.store = store;
     this.amount = amount;
@@ -47,7 +47,7 @@ export class Bill {
       date: dayjs(props[0]),
       store: props[1],
       amount: Number(props[2]),
-    }
+    };
   }
 
   get dateLabel(): string {
@@ -59,7 +59,7 @@ export class Bill {
   }
 
   static isEmpty(props: [string, string, string]): boolean {
-    if(props.length !== 3) {
+    if (props.length !== 3) {
       return true;
     }
     return !isTruthy(props[0]) || !isTruthy(props[1]);

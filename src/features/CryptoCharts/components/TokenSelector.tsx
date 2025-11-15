@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@/utils/ui/styled';
 import { SYMBOLS } from '../constants';
-import { TokenSelectorProps } from '../types';
+import type { TokenSelectorProps } from '../types';
 
 const Header = styled('div')({
   marginBottom: '20px',
@@ -26,7 +26,9 @@ export const TokenSelector: React.FC<TokenSelectorProps> = ({
     <Header>
       <StyledSelect
         value={selectedToken}
-        onChange={(e) => onTokenChange(e.target.value as typeof SYMBOLS[number])}
+        onChange={(e) =>
+          onTokenChange(e.target.value as (typeof SYMBOLS)[number])
+        }
       >
         {SYMBOLS.map((symbol) => (
           <option key={symbol} value={symbol}>
@@ -36,4 +38,4 @@ export const TokenSelector: React.FC<TokenSelectorProps> = ({
       </StyledSelect>
     </Header>
   );
-}; 
+};

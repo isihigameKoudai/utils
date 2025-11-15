@@ -30,12 +30,15 @@ export const todoStore = defineStore({
     },
     toggleTodo: ({ state, dispatch }, id: number) => {
       const newTodos = state.todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
       );
       dispatch('todos', newTodos);
     },
     removeTodo: ({ state, dispatch }, id: number) => {
-      dispatch('todos', state.todos.filter((todo) => todo.id !== id));
+      dispatch(
+        'todos',
+        state.todos.filter((todo) => todo.id !== id),
+      );
     },
   },
 });

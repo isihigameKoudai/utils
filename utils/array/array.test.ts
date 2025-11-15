@@ -26,7 +26,9 @@ describe('Array functions', () => {
 
   describe('unique', () => {
     it('重複と異なる型を含む配列から一意の数値を取得する', () => {
-      expect(unique([9, 2, 3, 5, 2, 1, 5, '1', '10'])).toEqual([9, 2, 3, 5, 1, 10]);
+      expect(unique([9, 2, 3, 5, 2, 1, 5, '1', '10'])).toEqual([
+        9, 2, 3, 5, 1, 10,
+      ]);
     });
 
     it('undefinedと数値に変換できない文字列を含む配列を処理する', () => {
@@ -46,7 +48,7 @@ describe('Array functions', () => {
     const testArray = [
       { key: 'a', value: 1 },
       { key: 'b', value: 2 },
-      { key: 'a', value: 3, foo: 'bar' }
+      { key: 'a', value: 3, foo: 'bar' },
     ];
 
     it('デフォルトの降順でkeyによってソートする', () => {
@@ -54,7 +56,7 @@ describe('Array functions', () => {
         { key: 'b', value: 2 },
         { key: 'a', value: 1 },
 
-        { key: 'a', value: 3, foo: 'bar' }
+        { key: 'a', value: 3, foo: 'bar' },
       ]);
     });
 
@@ -62,7 +64,7 @@ describe('Array functions', () => {
       expect(sortByKey(testArray, 'key', 'asc')).toEqual([
         { key: 'a', value: 1 },
         { key: 'a', value: 3, foo: 'bar' },
-        { key: 'b', value: 2 }
+        { key: 'b', value: 2 },
       ]);
     });
 
@@ -70,7 +72,7 @@ describe('Array functions', () => {
       expect(sortByKey(testArray, 'value', 'asc')).toEqual([
         { key: 'a', value: 1 },
         { key: 'b', value: 2 },
-        { key: 'a', value: 3, foo: 'bar' }
+        { key: 'a', value: 3, foo: 'bar' },
       ]);
     });
 
@@ -84,11 +86,11 @@ describe('Array functions', () => {
       const input = [
         { text: 'a', amount: 1, num: 10 },
         { text: 'b', amount: 2 },
-        { text: 'a', amount: 3, num: 11 }
+        { text: 'a', amount: 3, num: 11 },
       ];
       expect(sumByKey(input, { orderKey: 'text', numKey: 'amount' })).toEqual([
         { text: 'a', amount: 4 },
-        { text: 'b', amount: 2 }
+        { text: 'b', amount: 2 },
       ]);
     });
 
@@ -100,9 +102,11 @@ describe('Array functions', () => {
       const input = [
         { key: 'a', value: 1 },
         { key: 'b', value: 2 },
-        { key: 'c', value: 3 }
+        { key: 'c', value: 3 },
       ];
-      expect(sumByKey(input, { orderKey: 'key', numKey: 'value' })).toEqual(input);
+      expect(sumByKey(input, { orderKey: 'key', numKey: 'value' })).toEqual(
+        input,
+      );
     });
   });
 });

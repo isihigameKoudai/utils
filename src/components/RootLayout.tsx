@@ -12,4 +12,4 @@ export const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
       {children}
     </>
   );
-}; 
+};

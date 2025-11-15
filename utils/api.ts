@@ -1,4 +1,7 @@
-const request = async <T = any>(url: RequestInfo | URL, options?: RequestInit): Promise<T> => {
+const request = async <T = unknown>(
+  url: RequestInfo | URL,
+  options?: RequestInit,
+): Promise<T> => {
   try {
     const response = await fetch(url, options);
 
@@ -13,23 +16,34 @@ const request = async <T = any>(url: RequestInfo | URL, options?: RequestInit): 
     console.error(error);
     throw error;
   }
-}
+};
 
 const api = {
   request,
-  get: async <T = any>(url: RequestInfo | URL, options?: RequestInit): Promise<T> => {
+  get: async <T = unknown>(
+    url: RequestInfo | URL,
+    options?: RequestInit,
+  ): Promise<T> => {
     return request(url, { ...options, method: 'GET' });
   },
-  post: async <T = any>(url: RequestInfo | URL, options?: RequestInit): Promise<T> => {
+  post: async <T = unknown>(
+    url: RequestInfo | URL,
+    options?: RequestInit,
+  ): Promise<T> => {
     return request(url, { ...options, method: 'POST' });
   },
-  put: async <T = any>(url: RequestInfo | URL, options?: RequestInit): Promise<T> => {
+  put: async <T = unknown>(
+    url: RequestInfo | URL,
+    options?: RequestInit,
+  ): Promise<T> => {
     return request(url, { ...options, method: 'PUT' });
   },
-  delete: async <T = any>(url: RequestInfo | URL, options?: RequestInit): Promise<T> => {
+  delete: async <T = unknown>(
+    url: RequestInfo | URL,
+    options?: RequestInit,
+  ): Promise<T> => {
     return request(url, { ...options, method: 'DELETE' });
   },
-}
+};
 
 export default api;
-

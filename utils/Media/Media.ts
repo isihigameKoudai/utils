@@ -1,5 +1,4 @@
 export class Media {
-
   private _stream: MediaStream | null;
 
   constructor() {
@@ -12,8 +11,8 @@ export class Media {
 
   /**
    * ユーザメディアを取得する
-   * @param constraints 
-   * @returns 
+   * @param constraints
+   * @returns
    */
   async getUserMedia(constraints: MediaStreamConstraints) {
     try {
@@ -27,14 +26,14 @@ export class Media {
   }
 
   deleteStream() {
-    this.stream?.getVideoTracks().forEach(videoStream => {
+    this.stream?.getVideoTracks().forEach((videoStream) => {
       videoStream.enabled = false;
       videoStream.stop();
     });
-    this.stream?.getAudioTracks().forEach(audioStream => {
+    this.stream?.getAudioTracks().forEach((audioStream) => {
       audioStream.enabled = false;
       audioStream.stop();
     });
     this._stream = null;
   }
-};
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@/utils/ui/styled';
 import { ChartBox } from '@/src/components/ChartBox';
-import { SYMBOLS, Timeframe } from '../constants';
+import { SYMBOLS, type Timeframe } from '../constants';
 
 const StyledChartGrid = styled('div')({
   display: 'grid',
@@ -21,4 +21,4 @@ export const ChartGrid: React.FC<ChartGridProps> = ({ timeframe }) => {
       ))}
     </StyledChartGrid>
   );
-}; 
+};

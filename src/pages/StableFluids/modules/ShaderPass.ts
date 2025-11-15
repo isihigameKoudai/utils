@@ -1,7 +1,7 @@
-import * as THREE from "three";
-import Common from "./Common";
+import * as THREE from 'three';
+import Common from './Common';
 
-export type Uniforms = THREE.ShaderMaterialParameters["uniforms"];
+export type Uniforms = THREE.ShaderMaterialParameters['uniforms'];
 
 export type ShaderPassProps = {
   material?: THREE.ShaderMaterialParameters;
@@ -17,7 +17,7 @@ export default class ShaderPass {
   geometry?: THREE.BufferGeometry;
   plane?: THREE.Mesh;
   props: ShaderPassProps;
-  uniforms: THREE.ShaderMaterialParameters["uniforms"];
+  uniforms: THREE.ShaderMaterialParameters['uniforms'];
 
   constructor(props: ShaderPassProps) {
     this.props = props;

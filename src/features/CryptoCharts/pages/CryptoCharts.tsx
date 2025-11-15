@@ -10,4 +10,4 @@ const CryptoCharts: React.FC = () => {
   );
 };
 
-export default CryptoCharts; 
+export default CryptoCharts;

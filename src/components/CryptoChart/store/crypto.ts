@@ -1,7 +1,7 @@
-import { defineStore } from "../../../../utils/i-state";
-import { Trade } from "../model/CandleStick";
-import { fetchTradeDataList, CryptoListParams } from "../api/crypto";
-import { CandleStick } from "../model/CandleStick";
+import { defineStore } from '../../../../utils/i-state';
+import type { Trade } from '../model/CandleStick';
+import { fetchTradeDataList, type CryptoListParams } from '../api/crypto';
+import { CandleStick } from '../model/CandleStick';
 
 interface CryptoState {
   trades: Trade[];
@@ -13,8 +13,9 @@ const initialState: CryptoState = {
 
 export const CryptoStore = defineStore({
   state: initialState,
-  queries:{
-    candleSticks: (state) => state.trades.map(trade => new CandleStick(trade)),
+  queries: {
+    candleSticks: (state) =>
+      state.trades.map((trade) => new CandleStick(trade)),
   },
   actions: {
     async fetchTrades({ dispatch }, payload: CryptoListParams) {
@@ -25,5 +26,5 @@ export const CryptoStore = defineStore({
         console.error(error);
       }
     },
-  }
+  },
 });

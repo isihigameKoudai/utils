@@ -1,22 +1,23 @@
-import React, { forwardRef, useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useRef } from 'react';
 
-import { Face } from './type';
+import type { Face } from './type';
 import { drawMesh } from './drawMesh';
 
 interface Props {
-  objects: Face[]
+  objects: Face[];
 }
 
 const FaceMesh = forwardRef<HTMLVideoElement, Props>(({ objects }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (!canvasRef.current || !ref || !('current' in ref) || !ref.current) return;
+    if (!canvasRef.current || !ref || !('current' in ref) || !ref.current)
+      return;
 
     const video = ref.current;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    
+
     if (!ctx) return;
 
     // キャンバスのサイズをビデオに合わせる
@@ -27,17 +28,17 @@ const FaceMesh = forwardRef<HTMLVideoElement, Props>(({ objects }, ref) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // 検出された顔それぞれに対してメッシュを描画
-    objects.forEach(face => {
+    objects.forEach((face) => {
       drawMesh(ctx, face);
     });
   }, [objects, ref]);
 
   return (
     <div style={{ position: 'relative' }}>
-      <video 
-        ref={ref} 
-        width={640} 
-        height={480} 
+      <video
+        ref={ref}
+        width={640}
+        height={480}
         style={{ position: 'absolute' }}
       />
       <canvas
@@ -51,5 +52,7 @@ const FaceMesh = forwardRef<HTMLVideoElement, Props>(({ objects }, ref) => {
     </div>
   );
 });
+
+FaceMesh.displayName = 'FaceMesh';
 
 export default FaceMesh;

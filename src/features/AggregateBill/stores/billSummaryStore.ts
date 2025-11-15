@@ -1,8 +1,8 @@
 import { defineStore } from '@/utils/i-state';
-import { Bill, BillProps } from '../models/Bill';
+import { Bill, type BillProps } from '../models/Bill';
 import { csv2array, fetchFiles } from '@/utils/file/file';
 import type { SortKey, SortOrder } from './type';
-import { Dayjs } from 'dayjs';
+import type { Dayjs } from 'dayjs';
 
 type GroupingType = 'none' | 'store' | 'month';
 
@@ -13,7 +13,7 @@ type BillSummaryState = {
     order: SortOrder;
   };
   groupingType: GroupingType;
-}
+};
 
 const initialState: BillSummaryState = {
   summaryRecords: [] as BillSummaryState['summaryRecords'],
@@ -32,50 +32,55 @@ export const BillSummaryStore = defineStore({
     summaryRecords: (state) => {
       const records = state.summaryRecords
         .slice(1)
-        .filter(record => !Bill.isEmpty(record))
-        .map(record => new Bill(record));
-      
+        .filter((record) => !Bill.isEmpty(record))
+        .map((record) => new Bill(record));
+
       if (state.groupingType === 'none') {
         return records;
       }
 
-      const groupedRecords = records.reduce((acc, record) => {
-        let key: string;
-        switch (state.groupingType) {
-          case 'store':
-            key = record.store;
-            break;
-          case 'month':
-            key = record.date.format('YYYY-MM');
-            break;
-          default:
-            key = record.store;
-        }
+      const groupedRecords = records.reduce(
+        (acc, record) => {
+          let key: string;
+          switch (state.groupingType) {
+            case 'store':
+              key = record.store;
+              break;
+            case 'month':
+              key = record.date.format('YYYY-MM');
+              break;
+            default:
+              key = record.store;
+          }
 
-        const existingRecord = acc[key];
-        
-        return {
-          ...acc,
-          [key]: existingRecord
-            ? {
-                date: record.date,
-                store: state.groupingType === 'store' ? key : '集計',
-                amount: existingRecord.amount + record.amount,
-              }
-            : {
-                date: record.date,
-                store: state.groupingType === 'store' ? key : '集計',
-                amount: record.amount,
-              },
-        };
-      }, {} as Record<string, { date: Dayjs; store: string; amount: number }>);
+          const existingRecord = acc[key];
 
-      return Object.values(groupedRecords)
-        .map(record => new Bill([
-          record.date.format('YYYY-MM-DD'),
-          record.store,
-          record.amount.toString(),
-        ]));
+          return {
+            ...acc,
+            [key]: existingRecord
+              ? {
+                  date: record.date,
+                  store: state.groupingType === 'store' ? key : '集計',
+                  amount: existingRecord.amount + record.amount,
+                }
+              : {
+                  date: record.date,
+                  store: state.groupingType === 'store' ? key : '集計',
+                  amount: record.amount,
+                },
+          };
+        },
+        {} as Record<string, { date: Dayjs; store: string; amount: number }>,
+      );
+
+      return Object.values(groupedRecords).map(
+        (record) =>
+          new Bill([
+            record.date.format('YYYY-MM-DD'),
+            record.store,
+            record.amount.toString(),
+          ]),
+      );
     },
     isEmptySummaryRecords: (state) => state.summaryRecords.length <= 0,
   },
@@ -84,7 +89,7 @@ export const BillSummaryStore = defineStore({
       try {
         const { files } = await fetchFiles({
           isMultiple: false,
-          accept: '.csv'
+          accept: '.csv',
         });
         const records = csv2array(await files[0].text());
         dispatch('summaryRecords', records as BillProps[]);
@@ -98,6 +103,6 @@ export const BillSummaryStore = defineStore({
     },
     setGroupingType({ dispatch }, groupingType: GroupingType) {
       dispatch('groupingType', groupingType);
-    }
+    },
   },
-}); 
+});

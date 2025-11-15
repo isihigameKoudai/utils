@@ -1,9 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
-import { navigatorMock, streamMock, windowMock, documentMock } from '../../__test__/mocks/global';
+import {
+  navigatorMock,
+  streamMock,
+  windowMock,
+  documentMock,
+} from '../../__test__/mocks/global';
 import { VisualDetection } from './VisualDetection';
-import { INITIAL_VIDEO_EL_WIDTH, INITIAL_VIDEO_EL_HEIGHT } from '../../Media/constants';
+import {
+  INITIAL_VIDEO_EL_WIDTH,
+  INITIAL_VIDEO_EL_HEIGHT,
+} from '../../Media/constants';
 
 const mockModel = {
   detect: vi.fn(),
@@ -14,19 +22,18 @@ const mockModel = {
   infer: vi.fn(),
   buildDetectedObjects: vi.fn(),
   calculateMaxScores: vi.fn(),
-  dispose: vi.fn()
+  dispose: vi.fn(),
 } as unknown as cocoSsd.ObjectDetection;
-
 
 describe('VisualDetection', () => {
   let visualDetector: VisualDetection;
-  
+
   const mockDetectedObjects: cocoSsd.DetectedObject[] = [
     {
       bbox: [100, 200, 50, 60], // [x, y, width, height]
       class: 'person',
-      score: 0.95
-    }
+      score: 0.95,
+    },
   ];
 
   beforeEach(() => {
@@ -44,7 +51,7 @@ describe('VisualDetection', () => {
   describe('loadModel', () => {
     it('モデルが正しくロードされること', async () => {
       const model = await visualDetector.loadModel();
-      
+
       expect(cocoSsd.load).toHaveBeenCalled();
       expect(model).toBe(mockModel);
     });
@@ -60,7 +67,7 @@ describe('VisualDetection', () => {
   describe('loadEl', () => {
     it('デフォルトの設定でビデオ要素が正しく初期化されること', async () => {
       const video = await visualDetector.loadEl({});
-      
+
       expect(video.width).toBe(INITIAL_VIDEO_EL_WIDTH);
       expect(video.height).toBe(INITIAL_VIDEO_EL_HEIGHT);
       expect(video.muted).toBe(true);
@@ -71,16 +78,20 @@ describe('VisualDetection', () => {
     it('カスタムサイズでビデオ要素が正しく初期化されること', async () => {
       const customWidth = 1280;
       const customHeight = 720;
-      
+
       const video = await visualDetector.loadEl({
         width: customWidth,
-        height: customHeight
+        height: customHeight,
       });
 
       expect(video.width).toBe(customWidth);
       expect(video.height).toBe(customHeight);
-      expect(visualDetector.magnification.x).toBe(customWidth / INITIAL_VIDEO_EL_WIDTH);
-      expect(visualDetector.magnification.y).toBe(customHeight / INITIAL_VIDEO_EL_HEIGHT);
+      expect(visualDetector.magnification.x).toBe(
+        customWidth / INITIAL_VIDEO_EL_WIDTH,
+      );
+      expect(visualDetector.magnification.y).toBe(
+        customHeight / INITIAL_VIDEO_EL_HEIGHT,
+      );
     });
   });
 

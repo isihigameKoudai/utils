@@ -8,23 +8,28 @@ import cellular from './cellular.frag?raw';
 const CellularNoisePage: React.FC = () => {
   const uniforms = {
     time: {
-      value: 0
+      value: 0,
     },
     resolution: {
-      value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+      value: new THREE.Vector2(window.innerWidth, window.innerHeight),
     },
   };
 
-  return <div id="3D" style={{
-    width: '100%',
-    height: '100svh'
-  }}>
-    <ShaderCanvas
-      uniforms={uniforms}
-      vertexShader={vertex}
-      fragmentShader={cellular}
-    />
-  </div>;
-}
+  return (
+    <div
+      id="3D"
+      style={{
+        width: '100%',
+        height: '100svh',
+      }}
+    >
+      <ShaderCanvas
+        uniforms={uniforms}
+        vertexShader={vertex}
+        fragmentShader={cellular}
+      />
+    </div>
+  );
+};
 
 export default CellularNoisePage;

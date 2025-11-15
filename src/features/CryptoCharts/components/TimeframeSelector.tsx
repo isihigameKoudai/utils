@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@/utils/ui/styled';
 import { TIMEFRAMES } from '../constants';
-import { TimeframeSelectorProps } from '../types';
+import type { TimeframeSelectorProps } from '../types';
 
 const SelectContainer = styled('div')({
   marginBottom: '20px',
@@ -24,7 +24,9 @@ export const TimeframeSelector: React.FC<TimeframeSelectorProps> = ({
     <SelectContainer>
       <StyledSelect
         value={selectedTimeframe}
-        onChange={(e) => onTimeframeChange(e.target.value as typeof TIMEFRAMES[number])}
+        onChange={(e) =>
+          onTimeframeChange(e.target.value as (typeof TIMEFRAMES)[number])
+        }
       >
         {TIMEFRAMES.map((timeframe) => (
           <option key={timeframe} value={timeframe}>
@@ -34,4 +36,4 @@ export const TimeframeSelector: React.FC<TimeframeSelectorProps> = ({
       </StyledSelect>
     </SelectContainer>
   );
-}; 
+};

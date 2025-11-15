@@ -1,4 +1,4 @@
-import { GUI } from "dat.gui";
+import { GUI } from 'dat.gui';
 
 export type ControlProps = {
   iterations_poisson: number;
@@ -23,14 +23,14 @@ export default class Controls {
 
   init() {
     this.gui = new GUI({ width: 300 });
-    this.gui.add(this.params, "mouse_force", 20, 200);
-    this.gui.add(this.params, "cursor_size", 10, 200);
-    this.gui.add(this.params, "isViscous");
-    this.gui.add(this.params, "viscous", 0, 500);
-    this.gui.add(this.params, "iterations_viscous", 1, 32);
-    this.gui.add(this.params, "iterations_poisson", 1, 32);
-    this.gui.add(this.params, "dt", 1 / 200, 1 / 30);
-    this.gui.add(this.params, "BFECC");
+    this.gui.add(this.params, 'mouse_force', 20, 200);
+    this.gui.add(this.params, 'cursor_size', 10, 200);
+    this.gui.add(this.params, 'isViscous');
+    this.gui.add(this.params, 'viscous', 0, 500);
+    this.gui.add(this.params, 'iterations_viscous', 1, 32);
+    this.gui.add(this.params, 'iterations_poisson', 1, 32);
+    this.gui.add(this.params, 'dt', 1 / 200, 1 / 30);
+    this.gui.add(this.params, 'BFECC');
     this.gui.close();
   }
 }
