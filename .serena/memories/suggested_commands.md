@@ -1,0 +1,7 @@
+- `npm install` — install dependencies
+- `npm run dev` — start Vite dev server
+- `npm run build` — type-check and bundle
+- `npm run test` — run Vitest suite
+- `npm run lint` — ESLint with auto-fix
+- `npm run format` — Prettier write
+- `npx vitest run <path>` — run targeted tests
