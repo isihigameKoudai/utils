@@ -23,6 +23,11 @@ export const BRAND = {
     label: 'bitFlyer（アプラス）',
     columns: ['ご利用日', 'ご利用店名', 'お支払金額'],
   },
+  jcb_gold: {
+    value: 'jcb_gold',
+    label: 'JCBゴールド',
+    columns: ['ご利用日', 'ご利用先など', 'お支払い金額(￥)'],
+  },
   yodobashi: {
     value: 'yodobashi',
     label: 'ヨドバシ',

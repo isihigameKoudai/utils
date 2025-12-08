@@ -5,11 +5,18 @@ import {
 } from '@/utils/i-state';
 import type { Brand } from '../types/brand';
 import { BRAND } from '../constants/brand';
-import { array2csv, csv2array, fetchFiles, mergeCSVs } from '@/utils/file';
+import {
+  array2csv,
+  csv2array,
+  fetchFiles,
+  mergeCSVs,
+  readCsvFileAsText,
+} from '@/utils/file';
 import { fromEntries } from '@/utils/object';
 import { CSV } from '@/utils/file/csv/csv';
 import { isTruthy } from '@/utils/guards';
 import { Bill, type BillProps } from '../models/Bill';
+import { normalizeBrandRows } from './normalizer';
 
 type BrandState = {
   [key in Brand]: CSV | null;
@@ -52,12 +59,13 @@ const actions = {
         accept: '.csv',
       });
       const records = await Promise.all(
-        files.map(async (file) => csv2array(await file.text())),
+        files.map(async (file) => csv2array(await readCsvFileAsText(file))),
       );
       const mergedRecords = mergeCSVs(records);
       const hasDiffColumnCount = mergedRecords.some(
         (row) => row.length !== mergedRecords[0].length,
       );
+      console.log(mergedRecords);
       if (hasDiffColumnCount) {
         const invalidRecords = mergedRecords.filter(
           (row) => row.length !== mergedRecords[0].length,
@@ -78,9 +86,10 @@ const actions = {
           return null;
         }
         const brandColumns = Array.from(BRAND[brand.value].columns);
-        return records.getColumns(brandColumns);
+        const brandRows = records.getColumns(brandColumns);
+        return normalizeBrandRows(brand.value as Brand, brandRows);
       })
-      .filter<string[][]>(isTruthy);
+      .filter<BillProps[]>(isTruthy);
     if (allRecords.length === 0) {
       throw new Error('集計するデータがありません');
     }

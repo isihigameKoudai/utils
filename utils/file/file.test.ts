@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { csv2array, mergeStringifyCSVs, mergeArrayedCSVs } from './file';
+import {
+  csv2array,
+  mergeStringifyCSVs,
+  mergeArrayedCSVs,
+  decodeCsvBuffer,
+} from './file';
 
 describe('csv2array', () => {
   it('基本的なCSV文字列を2次元配列に変換できる', () => {
@@ -105,5 +110,19 @@ describe('mergeArrayedCSVs', () => {
       ['Alice', '100', '2021-01-01'],
     ];
     expect(mergeArrayedCSVs([csv])).toEqual(expected);
+  });
+});
+
+describe('decodeCsvBuffer', () => {
+  it('UTF-8のバッファをそのままデコードできる', () => {
+    const bytes = new TextEncoder().encode('sample,csv');
+    expect(decodeCsvBuffer(bytes)).toBe('sample,csv');
+  });
+
+  it('Shift_JISのバッファをUTF-8文字列に変換できる', () => {
+    const shiftJisBytes = Uint8Array.from([
+      0x83, 0x65, 0x83, 0x58, 0x83, 0x67, 0x2c, 0x31, 0x30, 0x30, 0x30,
+    ]);
+    expect(decodeCsvBuffer(shiftJisBytes)).toBe('テスト,1000');
   });
 });
