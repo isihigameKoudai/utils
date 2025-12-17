@@ -26,6 +26,7 @@ Motto: "Small, clear, safe steps — always grounded in real docs."
 ### Code Style & Limits
 
 * Files ≤ 300 LOC; keep modules single-purpose.
+* Use const as much as possible to make it immutable.
 * Comments: Add a brief header at the top of every file (where, what, why). Prefer clear, simple explanations; comment non-obvious logic.
 * Commenting habit: Err on the side of more comments; include rationale, assumptions, and trade-offs.
 * Configuration: Centralize runtime tunables in `config.py`; avoid magic numbers in code and tests. Pull defaults from config when wiring dependencies.

@@ -2,6 +2,7 @@ import { styled } from '@/utils/ui/styled';
 import { BillSummaryStore } from '../stores/billSummaryStore';
 import { Header } from '../components/Header';
 import { BillList } from '../components/BillList';
+import { BillBarChart } from '../components/BillBarChart';
 
 const Container = styled('div')({
   padding: '2rem',
@@ -79,7 +80,13 @@ const AggregateBillSummaryPage = () => {
         {queries.isEmptySummaryRecords ? (
           <div>データがありません</div>
         ) : (
-          <BillList bills={queries.summaryRecords} />
+          <>
+            <BillBarChart
+              bills={queries.summaryRecords}
+              groupingType={queries.groupingType}
+            />
+            <BillList bills={queries.summaryRecords} />
+          </>
         )}
       </Container>
     </>

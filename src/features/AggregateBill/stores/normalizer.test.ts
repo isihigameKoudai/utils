@@ -7,7 +7,7 @@ import { normalizeBrandRow, normalizeBrandRows } from './normalizer';
 
 describe('normalizeBrandRow', () => {
   it('JCBの金額表記から通貨記号とカンマを取り除く', () => {
-    const result = normalizeBrandRow('jcb', [
+    const result = normalizeBrandRow('jcb_gold', [
       '2025/01/15',
       'テストショップ',
       '¥12,345',
@@ -16,7 +16,7 @@ describe('normalizeBrandRow', () => {
   });
 
   it('JCBの金額表記に負数や全角マイナスが含まれても正しく変換する', () => {
-    const result = normalizeBrandRow('jcb', [
+    const result = normalizeBrandRow('jcb_gold', [
       '2025/02/01',
       'リボ払い調整',
       '−¥1,234円',
@@ -36,7 +36,7 @@ describe('normalizeBrandRow', () => {
 
 describe('normalizeBrandRows', () => {
   it('複数行をブランド別に正規化する', () => {
-    const rows = normalizeBrandRows('jcb', [
+    const rows = normalizeBrandRows('jcb_gold', [
       ['2025/04/01', 'A店', '¥1,000'],
       ['2025/04/02', 'B店', '¥2,000'],
     ]);
