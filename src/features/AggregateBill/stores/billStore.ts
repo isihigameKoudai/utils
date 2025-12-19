@@ -52,6 +52,9 @@ const queries = {
 } satisfies QueriesProps<BillState>;
 
 const actions = {
+  /**
+   * CSVファイルを読み込む
+   */
   async fetchCSVFiles({ dispatch }, { brand }: { brand: Brand }) {
     try {
       const { files } = await fetchFiles({
