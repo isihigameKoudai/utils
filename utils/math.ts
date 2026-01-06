@@ -29,3 +29,14 @@ export const variance = (arr: number[]): number => {
  * @returns
  */
 export const deviation = (arr: number[]): number => Math.sqrt(variance(arr));
+
+/**
+ * 中央値
+ * @param arr
+ * @returns
+ */
+export const median = (arr: number[]): number => {
+  const sorted = arr.sort((a, b) => a - b);
+  const middle = Math.floor(sorted.length / 2);
+  return sorted[middle];
+};

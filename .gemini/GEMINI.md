@@ -1,3 +1,5 @@
+@../doc/AGENT.md
+
 # Claude Project Configuration
 
 This is a React TypeScript project focused on creating reusable utilities and common functions, and then you can try to use some utilities on sandbox.
