@@ -37,6 +37,26 @@ src/
   └── routes/        # TanStack Router configuration
 ```
 
+### Dependency Direction (Features Architecture)
+
+Dependencies must flow in one direction only:
+
+```
+routes/pages → features → components → utils
+```
+
+**Prohibited imports:**
+
+- `utils/` → `src/` (utilities must not depend on application code)
+- `components/` → `features/` (shared components must not depend on features)
+- `components/` → `pages/` (shared components must not depend on pages)
+- `components/` → `routes/` (shared components must not depend on routes)
+- `features/` → `pages/` (features must not depend on pages)
+- `features/` → `routes/` (features must not depend on routes)
+- `features/A` → `features/B` (cross-feature imports forbidden)
+- `generated/` → any (generated files are output only, not imported by app code directly except routes config)
+- `utils/` → `node_modules` application-specific libs (keep utils pure)
+
 ## Code Style Guidelines
 
 ### TypeScript Configuration
@@ -67,6 +87,18 @@ import { fromEntries } from '@/utils/object';
 import type { StateProps, QueriesProps } from './type';
 ```
 
+### Type Imports
+
+Always use `type` keyword when importing types/interfaces:
+
+```typescript
+// Top-level type import
+import type { StateProps, QueriesProps } from './type';
+
+// Named import with inline type
+import { someFunction, type SomeType } from './module';
+```
+
 ### Naming Conventions
 
 - **Files**: camelCase for utilities (`array.ts`), PascalCase for components (`Menu.tsx`)
@@ -74,7 +106,7 @@ import type { StateProps, QueriesProps } from './type';
 - **Components**: PascalCase (`RootLayout`, `NavigationHeader`)
 - **Functions**: camelCase (`splitMap`, `createCachePromise`)
 - **Types/Interfaces**: PascalCase (`ListItem`, `DeferredOut`)
-- **Constants**: camelCase or UPPER_SNAKE_CASE for true constants
+- **Constants**: UPPER_SNAKE_CASE for true constants
 
 ### Component Guidelines
 
