@@ -13,9 +13,13 @@
   },
   "permission": {
     "bash": {
-      "*": "ask",
-      "git push": "ask",
-      "rm -rf *": "ask"
+      "*": "allow",
+      "rm -rf *": "deny",
+      "git push --force*": "deny",
+      "sudo *": "deny",
+      "dd *": "deny",
+      "mkfs*": "deny",
+      "format*": "deny"
     }
   },
   "mcp": {
