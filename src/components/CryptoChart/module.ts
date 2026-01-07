@@ -2,12 +2,11 @@ import {
   type DeepPartial,
   type ChartOptions,
   ColorType,
-  type CandlestickSeriesPartialOptions,
 } from 'lightweight-charts';
 
 import type { ColorTheme } from '@/utils/PreferColorScheme';
 
-import { CHART_DARK_COLOR, CHART_LIGHT_COLOR, SERIES_COLOR } from './constants';
+import { CHART_DARK_COLOR, CHART_LIGHT_COLOR } from './constants';
 
 export const createChartColor = (
   theme: ColorTheme,
@@ -26,15 +25,5 @@ export const createChartColor = (
       vertLines: { color: colors.GRID_LINE },
       horzLines: { color: colors.GRID_LINE },
     },
-  };
-};
-
-export const createSeriesColor = (): CandlestickSeriesPartialOptions => {
-  return {
-    borderVisible: false,
-    upColor: SERIES_COLOR.UP,
-    downColor: SERIES_COLOR.DOWN,
-    wickUpColor: SERIES_COLOR.UP,
-    wickDownColor: SERIES_COLOR.DOWN,
   };
 };

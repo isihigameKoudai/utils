@@ -16,13 +16,3 @@ export const getTimeframeLabel = (
       return timeframe;
   }
 };
-
-export const isValidTimeframe = (
-  timeframe: string,
-): timeframe is Timeframe | MultiTimeframe => {
-  return ['1h', '1d', '1w', '1M'].includes(timeframe);
-};
-
-export const isValidSymbol = (symbol: string): symbol is string => {
-  return symbol.length > 0;
-};

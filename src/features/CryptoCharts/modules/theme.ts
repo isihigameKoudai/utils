@@ -1,7 +1,7 @@
 import { createTheme, type Theme } from '@/utils/ui/theme';
 import PreferColorScheme from '@/utils/PreferColorScheme';
 
-export const lightTheme: Theme = {
+const lightTheme: Theme = {
   breakpoints: {
     values: {
       xs: 0,
@@ -125,7 +125,7 @@ export const lightTheme: Theme = {
   },
 };
 
-export const darkTheme: Theme = {
+const darkTheme: Theme = {
   ...lightTheme,
   palette: {
     ...lightTheme.palette,
