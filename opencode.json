@@ -1,0 +1,43 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "opencode",
+  "model": "anthropic/claude-sonnet-4-5",
+  "small_model": "grok code fast 1",
+  "instructions": ["AGENTS.md"],
+  "tui": {
+    "scroll_speed": 1,
+    "scroll_acceleration": {
+      "enabled": true
+    },
+    "diff_style": "auto"
+  },
+  "permission": {
+    "bash": {
+      "*": "ask",
+      "git push": "ask",
+      "rm -rf *": "ask"
+    }
+  },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "serena": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena-mcp-server"
+      ]
+    },
+    "chrome-devtools": {
+      "type": "local",
+      "command": ["npx", "-y", "chrome-devtools-mcp"],
+      "environment": {
+        "CHROME_REMOTE_DEBUGGING_URL": "http://localhost:9222"
+      }
+    }
+  }
+}

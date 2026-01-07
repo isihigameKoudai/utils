@@ -6,3 +6,4 @@ dist-ssr
 .env
 
 features/**/static/**.csv
+.opencode

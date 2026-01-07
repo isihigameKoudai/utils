@@ -161,6 +161,7 @@ import { someFunction, type SomeType } from './module';
 
 ## Collaboration & Accountability
 
+- Always think in English and respond in Japanese
 - Escalate when requirements are ambiguous or security-sensitive
 - Express uncertainty honestly (confidence < 80% → ask questions)
 - Value correctness over speed; use context7 MCP server when available
