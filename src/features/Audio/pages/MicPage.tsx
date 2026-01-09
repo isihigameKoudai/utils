@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 
 import { Visualizer } from '../../../../utils/Visualizer';
-import { basicParticle, lineAudio } from './animation';
+import { basicParticle, lineAudio } from '../modules/animation';
 
 const MicPage: React.FC = () => {
   const $particle = useRef<HTMLCanvasElement>(null!);

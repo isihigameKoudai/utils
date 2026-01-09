@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import Common from './Common';
 // import Visualizer from "../../../../utils/Visualizer";
 
-export class Mouse {
+class Mouse {
   mouseMoved: boolean;
   coords: THREE.Vector2;
   coords_old: THREE.Vector2;

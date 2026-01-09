@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react';
-import { Visualizer } from '../../../utils/Visualizer';
-import { fetchFiles } from '../../../utils/file';
-import { basicParticle } from './Mic/animation';
+import { Visualizer } from '../../../../utils/Visualizer';
+import { fetchFiles } from '../../../../utils/file';
+import { basicParticle } from '../modules/animation';
 
 const fetchAudio = async () =>
   fetchFiles({ accept: 'audio/*', isMultiple: false });

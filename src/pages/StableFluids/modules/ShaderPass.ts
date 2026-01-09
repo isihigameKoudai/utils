@@ -1,9 +1,7 @@
 import * as THREE from 'three';
 import Common from './Common';
 
-export type Uniforms = THREE.ShaderMaterialParameters['uniforms'];
-
-export type ShaderPassProps = {
+type ShaderPassProps = {
   material?: THREE.ShaderMaterialParameters;
   output?: THREE.WebGLRenderTarget;
   output0?: THREE.WebGLRenderTarget;
