@@ -4,6 +4,14 @@
   "model": "anthropic/claude-sonnet-4-5",
   "small_model": "grok code fast 1",
   "instructions": ["AGENTS.md"],
+  "provider": {
+    "anthropic": {
+      "name": "Anthropic"
+    },
+    "grok": {
+      "name": "Grok"
+    }
+  },
   "tui": {
     "scroll_speed": 1,
     "scroll_acceleration": {
