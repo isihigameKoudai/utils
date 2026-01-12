@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import Common from './Common';
-// import Visualizer from "../../../../utils/Visualizer";
 
 class Mouse {
   mouseMoved: boolean;
@@ -68,58 +67,6 @@ class Mouse {
 
     if (this.coords_old.x === 0 && this.coords_old.y === 0) this.diff.set(0, 0);
   }
-
-  /**
-   * custom move
-   */
-  // onMoveGhost() {
-  //   let i = 0;
-  //   setInterval(() => {
-  //     i = i + 0.07;
-  //     const radius = 300 + Math.sin(i) * 100; // 円の半径
-  //     const centerX = window.innerWidth / 2; // 画面の中心X座標
-  //     const centerY = window.innerHeight / 2; // 画面の中心Y座標
-  //     const angle = Date.now() / 500; // 現在時刻を秒単位に変換した値を角度として使用
-
-  //     const x = centerX + radius * Math.cos(angle);
-  //     const y = centerY + radius * Math.sin(angle);
-  //     this.setCoords(x, y);
-  //   }, 16);
-  // }
-
-  /**
-   * custom move by audio
-   */
-
-  // async onMoveByGhostAudio() {
-  //   let r = 0;
-
-  //   const visualizer = new Visualizer();
-  //   await visualizer.setDeviceAudio({
-  //     audio: true,
-  //     video: false,
-  //   });
-
-  //   visualizer.start(
-  //     ({ spectrumArray }) => {
-  //       r =
-  //         spectrumArray.reduce((a, i) => a + i) / (128 * spectrumArray.length);
-  //     },
-  //     { fftSize: 128 }
-  //   );
-
-  //   setInterval(() => {
-  //     // i = i + 0.07;
-  //     console.log(r);
-  //     const radius = 100 + Math.sin(r) * 800; // 円の半径
-  //     const centerX = window.innerWidth / 2; // 画面の中心X座標
-  //     const centerY = window.innerHeight / 2; // 画面の中心Y座標
-  //     const angle = Date.now() / 500; // 現在時刻を秒単位に変換した値を角度として使用
-  //     const x = centerX + radius * Math.cos(angle);
-  //     const y = centerY + radius * Math.sin(angle);
-  //     this.setCoords(x, y);
-  //   }, 16);
-  // }
 }
 
 export default new Mouse();

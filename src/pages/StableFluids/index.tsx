@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import WebGL from './modules/WebGL';
+import { WebGL } from '@/src/shared/modules/fluids';
 
 const StableFluids: React.FC = () => {
   const $ref = useRef<HTMLDivElement>(null!);

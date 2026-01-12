@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import WebGL from './modules/WebGL';
-import {
-  type DetectedObject,
-  VisualDetection,
-} from '../../../../utils/tensorflow';
-import Mouse from './modules/Mouse';
-import VisualDetectionView from '../../../components/VisualDetectionView';
+import { type DetectedObject, VisualDetection } from '@/utils/tensorflow';
+import { Mouse } from '@/src/shared/modules/fluids';
+import VisualDetectionView from '@/src/components/VisualDetectionView';
 
 export default function FluidDetect() {
   const $ref = useRef<HTMLDivElement>(null!);

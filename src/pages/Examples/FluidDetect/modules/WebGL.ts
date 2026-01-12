@@ -1,45 +1,16 @@
-import Common from './Common';
-import Output from './Output';
-import Mouse from './Mouse';
-
-import { VisualDetection } from '../../../../../utils/tensorflow';
+import { WebGL as BaseWebGL } from '@/src/shared/modules/fluids';
+import { VisualDetection } from '@/utils/tensorflow';
 
 type Props = {
   $wrapper: HTMLElement;
 };
-export default class WebGL {
-  $wrapper: HTMLElement;
-  output: Output;
+
+export default class WebGL extends BaseWebGL {
   $video: HTMLVideoElement | null;
 
   constructor({ $wrapper }: Props) {
-    this.$wrapper = $wrapper;
-    Common.init();
-    Mouse.init();
-    // Mouse.onMoveByGhostAudio();
+    super({ $wrapper });
     this.$video = null;
-
-    this.$wrapper.prepend(Common.renderer!.domElement);
-    this.output = new Output();
-    this.loop();
-
-    window.addEventListener('resize', this.resize.bind(this));
-  }
-
-  resize() {
-    Common.resize();
-    this.output.resize();
-  }
-
-  render() {
-    Mouse.update();
-    Common.update();
-    this.output.update();
-  }
-
-  loop() {
-    this.render();
-    requestAnimationFrame(this.loop.bind(this));
   }
 
   async initDetector({

@@ -5,6 +5,7 @@ import Mouse from './Mouse';
 type Props = {
   $wrapper: HTMLElement;
 };
+
 export default class WebGL {
   $wrapper: HTMLElement;
   output: Output;
@@ -13,7 +14,6 @@ export default class WebGL {
     this.$wrapper = $wrapper;
     Common.init();
     Mouse.init();
-    // Mouse.onMoveByGhostAudio();
 
     this.$wrapper.prepend(Common.renderer!.domElement);
     this.output = new Output();

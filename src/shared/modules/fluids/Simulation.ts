@@ -9,7 +9,7 @@ import Divergence from './Divergence';
 import Poisson from './Poisson';
 import Pressure from './Pressure';
 
-import { type Fbos, createFbos } from './utils/cretateFbos';
+import { type Fbos, createFbos } from './utils/createFbos';
 
 export default class Simulation {
   options: ControlProps;
