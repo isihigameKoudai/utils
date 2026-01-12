@@ -2,15 +2,15 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { isEmpty } from 'lodash-es';
 
-import type { DetectedObject } from '../../../utils/tensorflow';
-import ShaderCanvas from '../../../utils/ShaderCanvas';
-import vertex from '../../../utils/glsl/vertex.vert?raw';
-import fragment from './fragment.frag?raw';
+import type { DetectedObject } from '@/utils/tensorflow';
+import ShaderCanvas from '@/utils/ShaderCanvas';
+import vertex from '@/utils/glsl/vertex.vert?raw';
+import fragment from '../shaders/fragment.frag?raw';
 
-import DetectorView from './DetectorView';
-import { DETECTOR_OPACITY } from './const';
+import DetectorView from '../components/DetectorView';
+import { DETECTOR_OPACITY } from '../constants';
 
-const MeltTheBorder: React.FC = () => {
+const MeltTheBorderPage: React.FC = () => {
   const uniforms = useMemo(
     () => ({
       time: {
@@ -100,4 +100,4 @@ const MeltTheBorder: React.FC = () => {
   );
 };
 
-export default MeltTheBorder;
+export default MeltTheBorderPage;

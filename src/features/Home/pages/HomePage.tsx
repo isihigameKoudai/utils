@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 import { fetchFiles } from '@/utils/file';
 
-const Index: React.FC = () => {
+const HomePage: React.FC = () => {
   const onOpenFile = useCallback(async () => {
     const { files } = await fetchFiles();
     console.log('open files', files);
@@ -43,4 +43,4 @@ const Index: React.FC = () => {
   );
 };
 
-export default Index;
+export default HomePage;

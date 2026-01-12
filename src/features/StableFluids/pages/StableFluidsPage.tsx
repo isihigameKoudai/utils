@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { WebGL } from '@/src/shared/modules/fluids';
 
-const StableFluids: React.FC = () => {
+const StableFluidsPage: React.FC = () => {
   const $ref = useRef<HTMLDivElement>(null!);
   const isInitRef = useRef(true);
 
@@ -17,4 +17,4 @@ const StableFluids: React.FC = () => {
   return <div id="fluids" ref={$ref}></div>;
 };
 
-export default StableFluids;
+export default StableFluidsPage;
