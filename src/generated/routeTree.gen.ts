@@ -25,7 +25,6 @@ import { Route as ThreeDimensionParticleRouteImport } from './../routes/three-di
 import { Route as SamplesSquareAparkRouteImport } from './../routes/samples/square-apark'
 import { Route as SamplesPoseDetectionRouteImport } from './../routes/samples/pose-detection'
 import { Route as SamplesNormalCircleRouteImport } from './../routes/samples/normal-circle'
-import { Route as SamplesIstateRouteImport } from './../routes/samples/istate'
 import { Route as SamplesHandPoseDetectionRouteImport } from './../routes/samples/hand-pose-detection'
 import { Route as SamplesFollowerCircleRouteImport } from './../routes/samples/follower-circle'
 import { Route as SamplesFluidDetectRouteImport } from './../routes/samples/fluid-detect'
@@ -121,11 +120,6 @@ const SamplesNormalCircleRoute = SamplesNormalCircleRouteImport.update({
   path: '/samples/normal-circle',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SamplesIstateRoute = SamplesIstateRouteImport.update({
-  id: '/samples/istate',
-  path: '/samples/istate',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SamplesHandPoseDetectionRoute =
   SamplesHandPoseDetectionRouteImport.update({
     id: '/samples/hand-pose-detection',
@@ -218,7 +212,6 @@ export interface FileRoutesByFullPath {
   '/samples/fluid-detect': typeof SamplesFluidDetectRoute
   '/samples/follower-circle': typeof SamplesFollowerCircleRoute
   '/samples/hand-pose-detection': typeof SamplesHandPoseDetectionRoute
-  '/samples/istate': typeof SamplesIstateRoute
   '/samples/normal-circle': typeof SamplesNormalCircleRoute
   '/samples/pose-detection': typeof SamplesPoseDetectionRoute
   '/samples/square-apark': typeof SamplesSquareAparkRoute
@@ -251,7 +244,6 @@ export interface FileRoutesByTo {
   '/samples/fluid-detect': typeof SamplesFluidDetectRoute
   '/samples/follower-circle': typeof SamplesFollowerCircleRoute
   '/samples/hand-pose-detection': typeof SamplesHandPoseDetectionRoute
-  '/samples/istate': typeof SamplesIstateRoute
   '/samples/normal-circle': typeof SamplesNormalCircleRoute
   '/samples/pose-detection': typeof SamplesPoseDetectionRoute
   '/samples/square-apark': typeof SamplesSquareAparkRoute
@@ -285,7 +277,6 @@ export interface FileRoutesById {
   '/samples/fluid-detect': typeof SamplesFluidDetectRoute
   '/samples/follower-circle': typeof SamplesFollowerCircleRoute
   '/samples/hand-pose-detection': typeof SamplesHandPoseDetectionRoute
-  '/samples/istate': typeof SamplesIstateRoute
   '/samples/normal-circle': typeof SamplesNormalCircleRoute
   '/samples/pose-detection': typeof SamplesPoseDetectionRoute
   '/samples/square-apark': typeof SamplesSquareAparkRoute
@@ -320,7 +311,6 @@ export interface FileRouteTypes {
     | '/samples/fluid-detect'
     | '/samples/follower-circle'
     | '/samples/hand-pose-detection'
-    | '/samples/istate'
     | '/samples/normal-circle'
     | '/samples/pose-detection'
     | '/samples/square-apark'
@@ -353,7 +343,6 @@ export interface FileRouteTypes {
     | '/samples/fluid-detect'
     | '/samples/follower-circle'
     | '/samples/hand-pose-detection'
-    | '/samples/istate'
     | '/samples/normal-circle'
     | '/samples/pose-detection'
     | '/samples/square-apark'
@@ -386,7 +375,6 @@ export interface FileRouteTypes {
     | '/samples/fluid-detect'
     | '/samples/follower-circle'
     | '/samples/hand-pose-detection'
-    | '/samples/istate'
     | '/samples/normal-circle'
     | '/samples/pose-detection'
     | '/samples/square-apark'
@@ -420,7 +408,6 @@ export interface RootRouteChildren {
   SamplesFluidDetectRoute: typeof SamplesFluidDetectRoute
   SamplesFollowerCircleRoute: typeof SamplesFollowerCircleRoute
   SamplesHandPoseDetectionRoute: typeof SamplesHandPoseDetectionRoute
-  SamplesIstateRoute: typeof SamplesIstateRoute
   SamplesNormalCircleRoute: typeof SamplesNormalCircleRoute
   SamplesPoseDetectionRoute: typeof SamplesPoseDetectionRoute
   SamplesSquareAparkRoute: typeof SamplesSquareAparkRoute
@@ -549,13 +536,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SamplesNormalCircleRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/samples/istate': {
-      id: '/samples/istate'
-      path: '/samples/istate'
-      fullPath: '/samples/istate'
-      preLoaderRoute: typeof SamplesIstateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/samples/hand-pose-detection': {
       id: '/samples/hand-pose-detection'
       path: '/samples/hand-pose-detection'
@@ -676,7 +656,6 @@ const rootRouteChildren: RootRouteChildren = {
   SamplesFluidDetectRoute: SamplesFluidDetectRoute,
   SamplesFollowerCircleRoute: SamplesFollowerCircleRoute,
   SamplesHandPoseDetectionRoute: SamplesHandPoseDetectionRoute,
-  SamplesIstateRoute: SamplesIstateRoute,
   SamplesNormalCircleRoute: SamplesNormalCircleRoute,
   SamplesPoseDetectionRoute: SamplesPoseDetectionRoute,
   SamplesSquareAparkRoute: SamplesSquareAparkRoute,
