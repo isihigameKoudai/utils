@@ -32,8 +32,19 @@ npm run format       # Prettier formatting
 utils/               # Reusable utility modules (array, file, promise, etc.)
 src/
   ├── components/    # Reusable React components (domain-agnostic)
-  ├── features/      # Feature-specific modules (AggregateBill, CryptoCharts)
-  ├── pages/         # Page components (sandbox/examples)
+  ├── features/      # Feature-specific modules with pages, components, and business logic
+  │   ├── AggregateBill/   # Credit card billing aggregation
+  │   ├── Audio/           # Audio visualization and processing
+  │   ├── CryptoCharts/    # Cryptocurrency charts
+  │   ├── Detection/       # ML-based detection (pose, hand, face)
+  │   ├── Home/            # Homepage
+  │   ├── MeltTheBorder/   # Shader + ML detection demo
+  │   ├── Noise/           # Noise shaders (fBM, fractal, cellular)
+  │   ├── Playground/      # Development sandbox
+  │   ├── Shader/          # Shader examples
+  │   ├── StableFluids/    # Fluid simulation
+  │   └── ThreeDimension/  # 3D rendering examples
+  ├── shared/        # Shared modules across features
   └── routes/        # TanStack Router configuration
 ```
 
@@ -42,16 +53,14 @@ src/
 Dependencies must flow in one direction only:
 
 ```
-routes/pages → features → components → utils
+routes → features → components → utils
 ```
 
 **Prohibited imports:**
 
 - `utils/` → `src/` (utilities must not depend on application code)
 - `components/` → `features/` (shared components must not depend on features)
-- `components/` → `pages/` (shared components must not depend on pages)
 - `components/` → `routes/` (shared components must not depend on routes)
-- `features/` → `pages/` (features must not depend on pages)
 - `features/` → `routes/` (features must not depend on routes)
 - `features/A` → `features/B` (cross-feature imports forbidden)
 - `generated/` → any (generated files are output only, not imported by app code directly except routes config)
@@ -171,8 +180,9 @@ import { someFunction, type SomeType } from './module';
 - Production code must be placed under `src/`
 - Consider robustness, availability, reusability, and readability
 - Use shared modules from `utils/` when possible
-- Components must be reusable and domain-agnostic
-- Pages have 1:1 relationship with URLs
+- Components in `src/components/` must be reusable and domain-agnostic
+- Feature-specific components belong in `src/features/<Feature>/components/`
+- Page components belong in `src/features/<Feature>/pages/` with 1:1 URL relationship
 - Tests must be unit-level, covering all branches and edge cases
 
 ## Quick Checklist
