@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import * as THREE from 'three';
 
-import ShaderCanvas from '../../../../utils/ShaderCanvas';
-import vertex from '../../../../utils/glsl/vertex.vert?raw';
-import AudioCircle from './AudioCircle.frag?raw';
-import { Visualizer } from '../../../../utils/Visualizer';
+import ShaderCanvas from '@/utils/ShaderCanvas';
+import vertex from '@/utils/glsl/vertex.vert?raw';
+import AudioCircle from '../shaders/audioCircle.frag?raw';
+import { Visualizer } from '@/utils/Visualizer';
 
 const AudioCirclePage: React.FC = () => {
   const ringVisualizer = new Visualizer();

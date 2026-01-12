@@ -1,9 +1,9 @@
 import React from 'react';
 import * as THREE from 'three';
 
-import ShaderCanvas from '../../../../utils/ShaderCanvas';
-import vertex from '../../../../utils/glsl/vertex.vert?raw';
-import normalCircle from './normalCircle.frag?raw';
+import ShaderCanvas from '@/utils/ShaderCanvas';
+import vertex from '@/utils/glsl/vertex.vert?raw';
+import normalCircle from '../shaders/normalCircle.frag?raw';
 
 const NormalCirclePage: React.FC = () => {
   const uniforms = {

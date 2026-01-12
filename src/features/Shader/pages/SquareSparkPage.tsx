@@ -1,11 +1,11 @@
 import React from 'react';
 import * as THREE from 'three';
 
-import ShaderCanvas from '../../../../utils/ShaderCanvas';
-import vertex from '../../../../utils/glsl/vertex.vert?raw';
-import fiveStar from './fiveStar.frag?raw';
+import ShaderCanvas from '@/utils/ShaderCanvas';
+import vertex from '@/utils/glsl/vertex.vert?raw';
+import squareSpark from '../shaders/squareSpark.frag?raw';
 
-const FivePointCirclePage: React.FC = () => {
+const SquareSparkPage: React.FC = () => {
   return (
     <div
       id="3D"
@@ -24,10 +24,10 @@ const FivePointCirclePage: React.FC = () => {
           },
         }}
         vertexShader={vertex}
-        fragmentShader={fiveStar}
+        fragmentShader={squareSpark}
       />
     </div>
   );
 };
 
-export default FivePointCirclePage;
+export default SquareSparkPage;

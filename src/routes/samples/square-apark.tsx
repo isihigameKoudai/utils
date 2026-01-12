@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import SquareSpark from '@/src/pages/Examples/SquareSpark';
+import SquareSparkPage from '@/src/features/Shader/pages/SquareSparkPage';
 
 export const Route = createFileRoute('/samples/square-apark')({
-  component: SquareSpark,
+  component: SquareSparkPage,
 });
