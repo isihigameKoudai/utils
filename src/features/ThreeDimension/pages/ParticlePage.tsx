@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
-import * as THREE from 'three';
-import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Stats } from '@react-three/drei/core/Stats';
+import { Canvas, useFrame } from '@react-three/fiber';
+import React, { useMemo } from 'react';
+import * as THREE from 'three';
 
-import vertexShader from '../shaders/particle.vert?raw';
 import fragmentShader from '../shaders/particle.frag?raw';
+import vertexShader from '../shaders/particle.vert?raw';
 
 // TODO:
 const ParticleScene: React.FC = () => {

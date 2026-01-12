@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 
+import type { ControlProps } from './Controls';
+import advection_frag from './glsl/sim/advection.frag?raw';
 import face_vert from './glsl/sim/face.vert?raw';
 import line_vert from './glsl/sim/line.vert?raw';
-import advection_frag from './glsl/sim/advection.frag?raw';
 import ShaderPass from './ShaderPass';
-import type { ControlProps } from './Controls';
 import type { SimProps } from './types/Sim';
 
 interface Props extends SimProps {

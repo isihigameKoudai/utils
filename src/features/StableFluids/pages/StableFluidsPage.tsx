@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+
 import { WebGL } from '@/src/shared/modules/fluids';
 
 const StableFluidsPage: React.FC = () => {

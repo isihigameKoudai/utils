@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 
-import { type DetectedObject, VisualDetection } from '@/utils/tensorflow';
 import VisualDetectionView from '@/src/features/Detection/components/VisualDetectionView';
+import { type DetectedObject, VisualDetection } from '@/utils/tensorflow';
+
 import { DETECTOR_OPACITY } from '../constants';
 
 type DetectorViewProps = {

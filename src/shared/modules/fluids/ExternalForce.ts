@@ -1,11 +1,10 @@
 import * as THREE from 'three';
 
-import mouse_vert from './glsl/sim/mouse.vert?raw';
-import externalForce_frag from './glsl/sim/externalForce.frag?raw';
-
-import ShaderPass from './ShaderPass';
-import Mouse from './Mouse';
 import type { ControlProps } from './Controls';
+import externalForce_frag from './glsl/sim/externalForce.frag?raw';
+import mouse_vert from './glsl/sim/mouse.vert?raw';
+import Mouse from './Mouse';
+import ShaderPass from './ShaderPass';
 import type { SimProps } from './types/Sim';
 
 interface Props extends SimProps {

@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 
 import { useTheme } from '@/utils/ui/theme';
 
-import CryptoChartPresentational from './presentational';
-import { CryptoStore } from './store/crypto';
 import { type CryptoListParams } from './api/crypto';
 import { CandleStick } from './model/CandleStick';
+import CryptoChartPresentational from './presentational';
+import { CryptoStore } from './store/crypto';
 
 interface CryptoChartContainerProps {
   symbol: string;

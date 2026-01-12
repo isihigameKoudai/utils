@@ -1,9 +1,7 @@
-import React, { useRef } from 'react';
-
-import { Canvas, useFrame } from '@react-three/fiber';
-
-import { DoubleSide, Mesh, DirectionalLightHelper } from 'three';
 import { OrbitControls, useHelper } from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
+import React, { useRef } from 'react';
+import { DoubleSide, Mesh, DirectionalLightHelper } from 'three';
 
 const Content: React.FC = () => {
   const ref = useRef<Mesh>(null!);

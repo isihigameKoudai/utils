@@ -1,8 +1,7 @@
 import * as THREE from 'three';
 
-import face_vert from './glsl/sim/face.vert?raw';
 import divergence_frag from './glsl/sim/divergence.frag?raw';
-
+import face_vert from './glsl/sim/face.vert?raw';
 import ShaderPass from './ShaderPass';
 import type { SimProps } from './types/Sim';
 

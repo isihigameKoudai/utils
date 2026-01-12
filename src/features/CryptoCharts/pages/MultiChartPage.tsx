@@ -1,8 +1,10 @@
-import React from 'react';
 import { useNavigate, useParams } from '@tanstack/react-router';
+import React from 'react';
+
 import { styled } from '@/utils/ui/styled';
-import { TokenSelector } from '../components/TokenSelector';
+
 import { MultiChartGrid } from '../components/MultiChartGrid';
+import { TokenSelector } from '../components/TokenSelector';
 import type { Symbol } from '../constants';
 
 const StyledContainer = styled('div')({

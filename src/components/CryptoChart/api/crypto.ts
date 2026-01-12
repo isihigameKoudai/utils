@@ -1,5 +1,6 @@
 import api from '@/utils/api';
 import { apiMap } from '@/utils/apis/config';
+
 import { type Trade } from '../model/CandleStick';
 
 export interface CryptoListParams {

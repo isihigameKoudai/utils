@@ -1,14 +1,14 @@
+import { isEmpty } from 'lodash-es';
 import React, { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
-import { isEmpty } from 'lodash-es';
 
-import type { DetectedObject } from '@/utils/tensorflow';
-import ShaderCanvas from '@/utils/ShaderCanvas';
 import vertex from '@/utils/glsl/vertex.vert?raw';
-import fragment from '../shaders/fragment.frag?raw';
+import ShaderCanvas from '@/utils/ShaderCanvas';
+import type { DetectedObject } from '@/utils/tensorflow';
 
 import DetectorView from '../components/DetectorView';
 import { DETECTOR_OPACITY } from '../constants';
+import fragment from '../shaders/fragment.frag?raw';
 
 const MeltTheBorderPage: React.FC = () => {
   const uniforms = useMemo(

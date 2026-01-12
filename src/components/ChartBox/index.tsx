@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, type ComponentProps } from 'react';
 
 import { styled } from '@/utils/ui/styled';
+
 import { CryptoChart } from '../CryptoChart';
 
 const ChartWrapper = styled('div')({

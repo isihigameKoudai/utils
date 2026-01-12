@@ -1,6 +1,5 @@
-import React, { useCallback, useRef, useState } from 'react';
-
 import { Canvas, type ThreeElements, useFrame } from '@react-three/fiber';
+import React, { useCallback, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 const Box = (props: ThreeElements['mesh']) => {

@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import {
   navigatorMock,
@@ -7,11 +7,12 @@ import {
   windowMock,
   documentMock,
 } from '../../__test__/mocks/global';
-import { VisualDetection } from './VisualDetection';
 import {
   INITIAL_VIDEO_EL_WIDTH,
   INITIAL_VIDEO_EL_HEIGHT,
 } from '../../Media/constants';
+
+import { VisualDetection } from './VisualDetection';
 
 const mockModel = {
   detect: vi.fn(),

@@ -1,6 +1,6 @@
 import Common from './Common';
-import Output from './Output';
 import Mouse from './Mouse';
+import Output from './Output';
 
 type Props = {
   $wrapper: HTMLElement;

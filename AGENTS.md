@@ -83,16 +83,24 @@ routes → features → components → utils
 
 ### Import Order
 
-1. React and core libraries
-2. External dependencies
-3. Internal modules using `@/` alias
-4. Relative imports
-5. Type imports (use `import type` when importing only types)
+ESLint (`eslint-plugin-import`) により自動整形される。グループ間には空行を挿入し、各グループ内はアルファベット順。
+
+1. **builtin** - Node.js組み込みモジュール (`fs`, `path` 等)
+2. **external** - 外部ライブラリ (npm modules)
+3. **internal** - リポジトリ内モジュール
+   - `@/components/**` - 共通系components（先に配置）
+   - `@/**` - その他の内部モジュール (`@/utils`, `@/shared` 等)
+4. **parent/sibling/index** - 同ディレクトリ内ファイル (相対パス)
 
 ```typescript
-import React from 'react';
+import { useEffect } from 'react';
 import { create } from 'zustand';
+
+import { Button } from '@/components/Button';
+
 import { fromEntries } from '@/utils/object';
+
+import { useLocalState } from './hooks';
 import type { StateProps, QueriesProps } from './type';
 ```
 

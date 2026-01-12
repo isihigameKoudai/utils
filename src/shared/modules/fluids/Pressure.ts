@@ -2,7 +2,6 @@ import * as THREE from 'three';
 
 import face_vert from './glsl/sim/face.vert?raw';
 import pressure_frag from './glsl/sim/pressure.frag?raw';
-
 import ShaderPass from './ShaderPass';
 import type { SimProps } from './types/Sim';
 

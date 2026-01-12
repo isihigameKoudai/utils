@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useRef } from 'react';
 
-import type { Face } from './type';
 import { drawMesh } from './drawMesh';
+import type { Face } from './type';
 
 interface Props {
   objects: Face[];

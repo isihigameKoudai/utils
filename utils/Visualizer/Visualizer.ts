@@ -1,4 +1,5 @@
 import { Audio } from '../Media';
+
 import type { RenderCallBack, RenderOptions } from './type';
 
 // requestAnimationFrame の定義を修正

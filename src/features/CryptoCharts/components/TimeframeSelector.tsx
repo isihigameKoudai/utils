@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { styled } from '@/utils/ui/styled';
+
 import { TIMEFRAMES } from '../constants';
 import type { TimeframeSelectorProps } from '../types';
 

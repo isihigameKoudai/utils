@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 
 import Common from './Common';
-import Simulation from './Simulation';
-import face_vert from './glsl/sim/face.vert?raw';
 import color_frag from './glsl/sim/color.frag?raw';
+import face_vert from './glsl/sim/face.vert?raw';
+import Simulation from './Simulation';
 
 export default class Output {
   simulation: Simulation;

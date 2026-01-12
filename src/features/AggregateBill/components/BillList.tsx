@@ -1,6 +1,8 @@
-import { Bill } from '../models/Bill';
-import { styled } from '@/utils/ui/styled';
 import { useState, useMemo } from 'react';
+
+import { styled } from '@/utils/ui/styled';
+
+import { Bill } from '../models/Bill';
 
 const Table = styled('table')({
   width: '100%',

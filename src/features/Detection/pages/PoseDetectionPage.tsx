@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+
 import { PoseDetection, type Pose } from '@/utils/tensorflow';
+
 import { PoseDetectionView } from '../components/PoseDetectionView';
 
 const PoseDetectionPage = () => {

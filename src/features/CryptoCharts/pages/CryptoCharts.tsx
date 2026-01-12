@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { CryptoTheme } from '../modules/theme';
+
 import CryptoChartsPage from './CryptoChartsPage';
 
 const CryptoCharts: React.FC = () => {

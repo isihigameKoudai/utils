@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import type { Hand } from '../components/HandPoseDetectionView/type';
+
 import { HandPoseDetection } from '@/utils/tensorflow/HandPoseDetection';
+
 import { HandPoseDetectionView } from '../components/HandPoseDetectionView';
+import type { Hand } from '../components/HandPoseDetectionView/type';
 
 const HandPoseDetectionPage = () => {
   const videoRef = useRef<HTMLVideoElement>(null!);

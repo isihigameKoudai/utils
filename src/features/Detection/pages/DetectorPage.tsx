@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { VisualDetection, type DetectedObject } from '@/utils/tensorflow';
+
 import VisualDetectionView from '../components/VisualDetectionView';
 
 export default function DetectorPage() {

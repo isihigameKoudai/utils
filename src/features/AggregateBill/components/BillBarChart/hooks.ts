@@ -6,6 +6,7 @@
 import { useMemo, useState } from 'react';
 
 import type { Bill } from '../../models/Bill';
+
 import { TOP_PERCENTAGE } from './constants';
 import type { ChartDataItem, SortOrder } from './types';
 

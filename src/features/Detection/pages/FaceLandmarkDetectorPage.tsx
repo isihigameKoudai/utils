@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { FaceLandmarkDetection } from '@/utils/tensorflow';
+
 import FaceMesh, { type Face } from '../components/FaceMesh';
 
 export default function FaceLandmarkDetectorPage() {

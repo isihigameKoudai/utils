@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
 import { createChart, type IChartApi } from 'lightweight-charts';
+import React, { useEffect, useRef } from 'react';
 
 import { type ColorTheme } from '@/utils/PreferColorScheme';
 import { styled } from '@/utils/ui/styled';

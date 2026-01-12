@@ -1,13 +1,14 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import { Visualizer } from './Visualizer';
-import type { RenderCallBack } from './type';
 import {
   analyzerMock,
   windowMock,
   documentMock,
 } from '../__test__/mocks/global';
 import { AudioContextMock } from '../__test__/mocks/media';
+
+import type { RenderCallBack } from './type';
+import { Visualizer } from './Visualizer';
 
 describe('Visualizer', () => {
   let visualizer: Visualizer;
