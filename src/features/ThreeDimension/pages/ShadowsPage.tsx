@@ -59,7 +59,7 @@ const Content: React.FC = () => {
   );
 };
 
-const Shadows: React.FC = () => {
+const ShadowsPage: React.FC = () => {
   return (
     <div
       id="3D"
@@ -81,4 +81,4 @@ const Shadows: React.FC = () => {
   );
 };
 
-export default Shadows;
+export default ShadowsPage;

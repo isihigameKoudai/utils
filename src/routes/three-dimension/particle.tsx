@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import Particle from '@/src/pages/ThreeDimension/Particle';
+import ParticlePage from '@/src/features/ThreeDimension/pages/ParticlePage';
 
 export const Route = createFileRoute('/three-dimension/particle')({
-  component: Particle,
+  component: ParticlePage,
 });

@@ -35,7 +35,7 @@ const Box = (props: ThreeElements['mesh']) => {
   );
 };
 
-const ThreeDimension: React.FC = () => {
+const BoxPage: React.FC = () => {
   return (
     <div
       id="3D"
@@ -68,4 +68,4 @@ const ThreeDimension: React.FC = () => {
   );
 };
 
-export default ThreeDimension;
+export default BoxPage;

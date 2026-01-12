@@ -4,8 +4,8 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Stats } from '@react-three/drei/core/Stats';
 
-import vertexShader from './vertexShader.vert?raw';
-import fragmentShader from './fragmentShader.frag?raw';
+import vertexShader from '../shaders/particle.vert?raw';
+import fragmentShader from '../shaders/particle.frag?raw';
 
 // TODO:
 const ParticleScene: React.FC = () => {

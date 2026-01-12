@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import ThreeDimension from '@/src/pages/ThreeDimension';
+import BoxPage from '@/src/features/ThreeDimension/pages/BoxPage';
 
 export const Route = createFileRoute('/three-dimension/')({
-  component: ThreeDimension,
+  component: BoxPage,
 });

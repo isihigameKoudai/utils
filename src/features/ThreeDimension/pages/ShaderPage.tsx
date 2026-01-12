@@ -1,9 +1,9 @@
 import React from 'react';
 import * as THREE from 'three';
 
-import ShaderCanvas from '../../../../utils/ShaderCanvas';
-import vertex from '../../../../utils/glsl/vertex.vert?raw';
-import roundRing from '../../../../utils/glsl/roundRing.frag?raw';
+import ShaderCanvas from '@/utils/ShaderCanvas';
+import vertex from '@/utils/glsl/vertex.vert?raw';
+import roundRing from '@/utils/glsl/roundRing.frag?raw';
 
 const ShaderPage: React.FC = () => {
   return (

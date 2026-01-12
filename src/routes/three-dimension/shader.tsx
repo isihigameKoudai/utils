@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import Shader from '@/src/pages/ThreeDimension/Shader';
+import ShaderPage from '@/src/features/ThreeDimension/pages/ShaderPage';
 
 export const Route = createFileRoute('/three-dimension/shader')({
-  component: Shader,
+  component: ShaderPage,
 });

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import Shadows from '@/src/pages/ThreeDimension/Shadows';
+import ShadowsPage from '@/src/features/ThreeDimension/pages/ShadowsPage';
 
 export const Route = createFileRoute('/three-dimension/shadows')({
-  component: Shadows,
+  component: ShadowsPage,
 });
