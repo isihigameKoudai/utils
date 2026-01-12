@@ -23,18 +23,18 @@ import { Route as ThreeDimensionShadowsRouteImport } from './../routes/three-dim
 import { Route as ThreeDimensionShaderRouteImport } from './../routes/three-dimension/shader'
 import { Route as ThreeDimensionParticleRouteImport } from './../routes/three-dimension/particle'
 import { Route as SamplesSquareAparkRouteImport } from './../routes/samples/square-apark'
-import { Route as SamplesPoseDetectionRouteImport } from './../routes/samples/pose-detection'
 import { Route as SamplesNormalCircleRouteImport } from './../routes/samples/normal-circle'
-import { Route as SamplesHandPoseDetectionRouteImport } from './../routes/samples/hand-pose-detection'
 import { Route as SamplesFollowerCircleRouteImport } from './../routes/samples/follower-circle'
-import { Route as SamplesFluidDetectRouteImport } from './../routes/samples/fluid-detect'
-import { Route as SamplesFaceLandmarkDetectorRouteImport } from './../routes/samples/face-landmark-detector'
-import { Route as SamplesDetectorRouteImport } from './../routes/samples/detector'
 import { Route as SamplesAudioCircleRouteImport } from './../routes/samples/audio-circle'
 import { Route as Samples5starParticleRouteImport } from './../routes/samples/5star-particle'
 import { Route as NoiseFractalRouteImport } from './../routes/noise/fractal'
 import { Route as NoiseFbmRouteImport } from './../routes/noise/fbm'
 import { Route as NoiseCellularRouteImport } from './../routes/noise/cellular'
+import { Route as DetectionPoseRouteImport } from './../routes/detection/pose'
+import { Route as DetectionHandPoseRouteImport } from './../routes/detection/hand-pose'
+import { Route as DetectionFluidRouteImport } from './../routes/detection/fluid'
+import { Route as DetectionFaceLandmarkRouteImport } from './../routes/detection/face-landmark'
+import { Route as DetectionDetectorRouteImport } from './../routes/detection/detector'
 import { Route as AudioSpeechRouteImport } from './../routes/audio/speech'
 import { Route as AudioMicRouteImport } from './../routes/audio/mic'
 import { Route as AggregateBillSummaryRouteImport } from './../routes/aggregate-bill/summary'
@@ -110,41 +110,14 @@ const SamplesSquareAparkRoute = SamplesSquareAparkRouteImport.update({
   path: '/samples/square-apark',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SamplesPoseDetectionRoute = SamplesPoseDetectionRouteImport.update({
-  id: '/samples/pose-detection',
-  path: '/samples/pose-detection',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SamplesNormalCircleRoute = SamplesNormalCircleRouteImport.update({
   id: '/samples/normal-circle',
   path: '/samples/normal-circle',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SamplesHandPoseDetectionRoute =
-  SamplesHandPoseDetectionRouteImport.update({
-    id: '/samples/hand-pose-detection',
-    path: '/samples/hand-pose-detection',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const SamplesFollowerCircleRoute = SamplesFollowerCircleRouteImport.update({
   id: '/samples/follower-circle',
   path: '/samples/follower-circle',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SamplesFluidDetectRoute = SamplesFluidDetectRouteImport.update({
-  id: '/samples/fluid-detect',
-  path: '/samples/fluid-detect',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SamplesFaceLandmarkDetectorRoute =
-  SamplesFaceLandmarkDetectorRouteImport.update({
-    id: '/samples/face-landmark-detector',
-    path: '/samples/face-landmark-detector',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const SamplesDetectorRoute = SamplesDetectorRouteImport.update({
-  id: '/samples/detector',
-  path: '/samples/detector',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SamplesAudioCircleRoute = SamplesAudioCircleRouteImport.update({
@@ -170,6 +143,31 @@ const NoiseFbmRoute = NoiseFbmRouteImport.update({
 const NoiseCellularRoute = NoiseCellularRouteImport.update({
   id: '/noise/cellular',
   path: '/noise/cellular',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DetectionPoseRoute = DetectionPoseRouteImport.update({
+  id: '/detection/pose',
+  path: '/detection/pose',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DetectionHandPoseRoute = DetectionHandPoseRouteImport.update({
+  id: '/detection/hand-pose',
+  path: '/detection/hand-pose',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DetectionFluidRoute = DetectionFluidRouteImport.update({
+  id: '/detection/fluid',
+  path: '/detection/fluid',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DetectionFaceLandmarkRoute = DetectionFaceLandmarkRouteImport.update({
+  id: '/detection/face-landmark',
+  path: '/detection/face-landmark',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DetectionDetectorRoute = DetectionDetectorRouteImport.update({
+  id: '/detection/detector',
+  path: '/detection/detector',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AudioSpeechRoute = AudioSpeechRouteImport.update({
@@ -202,18 +200,18 @@ export interface FileRoutesByFullPath {
   '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
+  '/detection/detector': typeof DetectionDetectorRoute
+  '/detection/face-landmark': typeof DetectionFaceLandmarkRoute
+  '/detection/fluid': typeof DetectionFluidRoute
+  '/detection/hand-pose': typeof DetectionHandPoseRoute
+  '/detection/pose': typeof DetectionPoseRoute
   '/noise/cellular': typeof NoiseCellularRoute
   '/noise/fbm': typeof NoiseFbmRoute
   '/noise/fractal': typeof NoiseFractalRoute
   '/samples/5star-particle': typeof Samples5starParticleRoute
   '/samples/audio-circle': typeof SamplesAudioCircleRoute
-  '/samples/detector': typeof SamplesDetectorRoute
-  '/samples/face-landmark-detector': typeof SamplesFaceLandmarkDetectorRoute
-  '/samples/fluid-detect': typeof SamplesFluidDetectRoute
   '/samples/follower-circle': typeof SamplesFollowerCircleRoute
-  '/samples/hand-pose-detection': typeof SamplesHandPoseDetectionRoute
   '/samples/normal-circle': typeof SamplesNormalCircleRoute
-  '/samples/pose-detection': typeof SamplesPoseDetectionRoute
   '/samples/square-apark': typeof SamplesSquareAparkRoute
   '/three-dimension/particle': typeof ThreeDimensionParticleRoute
   '/three-dimension/shader': typeof ThreeDimensionShaderRoute
@@ -234,18 +232,18 @@ export interface FileRoutesByTo {
   '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
+  '/detection/detector': typeof DetectionDetectorRoute
+  '/detection/face-landmark': typeof DetectionFaceLandmarkRoute
+  '/detection/fluid': typeof DetectionFluidRoute
+  '/detection/hand-pose': typeof DetectionHandPoseRoute
+  '/detection/pose': typeof DetectionPoseRoute
   '/noise/cellular': typeof NoiseCellularRoute
   '/noise/fbm': typeof NoiseFbmRoute
   '/noise/fractal': typeof NoiseFractalRoute
   '/samples/5star-particle': typeof Samples5starParticleRoute
   '/samples/audio-circle': typeof SamplesAudioCircleRoute
-  '/samples/detector': typeof SamplesDetectorRoute
-  '/samples/face-landmark-detector': typeof SamplesFaceLandmarkDetectorRoute
-  '/samples/fluid-detect': typeof SamplesFluidDetectRoute
   '/samples/follower-circle': typeof SamplesFollowerCircleRoute
-  '/samples/hand-pose-detection': typeof SamplesHandPoseDetectionRoute
   '/samples/normal-circle': typeof SamplesNormalCircleRoute
-  '/samples/pose-detection': typeof SamplesPoseDetectionRoute
   '/samples/square-apark': typeof SamplesSquareAparkRoute
   '/three-dimension/particle': typeof ThreeDimensionParticleRoute
   '/three-dimension/shader': typeof ThreeDimensionShaderRoute
@@ -267,18 +265,18 @@ export interface FileRoutesById {
   '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
+  '/detection/detector': typeof DetectionDetectorRoute
+  '/detection/face-landmark': typeof DetectionFaceLandmarkRoute
+  '/detection/fluid': typeof DetectionFluidRoute
+  '/detection/hand-pose': typeof DetectionHandPoseRoute
+  '/detection/pose': typeof DetectionPoseRoute
   '/noise/cellular': typeof NoiseCellularRoute
   '/noise/fbm': typeof NoiseFbmRoute
   '/noise/fractal': typeof NoiseFractalRoute
   '/samples/5star-particle': typeof Samples5starParticleRoute
   '/samples/audio-circle': typeof SamplesAudioCircleRoute
-  '/samples/detector': typeof SamplesDetectorRoute
-  '/samples/face-landmark-detector': typeof SamplesFaceLandmarkDetectorRoute
-  '/samples/fluid-detect': typeof SamplesFluidDetectRoute
   '/samples/follower-circle': typeof SamplesFollowerCircleRoute
-  '/samples/hand-pose-detection': typeof SamplesHandPoseDetectionRoute
   '/samples/normal-circle': typeof SamplesNormalCircleRoute
-  '/samples/pose-detection': typeof SamplesPoseDetectionRoute
   '/samples/square-apark': typeof SamplesSquareAparkRoute
   '/three-dimension/particle': typeof ThreeDimensionParticleRoute
   '/three-dimension/shader': typeof ThreeDimensionShaderRoute
@@ -301,18 +299,18 @@ export interface FileRouteTypes {
     | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
+    | '/detection/detector'
+    | '/detection/face-landmark'
+    | '/detection/fluid'
+    | '/detection/hand-pose'
+    | '/detection/pose'
     | '/noise/cellular'
     | '/noise/fbm'
     | '/noise/fractal'
     | '/samples/5star-particle'
     | '/samples/audio-circle'
-    | '/samples/detector'
-    | '/samples/face-landmark-detector'
-    | '/samples/fluid-detect'
     | '/samples/follower-circle'
-    | '/samples/hand-pose-detection'
     | '/samples/normal-circle'
-    | '/samples/pose-detection'
     | '/samples/square-apark'
     | '/three-dimension/particle'
     | '/three-dimension/shader'
@@ -333,18 +331,18 @@ export interface FileRouteTypes {
     | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
+    | '/detection/detector'
+    | '/detection/face-landmark'
+    | '/detection/fluid'
+    | '/detection/hand-pose'
+    | '/detection/pose'
     | '/noise/cellular'
     | '/noise/fbm'
     | '/noise/fractal'
     | '/samples/5star-particle'
     | '/samples/audio-circle'
-    | '/samples/detector'
-    | '/samples/face-landmark-detector'
-    | '/samples/fluid-detect'
     | '/samples/follower-circle'
-    | '/samples/hand-pose-detection'
     | '/samples/normal-circle'
-    | '/samples/pose-detection'
     | '/samples/square-apark'
     | '/three-dimension/particle'
     | '/three-dimension/shader'
@@ -365,18 +363,18 @@ export interface FileRouteTypes {
     | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
+    | '/detection/detector'
+    | '/detection/face-landmark'
+    | '/detection/fluid'
+    | '/detection/hand-pose'
+    | '/detection/pose'
     | '/noise/cellular'
     | '/noise/fbm'
     | '/noise/fractal'
     | '/samples/5star-particle'
     | '/samples/audio-circle'
-    | '/samples/detector'
-    | '/samples/face-landmark-detector'
-    | '/samples/fluid-detect'
     | '/samples/follower-circle'
-    | '/samples/hand-pose-detection'
     | '/samples/normal-circle'
-    | '/samples/pose-detection'
     | '/samples/square-apark'
     | '/three-dimension/particle'
     | '/three-dimension/shader'
@@ -398,18 +396,18 @@ export interface RootRouteChildren {
   AggregateBillSummaryRoute: typeof AggregateBillSummaryRoute
   AudioMicRoute: typeof AudioMicRoute
   AudioSpeechRoute: typeof AudioSpeechRoute
+  DetectionDetectorRoute: typeof DetectionDetectorRoute
+  DetectionFaceLandmarkRoute: typeof DetectionFaceLandmarkRoute
+  DetectionFluidRoute: typeof DetectionFluidRoute
+  DetectionHandPoseRoute: typeof DetectionHandPoseRoute
+  DetectionPoseRoute: typeof DetectionPoseRoute
   NoiseCellularRoute: typeof NoiseCellularRoute
   NoiseFbmRoute: typeof NoiseFbmRoute
   NoiseFractalRoute: typeof NoiseFractalRoute
   Samples5starParticleRoute: typeof Samples5starParticleRoute
   SamplesAudioCircleRoute: typeof SamplesAudioCircleRoute
-  SamplesDetectorRoute: typeof SamplesDetectorRoute
-  SamplesFaceLandmarkDetectorRoute: typeof SamplesFaceLandmarkDetectorRoute
-  SamplesFluidDetectRoute: typeof SamplesFluidDetectRoute
   SamplesFollowerCircleRoute: typeof SamplesFollowerCircleRoute
-  SamplesHandPoseDetectionRoute: typeof SamplesHandPoseDetectionRoute
   SamplesNormalCircleRoute: typeof SamplesNormalCircleRoute
-  SamplesPoseDetectionRoute: typeof SamplesPoseDetectionRoute
   SamplesSquareAparkRoute: typeof SamplesSquareAparkRoute
   ThreeDimensionParticleRoute: typeof ThreeDimensionParticleRoute
   ThreeDimensionShaderRoute: typeof ThreeDimensionShaderRoute
@@ -522,13 +520,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SamplesSquareAparkRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/samples/pose-detection': {
-      id: '/samples/pose-detection'
-      path: '/samples/pose-detection'
-      fullPath: '/samples/pose-detection'
-      preLoaderRoute: typeof SamplesPoseDetectionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/samples/normal-circle': {
       id: '/samples/normal-circle'
       path: '/samples/normal-circle'
@@ -536,39 +527,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SamplesNormalCircleRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/samples/hand-pose-detection': {
-      id: '/samples/hand-pose-detection'
-      path: '/samples/hand-pose-detection'
-      fullPath: '/samples/hand-pose-detection'
-      preLoaderRoute: typeof SamplesHandPoseDetectionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/samples/follower-circle': {
       id: '/samples/follower-circle'
       path: '/samples/follower-circle'
       fullPath: '/samples/follower-circle'
       preLoaderRoute: typeof SamplesFollowerCircleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/samples/fluid-detect': {
-      id: '/samples/fluid-detect'
-      path: '/samples/fluid-detect'
-      fullPath: '/samples/fluid-detect'
-      preLoaderRoute: typeof SamplesFluidDetectRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/samples/face-landmark-detector': {
-      id: '/samples/face-landmark-detector'
-      path: '/samples/face-landmark-detector'
-      fullPath: '/samples/face-landmark-detector'
-      preLoaderRoute: typeof SamplesFaceLandmarkDetectorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/samples/detector': {
-      id: '/samples/detector'
-      path: '/samples/detector'
-      fullPath: '/samples/detector'
-      preLoaderRoute: typeof SamplesDetectorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/samples/audio-circle': {
@@ -604,6 +567,41 @@ declare module '@tanstack/react-router' {
       path: '/noise/cellular'
       fullPath: '/noise/cellular'
       preLoaderRoute: typeof NoiseCellularRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/detection/pose': {
+      id: '/detection/pose'
+      path: '/detection/pose'
+      fullPath: '/detection/pose'
+      preLoaderRoute: typeof DetectionPoseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/detection/hand-pose': {
+      id: '/detection/hand-pose'
+      path: '/detection/hand-pose'
+      fullPath: '/detection/hand-pose'
+      preLoaderRoute: typeof DetectionHandPoseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/detection/fluid': {
+      id: '/detection/fluid'
+      path: '/detection/fluid'
+      fullPath: '/detection/fluid'
+      preLoaderRoute: typeof DetectionFluidRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/detection/face-landmark': {
+      id: '/detection/face-landmark'
+      path: '/detection/face-landmark'
+      fullPath: '/detection/face-landmark'
+      preLoaderRoute: typeof DetectionFaceLandmarkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/detection/detector': {
+      id: '/detection/detector'
+      path: '/detection/detector'
+      fullPath: '/detection/detector'
+      preLoaderRoute: typeof DetectionDetectorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/audio/speech': {
@@ -646,18 +644,18 @@ const rootRouteChildren: RootRouteChildren = {
   AggregateBillSummaryRoute: AggregateBillSummaryRoute,
   AudioMicRoute: AudioMicRoute,
   AudioSpeechRoute: AudioSpeechRoute,
+  DetectionDetectorRoute: DetectionDetectorRoute,
+  DetectionFaceLandmarkRoute: DetectionFaceLandmarkRoute,
+  DetectionFluidRoute: DetectionFluidRoute,
+  DetectionHandPoseRoute: DetectionHandPoseRoute,
+  DetectionPoseRoute: DetectionPoseRoute,
   NoiseCellularRoute: NoiseCellularRoute,
   NoiseFbmRoute: NoiseFbmRoute,
   NoiseFractalRoute: NoiseFractalRoute,
   Samples5starParticleRoute: Samples5starParticleRoute,
   SamplesAudioCircleRoute: SamplesAudioCircleRoute,
-  SamplesDetectorRoute: SamplesDetectorRoute,
-  SamplesFaceLandmarkDetectorRoute: SamplesFaceLandmarkDetectorRoute,
-  SamplesFluidDetectRoute: SamplesFluidDetectRoute,
   SamplesFollowerCircleRoute: SamplesFollowerCircleRoute,
-  SamplesHandPoseDetectionRoute: SamplesHandPoseDetectionRoute,
   SamplesNormalCircleRoute: SamplesNormalCircleRoute,
-  SamplesPoseDetectionRoute: SamplesPoseDetectionRoute,
   SamplesSquareAparkRoute: SamplesSquareAparkRoute,
   ThreeDimensionParticleRoute: ThreeDimensionParticleRoute,
   ThreeDimensionShaderRoute: ThreeDimensionShaderRoute,

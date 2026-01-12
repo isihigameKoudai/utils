@@ -1,15 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { PoseDetection, type Pose } from '../../../../utils/tensorflow';
-import { PoseDetectionView } from '../../../components/PoseDetectionView';
+import type { Hand } from '../components/HandPoseDetectionView/type';
+import { HandPoseDetection } from '@/utils/tensorflow/HandPoseDetection';
+import { HandPoseDetectionView } from '../components/HandPoseDetectionView';
 
-const PoseDetectionPage = () => {
+const HandPoseDetectionPage = () => {
   const videoRef = useRef<HTMLVideoElement>(null!);
-  const [poses, setPose] = useState<Pose[]>([]);
+  const [hands, setHands] = useState<Hand[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
-  const [detector] = useState<PoseDetection>(
-    () => new PoseDetection('BlazePose'),
-  );
+  const [detector] = useState<HandPoseDetection>(() => new HandPoseDetection());
 
   useEffect(() => {
     (async () => {
@@ -28,34 +27,34 @@ const PoseDetectionPage = () => {
 
   const handleStart = () => {
     setIsRunning(true);
-    detector.start((detectedPoses: Pose[]) => {
-      setPose(detectedPoses);
+    detector.start((detectedHands: Hand[]) => {
+      setHands(detectedHands);
     });
   };
 
   const handleStop = () => {
     setIsRunning(false);
     detector.stop();
-    setPose([]);
+    setHands([]);
   };
 
   return (
     <div>
-      <h1>Pose Detection</h1>
+      <h1>Hand Pose Detection</h1>
       <div style={{ marginBottom: '1rem' }}>
         {isLoaded && !isRunning && (
           <button onClick={handleStart}>Start Detection</button>
         )}
         {isRunning && <button onClick={handleStop}>Stop Detection</button>}
       </div>
-      <PoseDetectionView
+      <HandPoseDetectionView
         ref={videoRef}
         width={640}
         height={480}
-        poses={poses}
+        hands={hands}
       />
     </div>
   );
 };
 
-export default PoseDetectionPage;
+export default HandPoseDetectionPage;

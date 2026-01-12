@@ -1,4 +1,4 @@
-import type { Pose } from '../../../utils/tensorflow';
+import type { Pose } from '@/utils/tensorflow';
 
 export const drawPose = ($canvas: HTMLCanvasElement, poses: Pose[]) => {
   const ctx = $canvas.getContext('2d');

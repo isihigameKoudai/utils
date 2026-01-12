@@ -4,7 +4,7 @@ import {
   type DetectedObject,
   VisualDetection,
 } from '../../../../utils/tensorflow';
-import VisualDetectionView from '../../../components/VisualDetectionView';
+import VisualDetectionView from '@/src/features/Detection/components/VisualDetectionView';
 import { DETECTOR_OPACITY } from '../const';
 
 type DetectorViewProps = {

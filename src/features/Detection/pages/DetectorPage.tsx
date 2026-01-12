@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  VisualDetection,
-  type DetectedObject,
-} from '../../../../utils/tensorflow';
-import VisualDetectionView from '../../../components/VisualDetectionView';
+import { VisualDetection, type DetectedObject } from '@/utils/tensorflow';
+import VisualDetectionView from '../components/VisualDetectionView';
 
-export default function Detector() {
+export default function DetectorPage() {
   const detectorRef = useRef(new VisualDetection());
   const $videoContainer = useRef<HTMLDivElement>(null);
   const [objects, setObjects] = useState<DetectedObject[]>([]);

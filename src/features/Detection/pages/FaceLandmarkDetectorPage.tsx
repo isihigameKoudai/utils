@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { FaceLandmarkDetection } from '../../../../utils/tensorflow';
-import FaceMesh, { type Face } from '../../../components/FaceMesh';
+import { FaceLandmarkDetection } from '@/utils/tensorflow';
+import FaceMesh, { type Face } from '../components/FaceMesh';
 
-export default function Detector() {
+export default function FaceLandmarkDetectorPage() {
   const [isShow, setIsShow] = useState<boolean>(true);
   const detectorRef = useRef(new FaceLandmarkDetection());
   const $video = useRef<HTMLVideoElement>(null!);

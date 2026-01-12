@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useRef } from 'react';
 
-import { Video } from '../../components/Video';
+import { Video } from '../Video';
 import { drawPose } from './drawPose';
 
 import { type PoseDetectionViewProps } from './type';
