@@ -1,8 +1,8 @@
 import { createChart, type IChartApi } from 'lightweight-charts';
 import React, { useEffect, useRef } from 'react';
 
+import { styled } from '@/src/shared/styled';
 import { type ColorTheme } from '@/utils/PreferColorScheme';
-import { styled } from '@/utils/ui/styled';
 
 import { type CandleStick } from './model/CandleStick';
 import { createChartColor } from './module';

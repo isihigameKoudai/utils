@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useTheme } from '@/utils/ui/theme';
+import { useTheme } from '@/src/shared/theme';
 
 import { type CryptoListParams } from './api/crypto';
 import { CandleStick } from './model/CandleStick';

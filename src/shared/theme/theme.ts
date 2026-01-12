@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { createContainer } from '@/utils/unstated-next';
+import { createContainer } from '@/src/shared/utils/createContainer';
 
 import type { Theme } from './type';
 

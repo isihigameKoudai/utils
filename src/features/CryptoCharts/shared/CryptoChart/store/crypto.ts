@@ -1,4 +1,5 @@
-import { defineStore } from '../../../../utils/i-state';
+import { defineStore, type Context, type QueriesProps } from '@/utils/i-state';
+
 import { fetchTradeDataList, type CryptoListParams } from '../api/crypto';
 import type { Trade } from '../model/CandleStick';
 import { CandleStick } from '../model/CandleStick';
@@ -14,11 +15,14 @@ const initialState: CryptoState = {
 export const CryptoStore = defineStore({
   state: initialState,
   queries: {
-    candleSticks: (state) =>
-      state.trades.map((trade) => new CandleStick(trade)),
-  },
+    candleSticks: (state: CryptoState): CandleStick[] =>
+      state.trades.map((trade: Trade) => new CandleStick(trade)),
+  } as QueriesProps<CryptoState>,
   actions: {
-    async fetchTrades({ dispatch }, payload: CryptoListParams) {
+    async fetchTrades(
+      { dispatch }: Context<CryptoState, QueriesProps<CryptoState>>,
+      payload: CryptoListParams,
+    ) {
       try {
         const trades = await fetchTradeDataList(payload);
         dispatch('trades', trades);
