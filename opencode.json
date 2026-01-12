@@ -2,7 +2,7 @@
   "$schema": "https://opencode.ai/config.json",
   "theme": "opencode",
   "model": "anthropic/claude-sonnet-4-5",
-  "small_model": "grok code fast 1",
+  "small_model": "opencode/grok-code-fast-1",
   "instructions": ["AGENTS.md"],
   "provider": {
     "anthropic": {
