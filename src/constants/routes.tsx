@@ -50,7 +50,7 @@ export const routeList: IRoute[] = [
     path: '/stable-fluids',
   },
   {
-    title: 'サンプル',
+    title: 'サンプル（Shader）',
     path: '/',
   },
   {
@@ -74,24 +74,28 @@ export const routeList: IRoute[] = [
     path: '/samples/square-apark',
   },
   {
+    title: 'Detection',
+    path: '/',
+  },
+  {
     title: 'ML',
-    path: '/samples/detector',
+    path: '/detection/detector',
   },
   {
     title: 'ML（顔ランドマーク検出）',
-    path: '/samples/face-landmark-detector',
+    path: '/detection/face-landmark',
   },
   {
     title: 'ML（手のポーズ検出）',
-    path: '/samples/hand-pose-detection',
+    path: '/detection/hand-pose',
   },
   {
     title: 'ML（ポーズ検出）',
-    path: '/samples/pose-detection',
+    path: '/detection/pose',
   },
   {
-    title: 'fluid-detect',
-    path: '/samples/fluid-detect',
+    title: 'Fluid + Detection',
+    path: '/detection/fluid',
   },
   {
     title: 'ノイズ',
@@ -112,10 +116,6 @@ export const routeList: IRoute[] = [
   {
     title: 'Melt the border',
     path: '/melt-the-border',
-  },
-  {
-    title: 'IState',
-    path: '/samples/istate',
   },
   {
     title: 'CryptoCharts',

@@ -10,8 +10,9 @@ import {
   INITIAL_VIDEO_EL_HEIGHT,
 } from '../../Media';
 import type { ElOption } from '../type';
-import type { ModelType, RenderCallBack, Pose } from './type';
+
 import { createConfig } from './module';
+import type { ModelType, RenderCallBack, Pose } from './type';
 
 export class PoseDetection extends Video {
   private _model: poseDetection.SupportedModels;

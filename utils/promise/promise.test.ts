@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
 import { createCachePromise, deferred } from './promise';
 
 describe('promise utils', () => {

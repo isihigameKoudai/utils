@@ -1,21 +1,23 @@
 import {
-  defineStore,
-  type ActionsProps,
-  type QueriesProps,
-} from '@/utils/i-state';
-import type { Brand } from '../types/brand';
-import { BRAND } from '../constants/brand';
-import {
   array2csv,
   csv2array,
   fetchFiles,
   mergeCSVs,
   readCsvFileAsText,
 } from '@/utils/file';
-import { fromEntries } from '@/utils/object';
 import { CSV } from '@/utils/file/csv/csv';
 import { isTruthy } from '@/utils/guards';
+import {
+  defineStore,
+  type ActionsProps,
+  type QueriesProps,
+} from '@/utils/i-state';
+import { fromEntries } from '@/utils/object';
+
+import { BRAND } from '../constants/brand';
 import { Bill, type BillProps } from '../models/Bill';
+import type { Brand } from '../types/brand';
+
 import { normalizeBrandRows } from './normalizer';
 
 type BrandState = {

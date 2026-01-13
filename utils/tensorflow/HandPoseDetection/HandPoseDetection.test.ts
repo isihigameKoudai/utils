@@ -1,12 +1,13 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as handPoseDetection from '@tensorflow-models/hand-pose-detection';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import { HandPoseDetection } from './HandPoseDetection';
 import {
   documentMock,
   navigatorMock,
   windowMock,
 } from '../../__test__/mocks/global';
+
+import { HandPoseDetection } from './HandPoseDetection';
 
 vi.mock('@tensorflow-models/hand-pose-detection', () => ({
   SupportedModels: {

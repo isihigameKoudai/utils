@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
-import NormalCircle from '@/src/pages/Examples/NormalCircle';
+
+import NormalCirclePage from '@/src/features/Shader/pages/NormalCirclePage';
 
 export const Route = createFileRoute('/samples/normal-circle')({
-  component: NormalCircle,
+  component: NormalCirclePage,
 });

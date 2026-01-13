@@ -1,6 +1,6 @@
+import { Canvas, useFrame, type RenderCallback } from '@react-three/fiber';
 import React, { useMemo, useRef } from 'react';
 import * as THREE from 'three';
-import { Canvas, useFrame, type RenderCallback } from '@react-three/fiber';
 
 type Props = {
   uniforms: THREE.ShaderMaterialParameters['uniforms'];

@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { Audio } from './Audio';
 
-import { mediaSourceMock, audioSourceMock } from '../__test__/mocks/media';
 import { navigatorMock, windowMock } from '../__test__/mocks/global';
+import { mediaSourceMock, audioSourceMock } from '../__test__/mocks/media';
+
+import { Audio } from './Audio';
 
 describe('Audio', () => {
   let audio: Audio;

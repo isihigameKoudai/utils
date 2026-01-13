@@ -1,12 +1,13 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import { FaceLandmarkDetection } from './FaceLandmarkDetection';
 import {
   documentMock,
   navigatorMock,
   windowMock,
 } from '../../__test__/mocks/global';
+
+import { FaceLandmarkDetection } from './FaceLandmarkDetection';
 
 vi.mock('@tensorflow-models/face-landmarks-detection', () => ({
   SupportedModels: {

@@ -1,6 +1,7 @@
-import type { Option, FetchFiles } from './type';
-import { deferred } from '../promise/promise';
 import { isTruthy } from '../guards';
+import { deferred } from '../promise/promise';
+
+import type { Option, FetchFiles } from './type';
 
 type DecoderCandidate = {
   label: string;

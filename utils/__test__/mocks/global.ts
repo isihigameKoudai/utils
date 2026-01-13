@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+
 import {
   INITIAL_VIDEO_EL_HEIGHT,
   INITIAL_VIDEO_EL_WIDTH,

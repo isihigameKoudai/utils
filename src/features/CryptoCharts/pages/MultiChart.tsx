@@ -1,8 +1,10 @@
-import React from 'react';
 import { useNavigate, useParams } from '@tanstack/react-router';
-import { CryptoTheme } from '../modules/theme';
-import MultiChartPage from './MultiChartPage';
+import React from 'react';
+
 import { SYMBOLS, DEFAULT_TOKEN } from '../constants';
+import { CryptoTheme } from '../modules/theme';
+
+import MultiChartPage from './MultiChartPage';
 
 const MultiChart: React.FC = () => {
   const navigate = useNavigate();

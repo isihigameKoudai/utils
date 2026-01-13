@@ -1,28 +1,4 @@
-import type { Symbol, Timeframe, MultiTimeframe } from '../constants';
-
-export interface ChartData {
-  symbol: Symbol;
-  timeframe: Timeframe | MultiTimeframe;
-  data: unknown[];
-}
-
-export interface ChartConfig {
-  width?: number;
-  height?: number;
-  theme?: 'light' | 'dark';
-}
-
-export interface CryptoChartProps {
-  symbol: Symbol;
-  timeframe: Timeframe | MultiTimeframe;
-  width?: number;
-  height?: number;
-}
-
-export interface ChartBoxProps {
-  symbol: Symbol;
-  timeframe: Timeframe | MultiTimeframe;
-}
+import type { Symbol, Timeframe } from '../constants';
 
 export interface TimeframeSelectorProps {
   selectedTimeframe: Timeframe;

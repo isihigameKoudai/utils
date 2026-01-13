@@ -4,9 +4,10 @@
 import * as tf from '@tensorflow/tfjs';
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
 
-import { Video } from '../../Media/Video';
 import { INITIAL_VIDEO_EL_HEIGHT, INITIAL_VIDEO_EL_WIDTH } from '../../Media';
+import { Video } from '../../Media/Video';
 import type { ElOption } from '../type';
+
 import type { RenderCallBack } from './type';
 
 export class FaceLandmarkDetection extends Video {
