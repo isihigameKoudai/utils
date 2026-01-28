@@ -3,7 +3,7 @@
   "theme": "opencode",
   "model": "anthropic/claude-opus-4-5",
   "small_model": "ollama/glm-4.7",
-  "instructions": ["AGENTS.md"],
+  "instructions": ["AGENTS.md", "./docs/AGENTS.md"],
   "provider": {
     "anthropic": {
       "name": "Anthropic"
