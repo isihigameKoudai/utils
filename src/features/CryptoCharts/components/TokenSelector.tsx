@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { styled } from '@/src/shared/styled';
+import { styled } from '@/utils/styled';
 
 import { SYMBOLS } from '../constants';
 import type { TokenSelectorProps } from '../types';

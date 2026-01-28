@@ -1,4 +1,4 @@
-import { styled } from '@/src/shared/styled';
+import { styled } from '@/utils/styled';
 
 import { BillBarChart } from '../components/BillBarChart';
 import { BillList } from '../components/BillList';

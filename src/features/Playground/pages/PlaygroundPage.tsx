@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { styled } from '@/src/shared/styled';
+import { styled } from '@/utils/styled';
 
 const Button = styled('button')({
   padding: '10px 20px',

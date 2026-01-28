@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ChartBox } from '@/src/components/ChartBox';
-import { styled } from '@/src/shared/styled';
+import { styled } from '@/utils/styled';
 
 import { SYMBOLS, type Timeframe } from '../constants';
 

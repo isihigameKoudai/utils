@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { styled } from '@/src/shared/styled';
+import { styled } from '@/utils/styled';
 
 import { ChartGrid } from '../components/ChartGrid';
 import { TimeframeSelector } from '../components/TimeframeSelector';

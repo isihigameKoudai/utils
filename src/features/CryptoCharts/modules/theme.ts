@@ -1,5 +1,5 @@
-import { createTheme, type Theme } from '@/src/shared/theme';
 import PreferColorScheme from '@/utils/PreferColorScheme';
+import { createTheme, type Theme } from '@/utils/theme';
 
 const lightTheme: Theme = {
   breakpoints: {

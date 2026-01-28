@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 
-import { styled } from '@/src/shared/styled';
+import { styled } from '@/utils/styled';
 
 import { Bill } from '../models/Bill';
 
