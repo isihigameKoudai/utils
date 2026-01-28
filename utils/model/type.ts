@@ -1,9 +1,9 @@
 import { ZodType } from 'zod';
 
 /**
- * TModel から TParams のキーを除外した型（拡張プロパティ）
+ * Model から Params のキーを除外した型（拡張プロパティ）
  */
-export type Extension<
+type Extension<
   Params extends Record<string, unknown>,
   Model extends Params,
 > = Omit<Model, keyof Params>;
@@ -13,7 +13,7 @@ export type Extension<
  * @template Params - パラメータの型
  * @template Model - 完成したモデルの型
  */
-export type ExtensionFactory<
+type ExtensionFactory<
   Params extends Record<string, unknown>,
   Model extends Params,
 > = (params: Readonly<Params>) => Extension<Params, Model>;
