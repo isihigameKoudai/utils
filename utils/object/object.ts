@@ -82,8 +82,16 @@ const immutarize = <T extends Record<string, unknown>>(
  * getterを保持したままプロパティをマージし、新しいイミュータブルなオブジェクト（prototypeなし）を作成する
  * @param sources - マージするソースオブジェクトのリスト
  * @returns プロトタイプを持たない新しく作成されたオブジェクト
+ * @example
+ * const obj = createImmutableObject(
+ *   { a: 1 },
+ *   { b: 2 },
+ *   { get c() { return 3; } }
+ * );
+ * console.log(obj); // { a: 1, b: 2, c: 3 }
+ * console.log(Object.getPrototypeOf(obj)); // null
  */
-export const createImmutableWithGetters = <T extends Record<string, unknown>>(
+export const createImmutableObject = <T extends Record<string, unknown>>(
   ...sources: Record<string, unknown>[]
 ): T => {
   const allDescriptors: PropertyDescriptorMap = {};

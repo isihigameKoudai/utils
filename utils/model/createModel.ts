@@ -1,4 +1,4 @@
-import { deepFreeze, createImmutableWithGetters } from '@/utils/object/object';
+import { deepFreeze, createImmutableObject } from '@/utils/object/object';
 
 import type { Config } from './type';
 
@@ -97,10 +97,7 @@ export const createModelFactory = <
     const extensionProps = extension(frozenParams);
 
     // getterを持つプロパティをマージしてモデルを作成
-    const model = createImmutableWithGetters<Model>(
-      frozenParams,
-      extensionProps,
-    );
+    const model = createImmutableObject<Model>(frozenParams, extensionProps);
 
     return Object.freeze(model);
   };
