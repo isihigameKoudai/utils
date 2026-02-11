@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { CryptoChart } from '@/src/features/CryptoCharts/shared/CryptoChart';
-import { styled } from '@/utils/styled';
+import { styled } from '@/utils/ui/styled';
 
 import { MULTI_TIMEFRAMES, type Symbol } from '../constants';
 import { getTimeframeLabel } from '../modules/utils';

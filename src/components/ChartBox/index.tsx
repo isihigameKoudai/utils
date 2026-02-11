@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, type ComponentProps } from 'react';
 
 import { CryptoChart } from '@/src/features/CryptoCharts/shared/CryptoChart';
-import { styled } from '@/utils/styled';
+import { styled } from '@/utils/ui/styled';
 
 const ChartWrapper = styled('div')({
   boxSizing: 'border-box',

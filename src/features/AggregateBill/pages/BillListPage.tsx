@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { styled } from '@/utils/styled';
+import { styled } from '@/utils/ui/styled';
 
 import { BillList } from '../components/BillList';
 import { Header } from '../components/Header';

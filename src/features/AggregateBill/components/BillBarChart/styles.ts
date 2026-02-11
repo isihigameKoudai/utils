@@ -3,7 +3,7 @@
  * 棒グラフコンポーネントのスタイル定義
  */
 
-import { styled } from '@/utils/styled';
+import { styled } from '@/utils/ui/styled';
 
 /** チャート全体のラッパー */
 export const ChartWrapper = styled('div')({

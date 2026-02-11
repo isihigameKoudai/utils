@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from '@tanstack/react-router';
 import React from 'react';
 
-import { styled } from '@/utils/styled';
+import { styled } from '@/utils/ui/styled';
 
 import { MultiChartGrid } from '../components/MultiChartGrid';
 import { TokenSelector } from '../components/TokenSelector';

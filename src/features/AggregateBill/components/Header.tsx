@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 
-import { styled } from '@/utils/styled';
+import { styled } from '@/utils/ui/styled';
 
 const HeaderContainer = styled('header')({
   backgroundColor: '#4a90e2',
