@@ -61,7 +61,7 @@ const immutarize = <T extends Record<string, unknown>>(
     );
   }
 
-  // getterがある場合はそのまま引き継ぎ、値の場合はwritable: falseにする
+  // getterがある場合はそのまま引き継ぎ
   if (descriptor.get) {
     return {
       enumerable: true,
@@ -70,6 +70,17 @@ const immutarize = <T extends Record<string, unknown>>(
     };
   }
 
+  // 関数の場合はメソッドとして保持する
+  if (typeof descriptor.value === 'function') {
+    return {
+      enumerable: true,
+      configurable: false,
+      writable: false,
+      value: descriptor.value,
+    };
+  }
+
+  // 値の場合はwritable: falseにする
   return {
     enumerable: true,
     configurable: false,

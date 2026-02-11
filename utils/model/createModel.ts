@@ -10,9 +10,10 @@ import type { Config } from './type';
  * - Zodスキーマによるランタイムバリデーション
  * - Object.freezeによる深いフリーズ
  * - getterを使用した拡張プロパティの定義が可能（オプション）
+ * - メソッド（関数）の定義が可能（オプション）
  *
  * @template TParams - パラメータの型（Zodスキーマで検証される入力）
- * @template TModel - 最終的なモデルの型（TParams + 拡張プロパティ）
+ * @template TModel - 最終的なモデルの型（TParams + 拡張プロパティ + メソッド）
  *
  * @param config - ファクトリ設定
  * @returns モデル生成関数
@@ -30,10 +31,12 @@ import type { Config } from './type';
  * // 2. パラメータ型
  * type UserParams = z.infer<typeof userSchema>;
  *
- * // 3. 完成したモデルの型定義
+ * // 3. 完成したモデルの型定義（getter + メソッド）
  * type User = UserParams & {
  *   readonly fullName: string;
  *   readonly isAdult: boolean;
+ *   greet: (greeting: string) => string;
+ *   toDisplayString: () => string;
  * };
  *
  * // 4. モデルファクトリの作成
@@ -42,6 +45,8 @@ import type { Config } from './type';
  *   extension: (params) => ({
  *     get fullName() { return `${params.firstName} ${params.lastName}`; },
  *     get isAdult() { return params.age >= 18; },
+ *     greet: (greeting: string) => `${greeting}, ${params.firstName}!`,
+ *     toDisplayString: () => `${params.firstName} ${params.lastName} (${params.age})`,
  *   }),
  * });
  *
@@ -53,8 +58,10 @@ import type { Config } from './type';
  *   age: 25,
  * });
  *
- * console.log(user.fullName); // 'Taro Yamada'
- * console.log(user.isAdult);  // true
+ * console.log(user.fullName);        // 'Taro Yamada'
+ * console.log(user.isAdult);         // true
+ * console.log(user.greet('Hello'));   // 'Hello, Taro!'
+ * console.log(user.toDisplayString()); // 'Taro Yamada (25)'
  * user.age = 30; // エラー: 読み取り専用プロパティ
  * ```
  *

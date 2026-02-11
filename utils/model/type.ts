@@ -29,6 +29,6 @@ export interface Config<
 > {
   /** Zodスキーマによるパラメータ検証 */
   readonly schema: ZodType<Params>;
-  /** 拡張プロパティを生成するファクトリ関数（Model が Params と異なる場合は必須） */
+  /** 拡張プロパティ（getter・メソッド等）を生成するファクトリ関数（Model が Params と異なる場合は必須） */
   readonly extension?: ExtensionFactory<Params, Model>;
 }
