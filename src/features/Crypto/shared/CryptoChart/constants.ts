@@ -13,7 +13,7 @@ export const CHART_LIGHT_COLOR = {
 } as const;
 
 export const CHART_DARK_COLOR = {
-  BACKGROUND: '#222',
-  TEXT: '#ccc',
-  GRID_LINE: '#333',
+  BACKGROUND: '#0d1117',
+  TEXT: '#c9d1d9',
+  GRID_LINE: '#30363d',
 } as const;

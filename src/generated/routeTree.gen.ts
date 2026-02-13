@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './../routes/__root'
+import { Route as TradeRouteImport } from './../routes/trade'
 import { Route as StableFluidsRouteImport } from './../routes/stable-fluids'
 import { Route as ShaderRouteImport } from './../routes/shader'
 import { Route as PlaygroundRouteImport } from './../routes/playground'
@@ -38,6 +39,11 @@ import { Route as AudioSpeechRouteImport } from './../routes/audio/speech'
 import { Route as AudioMicRouteImport } from './../routes/audio/mic'
 import { Route as AggregateBillSummaryRouteImport } from './../routes/aggregate-bill/summary'
 
+const TradeRoute = TradeRouteImport.update({
+  id: '/trade',
+  path: '/trade',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StableFluidsRoute = StableFluidsRouteImport.update({
   id: '/stable-fluids',
   path: '/stable-fluids',
@@ -185,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
   '/stable-fluids': typeof StableFluidsRoute
+  '/trade': typeof TradeRoute
   '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
@@ -215,6 +222,7 @@ export interface FileRoutesByTo {
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
   '/stable-fluids': typeof StableFluidsRoute
+  '/trade': typeof TradeRoute
   '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
@@ -246,6 +254,7 @@ export interface FileRoutesById {
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
   '/stable-fluids': typeof StableFluidsRoute
+  '/trade': typeof TradeRoute
   '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
@@ -278,6 +287,7 @@ export interface FileRouteTypes {
     | '/playground'
     | '/shader'
     | '/stable-fluids'
+    | '/trade'
     | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
@@ -308,6 +318,7 @@ export interface FileRouteTypes {
     | '/playground'
     | '/shader'
     | '/stable-fluids'
+    | '/trade'
     | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
@@ -338,6 +349,7 @@ export interface FileRouteTypes {
     | '/playground'
     | '/shader'
     | '/stable-fluids'
+    | '/trade'
     | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
@@ -369,6 +381,7 @@ export interface RootRouteChildren {
   PlaygroundRoute: typeof PlaygroundRoute
   ShaderRoute: typeof ShaderRoute
   StableFluidsRoute: typeof StableFluidsRoute
+  TradeRoute: typeof TradeRoute
   AggregateBillSummaryRoute: typeof AggregateBillSummaryRoute
   AudioMicRoute: typeof AudioMicRoute
   AudioSpeechRoute: typeof AudioSpeechRoute
@@ -396,6 +409,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/trade': {
+      id: '/trade'
+      path: '/trade'
+      fullPath: '/trade'
+      preLoaderRoute: typeof TradeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/stable-fluids': {
       id: '/stable-fluids'
       path: '/stable-fluids'
@@ -601,6 +621,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlaygroundRoute: PlaygroundRoute,
   ShaderRoute: ShaderRoute,
   StableFluidsRoute: StableFluidsRoute,
+  TradeRoute: TradeRoute,
   AggregateBillSummaryRoute: AggregateBillSummaryRoute,
   AudioMicRoute: AudioMicRoute,
   AudioSpeechRoute: AudioSpeechRoute,

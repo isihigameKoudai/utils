@@ -59,8 +59,10 @@ src/features/<FeatureName>/
 │   │   └── types.ts
 │   └── index.ts
 ├── pages/                       # Page components
-│   ├── <PageName>Page.tsx
-│   └── style.ts                 # Page styles
+│   └── <PageName>/              # Page別ディレクトリ
+│       ├── index.ts             # re-export
+│       ├── page.tsx             # Page component本体（JSX + useEffect等の副作用）
+│       └── style.ts             # Page styles
 ├── hooks/                       # Feature-specific hooks
 │   ├── index.ts
 │   └── use<Feature>.ts
@@ -695,6 +697,9 @@ export const todoApi: TodoApi = {
 
 Feature固有のカスタムフック。ServiceとStoreを組み合わせて使用。
 
+> **IMPORTANT**: Custom Hooksでは`useEffect`等の副作用を宣言しない。
+> Hooksは値やコールバックの宣言のみを行い、`useEffect`などの副作用は必ずコンポーネント側（page.tsx）で扱うこと。
+
 ```typescript
 // hooks/useTodoFeature.ts
 import { useCallback, useMemo } from 'react';
@@ -783,10 +788,26 @@ export const useTodoFeature = () => {
 
 ### 6. Page Component
 
+> **IMPORTANT**: `useEffect`などの副作用は必ずページコンポーネント（page.tsx）側で扱うこと。Custom Hooksには副作用を含めない。
+
+#### Directory Structure
+
+```
+pages/
+└── <PageName>/
+    ├── index.ts        # re-export
+    ├── page.tsx        # Page component本体（JSX + useEffect等の副作用）
+    └── style.ts        # Page styles
+```
+
+- `index.ts`: re-exportのみ。`style.ts`が存在する場合、`page.tsx`が必須。
+- `page.tsx`: ページ本体。JSXと副作用（useEffect等）を含む。
+- `style.ts`: スタイル定義。不要なら省略可。
+
 #### Step 1: Page Styles
 
 ```typescript
-// pages/style.ts
+// pages/TodoList/style.ts
 import { styled } from '@/utils/ui/styled';
 
 export const Container = styled('div')({
@@ -816,13 +837,13 @@ export const ErrorMessage = styled('div')({
 #### Step 2: Page Component
 
 ```typescript
-// pages/TodoListPage.tsx
+// pages/TodoList/page.tsx
 import { useEffect } from 'react';
 
-import { useTodoFeature } from '../hooks/useTodoFeature';
-import { TodoList } from '../components/TodoList';
-import { TodoForm } from '../components/TodoForm';
-import { TodoStats } from '../components/TodoStats';
+import { useTodoFeature } from '../../hooks/useTodoFeature';
+import { TodoList } from '../../components/TodoList';
+import { TodoForm } from '../../components/TodoForm';
+import { TodoStats } from '../../components/TodoStats';
 
 import { Container, Header, ErrorMessage } from './style';
 
@@ -839,7 +860,7 @@ export const TodoListPage = () => {
     clearError,
   } = useTodoFeature();
 
-  // Initial data fetch
+  // Side effects belong in the page component, NOT in hooks
   useEffect(() => {
     fetchTodos();
   }, [fetchTodos]);
@@ -870,6 +891,13 @@ export const TodoListPage = () => {
 };
 ```
 
+#### Step 3: Index (re-export)
+
+```typescript
+// pages/TodoList/index.ts
+export { TodoListPage } from './page';
+```
+
 ## Naming Conventions
 
 | Category        | Convention              | Example             |
@@ -890,14 +918,14 @@ export const TodoListPage = () => {
 
 ## Layer Responsibilities
 
-| Layer     | Responsibility                                   | Dependencies       |
-| --------- | ------------------------------------------------ | ------------------ |
-| Model     | ドメインロジック、バリデーション、computed props | Zod, utils         |
-| Store     | 状態管理、Commands(actions)、Queries             | Model (types only) |
-| Service   | API統合、複数action orchestration、DI            | Store, API         |
-| API       | HTTP通信、外部サービス連携                       | なし               |
-| Hook      | React integration、Service/Store利用             | Store, Service     |
-| Component | UI表示、ユーザーインタラクション                 | Hook               |
+| Layer     | Responsibility                                                           | Dependencies       |
+| --------- | ------------------------------------------------------------------------ | ------------------ |
+| Model     | ドメインロジック、バリデーション、computed props                         | Zod, utils         |
+| Store     | 状態管理、Commands(actions)、Queries                                     | Model (types only) |
+| Service   | API統合、複数action orchestration、DI                                    | Store, API         |
+| API       | HTTP通信、外部サービス連携                                               | なし               |
+| Hook      | React integration、Service/Store利用（値・コールバックのみ、副作用なし） | Store, Service     |
+| Component | UI表示、ユーザーインタラクション、副作用（useEffect等）                  | Hook               |
 
 ## Best Practices
 
@@ -1075,6 +1103,7 @@ describe('TodoService', () => {
 3. **Storeに直接API呼び出し**: Serviceで行う
 4. **Mutableな状態**: createModelFactoryは自動でfreeze
 5. **型の緩和**: `as any`や`@ts-ignore`を使用しない
+6. **Hooksに副作用を含める**: `useEffect`等の副作用はコンポーネント側（page.tsx）で扱う
 
 ### DO
 

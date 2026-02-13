@@ -46,8 +46,10 @@ src/features/{FeatureName}/
 ├── components/
 │   └── index.ts
 ├── pages/
-│   ├── style.ts                 # Styled components
-│   └── {FeatureName}Page.tsx
+│   └── {PageName}/
+│       ├── index.ts             # re-export (page.tsxからのnamed export)
+│       ├── page.tsx             # ページ本体（副作用はここで扱う）
+│       └── style.ts             # Styled components（任意。存在する場合はpage.tsxも必須）
 ├── hooks/
 │   ├── index.ts
 │   └── use{FeatureName}.ts
@@ -507,6 +509,9 @@ export const create{Entity}Service = ({ api, actions }: {Entity}ServiceDeps) => 
 
 ### Hook Template
 
+**IMPORTANT: Custom hooksにはuseEffectなどの副作用を含めない。値とコールバックの宣言のみ。**
+**副作用（useEffect等）は必ずコンポーネント側（page.tsx）で扱うこと。**
+
 ```typescript
 // hooks/use{FeatureName}.ts
 import { useCallback, useMemo } from 'react';
@@ -518,7 +523,7 @@ import type { {Entity}Params } from '../models/{entity}';
 
 /**
  * {FeatureName} Hook
- * @description {FeatureName}機能のカスタムフック
+ * @description {FeatureName}機能のカスタムフック（値・コールバックのみ、副作用なし）
  */
 export const use{FeatureName} = () => {
   const { queries, actions } = {Entity}Store.useStore();
@@ -574,7 +579,7 @@ export const use{FeatureName} = () => {
 ### Page Style Template
 
 ```typescript
-// pages/style.ts
+// pages/{PageName}/style.ts
 import { styled } from '@/utils/ui/styled';
 
 export const Container = styled('div')({
@@ -617,11 +622,19 @@ export const ItemCount = styled('p')({
 
 ### Page Template
 
+**pages/{PageName}/ ディレクトリ構造:**
+
+- `index.ts` — re-export（page.tsxからのnamed export）
+- `page.tsx` — ページ本体（useEffectなどの副作用はここで扱う）
+- `style.ts` — スタイル定義（任意。ただしstyle.tsが存在する場合はpage.tsxも必須）
+
+#### pages/{PageName}/page.tsx
+
 ```typescript
-// pages/{FeatureName}Page.tsx
+// pages/{PageName}/page.tsx
 import { useEffect } from 'react';
 
-import { use{FeatureName} } from '../hooks/use{FeatureName}';
+import { use{FeatureName} } from '../../hooks/use{FeatureName}';
 
 import {
   Container,
@@ -638,6 +651,7 @@ import {
 export const {FeatureName}Page = () => {
   const { items, isLoading, error, fetchAll } = use{FeatureName}();
 
+  // 副作用はコンポーネント側で扱う
   useEffect(() => {
     fetchAll();
   }, [fetchAll]);
@@ -666,6 +680,13 @@ export const {FeatureName}Page = () => {
     </Container>
   );
 };
+```
+
+#### pages/{PageName}/index.ts
+
+```typescript
+// pages/{PageName}/index.ts
+export { {FeatureName}Page } from './page';
 ```
 
 ### API Template
@@ -767,8 +788,8 @@ export { {entity}Api } from './{entity}Api';
 // components/index.ts
 // Export components as they are created
 
-// pages/index.ts
-export { {FeatureName}Page } from './{FeatureName}Page';
+// pages/{PageName}/index.ts
+export { {FeatureName}Page } from './page';
 
 // constants/index.ts
 // Export constants as they are defined
@@ -779,23 +800,24 @@ export { {FeatureName}Page } from './{FeatureName}Page';
 
 ## Naming Conventions
 
-| Type               | Pattern                 | Example             |
-| ------------------ | ----------------------- | ------------------- |
-| Schema             | `{entity}Schema`        | `taskSchema`        |
-| Params             | `{Entity}Params`        | `TaskParams`        |
-| Model              | `{Entity}`              | `Task`              |
-| Factory            | `create{Entity}`        | `createTask`        |
-| Empty Check        | `is{Entity}Empty`       | `isTaskEmpty`       |
-| Params Creator     | `create{Entity}Params`  | `createTaskParams`  |
-| Store              | `{Entity}Store`         | `TaskStore`         |
-| State Type         | `{Entity}State`         | `TaskState`         |
-| Service Factory    | `create{Entity}Service` | `createTaskService` |
-| API Interface      | `{Entity}Api`           | `TaskApi`           |
-| Actions Type       | `{Entity}Actions`       | `TaskActions`       |
-| API Implementation | `{entity}Api`           | `taskApi`           |
-| Hook               | `use{FeatureName}`      | `useTaskManager`    |
-| Page               | `{FeatureName}Page`     | `TaskManagerPage`   |
-| Style File         | `style.ts`              | `style.ts`          |
+| Type               | Pattern                     | Example                      |
+| ------------------ | --------------------------- | ---------------------------- |
+| Schema             | `{entity}Schema`            | `taskSchema`                 |
+| Params             | `{Entity}Params`            | `TaskParams`                 |
+| Model              | `{Entity}`                  | `Task`                       |
+| Factory            | `create{Entity}`            | `createTask`                 |
+| Empty Check        | `is{Entity}Empty`           | `isTaskEmpty`                |
+| Params Creator     | `create{Entity}Params`      | `createTaskParams`           |
+| Store              | `{Entity}Store`             | `TaskStore`                  |
+| State Type         | `{Entity}State`             | `TaskState`                  |
+| Service Factory    | `create{Entity}Service`     | `createTaskService`          |
+| API Interface      | `{Entity}Api`               | `TaskApi`                    |
+| Actions Type       | `{Entity}Actions`           | `TaskActions`                |
+| API Implementation | `{entity}Api`               | `taskApi`                    |
+| Hook               | `use{FeatureName}`          | `useTaskManager`             |
+| Page               | `{FeatureName}Page`         | `TaskManagerPage`            |
+| Page Dir           | `pages/{PageName}/`         | `pages/TaskManager/`         |
+| Style File         | `pages/{PageName}/style.ts` | `pages/TaskManager/style.ts` |
 
 ## Checklist
 
@@ -819,6 +841,8 @@ export { {FeatureName}Page } from './{FeatureName}Page';
 4. **Store は最小限**: 必要なstateとactionsのみ
 5. **ServiceでDI**: APIなど外部依存はServiceに注入
 6. **UIは最後**: ロジックが固まってからUI実装
+7. **Hookに副作用を含めない**: useEffectなどの副作用はpage.tsxで扱う。Hookは値とコールバックのみ
+8. **Pages構造を守る**: `pages/{PageName}/index.ts` + `page.tsx` + `style.ts（任意）`
 
 ## Related Skills
 
