@@ -18,3 +18,51 @@ yarn.lock
 package-lock.json
 .npmrc
 .yarnrc
+# TypeScript/Vite specific
+*.tsbuildinfo
+.vite/
+coverage/
+.nyc_output/
+
+# Generated files
+src/generated/
+*.gen.ts
+*.generated.*
+
+# Test artifacts
+test-results/
+playwright-report/
+playwright/.cache/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Cache directories
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+
+# Editor directories
+.vscode/
+.idea/
+*.sublime-*
+
+# Large media files (optional - uncomment if needed)
+# *.mp4
+# *.mov
+# *.avi
+# *.mkv
+# *.webm
