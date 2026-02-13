@@ -1,8 +1,9 @@
 import { styled } from '@/utils/ui/styled';
-import { BillSummaryStore } from '../stores/billSummaryStore';
-import { Header } from '../components/Header';
-import { BillList } from '../components/BillList';
+
 import { BillBarChart } from '../components/BillBarChart';
+import { BillList } from '../components/BillList';
+import { Header } from '../components/Header';
+import { BillSummaryStore } from '../stores/billSummaryStore';
 
 const Container = styled('div')({
   padding: '2rem',

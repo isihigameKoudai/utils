@@ -1,13 +1,14 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import * as poseDetection from '@tensorflow-models/pose-detection';
 import * as tf from '@tensorflow/tfjs';
+import * as poseDetection from '@tensorflow-models/pose-detection';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import { PoseDetection } from './PoseDetection';
 import {
   documentMock,
   navigatorMock,
   windowMock,
 } from '../../__test__/mocks/global';
+
+import { PoseDetection } from './PoseDetection';
 
 vi.mock('@tensorflow/tfjs', () => ({
   ready: vi.fn().mockResolvedValue(undefined),

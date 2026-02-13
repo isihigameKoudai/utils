@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
-import MeltTheBorder from '../pages/MeltTheBorder';
+
+import MeltTheBorderPage from '@/src/features/MeltTheBorder/pages/MeltTheBorderPage';
 
 export const Route = createFileRoute('/melt-the-border')({
-  component: MeltTheBorder,
+  component: MeltTheBorderPage,
 });

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "theme": "opencode",
+  "model": "anthropic/claude-opus-4-5",
+  "small_model": "ollama/glm-4.7",
+  "instructions": ["AGENTS.md", "./docs/AGENTS.md"],
+  "provider": {
+    "anthropic": {
+      "name": "Anthropic"
+    },
+    "grok": {
+      "name": "Grok"
+    },
+    "cerebras": {
+      "name": "Cerebras"
+    }
+  },
+  "tui": {
+    "scroll_speed": 1,
+    "scroll_acceleration": {
+      "enabled": true
+    },
+    "diff_style": "auto"
+  },
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "rm -rf *": "deny",
+      "git push --force*": "deny",
+      "sudo *": "deny",
+      "dd *": "deny",
+      "mkfs*": "deny",
+      "format*": "deny"
+    }
+  },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "serena": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena-mcp-server"
+      ]
+    },
+    "chrome-devtools": {
+      "type": "local",
+      "command": ["npx", "-y", "chrome-devtools-mcp"],
+      "environment": {
+        "CHROME_REMOTE_DEBUGGING_URL": "http://localhost:9222"
+      }
+    }
+  }
+}

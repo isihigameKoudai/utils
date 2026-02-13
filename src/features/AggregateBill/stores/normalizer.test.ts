@@ -3,6 +3,7 @@
 // JCB金額表記の揺れが数値文字列へ変換されることを確認する。
 
 import { describe, expect, it } from 'vitest';
+
 import { normalizeBrandRow, normalizeBrandRows } from './normalizer';
 
 describe('normalizeBrandRow', () => {

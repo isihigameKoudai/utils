@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 
-import { BRAND } from '../constants/brand';
-import { BillStore } from '../stores/billStore';
 import { styled } from '@/utils/ui/styled';
+
 import { BillList } from '../components/BillList';
 import { Header } from '../components/Header';
+import { BRAND } from '../constants/brand';
+import { BillStore } from '../stores/billStore';
 
 const Container = styled('div')({
   display: 'flex',

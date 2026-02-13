@@ -1,4 +1,5 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
+
 import { Media } from './Media';
 
 describe('Media', () => {

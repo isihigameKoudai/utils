@@ -1,8 +1,11 @@
-import { defineStore } from '@/utils/i-state';
-import { Bill, type BillProps } from '../models/Bill';
-import { csv2array, fetchFiles } from '@/utils/file/file';
-import type { SortKey, SortOrder } from './type';
 import type { Dayjs } from 'dayjs';
+
+import { csv2array, fetchFiles } from '@/utils/file/file';
+import { defineStore } from '@/utils/i-state';
+
+import { Bill, type BillProps } from '../models/Bill';
+
+import type { SortKey, SortOrder } from './type';
 
 type GroupingType = 'none' | 'store' | 'month';
 

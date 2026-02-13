@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { splitMap, unique, sortByKey, sumByKey } from './array';
 
 describe('Array functions', () => {
