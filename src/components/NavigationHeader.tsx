@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Box from '@/src/components/Box';
+import Box from '@/utils/ui/Box';
 
 import Menu from './Menu';
 
