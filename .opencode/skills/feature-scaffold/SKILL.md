@@ -19,45 +19,8 @@ Feature名: TaskManager
 
 ## Generated Structure
 
-以下のディレクトリとファイルが自動生成される：
-
-```
-src/features/{FeatureName}/
-├── models/                      # createModelFactory based
-│   └── {entity}/
-│       ├── index.ts             # re-export
-│       ├── scheme.ts            # Zod schema definition
-│       ├── types.ts             # Params & Model type definitions
-│       └── model.ts             # Model factory + helpers
-├── stores/                      # i-state (Actions = Commands)
-│   └── {entity}/
-│       ├── index.ts             # defineStore + re-export
-│       ├── type.ts              # State type definition
-│       ├── state.ts             # Initial state
-│       ├── queries.ts           # Query definitions (Read)
-│       └── actions.ts           # Action definitions (Command)
-├── services/                    # Orchestration + DI
-│   ├── index.ts
-│   ├── types.ts                 # Interfaces ({Entity}Api, {Entity}Actions, etc.)
-│   └── {entity}Service.ts
-├── api/
-│   ├── index.ts
-│   └── {entity}Api.ts
-├── components/
-│   └── index.ts
-├── pages/
-│   └── {PageName}/
-│       ├── index.ts             # re-export (page.tsxからのnamed export)
-│       ├── page.tsx             # ページ本体（副作用はここで扱う）
-│       └── style.ts             # Styled components（任意。存在する場合はpage.tsxも必須）
-├── hooks/
-│   ├── index.ts
-│   └── use{FeatureName}.ts
-├── constants/
-│   └── index.ts
-└── types/
-    └── index.ts
-```
+> ディレクトリ構造の詳細は [cqrs-feature](../cqrs-feature/SKILL.md#directory-structure) を参照。
+> このスキルは以下の全ディレクトリ（models, stores, services, api, components, pages, hooks, constants, types）のボイラープレートを生成する。
 
 ## Template Files
 
@@ -800,24 +763,15 @@ export { {FeatureName}Page } from './page';
 
 ## Naming Conventions
 
-| Type               | Pattern                     | Example                      |
-| ------------------ | --------------------------- | ---------------------------- |
-| Schema             | `{entity}Schema`            | `taskSchema`                 |
-| Params             | `{Entity}Params`            | `TaskParams`                 |
-| Model              | `{Entity}`                  | `Task`                       |
-| Factory            | `create{Entity}`            | `createTask`                 |
-| Empty Check        | `is{Entity}Empty`           | `isTaskEmpty`                |
-| Params Creator     | `create{Entity}Params`      | `createTaskParams`           |
-| Store              | `{Entity}Store`             | `TaskStore`                  |
-| State Type         | `{Entity}State`             | `TaskState`                  |
-| Service Factory    | `create{Entity}Service`     | `createTaskService`          |
-| API Interface      | `{Entity}Api`               | `TaskApi`                    |
-| Actions Type       | `{Entity}Actions`           | `TaskActions`                |
-| API Implementation | `{entity}Api`               | `taskApi`                    |
-| Hook               | `use{FeatureName}`          | `useTaskManager`             |
-| Page               | `{FeatureName}Page`         | `TaskManagerPage`            |
-| Page Dir           | `pages/{PageName}/`         | `pages/TaskManager/`         |
-| Style File         | `pages/{PageName}/style.ts` | `pages/TaskManager/style.ts` |
+> 命名規約の詳細は [cqrs-feature](../cqrs-feature/SKILL.md#naming-conventions) を参照。
+
+feature-scaffold固有の追加パターン：
+
+| Type           | Pattern                | Example              |
+| -------------- | ---------------------- | -------------------- |
+| Params Creator | `create{Entity}Params` | `createTaskParams`   |
+| Page Dir       | `pages/{PageName}/`    | `pages/TaskManager/` |
+| Style File     | `style.ts`             | `style.ts`           |
 
 ## Checklist
 
