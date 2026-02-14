@@ -13,16 +13,17 @@ CQRSは「Command Query Responsibility Segregation」の略で、データの読
 
 ### Core Principles
 
-1. **Command**: Store actionsが担当（状態を変更する操作）
+1. **Command**: Store actionsが担当（状態を変更する操作。stateに直結するデータ取得・ロジックも含む）
 2. **Query**: Store queriesが担当（状態を読み取る操作、純粋関数）
 3. **Domain Model**: `createModelFactory`で作成するイミュータブルなモデル
-4. **Store**: Zustandベースの`i-state`パターン（actionsがCommandの役割）
-5. **Service**: 複数のstore actionsのオーケストレーション、DI
+4. **Store**: Zustandベースの`i-state`パターン（actionsがCommand層。自storeのstateに直結するfetchやロジックはactionsに書いても良い）
+5. **Service**: 複数storeの横断的オーケストレーションのみ
 
 ### Key Design Decisions
 
 - **classを使わない**: `createModelFactory`でイミュータブルなモデルを生成
 - **commandsディレクトリなし**: Store actionsがCommand層の役割を担う
+- **actionsにstateに直結するロジックを含める**: データ取得（API呼び出し）、loading/error管理など、自storeのstateに直結する処理はactionsに書く
 - **servicesディレクトリ**: 複数store操作のオーケストレーション、外部API統合、DI
 
 ## Directory Structure
@@ -336,16 +337,29 @@ export const queries = {
 
 #### Step 4: Actions (Commands)
 
+> **actionsにstateに直結するロジックを含める**: データ取得（API呼び出し）、loading/error管理、フィルタ・マッピングなど、自storeのstateに直結する処理はactionsに書く。asyncも可。
+
 ```typescript
 // stores/todo/actions.ts
 import type { ActionsProps } from '@/utils/i-state';
 
 import type { TodoParams } from '../../models/todo';
+import type { TodoApi } from '../../services/types';
 
 import type { TodoState } from './type';
 import type { queries } from './queries';
 
 export const actions = {
+  // ----- Command: Fetch (stateに直結するAPI呼び出し) -----
+  /**
+   * @description APIからTodoリストを取得してstateに反映
+   * @command FetchTodos
+   */
+  async fetchTodos({ dispatch }, api: TodoApi) {
+    const todos = await api.fetchAll();
+    dispatch('todos', todos);
+  },
+
   // ----- Command: Create -----
   /**
    * @description Todoを作成する
@@ -364,6 +378,25 @@ export const actions = {
       createdAt: new Date().toISOString(),
     };
     dispatch('todos', [...state.todos, newTodo]);
+  },
+
+  // ----- Command: Create via API -----
+  /**
+   * @description APIでTodoを作成してstateに反映
+   * @command CreateTodoViaApi
+   */
+  async createTodoViaApi(
+    { state, dispatch },
+    api: TodoApi,
+    payload: { title: string; description?: string; dueDate: string },
+  ) {
+    const created = await api.create({
+      title: payload.title,
+      description: payload.description ?? '',
+      status: 'pending',
+      dueDate: payload.dueDate,
+    });
+    dispatch('todos', [...state.todos, created]);
   },
 
   // ----- Command: Update -----
@@ -400,15 +433,6 @@ export const actions = {
    */
   selectTodo({ dispatch }, id: string | null) {
     dispatch('selectedId', id);
-  },
-
-  // ----- Command: Set Todos (for API integration) -----
-  /**
-   * @description Todoリストを設定する（API取得後）
-   * @command SetTodos
-   */
-  setTodos({ dispatch }, todos: TodoParams[]) {
-    dispatch('todos', todos);
   },
 
   // ----- Command: Batch Complete -----
@@ -467,10 +491,18 @@ export { TodoStore, type TodoState } from './todo';
 
 複数のstore actions呼び出し、API統合、依存性注入を担当するService層。
 
-> **IMPORTANT**: `defineStore`は`useStore`（React hook）のみを提供し、`getStore`は存在しない。
-> ServiceはReactコンポーネント/hook内から呼び出すか、actionsを依存として注入する。
+> **IMPORTANT**: 単一storeのfetch/CRUD/loading/error管理はactionsに書く。
 
-#### Step 1: API Interface Types (for DI)
+#### When to Use Service
+
+| ケース                            | 置き場所    |
+| --------------------------------- | ----------- |
+| 自storeのstateにfetch→反映        | **actions** |
+| 自storeのloading/error管理        | **actions** |
+| 自storeのCRUD操作                 | **actions** |
+| 上記以外の操作           | **service** |
+
+#### Example: 複数Store横断のService
 
 ```typescript
 // services/types.ts
@@ -632,9 +664,6 @@ export const createTodoService = (deps: TodoServiceDeps) => {
     },
   };
 };
-
-/** @description Service singleton type */
-export type TodoService = ReturnType<typeof createTodoService>;
 ```
 
 ### 4. API Integration
@@ -698,25 +727,23 @@ export const todoApi: TodoApi = {
 Feature固有のカスタムフック。ServiceとStoreを組み合わせて使用。
 
 > **IMPORTANT**: Custom Hooksでは`useEffect`等の副作用を宣言しない。
-> Hooksは値やコールバックの宣言のみを行い、`useEffect`などの副作用は必ずコンポーネント側（page.tsx）で扱うこと。
+> Hooksは値やコールバックの宣言のみを行い、`useEffect`などの副作用は必ずコンポーネント側（page.tsx等）で扱うこと。
 
 ```typescript
 // hooks/useTodoFeature.ts
 import { useCallback, useMemo } from 'react';
 
 import { TodoStore } from '../stores/todo';
-import { createTodoService } from '../services/todoService';
 import { todoApi } from '../api/todoApi';
 
 /**
  * @description Todo Feature Hook
  * @example
- * const { todos, createTodo, isLoading } = useTodoFeature();
+ * const { todos, fetchTodos, isLoading } = useTodoFeature();
  */
 export const useTodoFeature = () => {
   const { queries, actions } = TodoStore.useStore();
 
-  // Service instance with actions injected
   const service = useMemo(
     () => createTodoService({ api: todoApi, actions }),
     [actions],
@@ -756,7 +783,6 @@ export const useTodoFeature = () => {
     (id: string) => service.deleteTodo(id),
     [service],
   );
-
   // Local actions (no API)
   const selectTodo = useCallback(
     (id: string | null) => actions.selectTodo(id),
@@ -774,12 +800,10 @@ export const useTodoFeature = () => {
     completionRate,
     isLoading,
     error,
-    // Service methods (async with API)
     fetchTodos,
     createTodo,
-    updateTodoStatus,
+    updateTodo,
     deleteTodo,
-    // Local actions
     selectTodo,
     clearError,
   };
@@ -918,14 +942,14 @@ export { TodoListPage } from './page';
 
 ## Layer Responsibilities
 
-| Layer     | Responsibility                                                           | Dependencies       |
-| --------- | ------------------------------------------------------------------------ | ------------------ |
-| Model     | ドメインロジック、バリデーション、computed props                         | Zod, utils         |
-| Store     | 状態管理、Commands(actions)、Queries                                     | Model (types only) |
-| Service   | API統合、複数action orchestration、DI                                    | Store, API         |
-| API       | HTTP通信、外部サービス連携                                               | なし               |
-| Hook      | React integration、Service/Store利用（値・コールバックのみ、副作用なし） | Store, Service     |
-| Component | UI表示、ユーザーインタラクション、副作用（useEffect等）                  | Hook               |
+| Layer     | Responsibility                                                                     | Dependencies       |
+| --------- | ---------------------------------------------------------------------------------- | ------------------ |
+| Model     | ドメインロジック、バリデーション、computed props                                   | Zod, utils         |
+| Store     | 状態管理、Commands(actions)、Queries。stateに直結するfetch/ロジックもactionsに含んで良い | Model (types only) |
+| Service   | API統合、複数action orchestration、DI      | Store              |
+| API       | HTTP通信、外部サービス連携                                                         | なし               |
+| Hook      | React integration、Store利用（値・コールバックのみ、副作用なし）                   | Store, (Service)   |
+| Component | UI表示、ユーザーインタラクション、副作用（useEffect等）                            | Hook               |
 
 ## Best Practices
 
@@ -941,7 +965,8 @@ export { TodoListPage } from './page';
 1. **Store Raw Data**: stateにはParams（生データ）を保存
 2. **Query → Model**: QueriesでDomain Modelに変換して返す
 3. **Actions = Commands**: 状態変更は全てactionsで行う
-4. **JSDoc @command**: action にCommandとしての役割を明示
+4. **stateに直結するロジックはactionsに書く**: データ取得（API呼び出し）、loading/error管理、フィルタ・マッピングなど、自storeのstateに直結する処理はactionsに含めて良い。asyncも可
+5. **JSDoc @command**: action にCommandとしての役割を明示
 
 ### Service Guidelines
 
@@ -1100,7 +1125,7 @@ describe('TodoService', () => {
 
 1. **classを使用する**: createModelFactoryを使う
 2. **commandsディレクトリ**: Store actionsがその役割
-3. **Storeに直接API呼び出し**: Serviceで行う
+3. **単一storeのfetch/CRUDをServiceに書く**: stateに直結する操作はactionsに書く
 4. **Mutableな状態**: createModelFactoryは自動でfreeze
 5. **型の緩和**: `as any`や`@ts-ignore`を使用しない
 6. **Hooksに副作用を含める**: `useEffect`等の副作用はコンポーネント側（page.tsx）で扱う
@@ -1109,8 +1134,8 @@ describe('TodoService', () => {
 
 1. **Zod Schema First**: バリデーションを最初に定義
 2. **Store = Raw Data**: stateにはParams型を保存
-3. **Service for Orchestration**: 複数操作はServiceで
-4. **DI Pattern**: テスト容易性のためcreate関数でDI
+3. **stateに直結するロジックはactionsに**: fetch、loading/error管理、CRUD等はactionsに書く
+4. **Service for 複数Store横断のみ**: 複数storeを跨ぐorchestrationのみServiceで
 5. **Immutable Updates**: withXxxメソッドで新しいParamsを返す
 
 ## Related Skills

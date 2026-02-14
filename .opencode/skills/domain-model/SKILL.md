@@ -177,11 +177,6 @@ export const createEntity = createModelFactory<EntityParams, Entity>({
   },
 });
 
-/** @description 空判定（static method相当） */
-export const isEntityEmpty = (params: Partial<EntityParams>): boolean => {
-  return !params.id || !params.name;
-};
-
 /** @description デフォルト値でパラメータ生成 */
 export const createEntityParams = (
   partial: Partial<EntityParams>,
@@ -217,7 +212,6 @@ export { entitySchema } from './scheme';
 export type { Entity, EntityParams, EntityStatus } from './types';
 export {
   createEntity,
-  isEntityEmpty,
   createEntityParams,
   sortEntitiesByCreatedAt,
 } from './model';
@@ -443,7 +437,6 @@ import { describe, it, expect } from 'vitest';
 
 import {
   createEntity,
-  isEntityEmpty,
   createEntityParams,
   sortEntitiesByCreatedAt,
   type EntityParams,
@@ -532,18 +525,6 @@ describe('Entity Model', () => {
   });
 
   describe('helper functions', () => {
-    it('isEntityEmpty should return true for empty id', () => {
-      expect(isEntityEmpty({ id: '' })).toBe(true);
-    });
-
-    it('isEntityEmpty should return true for empty name', () => {
-      expect(isEntityEmpty({ id: '1', name: '' })).toBe(true);
-    });
-
-    it('isEntityEmpty should return false for valid params', () => {
-      expect(isEntityEmpty(validParams)).toBe(false);
-    });
-
     it('createEntityParams should generate id if not provided', () => {
       const params = createEntityParams({ name: 'Test' });
       expect(params.id).toBeDefined();
@@ -678,11 +659,6 @@ const createEntity = createModelFactory({
   }),
 });
 
-// ✅ Static helpers as separate functions
-export const isEntityEmpty = (params: Partial<EntityParams>): boolean => {
-  return !params.id || !params.name;
-};
-
 export const createEntityParams = (partial: Partial<EntityParams>): EntityParams => {
   return { ...defaultParams, ...partial };
 };
@@ -740,17 +716,13 @@ export const initialState: EntityState = {
 // stores/entity/queries.ts
 import type { QueriesProps } from '@/utils/i-state';
 
-import { createEntity, isEntityEmpty, type Entity } from '../../models/entity';
+import { createEntity, type Entity } from '../../models/entity';
 import type { EntityState } from './type';
 
 /** @description Query definitions */
 export const queries = {
   /** @description ParamsをModelに変換したリスト */
-  itemList: (state): Entity[] =>
-    state.items
-      .filter((item) => !isEntityEmpty(item))
-      .map((item) => createEntity(item)),
-
+  itemList: (state): Entity[] => state.items.map((item) => createEntity(item)),
   /** @description 選択中のアイテム（Model） */
   selectedItem: (state): Entity | null => {
     if (!state.selectedId) return null;

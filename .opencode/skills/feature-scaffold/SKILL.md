@@ -281,6 +281,8 @@ export const queries = {
 
 ### Store Actions Template
 
+> **stateに直結するロジックはactionsに書く**: データ取得（fetch）、フィルタ・マッピング等、自storeのstateに直結する処理はactionsに含める。ただし**actionsにtry/catchは書かない**。エラーハンドリング（try/catch + loading/error管理）はservice層で行う。
+
 ```typescript
 // stores/{entity}/actions.ts
 import type { ActionsProps } from '@/utils/i-state';
@@ -378,6 +380,8 @@ export type {Entity}Actions = ReturnType<typeof {Entity}Store.useStore>['actions
 ```
 
 ### Service Template
+
+> **Service層の責務**: エラーハンドリング（try/catch + loading/error管理）＋ 複数store横断のorchestration ＋ DI を担当。actionsにはtry/catchを書かず、service層でエラーを捕捉してstoreに反映する。
 
 ```typescript
 // services/{entity}Service.ts
@@ -792,11 +796,13 @@ feature-scaffold固有の追加パターン：
 1. **まずSchemaから始める**: Zodスキーマでデータ構造を定義
 2. **次にModel**: computed properties, validation, メソッドを実装
 3. **TDDでModel実装**: テストを書きながらModelを実装
-4. **Store は最小限**: 必要なstateとactionsのみ
-5. **ServiceでDI**: APIなど外部依存はServiceに注入
-6. **UIは最後**: ロジックが固まってからUI実装
-7. **Hookに副作用を含めない**: useEffectなどの副作用はpage.tsxで扱う。Hookは値とコールバックのみ
-8. **Pages構造を守る**: `pages/{PageName}/index.ts` + `page.tsx` + `style.ts（任意）`
+4. **stateに直結するロジックはactionsに書く**: データ取得（fetch）、フィルタ・マッピング等はactionsに含める（try/catchは書かない）
+5. **actionsにtry/catchを書かない**: エラーハンドリングはservice層で捕捉する
+6. **エラーハンドリングはservice層で**: try/catch + loading/error管理はServiceが担当
+7. **ServiceでDI**: APIなど外部依存はServiceに注入
+8. **UIは最後**: ロジックが固まってからUI実装
+9. **Hookに副作用を含めない**: useEffectなどの副作用はpage.tsxで扱う。Hookは値とコールバックのみ
+10. **Pages構造を守る**: `pages/{PageName}/index.ts` + `page.tsx` + `style.ts（任意）`
 
 ## Related Skills
 
