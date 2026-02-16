@@ -5,26 +5,30 @@ import { styled } from '@/utils/ui/styled';
 export const PageContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
-  minHeight: '100dvh',
+  height: '100dvh',
+  boxSizing: 'border-box',
   backgroundColor: '#0d1117',
   color: '#c9d1d9',
-  padding: '1rem 1.25rem 1.25rem',
-  boxSizing: 'border-box',
-  gap: '1rem',
 });
 
 export const Header = styled('header')({
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'space-between',
-  gap: '0.75rem',
-  flexWrap: 'wrap',
+  padding: '0.75rem 1.5rem',
+  borderBottom: '1px solid #30363d',
 });
 
-export const BackLink = styled(Link)({
+export const Breadcrumb = styled('nav')({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.5rem',
+  fontSize: '0.875rem',
+});
+
+export const BreadcrumbLink = styled(Link)({
   color: '#58a6ff',
   textDecoration: 'none',
-  fontSize: '0.875rem',
+  fontWeight: 500,
   $nest: {
     '&:hover': {
       textDecoration: 'underline',
@@ -32,26 +36,29 @@ export const BackLink = styled(Link)({
   },
 });
 
-export const TokenLabel = styled('strong')({
-  fontSize: '0.875rem',
+export const BreadcrumbSeparator = styled('span')({
+  color: '#8b949e',
+  userSelect: 'none',
+});
+
+export const BreadcrumbText = styled('span')({
   color: '#f0f6fc',
+  fontWeight: 600,
 });
 
 export const ChartGrid = styled('div')({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-  gap: '0.75rem',
+  gap: '1px',
+  backgroundColor: '#30363d',
   flex: 1,
 });
 
 export const ChartCell = styled('section')({
-  border: '1px solid #30363d',
-  borderRadius: '8px',
-  backgroundColor: '#161b22',
-  padding: '0.75rem',
+  backgroundColor: '#0d1117',
+  padding: '0.5rem',
   display: 'flex',
   flexDirection: 'column',
-  gap: '0.5rem',
 });
 
 export const TimeframeLabel = styled('h2')({
@@ -59,6 +66,7 @@ export const TimeframeLabel = styled('h2')({
   fontSize: '0.875rem',
   fontWeight: 600,
   color: '#f0f6fc',
+  padding: '0.25rem 0.5rem 0.5rem',
 });
 
 export const Overlay = styled('div')({

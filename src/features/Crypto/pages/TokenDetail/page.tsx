@@ -6,14 +6,16 @@ import { useTokenDetail } from '../../hooks/useTokenDetail';
 import { getTimeframeLabel } from '../../modules/utils';
 
 import {
-  BackLink,
+  Breadcrumb,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbText,
   ChartCell,
   ChartGrid,
   Header,
   Overlay,
   PageContainer,
   TimeframeLabel,
-  TokenLabel,
 } from './style';
 
 type TokenDetailPageProps = {
@@ -35,10 +37,11 @@ export const TokenDetailPage = ({ token }: TokenDetailPageProps) => {
   return (
     <PageContainer>
       <Header>
-        <BackLink to="/trade">/trade に戻る</BackLink>
-        <TokenLabel>
-          {queries.token ? `${queries.token}/USDT` : `${token}/USDT`}
-        </TokenLabel>
+        <Breadcrumb>
+          <BreadcrumbLink to="/trade">trade</BreadcrumbLink>
+          <BreadcrumbSeparator>&gt;</BreadcrumbSeparator>
+          <BreadcrumbText>{queries.token ?? token}</BreadcrumbText>
+        </Breadcrumb>
       </Header>
 
       <ChartGrid>
