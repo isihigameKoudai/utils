@@ -54,5 +54,8 @@
         "CHROME_REMOTE_DEBUGGING_URL": "http://localhost:9222"
       }
     }
-  }
+  },
+  "plugin": [
+    "opencode-ignore"
+  ]
 }

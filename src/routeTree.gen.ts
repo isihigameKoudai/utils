@@ -8,38 +8,38 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './../routes/__root'
-import { Route as TradeRouteImport } from './../routes/trade'
-import { Route as StableFluidsRouteImport } from './../routes/stable-fluids'
-import { Route as ShaderRouteImport } from './../routes/shader'
-import { Route as PlaygroundRouteImport } from './../routes/playground'
-import { Route as MeltTheBorderRouteImport } from './../routes/melt-the-border'
-import { Route as IndexRouteImport } from './../routes/index'
-import { Route as TradeIndexRouteImport } from './../routes/trade/index'
-import { Route as ThreeDimensionIndexRouteImport } from './../routes/three-dimension/index'
-import { Route as NoiseIndexRouteImport } from './../routes/noise/index'
-import { Route as AudioIndexRouteImport } from './../routes/audio/index'
-import { Route as AggregateBillIndexRouteImport } from './../routes/aggregate-bill/index'
-import { Route as TradeTokenRouteImport } from './../routes/trade/$token'
-import { Route as ThreeDimensionShadowsRouteImport } from './../routes/three-dimension/shadows'
-import { Route as ThreeDimensionShaderRouteImport } from './../routes/three-dimension/shader'
-import { Route as ThreeDimensionParticleRouteImport } from './../routes/three-dimension/particle'
-import { Route as SamplesSquareAparkRouteImport } from './../routes/samples/square-apark'
-import { Route as SamplesNormalCircleRouteImport } from './../routes/samples/normal-circle'
-import { Route as SamplesFollowerCircleRouteImport } from './../routes/samples/follower-circle'
-import { Route as SamplesAudioCircleRouteImport } from './../routes/samples/audio-circle'
-import { Route as Samples5starParticleRouteImport } from './../routes/samples/5star-particle'
-import { Route as NoiseFractalRouteImport } from './../routes/noise/fractal'
-import { Route as NoiseFbmRouteImport } from './../routes/noise/fbm'
-import { Route as NoiseCellularRouteImport } from './../routes/noise/cellular'
-import { Route as DetectionPoseRouteImport } from './../routes/detection/pose'
-import { Route as DetectionHandPoseRouteImport } from './../routes/detection/hand-pose'
-import { Route as DetectionFluidRouteImport } from './../routes/detection/fluid'
-import { Route as DetectionFaceLandmarkRouteImport } from './../routes/detection/face-landmark'
-import { Route as DetectionDetectorRouteImport } from './../routes/detection/detector'
-import { Route as AudioSpeechRouteImport } from './../routes/audio/speech'
-import { Route as AudioMicRouteImport } from './../routes/audio/mic'
-import { Route as AggregateBillSummaryRouteImport } from './../routes/aggregate-bill/summary'
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as TradeRouteImport } from './routes/trade'
+import { Route as StableFluidsRouteImport } from './routes/stable-fluids'
+import { Route as ShaderRouteImport } from './routes/shader'
+import { Route as PlaygroundRouteImport } from './routes/playground'
+import { Route as MeltTheBorderRouteImport } from './routes/melt-the-border'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as TradeIndexRouteImport } from './routes/trade/index'
+import { Route as ThreeDimensionIndexRouteImport } from './routes/three-dimension/index'
+import { Route as NoiseIndexRouteImport } from './routes/noise/index'
+import { Route as AudioIndexRouteImport } from './routes/audio/index'
+import { Route as AggregateBillIndexRouteImport } from './routes/aggregate-bill/index'
+import { Route as TradeTokenRouteImport } from './routes/trade/$token'
+import { Route as ThreeDimensionShadowsRouteImport } from './routes/three-dimension/shadows'
+import { Route as ThreeDimensionShaderRouteImport } from './routes/three-dimension/shader'
+import { Route as ThreeDimensionParticleRouteImport } from './routes/three-dimension/particle'
+import { Route as SamplesSquareAparkRouteImport } from './routes/samples/square-apark'
+import { Route as SamplesNormalCircleRouteImport } from './routes/samples/normal-circle'
+import { Route as SamplesFollowerCircleRouteImport } from './routes/samples/follower-circle'
+import { Route as SamplesAudioCircleRouteImport } from './routes/samples/audio-circle'
+import { Route as Samples5starParticleRouteImport } from './routes/samples/5star-particle'
+import { Route as NoiseFractalRouteImport } from './routes/noise/fractal'
+import { Route as NoiseFbmRouteImport } from './routes/noise/fbm'
+import { Route as NoiseCellularRouteImport } from './routes/noise/cellular'
+import { Route as DetectionPoseRouteImport } from './routes/detection/pose'
+import { Route as DetectionHandPoseRouteImport } from './routes/detection/hand-pose'
+import { Route as DetectionFluidRouteImport } from './routes/detection/fluid'
+import { Route as DetectionFaceLandmarkRouteImport } from './routes/detection/face-landmark'
+import { Route as DetectionDetectorRouteImport } from './routes/detection/detector'
+import { Route as AudioSpeechRouteImport } from './routes/audio/speech'
+import { Route as AudioMicRouteImport } from './routes/audio/mic'
+import { Route as AggregateBillSummaryRouteImport } from './routes/aggregate-bill/summary'
 
 const TradeRoute = TradeRouteImport.update({
   id: '/trade',
@@ -224,10 +224,10 @@ export interface FileRoutesByFullPath {
   '/three-dimension/shader': typeof ThreeDimensionShaderRoute
   '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute
   '/trade/$token': typeof TradeTokenRoute
-  '/aggregate-bill': typeof AggregateBillIndexRoute
-  '/audio': typeof AudioIndexRoute
-  '/noise': typeof NoiseIndexRoute
-  '/three-dimension': typeof ThreeDimensionIndexRoute
+  '/aggregate-bill/': typeof AggregateBillIndexRoute
+  '/audio/': typeof AudioIndexRoute
+  '/noise/': typeof NoiseIndexRoute
+  '/three-dimension/': typeof ThreeDimensionIndexRoute
   '/trade/': typeof TradeIndexRoute
 }
 export interface FileRoutesByTo {
@@ -325,10 +325,10 @@ export interface FileRouteTypes {
     | '/three-dimension/shader'
     | '/three-dimension/shadows'
     | '/trade/$token'
-    | '/aggregate-bill'
-    | '/audio'
-    | '/noise'
-    | '/three-dimension'
+    | '/aggregate-bill/'
+    | '/audio/'
+    | '/noise/'
+    | '/three-dimension/'
     | '/trade/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -483,28 +483,28 @@ declare module '@tanstack/react-router' {
     '/three-dimension/': {
       id: '/three-dimension/'
       path: '/three-dimension'
-      fullPath: '/three-dimension'
+      fullPath: '/three-dimension/'
       preLoaderRoute: typeof ThreeDimensionIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/noise/': {
       id: '/noise/'
       path: '/noise'
-      fullPath: '/noise'
+      fullPath: '/noise/'
       preLoaderRoute: typeof NoiseIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/audio/': {
       id: '/audio/'
       path: '/audio'
-      fullPath: '/audio'
+      fullPath: '/audio/'
       preLoaderRoute: typeof AudioIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/aggregate-bill/': {
       id: '/aggregate-bill/'
       path: '/aggregate-bill'
-      fullPath: '/aggregate-bill'
+      fullPath: '/aggregate-bill/'
       preLoaderRoute: typeof AggregateBillIndexRouteImport
       parentRoute: typeof rootRouteImport
     }

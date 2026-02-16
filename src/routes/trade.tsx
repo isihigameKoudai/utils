@@ -1,7 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router';
-
-import { TradePage } from '../features/Crypto/pages/Trade';
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/trade')({
-  component: TradePage,
+  component: () => <Outlet />,
 });

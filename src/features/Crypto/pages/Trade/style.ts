@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router';
+
 import { styled } from '@/utils/ui/styled';
 
 export const PageContainer = styled('div')({
@@ -82,10 +84,17 @@ export const ChartHeader = styled('div')({
   padding: '0.25rem 0.5rem 0.5rem',
 });
 
-export const SymbolLabel = styled('span')({
+export const SymbolLink = styled(Link)({
   fontSize: '0.875rem',
   fontWeight: 600,
   color: '#f0f6fc',
+  textDecoration: 'none',
+  $nest: {
+    '&:hover': {
+      color: '#58a6ff',
+      textDecoration: 'underline',
+    },
+  },
 });
 
 export const PairLabel = styled('span')({

@@ -118,8 +118,13 @@ export const routeList: IRoute[] = [
     path: '/melt-the-border',
   },
   {
-    title: 'CryptoCharts',
+    title: 'CryptoCharts（一覧）',
     path: '/trade',
+  },
+  {
+    title: 'CryptoCharts（BTC詳細）',
+    path: '/trade',
+    menuPath: '/trade',
   },
   {
     title: 'クレジットカード集計',

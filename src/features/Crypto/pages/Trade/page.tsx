@@ -16,7 +16,7 @@ import {
   PageContainer,
   PairLabel,
   RemoveButton,
-  SymbolLabel,
+  SymbolLink,
   SymbolSelect,
   TimeframeButton,
   Toolbar,
@@ -94,7 +94,7 @@ export const TradePage = () => {
             <ChartCell key={symbol}>
               <ChartHeader>
                 <div>
-                  <SymbolLabel>{symbol}</SymbolLabel>
+                  <SymbolLink to={`/trade/${symbol}`}>{symbol}</SymbolLink>
                   <PairLabel>/USDT</PairLabel>
                 </div>
                 <RemoveButton
