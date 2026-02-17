@@ -13,18 +13,18 @@ CQRSは「Command Query Responsibility Segregation」の略で、データの読
 
 ### Core Principles
 
-1. **Command**: Store actionsが担当（状態を変更する操作。stateに直結するデータ取得・ロジックも含む）
+1. **Command**: Store actionsが担当（状態を変更する操作。stateに直結するデータ取得・ロジックも含む。ただしtry/catchは書かない）
 2. **Query**: Store queriesが担当（状態を読み取る操作、純粋関数）
 3. **Domain Model**: `createModelFactory`で作成するイミュータブルなモデル
-4. **Store**: Zustandベースの`i-state`パターン（actionsがCommand層。自storeのstateに直結するfetchやロジックはactionsに書いても良い）
-5. **Service**: 複数storeの横断的オーケストレーションのみ
+4. **Store**: Zustandベースの`i-state`パターン（actionsがCommand層。自storeのstateに直結するfetchやロジックはactionsに書いても良い。ただしtry/catchは書かない）
+5. **Service**: エラーハンドリング（try/catch + loading/error管理）＋ 複数store横断のorchestration ＋ DI
 
 ### Key Design Decisions
 
 - **classを使わない**: `createModelFactory`でイミュータブルなモデルを生成
 - **commandsディレクトリなし**: Store actionsがCommand層の役割を担う
-- **actionsにstateに直結するロジックを含める**: データ取得（API呼び出し）、loading/error管理など、自storeのstateに直結する処理はactionsに書く
-- **servicesディレクトリ**: 複数store操作のオーケストレーション、外部API統合、DI
+- **actionsにstateに直結するロジックを含める**: データ取得（API呼び出し）、フィルタ・マッピングなど、自storeのstateに直結する処理はactionsに書く。ただし**actionsにtry/catchは書かない**。エラーハンドリング（try/catch + loading/error管理）はservice層で行う
+- **servicesディレクトリ**: エラーハンドリング（try/catch + loading/error管理）＋ 複数store操作のオーケストレーション ＋ 外部API統合 ＋ DI
 
 ## Directory Structure
 
@@ -47,12 +47,13 @@ src/features/<FeatureName>/
 │       └── actions.ts           # Action definitions (Commands)
 ├── services/                    # Orchestration & DI
 │   ├── index.ts                 # Service re-export
-│   ├── types.ts                 # API interface types (for DI)
-│   └── <entity>Service.ts       # Service implementation
+│   └── <entity>/                # Entity別ディレクトリ
+│       ├── index.ts             # Service implementation
+│       └── types.ts             # API interface types (for DI)
 ├── api/                         # External API integration
 │   ├── index.ts
 │   ├── types.ts
-│   └── <entity>Api.ts
+│   └── <entity>.ts
 ├── components/                  # Feature-specific components
 │   ├── <ComponentName>/
 │   │   ├── index.tsx
@@ -337,14 +338,14 @@ export const queries = {
 
 #### Step 4: Actions (Commands)
 
-> **actionsにstateに直結するロジックを含める**: データ取得（API呼び出し）、loading/error管理、フィルタ・マッピングなど、自storeのstateに直結する処理はactionsに書く。asyncも可。
+> **stateに直結するロジックはactionsに書く**: データ取得（API呼び出し）、フィルタ・マッピングなど、自storeのstateに直結する処理はactionsに書く。asyncも可。ただし**actionsにtry/catchは書かない**。エラーハンドリング（try/catch + loading/error管理）はservice層で行う。
 
 ```typescript
 // stores/todo/actions.ts
 import type { ActionsProps } from '@/utils/i-state';
 
 import type { TodoParams } from '../../models/todo';
-import type { TodoApi } from '../../services/types';
+import type { TodoApi } from '../../services/todo/types';
 
 import type { TodoState } from './type';
 import type { queries } from './queries';
@@ -491,21 +492,21 @@ export { TodoStore, type TodoState } from './todo';
 
 複数のstore actions呼び出し、API統合、依存性注入を担当するService層。
 
-> **IMPORTANT**: 単一storeのfetch/CRUD/loading/error管理はactionsに書く。
+> **IMPORTANT**: actionsにtry/catchは書かない。エラーハンドリング（try/catch + loading/error管理）はservice層で行う。
 
 #### When to Use Service
 
-| ケース                            | 置き場所    |
-| --------------------------------- | ----------- |
-| 自storeのstateにfetch→反映        | **actions** |
-| 自storeのloading/error管理        | **actions** |
-| 自storeのCRUD操作                 | **actions** |
-| 上記以外の操作           | **service** |
+| ケース                         | 置き場所    |
+| ------------------------------ | ----------- |
+| 自storeのstateにfetch→反映     | **actions** |
+| 自storeのCRUD操作              | **actions** |
+| loading/error管理（try/catch） | **service** |
+| 上記以外の操作                 | **service** |
 
 #### Example: 複数Store横断のService
 
 ```typescript
-// services/types.ts
+// services/todo/types.ts
 import type { TodoParams } from '../models/todo';
 
 /** @description API interface for dependency injection */
@@ -543,7 +544,7 @@ export type TodoServiceDeps = {
 #### Step 2: Service Implementation
 
 ```typescript
-// services/todoService.ts
+// services/todo/index.ts
 import type { TodoServiceDeps } from './types';
 
 /**
@@ -669,9 +670,9 @@ export const createTodoService = (deps: TodoServiceDeps) => {
 ### 4. API Integration
 
 ```typescript
-// api/todoApi.ts
+// api/todo.ts
 import type { TodoParams } from '../models/todo';
-import type { TodoApi } from '../services/types';
+import type { TodoApi } from '../services/todo/types';
 
 const API_BASE = '/api/todos';
 
@@ -734,7 +735,7 @@ Feature固有のカスタムフック。ServiceとStoreを組み合わせて使�
 import { useCallback, useMemo } from 'react';
 
 import { TodoStore } from '../stores/todo';
-import { todoApi } from '../api/todoApi';
+import { todoApi } from '../api/todo';
 
 /**
  * @description Todo Feature Hook
@@ -942,14 +943,14 @@ export { TodoListPage } from './page';
 
 ## Layer Responsibilities
 
-| Layer     | Responsibility                                                                     | Dependencies       |
-| --------- | ---------------------------------------------------------------------------------- | ------------------ |
-| Model     | ドメインロジック、バリデーション、computed props                                   | Zod, utils         |
-| Store     | 状態管理、Commands(actions)、Queries。stateに直結するfetch/ロジックもactionsに含んで良い | Model (types only) |
-| Service   | API統合、複数action orchestration、DI      | Store              |
-| API       | HTTP通信、外部サービス連携                                                         | なし               |
-| Hook      | React integration、Store利用（値・コールバックのみ、副作用なし）                   | Store, (Service)   |
-| Component | UI表示、ユーザーインタラクション、副作用（useEffect等）                            | Hook               |
+| Layer     | Responsibility                                                                                                  | Dependencies       |
+| --------- | --------------------------------------------------------------------------------------------------------------- | ------------------ |
+| Model     | ドメインロジック、バリデーション、computed props                                                                | Zod, utils         |
+| Store     | 状態管理、Commands(actions)、Queries。stateに直結するfetch/ロジックもactionsに含んで良い（try/catchは書かない） | Model (types only) |
+| Service   | エラーハンドリング（try/catch + loading/error管理）、API統合、複数action orchestration、DI                      | Store              |
+| API       | HTTP通信、外部サービス連携                                                                                      | なし               |
+| Hook      | React integration、Store利用（値・コールバックのみ、副作用なし）                                                | Store, (Service)   |
+| Component | UI表示、ユーザーインタラクション、副作用（useEffect等）                                                         | Hook               |
 
 ## Best Practices
 
@@ -965,15 +966,16 @@ export { TodoListPage } from './page';
 1. **Store Raw Data**: stateにはParams（生データ）を保存
 2. **Query → Model**: QueriesでDomain Modelに変換して返す
 3. **Actions = Commands**: 状態変更は全てactionsで行う
-4. **stateに直結するロジックはactionsに書く**: データ取得（API呼び出し）、loading/error管理、フィルタ・マッピングなど、自storeのstateに直結する処理はactionsに含めて良い。asyncも可
-5. **JSDoc @command**: action にCommandとしての役割を明示
+4. **stateに直結するロジックはactionsに書く**: データ取得（API呼び出し）、フィルタ・マッピングなど、自storeのstateに直結する処理はactionsに含めて良い。asyncも可
+5. **actionsにtry/catchは書かない**: エラーハンドリング（try/catch + loading/error管理）はservice層で行う
+6. **JSDoc @command**: action にCommandとしての役割を明示
 
 ### Service Guidelines
 
-1. **Orchestration**: 複数のstore actionを組み合わせる
-2. **API Integration**: 外部API呼び出しはServiceで行う
-3. **DI via Factory**: `createXxxService(deps)`パターンでDI
-4. **Error Handling**: try/catchでエラーをstoreに反映
+1. **Error Handling**: try/catch + loading/error管理はServiceが担当。actionsにはtry/catchを書かず、service層でエラーを捕捉してstoreに反映
+2. **Orchestration**: 複数のstore actionを組み合わせる
+3. **API Integration**: 外部API呼び出しはServiceで行う
+4. **DI via Factory**: `createXxxService(deps)`パターンでDI
 
 ## Testing Strategy
 
@@ -1056,10 +1058,10 @@ describe('Todo Model', () => {
 ### Service Tests (with Mock DI)
 
 ```typescript
-// services/todoService.test.ts
+// services/todo/index.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { createTodoService } from './todoService';
+import { createTodoService } from '.';
 import type { TodoApi, TodoActions } from './types';
 
 describe('TodoService', () => {
@@ -1126,17 +1128,19 @@ describe('TodoService', () => {
 1. **classを使用する**: createModelFactoryを使う
 2. **commandsディレクトリ**: Store actionsがその役割
 3. **単一storeのfetch/CRUDをServiceに書く**: stateに直結する操作はactionsに書く
-4. **Mutableな状態**: createModelFactoryは自動でfreeze
-5. **型の緩和**: `as any`や`@ts-ignore`を使用しない
-6. **Hooksに副作用を含める**: `useEffect`等の副作用はコンポーネント側（page.tsx）で扱う
+4. **actionsにtry/catchを書く**: エラーハンドリング（try/catch + loading/error管理）はservice層で行う
+5. **Mutableな状態**: createModelFactoryは自動でfreeze
+6. **型の緩和**: `as any`や`@ts-ignore`を使用しない
+7. **Hooksに副作用を含める**: `useEffect`等の副作用はコンポーネント側（page.tsx）で扱う
 
 ### DO
 
 1. **Zod Schema First**: バリデーションを最初に定義
 2. **Store = Raw Data**: stateにはParams型を保存
-3. **stateに直結するロジックはactionsに**: fetch、loading/error管理、CRUD等はactionsに書く
-4. **Service for 複数Store横断のみ**: 複数storeを跨ぐorchestrationのみServiceで
-5. **Immutable Updates**: withXxxメソッドで新しいParamsを返す
+3. **stateに直結するロジックはactionsに**: fetch、CRUD等はactionsに書く（try/catchは書かない）
+4. **エラーハンドリングはservice層で**: try/catch + loading/error管理はServiceが担当
+5. **Service for 複数Store横断のみ**: 複数storeを跨ぐorchestrationのみServiceで
+6. **Immutable Updates**: withXxxメソッドで新しいParamsを返す
 
 ## Related Skills
 

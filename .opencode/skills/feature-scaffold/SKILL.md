@@ -357,7 +357,7 @@ export type { {Entity}State } from './type';
 ### Service Types Template
 
 ```typescript
-// services/types.ts
+// services/{entity}/types.ts
 import type { {Entity}Params } from '../models/{entity}';
 import type { {Entity}Store } from '../stores/{entity}';
 
@@ -384,7 +384,7 @@ export type {Entity}Actions = ReturnType<typeof {Entity}Store.useStore>['actions
 > **Service層の責務**: エラーハンドリング（try/catch + loading/error管理）＋ 複数store横断のorchestration ＋ DI を担当。actionsにはtry/catchを書かず、service層でエラーを捕捉してstoreに反映する。
 
 ```typescript
-// services/{entity}Service.ts
+// services/{entity}/index.ts
 import { create{Entity}Params, type {Entity}Params } from '../models/{entity}';
 import type { {Entity}Api, {Entity}Actions } from './types';
 
@@ -659,7 +659,7 @@ export { {FeatureName}Page } from './page';
 ### API Template
 
 ```typescript
-// api/{entity}Api.ts
+// api/{entity}.ts
 import type { {Entity}Params } from '../models/{entity}';
 import type { {Entity}Api } from '../services/types';
 
@@ -743,14 +743,14 @@ export const {Entity}Store = defineStore({
 export type { {Entity}State } from './type';
 
 // services/index.ts
-export { create{Entity}Service } from './{entity}Service';
+export { create{Entity}Service } from './{entity}';
 export type * from './types';
 
 // hooks/index.ts
 export { use{FeatureName} } from './use{FeatureName}';
 
 // api/index.ts
-export { {entity}Api } from './{entity}Api';
+export { {entity}Api } from './{entity}';
 
 // components/index.ts
 // Export components as they are created
