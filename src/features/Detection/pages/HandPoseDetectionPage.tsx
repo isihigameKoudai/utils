@@ -10,7 +10,14 @@ const HandPoseDetectionPage = () => {
   const [hands, setHands] = useState<Hand[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
-  const [detector] = useState<HandPoseDetection>(() => new HandPoseDetection());
+  const [detector] = useState<HandPoseDetection>(
+    () =>
+      new HandPoseDetection({
+        navigator: window.navigator,
+        document,
+        window,
+      }),
+  );
 
   useEffect(() => {
     (async () => {

@@ -10,7 +10,11 @@ const PoseDetectionPage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [detector] = useState<PoseDetection>(
-    () => new PoseDetection('BlazePose'),
+    () =>
+      new PoseDetection(
+        { navigator: window.navigator, document, window },
+        'BlazePose',
+      ),
   );
 
   useEffect(() => {

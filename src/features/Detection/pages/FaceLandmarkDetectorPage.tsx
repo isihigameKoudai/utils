@@ -6,7 +6,13 @@ import FaceMesh, { type Face } from '../components/FaceMesh';
 
 export default function FaceLandmarkDetectorPage() {
   const [isShow, setIsShow] = useState<boolean>(true);
-  const detectorRef = useRef(new FaceLandmarkDetection());
+  const detectorRef = useRef(
+    new FaceLandmarkDetection({
+      navigator: window.navigator,
+      document,
+      window,
+    }),
+  );
   const $video = useRef<HTMLVideoElement>(null!);
   const [faces, setFaces] = useState<Face[]>([]);
 

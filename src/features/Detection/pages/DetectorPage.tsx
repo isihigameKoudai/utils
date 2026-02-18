@@ -5,7 +5,13 @@ import { VisualDetection, type DetectedObject } from '@/utils/tensorflow';
 import VisualDetectionView from '../components/VisualDetectionView';
 
 export default function DetectorPage() {
-  const detectorRef = useRef(new VisualDetection());
+  const detectorRef = useRef(
+    new VisualDetection({
+      navigator: window.navigator,
+      document,
+      window,
+    }),
+  );
   const $videoContainer = useRef<HTMLDivElement>(null);
   const [objects, setObjects] = useState<DetectedObject[]>([]);
   const [isShow, setIsShow] = useState<boolean>(false);
