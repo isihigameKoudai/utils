@@ -8,15 +8,19 @@ import type { TokenDetailServiceDeps } from './types';
 
 const createLoadingState = (value: boolean): TokenDetailLoadingState => {
   return MULTI_TIMEFRAMES.reduce<TokenDetailLoadingState>((acc, timeframe) => {
-    acc[timeframe] = value;
-    return acc;
+    return {
+      ...acc,
+      [timeframe]: value,
+    };
   }, {});
 };
 
 const createFallbackErrors = (message: string): TokenDetailErrorState => {
   return MULTI_TIMEFRAMES.reduce<TokenDetailErrorState>((acc, timeframe) => {
-    acc[timeframe] = message;
-    return acc;
+    return {
+      ...acc,
+      [timeframe]: message,
+    };
   }, {});
 };
 
