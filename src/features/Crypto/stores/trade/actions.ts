@@ -2,8 +2,8 @@ import type { CandlestickData, UTCTimestamp } from 'lightweight-charts';
 
 import type { ActionsProps } from '@/utils/i-state';
 
+import { fetchTradeDataList } from '../../api/crypto';
 import type { MultiTimeframe, Symbol } from '../../constants';
-import { fetchTradeDataList } from '../../shared/CryptoChart/api/crypto';
 import type { Trade } from '../../shared/CryptoChart/model/CandleStick';
 
 import { queries, toChartDataKey } from './queries';

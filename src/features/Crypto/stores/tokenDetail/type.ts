@@ -1,10 +1,7 @@
-import type { CandlestickData, UTCTimestamp } from 'lightweight-charts';
-
 import type { MultiTimeframe, Symbol } from '../../constants';
+import type { Trade } from '../../shared/CryptoChart/model/CandleStick';
 
-export type TokenDetailChartData = Partial<
-  Record<MultiTimeframe, CandlestickData<UTCTimestamp>[]>
->;
+export type TokenDetailChartData = Partial<Record<MultiTimeframe, Trade[]>>;
 
 export type TokenDetailLoadingState = Partial<Record<MultiTimeframe, boolean>>;
 

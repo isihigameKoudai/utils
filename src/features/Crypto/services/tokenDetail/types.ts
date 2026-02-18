@@ -1,11 +1,10 @@
-import type { CandlestickData, UTCTimestamp } from 'lightweight-charts';
-
-import type { MultiTimeframe, Symbol } from '../constants';
-import type { TokenDetailStore } from '../stores/tokenDetail';
+import type { MultiTimeframe, Symbol } from '../../constants';
+import type { Trade } from '../../shared/CryptoChart/model/CandleStick';
+import type { TokenDetailStore } from '../../stores/tokenDetail';
 
 export type TokenDetailApiResult = {
   timeframe: MultiTimeframe;
-  data: CandlestickData<UTCTimestamp>[];
+  data: Trade[];
 };
 
 export type TokenDetailApi = {

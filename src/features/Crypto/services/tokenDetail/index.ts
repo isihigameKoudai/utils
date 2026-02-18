@@ -1,13 +1,8 @@
-import {
-  MULTI_TIMEFRAMES,
-  type MultiTimeframe,
-  type Symbol,
-} from '../constants';
+import { MULTI_TIMEFRAMES, type Symbol } from '../../constants';
 import type {
-  TokenDetailChartData,
   TokenDetailErrorState,
   TokenDetailLoadingState,
-} from '../stores/tokenDetail';
+} from '../../stores/tokenDetail';
 
 import type { TokenDetailServiceDeps } from './types';
 
@@ -30,37 +25,15 @@ export const createTokenDetailService = ({
   actions,
 }: TokenDetailServiceDeps) => {
   return {
+    /**
+     * @description 全タイムフレームのデータを取得（try/catch + loading/error管理）
+     */
     async fetchAllTimeframes(token: Symbol): Promise<void> {
       actions.setLoading(createLoadingState(true));
       actions.setErrors({});
 
       try {
-        const settled = await Promise.allSettled(
-          api.fetchAllTimeframes(token, MULTI_TIMEFRAMES),
-        );
-
-        const nextChartData: TokenDetailChartData = {};
-        const nextErrors: TokenDetailErrorState = {};
-        const nextLoading: TokenDetailLoadingState = {};
-
-        settled.forEach((result, index) => {
-          const timeframe: MultiTimeframe = MULTI_TIMEFRAMES[index];
-          nextLoading[timeframe] = false;
-
-          if (result.status === 'fulfilled') {
-            nextChartData[timeframe] = result.value.data;
-            return;
-          }
-
-          nextErrors[timeframe] =
-            result.reason instanceof Error
-              ? result.reason.message
-              : 'データ取得に失敗しました';
-        });
-
-        actions.setChartData(nextChartData);
-        actions.setErrors(nextErrors);
-        actions.setLoading(nextLoading);
+        await actions.fetchAllTimeframes(api, token);
       } catch (error) {
         const message =
           error instanceof Error ? error.message : 'データ取得に失敗しました';
