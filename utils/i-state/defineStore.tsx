@@ -1,6 +1,7 @@
 /**
  * npm i zustand
  */
+import { useMemo } from 'react';
 import { create } from 'zustand';
 
 import { fromEntries } from '@/utils/object';
@@ -97,32 +98,34 @@ export const defineStore = <
     },
   }));
 
-  // ストアを使用するためのフック（型情報を保持）
-  const useStore = () => {
-    const { state, dispatch } = store();
-
-    const queries = fromEntries<Queries<Q>>(
+  const computeQueries = (state: S): Queries<Q> =>
+    fromEntries<Queries<Q>>(
       Object.entries(queryFns).map(([key, fn]) => [
         key as keyof Q,
         fn(state),
       ]) as [keyof Q, Queries<Q>[keyof Q]][],
     );
 
-    const actions = fromEntries<Actions<S, Q, A>>(
-      Object.entries(actionFns).map(([key, fn]) => [
-        key as keyof A,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ((...args: any[]) =>
-          fn(
-            {
-              state,
-              queries,
-              dispatch,
-            },
-            ...args,
-          )) as Actions<S, Q, A>[keyof A],
-      ]),
-    );
+  // 参照安定化: 呼び出し時に getState() で最新値を取得
+  const stableActions = fromEntries<Actions<S, Q, A>>(
+    Object.entries(actionFns).map(([key, fn]) => [
+      key as keyof A,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ((...args: any[]) => {
+        const { state, dispatch } = store.getState();
+        const queries = computeQueries(state);
+        return fn({ state, queries, dispatch }, ...args);
+      }) as Actions<S, Q, A>[keyof A],
+    ]),
+  );
+
+  // ストアを使用するためのフック（型情報を保持）
+  const useStore = () => {
+    const { state } = store();
+
+    const queries = useMemo(() => computeQueries(state), [state]);
+
+    const actions = useMemo(() => stableActions, []);
 
     return {
       state,

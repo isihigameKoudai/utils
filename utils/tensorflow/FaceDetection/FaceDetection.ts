@@ -13,6 +13,12 @@ import type { ElOption } from '../type';
 
 import type { RenderCallBack } from './type';
 
+interface Params {
+  navigator: Navigator;
+  document: Document;
+  window: Window & typeof globalThis;
+}
+
 export class FaceDetection extends Video {
   _model: faceDetection.SupportedModels;
 
@@ -22,8 +28,13 @@ export class FaceDetection extends Video {
 
   _requestAnimationFrameId: number;
 
-  constructor() {
-    super();
+  private document: Document;
+  private window: Window & typeof globalThis;
+
+  constructor(params: Params) {
+    super(params);
+    this.document = params.document;
+    this.window = params.window;
     this._model = faceDetection.SupportedModels.MediaPipeFaceDetector;
     this._detector = null;
     this._detectedRawFaces = [];
@@ -94,7 +105,7 @@ export class FaceDetection extends Video {
       y: height / INITIAL_VIDEO_EL_HEIGHT,
     });
 
-    const videoEl = $video || document.createElement('video');
+    const videoEl = $video || this.document.createElement('video');
     videoEl.muted = true;
     videoEl.autoplay = true;
     videoEl.width = width;
@@ -127,14 +138,14 @@ export class FaceDetection extends Video {
 
     renderCallBack?.(this.detectedFaces);
 
-    this._requestAnimationFrameId = window.requestAnimationFrame(
+    this._requestAnimationFrameId = this.window.requestAnimationFrame(
       this.start.bind(this, renderCallBack),
     );
   }
 
   stop() {
     this.stopVideo();
-    window.cancelAnimationFrame(this._requestAnimationFrameId);
+    this.window.cancelAnimationFrame(this._requestAnimationFrameId);
     this._detectedRawFaces = [];
     this._requestAnimationFrameId = 0;
     this._detector = null;

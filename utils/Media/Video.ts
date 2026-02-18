@@ -1,13 +1,18 @@
 import { Media } from './Media';
 
 const INITIAL_MAGNIFICATION = { x: 1, y: 1 };
+
+interface Params {
+  navigator: Navigator;
+}
+
 export class Video extends Media {
   _$video: HTMLVideoElement | null;
 
   _magnification: { x: number; y: number };
 
-  constructor() {
-    super();
+  constructor(params: Params) {
+    super(params);
     this._magnification = INITIAL_MAGNIFICATION;
     this._$video = null;
   }

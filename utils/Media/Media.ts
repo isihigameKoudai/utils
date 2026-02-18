@@ -1,8 +1,15 @@
+interface Params {
+  navigator: Navigator;
+}
+
 export class Media {
   private _stream: MediaStream | null;
 
-  constructor() {
+  private navigator: Navigator;
+
+  constructor(params: Params) {
     this._stream = null;
+    this.navigator = params.navigator;
   }
 
   get stream() {
@@ -16,7 +23,8 @@ export class Media {
    */
   async getUserMedia(constraints: MediaStreamConstraints) {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      const stream =
+        await this.navigator.mediaDevices.getUserMedia(constraints);
       this._stream = stream;
       return stream;
     } catch (error) {

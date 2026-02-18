@@ -38,15 +38,15 @@ describe('FaceDetection', () => {
   let detector: FaceDetection;
 
   beforeEach(() => {
-    vi.stubGlobal('navigator', navigatorMock);
-    vi.stubGlobal('document', documentMock);
-    vi.stubGlobal('window', windowMock);
-    detector = new FaceDetection();
+    detector = new FaceDetection({
+      navigator: navigatorMock,
+      document: documentMock,
+      window: windowMock,
+    });
   });
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.unstubAllGlobals();
   });
 
   describe('constructor', () => {
@@ -77,18 +77,18 @@ describe('FaceDetection', () => {
 
   describe('load', () => {
     it('should load video element and model', async () => {
-      const mockVideo = document.createElement('video');
+      const mockVideo = documentMock.createElement('video');
       await detector.load({ $video: mockVideo });
 
       expect(detector.detector).not.toBeNull();
       expect(detector.$video).toBe(mockVideo);
-      expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalled();
+      expect(navigatorMock.mediaDevices.getUserMedia).toHaveBeenCalled();
     });
   });
 
   describe('start', () => {
     it('should start face detection and call renderCallback', async () => {
-      const mockVideo = document.createElement('video');
+      const mockVideo = documentMock.createElement('video');
       const renderCallback = vi.fn();
 
       await detector.load({ $video: mockVideo });
@@ -96,7 +96,7 @@ describe('FaceDetection', () => {
 
       expect(detector.detectedRawFaces).toHaveLength(1);
       expect(renderCallback).toHaveBeenCalled();
-      expect(window.requestAnimationFrame).toHaveBeenCalled();
+      expect(windowMock.requestAnimationFrame).toHaveBeenCalled();
     });
 
     it('should not start if detector is not loaded', async () => {
@@ -112,7 +112,7 @@ describe('FaceDetection', () => {
 
   describe('stop', () => {
     it('should stop detection and clean up resources', async () => {
-      const mockVideo = document.createElement('video');
+      const mockVideo = documentMock.createElement('video');
       await detector.load({ $video: mockVideo });
       await detector.start();
 
@@ -121,13 +121,13 @@ describe('FaceDetection', () => {
       expect(detector.detector).toBeNull();
       expect(detector.detectedRawFaces).toHaveLength(0);
       expect(detector.requestAnimationFrameId).toBe(0);
-      expect(window.cancelAnimationFrame).toHaveBeenCalled();
+      expect(windowMock.cancelAnimationFrame).toHaveBeenCalled();
     });
   });
 
   describe('detectedFaces', () => {
     it('should return transformed face detection results', async () => {
-      const mockVideo = document.createElement('video');
+      const mockVideo = documentMock.createElement('video');
       await detector.load({ $video: mockVideo });
       await detector.start();
 

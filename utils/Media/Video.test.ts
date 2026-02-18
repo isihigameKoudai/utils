@@ -1,12 +1,14 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
 
+import { navigatorMock } from '../__test__/mocks/global';
+
 import { Video } from './Video';
 
 describe('Video', () => {
   let video: Video;
 
   beforeEach(() => {
-    video = new Video();
+    video = new Video({ navigator: navigatorMock });
   });
 
   test('初期化時にmagnificationが{x: 1, y: 1}であること', () => {

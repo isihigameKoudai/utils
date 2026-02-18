@@ -9,16 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './../routes/__root'
+import { Route as TradeRouteImport } from './../routes/trade'
 import { Route as StableFluidsRouteImport } from './../routes/stable-fluids'
 import { Route as ShaderRouteImport } from './../routes/shader'
 import { Route as PlaygroundRouteImport } from './../routes/playground'
 import { Route as MeltTheBorderRouteImport } from './../routes/melt-the-border'
 import { Route as IndexRouteImport } from './../routes/index'
+import { Route as TradeIndexRouteImport } from './../routes/trade/index'
 import { Route as ThreeDimensionIndexRouteImport } from './../routes/three-dimension/index'
 import { Route as NoiseIndexRouteImport } from './../routes/noise/index'
-import { Route as CryptoChartsIndexRouteImport } from './../routes/crypto-charts/index'
 import { Route as AudioIndexRouteImport } from './../routes/audio/index'
 import { Route as AggregateBillIndexRouteImport } from './../routes/aggregate-bill/index'
+import { Route as TradeTokenRouteImport } from './../routes/trade/$token'
 import { Route as ThreeDimensionShadowsRouteImport } from './../routes/three-dimension/shadows'
 import { Route as ThreeDimensionShaderRouteImport } from './../routes/three-dimension/shader'
 import { Route as ThreeDimensionParticleRouteImport } from './../routes/three-dimension/particle'
@@ -38,8 +40,12 @@ import { Route as DetectionDetectorRouteImport } from './../routes/detection/det
 import { Route as AudioSpeechRouteImport } from './../routes/audio/speech'
 import { Route as AudioMicRouteImport } from './../routes/audio/mic'
 import { Route as AggregateBillSummaryRouteImport } from './../routes/aggregate-bill/summary'
-import { Route as CryptoChartsMultiTokenRouteImport } from './../routes/crypto-charts/multi/$token'
 
+const TradeRoute = TradeRouteImport.update({
+  id: '/trade',
+  path: '/trade',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StableFluidsRoute = StableFluidsRouteImport.update({
   id: '/stable-fluids',
   path: '/stable-fluids',
@@ -65,6 +71,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TradeIndexRoute = TradeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TradeRoute,
+} as any)
 const ThreeDimensionIndexRoute = ThreeDimensionIndexRouteImport.update({
   id: '/three-dimension/',
   path: '/three-dimension/',
@@ -73,11 +84,6 @@ const ThreeDimensionIndexRoute = ThreeDimensionIndexRouteImport.update({
 const NoiseIndexRoute = NoiseIndexRouteImport.update({
   id: '/noise/',
   path: '/noise/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CryptoChartsIndexRoute = CryptoChartsIndexRouteImport.update({
-  id: '/crypto-charts/',
-  path: '/crypto-charts/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AudioIndexRoute = AudioIndexRouteImport.update({
@@ -89,6 +95,11 @@ const AggregateBillIndexRoute = AggregateBillIndexRouteImport.update({
   id: '/aggregate-bill/',
   path: '/aggregate-bill/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const TradeTokenRoute = TradeTokenRouteImport.update({
+  id: '/$token',
+  path: '/$token',
+  getParentRoute: () => TradeRoute,
 } as any)
 const ThreeDimensionShadowsRoute = ThreeDimensionShadowsRouteImport.update({
   id: '/three-dimension/shadows',
@@ -185,11 +196,6 @@ const AggregateBillSummaryRoute = AggregateBillSummaryRouteImport.update({
   path: '/aggregate-bill/summary',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CryptoChartsMultiTokenRoute = CryptoChartsMultiTokenRouteImport.update({
-  id: '/crypto-charts/multi/$token',
-  path: '/crypto-charts/multi/$token',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -197,6 +203,7 @@ export interface FileRoutesByFullPath {
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
   '/stable-fluids': typeof StableFluidsRoute
+  '/trade': typeof TradeRouteWithChildren
   '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
@@ -216,12 +223,12 @@ export interface FileRoutesByFullPath {
   '/three-dimension/particle': typeof ThreeDimensionParticleRoute
   '/three-dimension/shader': typeof ThreeDimensionShaderRoute
   '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute
+  '/trade/$token': typeof TradeTokenRoute
   '/aggregate-bill': typeof AggregateBillIndexRoute
   '/audio': typeof AudioIndexRoute
-  '/crypto-charts': typeof CryptoChartsIndexRoute
   '/noise': typeof NoiseIndexRoute
   '/three-dimension': typeof ThreeDimensionIndexRoute
-  '/crypto-charts/multi/$token': typeof CryptoChartsMultiTokenRoute
+  '/trade/': typeof TradeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -248,12 +255,12 @@ export interface FileRoutesByTo {
   '/three-dimension/particle': typeof ThreeDimensionParticleRoute
   '/three-dimension/shader': typeof ThreeDimensionShaderRoute
   '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute
+  '/trade/$token': typeof TradeTokenRoute
   '/aggregate-bill': typeof AggregateBillIndexRoute
   '/audio': typeof AudioIndexRoute
-  '/crypto-charts': typeof CryptoChartsIndexRoute
   '/noise': typeof NoiseIndexRoute
   '/three-dimension': typeof ThreeDimensionIndexRoute
-  '/crypto-charts/multi/$token': typeof CryptoChartsMultiTokenRoute
+  '/trade': typeof TradeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -262,6 +269,7 @@ export interface FileRoutesById {
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
   '/stable-fluids': typeof StableFluidsRoute
+  '/trade': typeof TradeRouteWithChildren
   '/aggregate-bill/summary': typeof AggregateBillSummaryRoute
   '/audio/mic': typeof AudioMicRoute
   '/audio/speech': typeof AudioSpeechRoute
@@ -281,12 +289,12 @@ export interface FileRoutesById {
   '/three-dimension/particle': typeof ThreeDimensionParticleRoute
   '/three-dimension/shader': typeof ThreeDimensionShaderRoute
   '/three-dimension/shadows': typeof ThreeDimensionShadowsRoute
+  '/trade/$token': typeof TradeTokenRoute
   '/aggregate-bill/': typeof AggregateBillIndexRoute
   '/audio/': typeof AudioIndexRoute
-  '/crypto-charts/': typeof CryptoChartsIndexRoute
   '/noise/': typeof NoiseIndexRoute
   '/three-dimension/': typeof ThreeDimensionIndexRoute
-  '/crypto-charts/multi/$token': typeof CryptoChartsMultiTokenRoute
+  '/trade/': typeof TradeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -296,6 +304,7 @@ export interface FileRouteTypes {
     | '/playground'
     | '/shader'
     | '/stable-fluids'
+    | '/trade'
     | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
@@ -315,12 +324,12 @@ export interface FileRouteTypes {
     | '/three-dimension/particle'
     | '/three-dimension/shader'
     | '/three-dimension/shadows'
+    | '/trade/$token'
     | '/aggregate-bill'
     | '/audio'
-    | '/crypto-charts'
     | '/noise'
     | '/three-dimension'
-    | '/crypto-charts/multi/$token'
+    | '/trade/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -347,12 +356,12 @@ export interface FileRouteTypes {
     | '/three-dimension/particle'
     | '/three-dimension/shader'
     | '/three-dimension/shadows'
+    | '/trade/$token'
     | '/aggregate-bill'
     | '/audio'
-    | '/crypto-charts'
     | '/noise'
     | '/three-dimension'
-    | '/crypto-charts/multi/$token'
+    | '/trade'
   id:
     | '__root__'
     | '/'
@@ -360,6 +369,7 @@ export interface FileRouteTypes {
     | '/playground'
     | '/shader'
     | '/stable-fluids'
+    | '/trade'
     | '/aggregate-bill/summary'
     | '/audio/mic'
     | '/audio/speech'
@@ -379,12 +389,12 @@ export interface FileRouteTypes {
     | '/three-dimension/particle'
     | '/three-dimension/shader'
     | '/three-dimension/shadows'
+    | '/trade/$token'
     | '/aggregate-bill/'
     | '/audio/'
-    | '/crypto-charts/'
     | '/noise/'
     | '/three-dimension/'
-    | '/crypto-charts/multi/$token'
+    | '/trade/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -393,6 +403,7 @@ export interface RootRouteChildren {
   PlaygroundRoute: typeof PlaygroundRoute
   ShaderRoute: typeof ShaderRoute
   StableFluidsRoute: typeof StableFluidsRoute
+  TradeRoute: typeof TradeRouteWithChildren
   AggregateBillSummaryRoute: typeof AggregateBillSummaryRoute
   AudioMicRoute: typeof AudioMicRoute
   AudioSpeechRoute: typeof AudioSpeechRoute
@@ -414,14 +425,19 @@ export interface RootRouteChildren {
   ThreeDimensionShadowsRoute: typeof ThreeDimensionShadowsRoute
   AggregateBillIndexRoute: typeof AggregateBillIndexRoute
   AudioIndexRoute: typeof AudioIndexRoute
-  CryptoChartsIndexRoute: typeof CryptoChartsIndexRoute
   NoiseIndexRoute: typeof NoiseIndexRoute
   ThreeDimensionIndexRoute: typeof ThreeDimensionIndexRoute
-  CryptoChartsMultiTokenRoute: typeof CryptoChartsMultiTokenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/trade': {
+      id: '/trade'
+      path: '/trade'
+      fullPath: '/trade'
+      preLoaderRoute: typeof TradeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/stable-fluids': {
       id: '/stable-fluids'
       path: '/stable-fluids'
@@ -457,6 +473,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/trade/': {
+      id: '/trade/'
+      path: '/'
+      fullPath: '/trade/'
+      preLoaderRoute: typeof TradeIndexRouteImport
+      parentRoute: typeof TradeRoute
+    }
     '/three-dimension/': {
       id: '/three-dimension/'
       path: '/three-dimension'
@@ -469,13 +492,6 @@ declare module '@tanstack/react-router' {
       path: '/noise'
       fullPath: '/noise'
       preLoaderRoute: typeof NoiseIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/crypto-charts/': {
-      id: '/crypto-charts/'
-      path: '/crypto-charts'
-      fullPath: '/crypto-charts'
-      preLoaderRoute: typeof CryptoChartsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/audio/': {
@@ -491,6 +507,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/aggregate-bill'
       preLoaderRoute: typeof AggregateBillIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/trade/$token': {
+      id: '/trade/$token'
+      path: '/$token'
+      fullPath: '/trade/$token'
+      preLoaderRoute: typeof TradeTokenRouteImport
+      parentRoute: typeof TradeRoute
     }
     '/three-dimension/shadows': {
       id: '/three-dimension/shadows'
@@ -625,15 +648,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AggregateBillSummaryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/crypto-charts/multi/$token': {
-      id: '/crypto-charts/multi/$token'
-      path: '/crypto-charts/multi/$token'
-      fullPath: '/crypto-charts/multi/$token'
-      preLoaderRoute: typeof CryptoChartsMultiTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
+
+interface TradeRouteChildren {
+  TradeTokenRoute: typeof TradeTokenRoute
+  TradeIndexRoute: typeof TradeIndexRoute
+}
+
+const TradeRouteChildren: TradeRouteChildren = {
+  TradeTokenRoute: TradeTokenRoute,
+  TradeIndexRoute: TradeIndexRoute,
+}
+
+const TradeRouteWithChildren = TradeRoute._addFileChildren(TradeRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -641,6 +669,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlaygroundRoute: PlaygroundRoute,
   ShaderRoute: ShaderRoute,
   StableFluidsRoute: StableFluidsRoute,
+  TradeRoute: TradeRouteWithChildren,
   AggregateBillSummaryRoute: AggregateBillSummaryRoute,
   AudioMicRoute: AudioMicRoute,
   AudioSpeechRoute: AudioSpeechRoute,
@@ -662,10 +691,8 @@ const rootRouteChildren: RootRouteChildren = {
   ThreeDimensionShadowsRoute: ThreeDimensionShadowsRoute,
   AggregateBillIndexRoute: AggregateBillIndexRoute,
   AudioIndexRoute: AudioIndexRoute,
-  CryptoChartsIndexRoute: CryptoChartsIndexRoute,
   NoiseIndexRoute: NoiseIndexRoute,
   ThreeDimensionIndexRoute: ThreeDimensionIndexRoute,
-  CryptoChartsMultiTokenRoute: CryptoChartsMultiTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

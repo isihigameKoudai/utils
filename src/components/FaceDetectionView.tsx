@@ -11,7 +11,11 @@ const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({
   width = 640,
   height = 480,
 }) => {
-  const detector = new FaceDetection();
+  const detector = new FaceDetection({
+    navigator: window.navigator,
+    document,
+    window,
+  });
   const $video = useRef<HTMLVideoElement>(null);
   const $face = useRef<HTMLDivElement>(null);
   const [points, setPoints] = useState<

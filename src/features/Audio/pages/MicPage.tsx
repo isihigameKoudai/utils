@@ -7,8 +7,12 @@ const MicPage: React.FC = () => {
   const $particle = useRef<HTMLCanvasElement>(null!);
   const $lineAudio = useRef<HTMLCanvasElement>(null!);
 
-  const particleVisualizerRef = useRef(new Visualizer());
-  const lineVisualizerRef = useRef(new Visualizer());
+  const particleVisualizerRef = useRef(
+    new Visualizer({ navigator: window.navigator, window }),
+  );
+  const lineVisualizerRef = useRef(
+    new Visualizer({ navigator: window.navigator, window }),
+  );
 
   const onActivateMic = useCallback(async () => {
     const particleVisualizer = particleVisualizerRef.current;

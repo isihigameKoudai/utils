@@ -8,7 +8,10 @@ import { Visualizer } from '@/utils/Visualizer';
 import AudioCircle from '../shaders/audioCircle.frag?raw';
 
 const AudioCirclePage: React.FC = () => {
-  const ringVisualizer = new Visualizer();
+  const ringVisualizer = new Visualizer({
+    navigator: window.navigator,
+    window,
+  });
 
   const uniforms = {
     time: {
