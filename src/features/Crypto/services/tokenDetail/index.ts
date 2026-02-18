@@ -43,6 +43,7 @@ export const createTokenDetailService = ({
           error instanceof Error ? error.message : 'データ取得に失敗しました';
 
         actions.setErrors(createFallbackErrors(message));
+      } finally {
         actions.setLoading(createLoadingState(false));
       }
     },
