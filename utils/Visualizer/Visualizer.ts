@@ -3,19 +3,24 @@ import { Audio } from '../Media';
 import type { RenderCallBack, RenderOptions } from './type';
 
 // requestAnimationFrame の定義を修正
-export const requestAnimationFrame = () =>
-  window.requestAnimationFrame ||
-  window.mozRequestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  window.msRequestAnimationFrame;
+export const getRequestAnimationFrame = (win: Window & typeof globalThis) =>
+  win.requestAnimationFrame ||
+  win.mozRequestAnimationFrame ||
+  win.webkitRequestAnimationFrame ||
+  win.msRequestAnimationFrame;
 
 // cancelAnimationFrame の定義を修正
-export const cancelAnimationFrame = () =>
-  window.cancelAnimationFrame ||
-  window.webkitCancelAnimationFrame ||
-  window.mozCancelAnimationFrame ||
-  window.msCancelAnimationFrame ||
-  window.oCancelAnimationFrame;
+export const getCancelAnimationFrame = (win: Window & typeof globalThis) =>
+  win.cancelAnimationFrame ||
+  win.webkitCancelAnimationFrame ||
+  win.mozCancelAnimationFrame ||
+  win.msCancelAnimationFrame ||
+  win.oCancelAnimationFrame;
+
+interface Params {
+  navigator: Navigator;
+  window: Window & typeof globalThis;
+}
 
 /**
  * 取り込んだ音声を任意のビジュアルに変換・描画の機能を司る
@@ -29,8 +34,8 @@ export class Visualizer extends Audio {
   $canvas: HTMLCanvasElement | null;
   requestAnimationFrameId: number;
 
-  constructor() {
-    super();
+  constructor(params: Params) {
+    super(params);
     this.analyzer = null;
     this.timeDomainArray = new Uint8Array();
     this.spectrumArray = new Uint8Array();
@@ -38,8 +43,8 @@ export class Visualizer extends Audio {
     this.spectrumRawArray = new Float32Array();
     this.$canvas = null;
     this.requestAnimationFrameId = 0;
-    window.requestAnimationFrame = requestAnimationFrame();
-    window.cancelAnimationFrame = cancelAnimationFrame();
+    this.window.requestAnimationFrame = getRequestAnimationFrame(this.window);
+    this.window.cancelAnimationFrame = getCancelAnimationFrame(this.window);
   }
 
   /**
@@ -56,8 +61,8 @@ export class Visualizer extends Audio {
     renderCallBack: RenderCallBack,
     {
       $canvas,
-      canvasWidth = window.innerWidth,
-      canvasHeight = window.innerHeight,
+      canvasWidth = this.window.innerWidth,
+      canvasHeight = this.window.innerHeight,
       smoothingTimeConstant = 0.5,
       fftSize = 2048,
     }: RenderOptions,
@@ -115,7 +120,7 @@ export class Visualizer extends Audio {
       spectrumRawArray: this.spectrumRawArray,
     });
 
-    this.requestAnimationFrameId = window.requestAnimationFrame(
+    this.requestAnimationFrameId = this.window.requestAnimationFrame(
       this.render.bind(this, renderCallBack),
     );
   }
@@ -126,6 +131,6 @@ export class Visualizer extends Audio {
   stop() {
     super.stop();
     this.analyzer?.disconnect();
-    window.cancelAnimationFrame(this.requestAnimationFrameId);
+    this.window.cancelAnimationFrame(this.requestAnimationFrameId);
   }
 }

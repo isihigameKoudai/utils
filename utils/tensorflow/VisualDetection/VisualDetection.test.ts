@@ -38,15 +38,14 @@ describe('VisualDetection', () => {
   ];
 
   beforeEach(() => {
-    // ブラウザAPIのモック
-    global.navigator = navigatorMock;
-    global.window = windowMock;
-    global.document = documentMock;
-
     // cocoSsd.loadのモックを修正
     vi.spyOn(cocoSsd, 'load').mockResolvedValue(mockModel);
 
-    visualDetector = new VisualDetection();
+    visualDetector = new VisualDetection({
+      navigator: navigatorMock,
+      document: documentMock,
+      window: windowMock,
+    });
   });
 
   describe('loadModel', () => {

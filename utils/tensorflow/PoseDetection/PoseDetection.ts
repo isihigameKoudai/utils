@@ -14,14 +14,28 @@ import type { ElOption } from '../type';
 import { createConfig } from './module';
 import type { ModelType, RenderCallBack, Pose } from './type';
 
+interface Params {
+  navigator: Navigator;
+  document: Document;
+  window: Window & typeof globalThis;
+}
+
 export class PoseDetection extends Video {
   private _model: poseDetection.SupportedModels;
   private _detector: poseDetection.PoseDetector | null;
   private _detectedPoses: Pose[];
   private _requestAnimationFrameId: number;
 
-  constructor(modelType: ModelType = poseDetection.SupportedModels.MoveNet) {
-    super();
+  private document: Document;
+  private window: Window & typeof globalThis;
+
+  constructor(
+    params: Params,
+    modelType: ModelType = poseDetection.SupportedModels.MoveNet,
+  ) {
+    super(params);
+    this.document = params.document;
+    this.window = params.window;
     this._model = poseDetection.SupportedModels[modelType];
     this._detector = null;
     this._detectedPoses = [];
@@ -69,7 +83,7 @@ export class PoseDetection extends Video {
       y: height / INITIAL_VIDEO_EL_HEIGHT,
     });
 
-    const videoEl = $video || document.createElement('video');
+    const videoEl = $video || this.document.createElement('video');
     videoEl.muted = true;
     videoEl.autoplay = true;
     videoEl.width = width;
@@ -101,14 +115,14 @@ export class PoseDetection extends Video {
       renderCallBack(poses);
     }
 
-    this._requestAnimationFrameId = window.requestAnimationFrame(
+    this._requestAnimationFrameId = this.window.requestAnimationFrame(
       this.start.bind(this, renderCallBack),
     );
   }
 
   stop() {
     this.stopVideo();
-    window.cancelAnimationFrame(this._requestAnimationFrameId);
+    this.window.cancelAnimationFrame(this._requestAnimationFrameId);
     this._detectedPoses = [];
     this._requestAnimationFrameId = 0;
     this._detector = null;

@@ -43,15 +43,15 @@ describe('PoseDetection', () => {
   let detector: PoseDetection;
 
   beforeEach(() => {
-    vi.stubGlobal('navigator', navigatorMock);
-    vi.stubGlobal('document', documentMock);
-    vi.stubGlobal('window', windowMock);
-    detector = new PoseDetection();
+    detector = new PoseDetection({
+      navigator: navigatorMock,
+      document: documentMock,
+      window: windowMock,
+    });
   });
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.unstubAllGlobals();
   });
 
   describe('constructor', () => {
@@ -83,25 +83,25 @@ describe('PoseDetection', () => {
 
   describe('load', () => {
     it('should load video element and model', async () => {
-      const mockVideo = document.createElement('video');
+      const mockVideo = documentMock.createElement('video');
       await detector.load({ $video: mockVideo });
 
       expect(detector.detector).not.toBeNull();
       expect(detector.$video).toBe(mockVideo);
-      expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalled();
+      expect(navigatorMock.mediaDevices.getUserMedia).toHaveBeenCalled();
     });
 
     it('should create new video element if none provided', async () => {
       await detector.load();
 
       expect(detector.$video).not.toBeNull();
-      expect(document.createElement).toHaveBeenCalledWith('video');
+      expect(documentMock.createElement).toHaveBeenCalledWith('video');
     });
   });
 
   describe('start', () => {
     it('should start pose detection and call renderCallback', async () => {
-      const mockVideo = document.createElement('video');
+      const mockVideo = documentMock.createElement('video');
       const renderCallback = vi.fn();
 
       await detector.load({ $video: mockVideo });
@@ -109,7 +109,7 @@ describe('PoseDetection', () => {
 
       expect(detector.detectedPoses).toHaveLength(1);
       expect(renderCallback).toHaveBeenCalledWith(detector.detectedPoses);
-      expect(window.requestAnimationFrame).toHaveBeenCalled();
+      expect(windowMock.requestAnimationFrame).toHaveBeenCalled();
     });
 
     it('should not start if detector is not loaded', async () => {
@@ -134,7 +134,7 @@ describe('PoseDetection', () => {
 
   describe('stop', () => {
     it('should stop detection and clean up resources', async () => {
-      const mockVideo = document.createElement('video');
+      const mockVideo = documentMock.createElement('video');
       await detector.load({ $video: mockVideo });
       await detector.start();
 
@@ -143,7 +143,7 @@ describe('PoseDetection', () => {
       expect(detector.detector).toBeNull();
       expect(detector.detectedPoses).toHaveLength(0);
       expect(detector.requestAnimationFrameId).toBe(0);
-      expect(window.cancelAnimationFrame).toHaveBeenCalled();
+      expect(windowMock.cancelAnimationFrame).toHaveBeenCalled();
     });
   });
 });

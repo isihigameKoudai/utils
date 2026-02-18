@@ -10,6 +10,12 @@ import type { ElOption } from '../type';
 
 import type { RenderCallBack } from './type';
 
+interface Params {
+  navigator: Navigator;
+  document: Document;
+  window: Window & typeof globalThis;
+}
+
 export class FaceLandmarkDetection extends Video {
   _model: faceLandmarksDetection.SupportedModels;
   _detector: faceLandmarksDetection.FaceLandmarksDetector | null;
@@ -17,8 +23,13 @@ export class FaceLandmarkDetection extends Video {
   _requestAnimationFrameId: number;
   _isRunning: boolean;
 
-  constructor() {
-    super();
+  private document: Document;
+  private window: Window & typeof globalThis;
+
+  constructor(params: Params) {
+    super(params);
+    this.document = params.document;
+    this.window = params.window;
     this._model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
     this._detector = null;
     this._detectedRawFaces = [];
@@ -66,7 +77,7 @@ export class FaceLandmarkDetection extends Video {
       y: height / INITIAL_VIDEO_EL_HEIGHT,
     });
 
-    const videoEl = $video || document.createElement('video');
+    const videoEl = $video || this.document.createElement('video');
     videoEl.muted = true;
     videoEl.autoplay = true;
     videoEl.width = width;
@@ -101,13 +112,13 @@ export class FaceLandmarkDetection extends Video {
     // TODO: detectedRawFacesを使ったgettersをrenderCallBackに渡す
     renderCallBack?.(this.detectedRawFaces);
 
-    this._requestAnimationFrameId = window.requestAnimationFrame(
+    this._requestAnimationFrameId = this.window.requestAnimationFrame(
       this.start.bind(this, renderCallBack),
     );
   }
   stop() {
     this.stopVideo();
-    window.cancelAnimationFrame(this._requestAnimationFrameId);
+    this.window.cancelAnimationFrame(this._requestAnimationFrameId);
     this._detectedRawFaces = [];
     this._requestAnimationFrameId = 0;
     this._detector = null;
