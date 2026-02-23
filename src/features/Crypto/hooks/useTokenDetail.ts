@@ -15,9 +15,9 @@ export const useTokenDetail = () => {
 
   const initialize = useCallback(
     (token: Symbol) => {
-      actions.initialize({ token });
+      service.initialize(token);
     },
-    [actions],
+    [service],
   );
 
   const fetchAllTimeframes = useCallback(
