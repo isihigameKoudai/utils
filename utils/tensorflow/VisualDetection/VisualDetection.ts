@@ -13,6 +13,12 @@ import type { ElOption } from '../type';
 
 import type { DetectedObject, RenderCallBack } from './type';
 
+interface Params {
+  navigator: Navigator;
+  document: Document;
+  window: Window & typeof globalThis;
+}
+
 /**
  * Detect some objects by using camera;
  * powered by tensorflow.js cocossd model;
@@ -23,8 +29,13 @@ export class VisualDetection extends Video {
   _detectedRawObjects: cocoSsd.DetectedObject[];
   _requestAnimationFrameId: number;
 
-  constructor() {
-    super();
+  private document: Document;
+  private window: Window & typeof globalThis;
+
+  constructor(params: Params) {
+    super(params);
+    this.document = params.document;
+    this.window = params.window;
     this._model = null;
     this._detectedRawObjects = [];
     this._requestAnimationFrameId = 0;
@@ -85,7 +96,7 @@ export class VisualDetection extends Video {
       y: height / INITIAL_VIDEO_EL_HEIGHT,
     });
 
-    const videoEl = $video || document.createElement('video');
+    const videoEl = $video || this.document.createElement('video');
     videoEl.muted = true;
     videoEl.autoplay = true;
     videoEl.width = width;
@@ -121,14 +132,14 @@ export class VisualDetection extends Video {
       renderCallBack(this.detectedObjects);
     }
 
-    this._requestAnimationFrameId = window.requestAnimationFrame(
+    this._requestAnimationFrameId = this.window.requestAnimationFrame(
       this.start.bind(this, renderCallBack),
     );
   }
 
   stop() {
     this.stopVideo();
-    window.cancelAnimationFrame(this._requestAnimationFrameId);
+    this.window.cancelAnimationFrame(this._requestAnimationFrameId);
     this._detectedRawObjects = [];
     this._requestAnimationFrameId = 0;
     this._model = null;

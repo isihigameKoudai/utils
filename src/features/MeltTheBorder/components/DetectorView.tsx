@@ -14,7 +14,13 @@ const DetectorView: React.FC<DetectorViewProps> = ({
   onDetect = () => {},
 }) => {
   const isInitRef = useRef(true);
-  const detectorRef = useRef(new VisualDetection());
+  const detectorRef = useRef(
+    new VisualDetection({
+      navigator: window.navigator,
+      document,
+      window,
+    }),
+  );
   const $videoContainer = useRef<HTMLDivElement>(null);
   const [objects, setObjects] = useState<DetectedObject[]>([]);
   const [isShow, setIsShow] = useState(false);

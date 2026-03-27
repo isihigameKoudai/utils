@@ -29,24 +29,16 @@ describe('Audio', () => {
 
     // MediaStreamAudioSourceNodeのモック
     mockMediaSource = mediaSourceMock;
-    // navigatorオブジェクトのモック
-    global.navigator = navigatorMock;
-    // windowオブジェクトのモック
-    global.window = windowMock;
-    // AudioContextのグローバル定義
-    global.AudioContext = vi.fn().mockImplementation(() => mockContext);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    vi.spyOn(windowMock as any, 'AudioContext').mockImplementation(
+      () => mockContext,
+    );
 
-    audio = new Audio();
+    audio = new Audio({ navigator: navigatorMock, window: windowMock });
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    delete (global as any).window;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    delete (global as any).AudioContext;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    delete (global as any).navigator;
   });
 
   it('AudioContextを作成すること', () => {
@@ -86,7 +78,7 @@ describe('Audio', () => {
 
   it('デバイスの音声をセットすること', async () => {
     const mockStream = {} as MediaStream;
-    vi.spyOn(navigator.mediaDevices, 'getUserMedia').mockResolvedValue(
+    vi.spyOn(navigatorMock.mediaDevices, 'getUserMedia').mockResolvedValue(
       mockStream,
     );
     vi.spyOn(audio.context, 'createMediaStreamSource').mockReturnValue(

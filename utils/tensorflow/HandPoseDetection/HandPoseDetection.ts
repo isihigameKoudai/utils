@@ -13,14 +13,25 @@ import type { ElOption } from '../type';
 
 import type { RenderCallBack } from './type';
 
+interface Params {
+  navigator: Navigator;
+  document: Document;
+  window: Window & typeof globalThis;
+}
+
 export class HandPoseDetection extends Video {
   private _model: handPoseDetection.SupportedModels;
   private _detector: handPoseDetection.HandDetector | null = null;
   private _detectedRawHands: handPoseDetection.Hand[] = [];
   private _requestAnimationFrameId: number = 0;
 
-  constructor() {
-    super();
+  private document: Document;
+  private window: Window & typeof globalThis;
+
+  constructor(params: Params) {
+    super(params);
+    this.document = params.document;
+    this.window = params.window;
     this._model = handPoseDetection.SupportedModels.MediaPipeHands;
     this._detector = null;
     this._detectedRawHands = [];
@@ -66,7 +77,7 @@ export class HandPoseDetection extends Video {
       y: height / INITIAL_VIDEO_EL_HEIGHT,
     });
 
-    const videoEl = $video || document.createElement('video');
+    const videoEl = $video || this.document.createElement('video');
     videoEl.muted = true;
     videoEl.autoplay = true;
     videoEl.width = width;
@@ -99,14 +110,14 @@ export class HandPoseDetection extends Video {
 
     renderCallBack?.(this.detectedRawHands);
 
-    this._requestAnimationFrameId = window.requestAnimationFrame(
+    this._requestAnimationFrameId = this.window.requestAnimationFrame(
       this.start.bind(this, renderCallBack),
     );
   }
 
   stop() {
     this.stopVideo();
-    window.cancelAnimationFrame(this._requestAnimationFrameId);
+    this.window.cancelAnimationFrame(this._requestAnimationFrameId);
     this._detectedRawHands = [];
     this._requestAnimationFrameId = 0;
     this._detector = null;

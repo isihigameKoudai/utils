@@ -4,9 +4,17 @@ import { Media } from './Media';
 
 describe('Media', () => {
   let media: Media;
+  const mockGetUserMedia = vi.fn();
+
+  const navigatorMock = {
+    mediaDevices: {
+      getUserMedia: mockGetUserMedia,
+    },
+  } as unknown as Navigator;
 
   beforeEach(() => {
-    media = new Media();
+    mockGetUserMedia.mockReset();
+    media = new Media({ navigator: navigatorMock });
   });
 
   test('初期化時にstreamがnullであること', () => {
@@ -15,13 +23,7 @@ describe('Media', () => {
 
   test('getUserMediaが正常に動作すること', async () => {
     const mockStream = {} as MediaStream;
-    const mockGetUserMedia = vi.fn().mockResolvedValue(mockStream);
-
-    vi.stubGlobal('navigator', {
-      mediaDevices: {
-        getUserMedia: mockGetUserMedia,
-      },
-    });
+    mockGetUserMedia.mockResolvedValue(mockStream);
 
     const constraints: MediaStreamConstraints = { audio: true, video: true };
     const result = await media.getUserMedia(constraints);
@@ -33,13 +35,7 @@ describe('Media', () => {
 
   test('getUserMediaがエラーをキャッチすること', async () => {
     const mockError = new Error('getUserMedia error');
-    const mockGetUserMedia = vi.fn().mockRejectedValue(mockError);
-
-    vi.stubGlobal('navigator', {
-      mediaDevices: {
-        getUserMedia: mockGetUserMedia,
-      },
-    });
+    mockGetUserMedia.mockRejectedValue(mockError);
 
     const consoleErrorSpy = vi
       .spyOn(console, 'error')

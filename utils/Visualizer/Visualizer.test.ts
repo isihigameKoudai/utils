@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import {
   analyzerMock,
+  navigatorMock,
   windowMock,
   documentMock,
 } from '../__test__/mocks/global';
@@ -18,18 +19,12 @@ describe('Visualizer', () => {
   beforeEach(() => {
     mockAnalyser = analyzerMock;
 
-    global.window = windowMock;
-    global.document = documentMock;
     global.AudioContext = AudioContextMock as unknown as typeof AudioContext;
 
-    // requestAnimationFrameのモックを追加
-    const mockRequestAnimationFrame = vi.fn();
-    global.window = {
-      ...global.window,
-      requestAnimationFrame: mockRequestAnimationFrame,
-    } as unknown as Window & typeof globalThis;
-
-    visualizer = new Visualizer();
+    visualizer = new Visualizer({
+      navigator: navigatorMock,
+      window: windowMock,
+    });
 
     // stopメソッドをモックする
     visualizer.stop = vi.fn().mockImplementation(() => {
@@ -37,7 +32,7 @@ describe('Visualizer', () => {
         visualizer.analyzer.disconnect();
       }
       if (visualizer.requestAnimationFrameId) {
-        window.cancelAnimationFrame(visualizer.requestAnimationFrameId);
+        windowMock.cancelAnimationFrame(visualizer.requestAnimationFrameId);
       }
     });
 
@@ -64,7 +59,7 @@ describe('Visualizer', () => {
         const visualizerWithRender = visualizer as unknown as {
           render: (callback: RenderCallBack) => void;
         };
-        window.requestAnimationFrame(
+        windowMock.requestAnimationFrame(
           visualizerWithRender.render.bind(visualizer, renderCallback),
         );
       });
@@ -85,10 +80,6 @@ describe('Visualizer', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    delete (global as any).window;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    delete (global as any).document;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (global as any).AudioContext;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -123,7 +114,10 @@ describe('Visualizer', () => {
   });
 
   it('ビジュアライゼーションを停止すること', () => {
-    const mockCancelAnimationFrame = vi.spyOn(window, 'cancelAnimationFrame');
+    const mockCancelAnimationFrame = vi.spyOn(
+      windowMock,
+      'cancelAnimationFrame',
+    );
 
     visualizer.requestAnimationFrameId = 123;
     visualizer.analyzer = mockAnalyser;
@@ -143,7 +137,7 @@ describe('Visualizer', () => {
 
     // window.requestAnimationFrameのモックを追加
     const mockRequestAnimationFrame = vi.fn();
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
+    vi.spyOn(windowMock, 'requestAnimationFrame').mockImplementation(
       mockRequestAnimationFrame,
     );
 

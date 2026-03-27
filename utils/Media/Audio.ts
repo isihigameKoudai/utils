@@ -6,9 +6,14 @@ declare global {
   }
 }
 
-const createAudioContext = (): AudioContext =>
-  new AudioContext() ||
-  new (window.AudioContext || window.webkitAudioContext)();
+const createAudioContext = (win: Window & typeof globalThis): AudioContext =>
+  new (win.AudioContext || win.webkitAudioContext)();
+
+interface Params {
+  navigator: Navigator;
+  window: Window & typeof globalThis;
+}
+
 /**
  * 音声データの再生、停止、一時停止、再開を行うクラス
  * web audio api使用
@@ -20,9 +25,12 @@ export class Audio extends Media {
   _mediaSource: MediaStreamAudioSourceNode | null;
   isPlaying: boolean;
 
-  constructor() {
-    super();
-    this._context = createAudioContext();
+  protected window: Window & typeof globalThis;
+
+  constructor(params: Params) {
+    super(params);
+    this.window = params.window;
+    this._context = createAudioContext(this.window);
     this._audioSource = null;
     this._mediaSource = null;
     this.isPlaying = false;
@@ -45,7 +53,7 @@ export class Audio extends Media {
    * @param arrayBuffer
    */
   async setAudio(arrayBuffer: ArrayBuffer) {
-    this._context = createAudioContext();
+    this._context = createAudioContext(this.window);
     this._audioSource = this._context.createBufferSource();
     this._audioSource.buffer = await this._context.decodeAudioData(arrayBuffer);
   }
@@ -58,7 +66,7 @@ export class Audio extends Media {
     constraints: MediaStreamConstraints = { audio: true, video: false },
   ): Promise<MediaStream> {
     const stream = await this.getUserMedia(constraints);
-    this._context = createAudioContext();
+    this._context = createAudioContext(this.window);
     this._mediaSource = this._context.createMediaStreamSource(stream);
     return stream;
   }

@@ -20,7 +20,11 @@ export default class WebGL extends BaseWebGL {
     width?: number;
     height?: number;
   }) {
-    const detector = new VisualDetection();
+    const detector = new VisualDetection({
+      navigator: window.navigator,
+      document,
+      window,
+    });
     await detector.load({ width, height });
     return detector;
   }

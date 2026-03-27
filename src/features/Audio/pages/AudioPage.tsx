@@ -9,7 +9,9 @@ const fetchAudio = async () =>
 
 const AudioPage: React.FC = () => {
   const $canvas = useRef<HTMLCanvasElement>(null);
-  const visualizerRef = useRef(new Visualizer());
+  const visualizerRef = useRef(
+    new Visualizer({ navigator: window.navigator, window }),
+  );
 
   const onPlayAudio = useCallback(async () => {
     const visualizer = visualizerRef.current;
