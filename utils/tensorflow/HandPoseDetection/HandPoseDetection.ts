@@ -1,17 +1,20 @@
-/**
- * npm i @tensorflow/tfjs @tensorflow-models/hand-pose-detection
- */
-import * as tf from '@tensorflow/tfjs';
-import * as handPoseDetection from '@tensorflow-models/hand-pose-detection';
+import { HandLandmarker } from '@mediapipe/tasks-vision';
 
 import {
   INITIAL_VIDEO_EL_HEIGHT,
   INITIAL_VIDEO_EL_WIDTH,
   Video,
 } from '../../Media';
+import { HAND_LANDMARK_NAMES } from '../landmarks';
 import type { ElOption } from '../type';
+import { getVisionFileset } from '../vision';
 
-import type { RenderCallBack } from './type';
+import { MODEL_ASSET_PATH } from './constants';
+import type { Hand, RenderCallBack } from './type';
+
+const toHandedness = (categoryName?: string): Hand['handedness'] => {
+  return categoryName === 'Left' ? 'Left' : 'Right';
+};
 
 interface Params {
   navigator: Navigator;
@@ -20,9 +23,9 @@ interface Params {
 }
 
 export class HandPoseDetection extends Video {
-  private _model: handPoseDetection.SupportedModels;
-  private _detector: handPoseDetection.HandDetector | null = null;
-  private _detectedRawHands: handPoseDetection.Hand[] = [];
+  private _model: string;
+  private _detector: HandLandmarker | null = null;
+  private _detectedRawHands: Hand[] = [];
   private _requestAnimationFrameId: number = 0;
 
   private document: Document;
@@ -32,7 +35,7 @@ export class HandPoseDetection extends Video {
     super(params);
     this.document = params.document;
     this.window = params.window;
-    this._model = handPoseDetection.SupportedModels.MediaPipeHands;
+    this._model = 'MediaPipeHands';
     this._detector = null;
     this._detectedRawHands = [];
     this._requestAnimationFrameId = 0;
@@ -56,9 +59,14 @@ export class HandPoseDetection extends Video {
 
   async loadModel() {
     try {
-      await tf.ready();
-      const detector = await handPoseDetection.createDetector(this._model, {
-        runtime: 'tfjs',
+      const fileset = await getVisionFileset();
+      const detector = await HandLandmarker.createFromOptions(fileset, {
+        baseOptions: {
+          modelAssetPath: MODEL_ASSET_PATH,
+          delegate: 'GPU',
+        },
+        runningMode: 'VIDEO',
+        numHands: 2,
       });
       this._detector = detector;
     } catch (error) {
@@ -102,8 +110,24 @@ export class HandPoseDetection extends Video {
       return;
     }
 
-    const hands = await this.detector.estimateHands(this.$video, {
-      flipHorizontal: false,
+    const video = this.$video;
+    const result = this.detector.detectForVideo(video, performance.now());
+    const videoWidth = video.videoWidth || video.width;
+    const videoHeight = video.videoHeight || video.height;
+
+    const hands: Hand[] = result.landmarks.map((handLandmarks, handIndex) => {
+      const handedness = result.handedness[handIndex]?.[0];
+
+      return {
+        keypoints: handLandmarks.map((landmark, landmarkIndex) => ({
+          x: landmark.x * videoWidth,
+          y: landmark.y * videoHeight,
+          name:
+            HAND_LANDMARK_NAMES[landmarkIndex] ?? `landmark_${landmarkIndex}`,
+        })),
+        handedness: toHandedness(handedness?.categoryName),
+        score: handedness?.score ?? 0,
+      };
     });
 
     this._detectedRawHands = hands;

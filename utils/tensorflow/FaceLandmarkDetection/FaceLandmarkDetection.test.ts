@@ -1,47 +1,47 @@
-import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { FaceLandmarker } from '@mediapipe/tasks-vision';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   documentMock,
   navigatorMock,
   windowMock,
 } from '../../__test__/mocks/global';
+import { getVisionFileset } from '../vision';
 
+import { MODEL_ASSET_PATH } from './constants';
 import { FaceLandmarkDetection } from './FaceLandmarkDetection';
 
-vi.mock('@tensorflow-models/face-landmarks-detection', () => ({
-  SupportedModels: {
-    MediaPipeFaceMesh: 'MediaPipeFaceMesh',
+vi.mock('../vision', () => ({
+  getVisionFileset: vi.fn().mockResolvedValue({}),
+}));
+
+vi.mock('@mediapipe/tasks-vision', () => ({
+  FaceLandmarker: {
+    createFromOptions: vi.fn(),
   },
-  createDetector: vi.fn().mockResolvedValue({
-    estimateFaces: vi.fn().mockResolvedValue([
-      {
-        box: {
-          xMin: 0,
-          yMin: 0,
-          xMax: 100,
-          yMax: 100,
-          width: 100,
-          height: 100,
-        },
-        keypoints: [
-          { x: 50, y: 50, z: 0, name: 'nose_tip' },
-          { x: 30, y: 30, z: 0, name: 'left_eye' },
-          { x: 70, y: 30, z: 0, name: 'right_eye' },
-        ],
-        annotations: {
-          leftEyeIris: [[30, 30, 0]],
-          rightEyeIris: [[70, 30, 0]],
-        },
-      },
-    ]),
-  }),
 }));
 
 describe('FaceLandmarkDetection', () => {
   let detector: FaceLandmarkDetection;
 
   beforeEach(() => {
+    vi.mocked(FaceLandmarker.createFromOptions).mockResolvedValue({
+      setOptions: vi.fn(),
+      detect: vi.fn(),
+      detectForVideo: vi.fn().mockReturnValue({
+        faceLandmarks: [
+          [
+            { x: 0.1, y: 0.1, z: 0 },
+            { x: 0.5, y: 0.5, z: 0 },
+            { x: 0.8, y: 0.8, z: 0 },
+          ],
+        ],
+        faceBlendshapes: [],
+        facialTransformationMatrixes: [],
+      }),
+      close: vi.fn(),
+    });
+
     detector = new FaceLandmarkDetection({
       navigator: navigatorMock,
       document: documentMock,
@@ -55,9 +55,7 @@ describe('FaceLandmarkDetection', () => {
 
   describe('constructor', () => {
     it('should initialize with default values', () => {
-      expect(detector.model).toBe(
-        faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh,
-      );
+      expect(detector.model).toBe('MediaPipeFaceMesh');
       expect(detector.detector).toBeNull();
       expect(detector.detectedRawFaces).toEqual([]);
       expect(detector.requestAnimationFrameId).toBe(0);
@@ -68,22 +66,28 @@ describe('FaceLandmarkDetection', () => {
   describe('loadModel', () => {
     it('should load the face landmark detection model', async () => {
       await detector.loadModel();
-      expect(faceLandmarksDetection.createDetector).toHaveBeenCalledWith(
-        detector.model,
-        {
-          runtime: 'tfjs',
-          refineLandmarks: true,
-        },
+
+      expect(getVisionFileset).toHaveBeenCalled();
+      expect(FaceLandmarker.createFromOptions).toHaveBeenCalledWith(
+        {},
+        expect.objectContaining({
+          baseOptions: expect.objectContaining({
+            modelAssetPath: MODEL_ASSET_PATH,
+            delegate: 'GPU',
+          }),
+          runningMode: 'VIDEO',
+          numFaces: 1,
+        }),
       );
       expect(detector.detector).not.toBeNull();
     });
 
     it('should handle model loading errors', async () => {
       const error = new Error('Model loading failed');
-      vi.mocked(faceLandmarksDetection.createDetector).mockRejectedValueOnce(
-        error,
-      );
-      const consoleSpy = vi.spyOn(console, 'error');
+      vi.mocked(FaceLandmarker.createFromOptions).mockRejectedValueOnce(error);
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
 
       await detector.loadModel();
 
@@ -124,7 +128,9 @@ describe('FaceLandmarkDetection', () => {
     });
 
     it('should not start if detector is not loaded', async () => {
-      const consoleSpy = vi.spyOn(console, 'error');
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       await detector.start();
 
       expect(consoleSpy).toHaveBeenCalledWith(
@@ -135,7 +141,9 @@ describe('FaceLandmarkDetection', () => {
 
     it('should not start if video is not loaded', async () => {
       await detector.loadModel();
-      const consoleSpy = vi.spyOn(console, 'error');
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
 
       await detector.start();
 

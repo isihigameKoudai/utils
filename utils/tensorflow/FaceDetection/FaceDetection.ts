@@ -1,17 +1,16 @@
-/**
- * npm i @tensorflow/tfjs @tensorflow-models/face-detection
- */
-import * as tf from '@tensorflow/tfjs';
-import * as faceDetection from '@tensorflow-models/face-detection';
+import { FaceDetector } from '@mediapipe/tasks-vision';
 
 import {
   INITIAL_VIDEO_EL_WIDTH,
   INITIAL_VIDEO_EL_HEIGHT,
 } from '../../Media/constants';
 import { Video } from '../../Media/Video';
+import { FACE_KEYPOINT_NAMES } from '../landmarks';
 import type { ElOption } from '../type';
+import { getVisionFileset } from '../vision';
 
-import type { RenderCallBack } from './type';
+import { MODEL_ASSET_PATH } from './constants';
+import type { Face, RenderCallBack } from './type';
 
 interface Params {
   navigator: Navigator;
@@ -20,11 +19,11 @@ interface Params {
 }
 
 export class FaceDetection extends Video {
-  _model: faceDetection.SupportedModels;
+  _model: string;
 
-  _detector: faceDetection.FaceDetector | null;
+  _detector: FaceDetector | null;
 
-  _detectedRawFaces: faceDetection.Face[];
+  _detectedRawFaces: Face[];
 
   _requestAnimationFrameId: number;
 
@@ -35,7 +34,7 @@ export class FaceDetection extends Video {
     super(params);
     this.document = params.document;
     this.window = params.window;
-    this._model = faceDetection.SupportedModels.MediaPipeFaceDetector;
+    this._model = 'MediaPipeFaceDetector';
     this._detector = null;
     this._detectedRawFaces = [];
     this._requestAnimationFrameId = 0;
@@ -57,7 +56,7 @@ export class FaceDetection extends Video {
     return this._requestAnimationFrameId;
   }
 
-  get detectedFaces(): faceDetection.Face[] {
+  get detectedFaces(): Face[] {
     return this.detectedRawFaces.map((face) => {
       const { x: timesX, y: timesY } = this.magnification;
       return {
@@ -82,10 +81,13 @@ export class FaceDetection extends Video {
 
   async loadModel() {
     try {
-      await tf.ready();
-      const detector = await faceDetection.createDetector(this._model, {
-        runtime: 'mediapipe',
-        solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_detection',
+      const fileset = await getVisionFileset();
+      const detector = await FaceDetector.createFromOptions(fileset, {
+        baseOptions: {
+          modelAssetPath: MODEL_ASSET_PATH,
+          delegate: 'GPU',
+        },
+        runningMode: 'VIDEO',
       });
       this._detector = detector;
     } catch (error) {
@@ -130,8 +132,32 @@ export class FaceDetection extends Video {
       return;
     }
 
-    const faces = await this.detector.estimateFaces(this.$video, {
-      flipHorizontal: false,
+    const video = this.$video;
+    const videoWidth = video.videoWidth || video.width;
+    const videoHeight = video.videoHeight || video.height;
+    const result = this.detector.detectForVideo(video, performance.now());
+    const faces: Face[] = result.detections.map((detection) => {
+      const box = detection.boundingBox;
+      const x = box?.originX ?? 0;
+      const y = box?.originY ?? 0;
+      const width = box?.width ?? 0;
+      const height = box?.height ?? 0;
+
+      return {
+        box: {
+          xMin: x,
+          yMin: y,
+          xMax: x + width,
+          yMax: y + height,
+          width,
+          height,
+        },
+        keypoints: detection.keypoints.map((keypoint, index) => ({
+          x: keypoint.x * videoWidth,
+          y: keypoint.y * videoHeight,
+          name: FACE_KEYPOINT_NAMES[index],
+        })),
+      };
     });
 
     this._detectedRawFaces = faces;
