@@ -1,4 +1,4 @@
-import type { Hand } from '@tensorflow-models/hand-pose-detection';
+import type { Hand } from '@/utils/tensorflow/HandPoseDetection/type';
 
 const fingerLookupIndices = {
   thumb: [0, 1, 2, 3, 4],

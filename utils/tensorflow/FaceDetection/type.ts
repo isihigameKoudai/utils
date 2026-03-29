@@ -1,5 +1,17 @@
-import * as faceDetection from '@tensorflow-models/face-detection';
+export type Face = {
+  box: {
+    width: number;
+    height: number;
+    xMin: number;
+    xMax: number;
+    yMin: number;
+    yMax: number;
+  };
+  keypoints: {
+    x: number;
+    y: number;
+    name?: string;
+  }[];
+};
 
-export type RenderCallBack = (
-  faces: faceDetection.Face[],
-) => void | Promise<void>;
+export type RenderCallBack = (faces: Face[]) => void | Promise<void>;

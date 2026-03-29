@@ -1,7 +1,15 @@
-import * as poseDetection from '@tensorflow-models/pose-detection';
+export type Keypoint = {
+  x: number;
+  y: number;
+  score?: number;
+  name?: string;
+};
 
-export type Pose = poseDetection.Pose;
+export type Pose = {
+  keypoints: Keypoint[];
+  score: number;
+};
 
-export type ModelType = keyof typeof poseDetection.SupportedModels;
+export type ModelType = 'MoveNet' | 'BlazePose' | 'PoseNet';
 
 export type RenderCallBack = (poses: Pose[]) => void | Promise<void>;

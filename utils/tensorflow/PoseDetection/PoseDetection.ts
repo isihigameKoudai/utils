@@ -1,18 +1,16 @@
-/**
- * npm install @tensorflow/tfjs @tensorflow-models/pose-detection
- */
-import * as tf from '@tensorflow/tfjs';
-import * as poseDetection from '@tensorflow-models/pose-detection';
+import { PoseLandmarker } from '@mediapipe/tasks-vision';
 
 import {
-  Video,
-  INITIAL_VIDEO_EL_WIDTH,
   INITIAL_VIDEO_EL_HEIGHT,
+  INITIAL_VIDEO_EL_WIDTH,
+  Video,
 } from '../../Media';
+import { POSE_LANDMARK_NAMES } from '../landmarks';
 import type { ElOption } from '../type';
+import { getVisionFileset } from '../vision';
 
-import { createConfig } from './module';
-import type { ModelType, RenderCallBack, Pose } from './type';
+import { getModelAssetPath } from './module';
+import type { ModelType, Pose, RenderCallBack } from './type';
 
 interface Params {
   navigator: Navigator;
@@ -21,22 +19,19 @@ interface Params {
 }
 
 export class PoseDetection extends Video {
-  private _model: poseDetection.SupportedModels;
-  private _detector: poseDetection.PoseDetector | null;
+  private _model: ModelType;
+  private _detector: PoseLandmarker | null;
   private _detectedPoses: Pose[];
   private _requestAnimationFrameId: number;
 
   private document: Document;
   private window: Window & typeof globalThis;
 
-  constructor(
-    params: Params,
-    modelType: ModelType = poseDetection.SupportedModels.MoveNet,
-  ) {
+  constructor(params: Params, modelType: ModelType = 'MoveNet') {
     super(params);
     this.document = params.document;
     this.window = params.window;
-    this._model = poseDetection.SupportedModels[modelType];
+    this._model = modelType;
     this._detector = null;
     this._detectedPoses = [];
     this._requestAnimationFrameId = 0;
@@ -60,15 +55,19 @@ export class PoseDetection extends Video {
 
   async loadDetector() {
     try {
-      // NOTE: tensorflowのバックエンドを準備してからdetectorを作成する
-      await tf.ready();
-
-      const config = createConfig(this.model);
-      this._detector = await poseDetection.createDetector(this.model, config);
+      const fileset = await getVisionFileset();
+      this._detector = await PoseLandmarker.createFromOptions(fileset, {
+        baseOptions: {
+          modelAssetPath: getModelAssetPath(this.model),
+          delegate: 'GPU',
+        },
+        runningMode: 'VIDEO',
+        numPoses: 1,
+      });
       return this.detector;
-    } catch (e) {
-      console.error(e);
-      throw e;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
   }
 
@@ -108,7 +107,27 @@ export class PoseDetection extends Video {
       return;
     }
 
-    const poses = await this.detector.estimatePoses(this.$video);
+    const video = this.$video;
+    const videoWidth = video.videoWidth || video.width;
+    const videoHeight = video.videoHeight || video.height;
+    const result = this.detector.detectForVideo(video, performance.now());
+    const poses: Pose[] = result.landmarks.map((poseLandmarks) => {
+      const keypoints = poseLandmarks.map((landmark, index) => ({
+        x: landmark.x * videoWidth,
+        y: landmark.y * videoHeight,
+        score: landmark.visibility ?? 0,
+        name: POSE_LANDMARK_NAMES[index] ?? `landmark_${index}`,
+      }));
+      const total = keypoints.reduce((sum, keypoint) => {
+        return sum + (keypoint.score ?? 0);
+      }, 0);
+
+      return {
+        keypoints,
+        score: keypoints.length > 0 ? total / keypoints.length : 0,
+      };
+    });
+
     this._detectedPoses = poses;
 
     if (renderCallBack) {
