@@ -1,4 +1,4 @@
-import { ZodType } from 'zod';
+import type { GenericSchema } from 'valibot';
 
 /**
  * Model から Params のキーを除外した型（拡張プロパティ）
@@ -20,15 +20,15 @@ type ExtensionFactory<
 
 /**
  * モデルファクトリの設定型
- * @template Params - パラメータの型（Zodスキーマから推論）
+ * @template Params - パラメータの型（Valibotスキーマから推論）
  * @template Model - 最終的なモデルの型
  */
 export interface Config<
   Params extends Record<string, unknown>,
   Model extends Params = Params,
 > {
-  /** Zodスキーマによるパラメータ検証 */
-  readonly schema: ZodType<Params>;
+  /** Valibotスキーマによるパラメータ検証 */
+  readonly schema: GenericSchema<Params>;
   /** 拡張プロパティ（getter・メソッド等）を生成するファクトリ関数（Model が Params と異なる場合は必須） */
   readonly extension?: ExtensionFactory<Params, Model>;
 }

@@ -1,3 +1,5 @@
+import { parse } from 'valibot';
+
 import { deepFreeze, createImmutableObject } from '@/utils/object/object';
 
 import type { Config } from './type';
@@ -7,12 +9,12 @@ import type { Config } from './type';
  *
  * @description
  * - 完全にイミュータブルなモデルを生成
- * - Zodスキーマによるランタイムバリデーション
+ * - Valibotスキーマによるランタイムバリデーション
  * - Object.freezeによる深いフリーズ
  * - getterを使用した拡張プロパティの定義が可能（オプション）
  * - メソッド（関数）の定義が可能（オプション）
  *
- * @template TParams - パラメータの型（Zodスキーマで検証される入力）
+ * @template TParams - パラメータの型（Valibotスキーマで検証される入力）
  * @template TModel - 最終的なモデルの型（TParams + 拡張プロパティ + メソッド）
  *
  * @param config - ファクトリ設定
@@ -20,16 +22,18 @@ import type { Config } from './type';
  *
  * @example
  * ```ts
+ * import * as v from 'valibot';
+ *
  * // 1. スキーマの定義
- * const userSchema = z.object({
- *   id: z.string(),
- *   firstName: z.string(),
- *   lastName: z.string(),
- *   age: z.number().min(0),
+ * const userSchema = v.object({
+ *   id: v.string(),
+ *   firstName: v.string(),
+ *   lastName: v.string(),
+ *   age: v.pipe(v.number(), v.minValue(0)),
  * });
  *
  * // 2. パラメータ型
- * type UserParams = z.infer<typeof userSchema>;
+ * type UserParams = v.InferOutput<typeof userSchema>;
  *
  * // 3. 完成したモデルの型定義（getter + メソッド）
  * type User = UserParams & {
@@ -67,14 +71,16 @@ import type { Config } from './type';
  *
  * @example
  * ```ts
+ * import * as v from 'valibot';
+ *
  * // 拡張なしのシンプルなモデル
- * const productSchema = z.object({
- *   id: z.string(),
- *   name: z.string(),
- *   price: z.number(),
+ * const productSchema = v.object({
+ *   id: v.string(),
+ *   name: v.string(),
+ *   price: v.number(),
  * });
  *
- * type Product = z.infer<typeof productSchema>;
+ * type Product = v.InferOutput<typeof productSchema>;
  *
  * const createProduct = createModelFactory<Product>({
  *   schema: productSchema,
@@ -89,8 +95,8 @@ export const createModelFactory = <
   const { schema, extension } = config;
 
   return (params: Params): Readonly<Model> => {
-    // Zodによるバリデーション（失敗時は例外をスロー）
-    const validatedParams = schema.parse(params);
+    // Valibotによるバリデーション（失敗時は例外をスロー）
+    const validatedParams = parse(schema, params);
 
     // ベースとなるイミュータブルオブジェクトを作成
     const frozenParams = deepFreeze(validatedParams);
