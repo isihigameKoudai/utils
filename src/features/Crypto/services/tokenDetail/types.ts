@@ -14,7 +14,7 @@ export type TokenDetailApi = {
   ) => Promise<TokenDetailApiResult>[];
 };
 
-export type TokenDetailActions = ReturnType<
+type TokenDetailActions = ReturnType<
   typeof TokenDetailStore.useStore
 >['actions'];
 
