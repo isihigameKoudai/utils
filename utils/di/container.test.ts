@@ -155,4 +155,77 @@ describe('Container', () => {
       expect(container.resolve(token)).toBe('second');
     });
   });
+
+  describe('循環参照検知', () => {
+    it('A → A の直接循環で Error を投げる', () => {
+      const aToken = createToken<string>('A');
+      container.register(aToken, (c) => c.resolve(aToken));
+
+      expect(() => container.resolve(aToken)).toThrowError(
+        /circular dependency/i,
+      );
+    });
+
+    it('A → B → A の間接循環で Error を投げる', () => {
+      const aToken = createToken<string>('A');
+      const bToken = createToken<string>('B');
+
+      container.register(aToken, (c) => c.resolve(bToken));
+      container.register(bToken, (c) => c.resolve(aToken));
+
+      expect(() => container.resolve(aToken)).toThrowError(
+        /circular dependency/i,
+      );
+    });
+
+    it('A → B → C → A の3段循環で Error を投げる', () => {
+      const aToken = createToken<string>('A');
+      const bToken = createToken<string>('B');
+      const cToken = createToken<string>('C');
+
+      container.register(aToken, (c) => c.resolve(bToken));
+      container.register(bToken, (c) => c.resolve(cToken));
+      container.register(cToken, (c) => c.resolve(aToken));
+
+      expect(() => container.resolve(aToken)).toThrowError(
+        /circular dependency/i,
+      );
+    });
+
+    it('エラーメッセージに循環チェーンが含まれる', () => {
+      const aToken = createToken<string>('A');
+      const bToken = createToken<string>('B');
+
+      container.register(aToken, (c) => c.resolve(bToken));
+      container.register(bToken, (c) => c.resolve(aToken));
+
+      expect(() => container.resolve(aToken)).toThrowError(/A.*→.*B.*→.*A/);
+    });
+
+    it('singleton キャッシュ済みの場合は循環にならない', () => {
+      const aToken = createToken<string>('A');
+      const bToken = createToken<string>('B');
+
+      container.register(aToken, () => 'a-value', 'singleton');
+      container.register(bToken, (c) => `${c.resolve(aToken)}-and-b`);
+
+      container.resolve(aToken);
+
+      expect(container.resolve(bToken)).toBe('a-value-and-b');
+    });
+
+    it('循環検知後もコンテナは正常に使える（スタックがクリアされる）', () => {
+      const badToken = createToken<string>('Bad');
+      const goodToken = createToken<string>('Good');
+
+      container.register(badToken, (c) => c.resolve(badToken));
+      container.register(goodToken, () => 'ok');
+
+      expect(() => container.resolve(badToken)).toThrowError(
+        /circular dependency/i,
+      );
+
+      expect(container.resolve(goodToken)).toBe('ok');
+    });
+  });
 });

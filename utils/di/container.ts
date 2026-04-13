@@ -24,8 +24,8 @@ interface Registration<T> {
  * ```
  *
  * ### 拡張のヒント
- * - **循環参照検知**: 現時点では未実装（無限再帰になる）。
- *   `resolve()` に解決中スタックを持たせ、同一トークンの再帰を検出すれば実装可能。
+ * - **循環参照検知**: `resolve()` 内で解決中スタック (`Set<symbol>`) を管理し、
+ *   同一トークンの再帰呼び出しを検出して `Error` を投げる。
  * - **Scoped ライフタイム**: リクエストスコープなどが必要な場合、
  *   子コンテナ (`createScope()`) を導入する設計が一般的。
  * - **React 連携**: `useInjection` フックで Context 経由のコンテナ参照を提供できる。
@@ -33,6 +33,8 @@ interface Registration<T> {
  */
 export class Container {
   private readonly registrations = new Map<symbol, Registration<unknown>>();
+
+  private readonly resolvingStack = new Set<symbol>();
 
   /**
    * 依存をコンテナに登録する。
@@ -86,14 +88,34 @@ export class Container {
       );
     }
 
-    if (registration.lifetime === 'singleton') {
-      if (registration.instance === undefined) {
-        registration.instance = registration.factory(this);
-      }
+    if (
+      registration.lifetime === 'singleton' &&
+      registration.instance !== undefined
+    ) {
       return registration.instance as T;
     }
 
-    return registration.factory(this) as T;
+    const sym = token as symbol;
+
+    if (this.resolvingStack.has(sym)) {
+      const chain = [...this.resolvingStack, sym]
+        .map((s) => s.toString())
+        .join(' → ');
+      throw new Error(`[DI] Circular dependency detected: ${chain}`);
+    }
+
+    this.resolvingStack.add(sym);
+    try {
+      const instance = registration.factory(this);
+
+      if (registration.lifetime === 'singleton') {
+        registration.instance = instance;
+      }
+
+      return instance as T;
+    } finally {
+      this.resolvingStack.delete(sym);
+    }
   }
 
   /**
