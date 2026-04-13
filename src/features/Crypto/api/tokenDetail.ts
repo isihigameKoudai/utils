@@ -3,12 +3,10 @@ import {
   type MultiTimeframe,
   type Symbol,
 } from '../constants';
-import type { TokenDetailApi } from '../services/tokenDetail/types';
 
 import { fetchTradeDataList } from './crypto';
 
-/** @description TokenDetail APIクライアント（TokenDetailApiを実装） */
-export const tokenDetailApi: TokenDetailApi = {
+export const tokenDetailApi = {
   fetchAllTimeframes: (
     token: Symbol,
     timeframes: readonly MultiTimeframe[] = MULTI_TIMEFRAMES,
@@ -25,4 +23,6 @@ export const tokenDetailApi: TokenDetailApi = {
       };
     });
   },
-};
+} as const;
+
+export type TokenDetailApi = typeof tokenDetailApi;

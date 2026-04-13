@@ -1,18 +1,5 @@
-import type { MultiTimeframe, Symbol } from '../../constants';
-import type { Trade } from '../../shared/CryptoChart/model/CandleStick';
+import type { TokenDetailApi } from '../../api/tokenDetail';
 import type { TokenDetailStore } from '../../stores/tokenDetail';
-
-export type TokenDetailApiResult = {
-  timeframe: MultiTimeframe;
-  data: Trade[];
-};
-
-export type TokenDetailApi = {
-  fetchAllTimeframes: (
-    token: Symbol,
-    timeframes: readonly MultiTimeframe[],
-  ) => Promise<TokenDetailApiResult>[];
-};
 
 type TokenDetailActions = ReturnType<
   typeof TokenDetailStore.useStore

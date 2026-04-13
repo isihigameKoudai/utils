@@ -1,11 +1,11 @@
 import type { ActionsProps } from '@/utils/i-state';
 
+import type { TokenDetailApi } from '../../api/tokenDetail';
 import {
   MULTI_TIMEFRAMES,
   type MultiTimeframe,
   type Symbol,
 } from '../../constants';
-import type { TokenDetailApi } from '../../services/tokenDetail/types';
 
 import { queries } from './queries';
 import type {

@@ -7,7 +7,6 @@ import type { Trade } from '../../shared/CryptoChart/model/CandleStick';
 
 import type { TokenDetailState } from './type';
 
-/** @description Trade[] → CandlestickData[] に変換 */
 const toCandlestickData = (
   trades: Trade[],
 ): CandlestickData<UTCTimestamp>[] => {
