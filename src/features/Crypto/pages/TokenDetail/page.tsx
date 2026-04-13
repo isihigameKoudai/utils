@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { CryptoChart } from '../../components/CryptoChart';
 import type { Symbol } from '../../constants';
 import { useTokenDetail } from '../../hooks/useTokenDetail';
-import { getTimeframeLabel } from '../../modules/utils';
 
 import {
   Breadcrumb,
@@ -45,15 +44,19 @@ export const TokenDetailPage = ({ token }: TokenDetailPageProps) => {
       </Header>
 
       <ChartGrid>
-        {queries.chartPanels.map(({ timeframe, data, isLoading, error }) => (
-          <ChartCell key={timeframe}>
-            <TimeframeLabel>{getTimeframeLabel(timeframe)}</TimeframeLabel>
-            {isLoading && <Overlay>読み込み中...</Overlay>}
-            {!isLoading && error && <Overlay>{error}</Overlay>}
-            {!isLoading && !error && data && <CryptoChart data={data} isDark />}
-            {!isLoading && !error && !data && <Overlay>データなし</Overlay>}
-          </ChartCell>
-        ))}
+        {queries.chartPanels.map(
+          ({ timeframe, label, data, isLoading, error }) => (
+            <ChartCell key={timeframe}>
+              <TimeframeLabel>{label}</TimeframeLabel>
+              {isLoading && <Overlay>読み込み中...</Overlay>}
+              {!isLoading && error && <Overlay>{error}</Overlay>}
+              {!isLoading && !error && data && (
+                <CryptoChart data={data} isDark />
+              )}
+              {!isLoading && !error && !data && <Overlay>データなし</Overlay>}
+            </ChartCell>
+          ),
+        )}
       </ChartGrid>
     </PageContainer>
   );
