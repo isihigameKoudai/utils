@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 
-import { Container, createToken } from './container';
+import { Container } from './container';
+import { createToken } from './modules';
 
 describe('Container', () => {
   let container: Container;
