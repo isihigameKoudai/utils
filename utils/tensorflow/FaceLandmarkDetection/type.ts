@@ -1,5 +1,21 @@
-import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
+export type FaceKeypoint = {
+  x: number;
+  y: number;
+  z: number;
+  name?: string;
+};
 
-export type RenderCallBack = (
-  faces: faceLandmarksDetection.Face[],
-) => void | Promise<void>;
+export type Face = {
+  box: {
+    width: number;
+    height: number;
+    xMin: number;
+    xMax: number;
+    yMin: number;
+    yMax: number;
+  };
+  keypoints: FaceKeypoint[];
+  annotations: Record<string, [number, number, number][]>;
+};
+
+export type RenderCallBack = (faces: Face[]) => void | Promise<void>;

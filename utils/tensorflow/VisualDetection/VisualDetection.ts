@@ -1,17 +1,15 @@
-/**
- * npm i @tensorflow/tfjs @tensorflow-models/coco-ssd
- */
-import * as tf from '@tensorflow/tfjs';
-import * as cocoSsd from '@tensorflow-models/coco-ssd';
+import { ObjectDetector, type Detection } from '@mediapipe/tasks-vision';
 
 import {
-  INITIAL_VIDEO_EL_WIDTH,
   INITIAL_VIDEO_EL_HEIGHT,
+  INITIAL_VIDEO_EL_WIDTH,
 } from '../../Media/constants';
 import { Video } from '../../Media/Video';
 import type { ElOption } from '../type';
+import { getVisionFileset } from '../vision';
 
-import type { DetectedObject, RenderCallBack } from './type';
+import { MODEL_ASSET_PATH } from './constants';
+import type { DetectedObject, ModelConfig, RenderCallBack } from './type';
 
 interface Params {
   navigator: Navigator;
@@ -19,14 +17,9 @@ interface Params {
   window: Window & typeof globalThis;
 }
 
-/**
- * Detect some objects by using camera;
- * powered by tensorflow.js cocossd model;
- * https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd
- */
 export class VisualDetection extends Video {
-  _model: cocoSsd.ObjectDetection | null;
-  _detectedRawObjects: cocoSsd.DetectedObject[];
+  _model: ObjectDetector | null;
+  _detectedRawObjects: Detection[];
   _requestAnimationFrameId: number;
 
   private document: Document;
@@ -50,22 +43,24 @@ export class VisualDetection extends Video {
   }
 
   get detectedObjects(): DetectedObject[] {
-    return (this.detectedRawObjects || []).map((obj) => {
+    return (this.detectedRawObjects || []).map((detectedObject) => {
       const { x: timesX, y: timesY } = this.magnification;
-      const left = obj.bbox[0] * timesX;
-      const top = obj.bbox[1] * timesY;
-      const width = obj.bbox[2] * timesX;
-      const height = obj.bbox[3] * timesY;
-      const centerX = (obj.bbox[0] + obj.bbox[2] / 2) * timesX;
-      const centerY = (obj.bbox[1] + obj.bbox[3] / 2) * timesY;
+      const box = detectedObject.boundingBox;
+      const left = (box?.originX ?? 0) * timesX;
+      const top = (box?.originY ?? 0) * timesY;
+      const width = (box?.width ?? 0) * timesX;
+      const height = (box?.height ?? 0) * timesY;
+      const centerX = left + width / 2;
+      const centerY = top + height / 2;
+      const topCategory = detectedObject.categories[0];
 
       return {
         left,
         top,
         width,
         height,
-        class: obj.class,
-        score: obj.score,
+        class: topCategory?.categoryName ?? '',
+        score: topCategory?.score ?? 0,
         center: {
           x: centerX,
           y: centerY,
@@ -74,14 +69,21 @@ export class VisualDetection extends Video {
     });
   }
 
-  async loadModel(config: cocoSsd.ModelConfig = {}) {
+  async loadModel(config: ModelConfig = {}) {
     try {
-      await tf.ready();
-      this._model = await cocoSsd.load(config);
+      const fileset = await getVisionFileset();
+      this._model = await ObjectDetector.createFromOptions(fileset, {
+        baseOptions: {
+          modelAssetPath: MODEL_ASSET_PATH,
+          delegate: 'GPU',
+        },
+        runningMode: 'VIDEO',
+        scoreThreshold: config.scoreThreshold ?? 0.3,
+      });
       return this.model;
-    } catch (e) {
-      console.error(e);
-      throw e;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
   }
 
@@ -107,7 +109,7 @@ export class VisualDetection extends Video {
 
   async load(
     elConfig?: ElOption,
-    modelConfig: cocoSsd.ModelConfig = {},
+    modelConfig: ModelConfig = {},
   ): Promise<HTMLVideoElement> {
     const $video = await this.loadEl(elConfig || {});
     await this.loadModel(modelConfig);
@@ -125,8 +127,11 @@ export class VisualDetection extends Video {
       return;
     }
 
-    const detectedRawObjects = await this.model.detect(this.$video);
-    this._detectedRawObjects = detectedRawObjects;
+    const detectedRawObjects = this.model.detectForVideo(
+      this.$video,
+      performance.now(),
+    );
+    this._detectedRawObjects = detectedRawObjects.detections;
 
     if (renderCallBack) {
       renderCallBack(this.detectedObjects);

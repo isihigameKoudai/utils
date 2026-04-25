@@ -2,23 +2,10 @@ import type { CandlestickData, UTCTimestamp } from 'lightweight-charts';
 
 import type { QueriesProps } from '@/utils/i-state';
 
-import { MULTI_TIMEFRAMES, type MultiTimeframe } from '../../constants';
-import type { Trade } from '../../shared/CryptoChart/model/CandleStick';
+import { TIMEFRAME, type MultiTimeframe } from '../../constants';
+import { toCandlestickData } from '../../shared/CryptoChart/model/CandleStick';
 
 import type { TokenDetailState } from './type';
-
-/** @description Trade[] → CandlestickData[] に変換 */
-const toCandlestickData = (
-  trades: Trade[],
-): CandlestickData<UTCTimestamp>[] => {
-  return trades.map((trade) => ({
-    time: (trade[0] / 1000) as UTCTimestamp,
-    open: Number(trade[1]),
-    high: Number(trade[2]),
-    low: Number(trade[3]),
-    close: Number(trade[4]),
-  }));
-};
 
 export const queries = {
   token: (state) => state.token,
@@ -43,10 +30,11 @@ export const queries = {
   },
 
   chartPanels: (state) =>
-    MULTI_TIMEFRAMES.map((timeframe) => {
+    Object.values(TIMEFRAME).map(({ value: timeframe, label }) => {
       const trades = state.chartData[timeframe];
       return {
         timeframe,
+        label,
         data: trades ? toCandlestickData(trades) : undefined,
         isLoading: state.loading[timeframe] ?? false,
         error: state.errors[timeframe],

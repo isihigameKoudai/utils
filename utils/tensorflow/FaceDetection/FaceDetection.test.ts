@@ -1,43 +1,55 @@
-import * as faceDetection from '@tensorflow-models/face-detection';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { FaceDetector } from '@mediapipe/tasks-vision';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   documentMock,
   navigatorMock,
   windowMock,
 } from '../../__test__/mocks/global';
+import { getVisionFileset } from '../vision';
 
+import { MODEL_ASSET_PATH } from './constants';
 import { FaceDetection } from './FaceDetection';
 
-vi.mock('@tensorflow-models/face-detection', () => ({
-  SupportedModels: {
-    MediaPipeFaceDetector: 'MediaPipeFaceDetector',
+vi.mock('../vision', () => ({
+  getVisionFileset: vi.fn().mockResolvedValue({}),
+}));
+
+vi.mock('@mediapipe/tasks-vision', () => ({
+  FaceDetector: {
+    createFromOptions: vi.fn(),
   },
-  createDetector: vi.fn().mockResolvedValue({
-    estimateFaces: vi.fn().mockResolvedValue([
-      {
-        box: {
-          width: 100,
-          height: 100,
-          xMin: 0,
-          xMax: 100,
-          yMin: 0,
-          yMax: 100,
-        },
-        keypoints: [
-          { x: 50, y: 50, name: 'nose' },
-          { x: 30, y: 30, name: 'leftEye' },
-          { x: 70, y: 30, name: 'rightEye' },
-        ],
-      },
-    ]),
-  }),
 }));
 
 describe('FaceDetection', () => {
   let detector: FaceDetection;
 
   beforeEach(() => {
+    vi.mocked(FaceDetector.createFromOptions).mockResolvedValue({
+      setOptions: vi.fn(),
+      detect: vi.fn(),
+      detectForVideo: vi.fn().mockReturnValue({
+        detections: [
+          {
+            boundingBox: {
+              originX: 0,
+              originY: 0,
+              width: 100,
+              height: 100,
+              angle: 0,
+            },
+            keypoints: [
+              { x: 0.5, y: 0.5 },
+              { x: 0.3, y: 0.3 },
+              { x: 0.7, y: 0.3 },
+            ],
+            categories: [],
+          },
+        ],
+      }),
+      close: vi.fn(),
+    });
+
     detector = new FaceDetection({
       navigator: navigatorMock,
       document: documentMock,
@@ -51,9 +63,7 @@ describe('FaceDetection', () => {
 
   describe('constructor', () => {
     it('should initialize with default values', () => {
-      expect(detector.model).toBe(
-        faceDetection.SupportedModels.MediaPipeFaceDetector,
-      );
+      expect(detector.model).toBe('MediaPipeFaceDetector');
       expect(detector.detector).toBeNull();
       expect(detector.detectedRawFaces).toEqual([]);
       expect(detector.requestAnimationFrameId).toBe(0);
@@ -63,13 +73,17 @@ describe('FaceDetection', () => {
   describe('loadModel', () => {
     it('should load the face detection model', async () => {
       await detector.loadModel();
-      expect(faceDetection.createDetector).toHaveBeenCalledWith(
-        detector.model,
-        {
-          runtime: 'mediapipe',
-          solutionPath:
-            'https://cdn.jsdelivr.net/npm/@mediapipe/face_detection',
-        },
+
+      expect(getVisionFileset).toHaveBeenCalled();
+      expect(FaceDetector.createFromOptions).toHaveBeenCalledWith(
+        {},
+        expect.objectContaining({
+          baseOptions: expect.objectContaining({
+            modelAssetPath: MODEL_ASSET_PATH,
+            delegate: 'GPU',
+          }),
+          runningMode: 'VIDEO',
+        }),
       );
       expect(detector.detector).not.toBeNull();
     });
@@ -100,7 +114,9 @@ describe('FaceDetection', () => {
     });
 
     it('should not start if detector is not loaded', async () => {
-      const consoleSpy = vi.spyOn(console, 'error');
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       await detector.start();
 
       expect(consoleSpy).toHaveBeenCalledWith(

@@ -1,4 +1,4 @@
-import type { Hand as HandPose } from '@tensorflow-models/hand-pose-detection';
+import type { Hand as HandPose } from '@/utils/tensorflow/HandPoseDetection/type';
 
 export type Hand = HandPose;
 

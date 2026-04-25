@@ -3,7 +3,7 @@ import { apiMap } from '@/utils/apis/config';
 
 import { type Trade } from '../shared/CryptoChart/model/CandleStick';
 
-export interface CryptoListParams {
+interface CryptoListParams {
   symbol: string;
   baseSymbol?: string;
   interval:

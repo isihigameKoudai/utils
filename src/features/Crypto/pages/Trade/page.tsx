@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import { CryptoChart } from '../../components/CryptoChart';
-import { MULTI_TIMEFRAMES, SYMBOLS, type Symbol } from '../../constants';
+import { SYMBOLS, TIMEFRAME, type Symbol } from '../../constants';
 import { useTrade } from '../../hooks/useTrade';
-import { getTimeframeLabel } from '../../modules/utils';
 
 import {
   ActiveTimeframeButton,
@@ -47,10 +46,10 @@ export const TradePage = () => {
   return (
     <PageContainer>
       <Toolbar>
-        {MULTI_TIMEFRAMES.map((tf) =>
+        {Object.values(TIMEFRAME).map(({ value: tf, label }) =>
           tf === selectedTimeframe ? (
             <ActiveTimeframeButton key={tf} type="button">
-              {getTimeframeLabel(tf)}
+              {label}
             </ActiveTimeframeButton>
           ) : (
             <TimeframeButton
@@ -58,7 +57,7 @@ export const TradePage = () => {
               type="button"
               onClick={() => actions.changeTimeframe({ timeframe: tf })}
             >
-              {getTimeframeLabel(tf)}
+              {label}
             </TimeframeButton>
           ),
         )}

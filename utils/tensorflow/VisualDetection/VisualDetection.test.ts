@@ -1,45 +1,62 @@
-import * as cocoSsd from '@tensorflow-models/coco-ssd';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { ObjectDetector } from '@mediapipe/tasks-vision';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
+  documentMock,
   navigatorMock,
   streamMock,
   windowMock,
-  documentMock,
 } from '../../__test__/mocks/global';
 import {
-  INITIAL_VIDEO_EL_WIDTH,
   INITIAL_VIDEO_EL_HEIGHT,
+  INITIAL_VIDEO_EL_WIDTH,
 } from '../../Media/constants';
+import { getVisionFileset } from '../vision';
 
+import { MODEL_ASSET_PATH } from './constants';
 import { VisualDetection } from './VisualDetection';
 
-const mockModel = {
-  detect: vi.fn(),
-  modelPath: '',
-  model: {},
-  getPrefix: () => '',
-  load: vi.fn(),
-  infer: vi.fn(),
-  buildDetectedObjects: vi.fn(),
-  calculateMaxScores: vi.fn(),
-  dispose: vi.fn(),
-} as unknown as cocoSsd.ObjectDetection;
+vi.mock('../vision', () => ({
+  getVisionFileset: vi.fn().mockResolvedValue({}),
+}));
+
+vi.mock('@mediapipe/tasks-vision', () => ({
+  ObjectDetector: {
+    createFromOptions: vi.fn(),
+  },
+}));
 
 describe('VisualDetection', () => {
   let visualDetector: VisualDetection;
 
-  const mockDetectedObjects: cocoSsd.DetectedObject[] = [
+  const mockDetections = [
     {
-      bbox: [100, 200, 50, 60], // [x, y, width, height]
-      class: 'person',
-      score: 0.95,
+      boundingBox: {
+        originX: 100,
+        originY: 200,
+        width: 50,
+        height: 60,
+        angle: 0,
+      },
+      categories: [
+        {
+          categoryName: 'person',
+          score: 0.95,
+          index: 0,
+          displayName: '',
+        },
+      ],
+      keypoints: [],
     },
   ];
 
   beforeEach(() => {
-    // cocoSsd.loadのモックを修正
-    vi.spyOn(cocoSsd, 'load').mockResolvedValue(mockModel);
+    vi.mocked(ObjectDetector.createFromOptions).mockResolvedValue({
+      setOptions: vi.fn(),
+      detect: vi.fn(),
+      detectForVideo: vi.fn().mockReturnValue({ detections: mockDetections }),
+      close: vi.fn(),
+    });
 
     visualDetector = new VisualDetection({
       navigator: navigatorMock,
@@ -52,13 +69,24 @@ describe('VisualDetection', () => {
     it('モデルが正しくロードされること', async () => {
       const model = await visualDetector.loadModel();
 
-      expect(cocoSsd.load).toHaveBeenCalled();
-      expect(model).toBe(mockModel);
+      expect(getVisionFileset).toHaveBeenCalled();
+      expect(ObjectDetector.createFromOptions).toHaveBeenCalledWith(
+        {},
+        expect.objectContaining({
+          baseOptions: expect.objectContaining({
+            modelAssetPath: MODEL_ASSET_PATH,
+            delegate: 'GPU',
+          }),
+          runningMode: 'VIDEO',
+          scoreThreshold: 0.3,
+        }),
+      );
+      expect(model).not.toBeNull();
     });
 
     it('モデルのロードに失敗した場合エラーをスローすること', async () => {
       const error = new Error('Model load failed');
-      vi.spyOn(cocoSsd, 'load').mockRejectedValueOnce(error);
+      vi.mocked(ObjectDetector.createFromOptions).mockRejectedValueOnce(error);
 
       await expect(visualDetector.loadModel()).rejects.toThrow();
     });
@@ -99,17 +127,19 @@ describe('VisualDetection', () => {
     it('検出されたオブジェクトが正しく変換されること', async () => {
       await visualDetector.loadModel();
       await visualDetector.loadEl({});
-      visualDetector._detectedRawObjects = mockDetectedObjects;
+      visualDetector._detectedRawObjects = mockDetections;
 
       const detectedObjects = visualDetector.detectedObjects;
-      const obj = detectedObjects[0];
+      const detectedObject = detectedObjects[0];
 
-      expect(obj.left).toBe(mockDetectedObjects[0].bbox[0]);
-      expect(obj.top).toBe(mockDetectedObjects[0].bbox[1]);
-      expect(obj.width).toBe(mockDetectedObjects[0].bbox[2]);
-      expect(obj.height).toBe(mockDetectedObjects[0].bbox[3]);
-      expect(obj.class).toBe(mockDetectedObjects[0].class);
-      expect(obj.score).toBe(mockDetectedObjects[0].score);
+      expect(detectedObject.left).toBe(mockDetections[0].boundingBox.originX);
+      expect(detectedObject.top).toBe(mockDetections[0].boundingBox.originY);
+      expect(detectedObject.width).toBe(mockDetections[0].boundingBox.width);
+      expect(detectedObject.height).toBe(mockDetections[0].boundingBox.height);
+      expect(detectedObject.class).toBe(
+        mockDetections[0].categories[0].categoryName,
+      );
+      expect(detectedObject.score).toBe(mockDetections[0].categories[0].score);
     });
   });
 
@@ -121,7 +151,6 @@ describe('VisualDetection', () => {
       const mockCallback = vi.fn();
       await visualDetector.start(mockCallback);
 
-      expect(mockModel.detect).toHaveBeenCalled();
       expect(mockCallback).toHaveBeenCalled();
     });
 

@@ -1,46 +1,54 @@
-import * as handPoseDetection from '@tensorflow-models/hand-pose-detection';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { HandLandmarker } from '@mediapipe/tasks-vision';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   documentMock,
   navigatorMock,
   windowMock,
 } from '../../__test__/mocks/global';
+import { getVisionFileset } from '../vision';
 
+import { MODEL_ASSET_PATH } from './constants';
 import { HandPoseDetection } from './HandPoseDetection';
 
-vi.mock('@tensorflow-models/hand-pose-detection', () => ({
-  SupportedModels: {
-    MediaPipeHands: 'MediaPipeHands',
+vi.mock('../vision', () => ({
+  getVisionFileset: vi.fn().mockResolvedValue({}),
+}));
+
+vi.mock('@mediapipe/tasks-vision', () => ({
+  HandLandmarker: {
+    createFromOptions: vi.fn(),
   },
-  createDetector: vi.fn().mockResolvedValue({
-    estimateHands: vi.fn().mockResolvedValue([
-      {
-        keypoints: [
-          { x: 0, y: 0, name: 'wrist' },
-          { x: 10, y: 10, name: 'thumb_tip' },
-          { x: 20, y: 20, name: 'index_finger_tip' },
-        ],
-        handedness: 'Left',
-        score: 0.98,
-      },
-      {
-        keypoints: [
-          { x: 100, y: 100, name: 'wrist' },
-          { x: 110, y: 110, name: 'thumb_tip' },
-          { x: 120, y: 120, name: 'index_finger_tip' },
-        ],
-        handedness: 'Right',
-        score: 0.96,
-      },
-    ]),
-  }),
 }));
 
 describe('HandPoseDetection', () => {
   let detector: HandPoseDetection;
 
   beforeEach(() => {
+    vi.mocked(HandLandmarker.createFromOptions).mockResolvedValue({
+      setOptions: vi.fn(),
+      detect: vi.fn(),
+      detectForVideo: vi.fn().mockReturnValue({
+        landmarks: [
+          [
+            { x: 0, y: 0, z: 0 },
+            { x: 0.1, y: 0.1, z: 0 },
+            { x: 0.2, y: 0.2, z: 0 },
+          ],
+          [
+            { x: 0.5, y: 0.5, z: 0 },
+            { x: 0.6, y: 0.6, z: 0 },
+            { x: 0.7, y: 0.7, z: 0 },
+          ],
+        ],
+        handedness: [
+          [{ categoryName: 'Left', score: 0.98, index: 0, displayName: '' }],
+          [{ categoryName: 'Right', score: 0.96, index: 1, displayName: '' }],
+        ],
+      }),
+      close: vi.fn(),
+    });
+
     detector = new HandPoseDetection({
       navigator: navigatorMock,
       document: documentMock,
@@ -54,9 +62,7 @@ describe('HandPoseDetection', () => {
 
   describe('constructor', () => {
     it('should initialize with default values', () => {
-      expect(detector.model).toBe(
-        handPoseDetection.SupportedModels.MediaPipeHands,
-      );
+      expect(detector.model).toBe('MediaPipeHands');
       expect(detector.detector).toBeNull();
       expect(detector.detectedRawHands).toEqual([]);
       expect(detector.requestAnimationFrameId).toBe(0);
@@ -66,19 +72,28 @@ describe('HandPoseDetection', () => {
   describe('loadModel', () => {
     it('should load the hand pose detection model', async () => {
       await detector.loadModel();
-      expect(handPoseDetection.createDetector).toHaveBeenCalledWith(
-        detector.model,
-        {
-          runtime: 'tfjs',
-        },
+
+      expect(getVisionFileset).toHaveBeenCalled();
+      expect(HandLandmarker.createFromOptions).toHaveBeenCalledWith(
+        {},
+        expect.objectContaining({
+          baseOptions: expect.objectContaining({
+            modelAssetPath: MODEL_ASSET_PATH,
+            delegate: 'GPU',
+          }),
+          runningMode: 'VIDEO',
+          numHands: 2,
+        }),
       );
       expect(detector.detector).not.toBeNull();
     });
 
     it('should handle model loading errors', async () => {
       const error = new Error('Model loading failed');
-      vi.mocked(handPoseDetection.createDetector).mockRejectedValueOnce(error);
-      const consoleSpy = vi.spyOn(console, 'error');
+      vi.mocked(HandLandmarker.createFromOptions).mockRejectedValueOnce(error);
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
 
       await detector.loadModel();
 
@@ -126,10 +141,13 @@ describe('HandPoseDetection', () => {
       const hands = detector.detectedRawHands;
       expect(hands[0].handedness).toBe('Left');
       expect(hands[1].handedness).toBe('Right');
+      expect(hands[0].keypoints[0].name).toBe('wrist');
     });
 
     it('should not start if detector is not loaded', async () => {
-      const consoleSpy = vi.spyOn(console, 'error');
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       await detector.start();
 
       expect(consoleSpy).toHaveBeenCalledWith(
@@ -140,7 +158,9 @@ describe('HandPoseDetection', () => {
 
     it('should not start if video is not loaded', async () => {
       await detector.loadModel();
-      const consoleSpy = vi.spyOn(console, 'error');
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
 
       await detector.start();
 

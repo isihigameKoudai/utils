@@ -41,10 +41,24 @@ export const SYMBOLS = [
 
 export type Symbol = (typeof SYMBOLS)[number];
 
-export const TIMEFRAMES = ['1d', '1M'] as const;
-export type Timeframe = (typeof TIMEFRAMES)[number];
+export const TIMEFRAME = {
+  HOUR: {
+    value: '1h',
+    label: '1時間足',
+  },
+  DAY: {
+    value: '1d',
+    label: '日足',
+  },
+  WEEK: {
+    value: '1w',
+    label: '週足',
+  },
+  MONTH: {
+    value: '1M',
+    label: '月足',
+  },
+} as const;
 
-export const MULTI_TIMEFRAMES = ['1h', '1d', '1w', '1M'] as const;
+export const MULTI_TIMEFRAMES = Object.values(TIMEFRAME).map((v) => v.value);
 export type MultiTimeframe = (typeof MULTI_TIMEFRAMES)[number];
-
-export const DEFAULT_TOKEN = 'BTC' as const;

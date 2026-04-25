@@ -1,5 +1,13 @@
-import * as handPoseDetection from '@tensorflow-models/hand-pose-detection';
+export type Keypoint = {
+  x: number;
+  y: number;
+  name?: string;
+};
 
-export type RenderCallBack = (
-  hands: handPoseDetection.Hand[],
-) => void | Promise<void>;
+export type Hand = {
+  keypoints: Keypoint[];
+  handedness: 'Left' | 'Right';
+  score: number;
+};
+
+export type RenderCallBack = (hands: Hand[]) => void | Promise<void>;

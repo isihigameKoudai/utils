@@ -1,3 +1,5 @@
+import type { CandlestickData, UTCTimestamp } from 'lightweight-charts';
+
 export type Trade = [
   // Open time
   number,
@@ -24,3 +26,15 @@ export type Trade = [
   // Ignore
   string,
 ];
+
+export const toCandlestickData = (
+  trades: Trade[],
+): CandlestickData<UTCTimestamp>[] => {
+  return trades.map((trade) => ({
+    time: (trade[0] / 1000) as UTCTimestamp,
+    open: Number(trade[1]),
+    high: Number(trade[2]),
+    low: Number(trade[3]),
+    close: Number(trade[4]),
+  }));
+};

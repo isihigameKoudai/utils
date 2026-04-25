@@ -1,0 +1,35 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+  "agents": {
+    "prometheus": {
+      "enabled": true,
+      "replace_plan": true,
+      "model": "github-copilot/claude-opus-4.6"
+    },
+    "sisyphus": {
+      "model": "github-copilot/claude-opus-4.6"
+    },
+    "oracle": {
+      "model": "github-copilot/claude-opus-4.6"
+    },
+    "frontend-ui-ux-engineer": {
+      "model": "github-copilot/claude-sonnet-4.5"
+    },
+    "librarian": {
+      "model": "github-copilot/claude-sonnet-4.5"
+    },
+    "explore": {
+      "model": "github-copilot/claude-haiku-4.5"
+    },
+    "document-writer": {
+      "model": "github-copilot/claude-sonnet-4.5"
+    },
+    "multimodal-looker": {
+      "model": "github-copilot/claude-sonnet-4.5"
+    }
+  },
+  "_migrations": [
+    "model-version:anthropic/claude-opus-4-5->anthropic/claude-opus-4-6",
+    "provider:anthropic->github-copilot"
+  ]
+}

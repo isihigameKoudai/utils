@@ -1,19 +1,10 @@
-import {
-  MULTI_TIMEFRAMES,
-  type MultiTimeframe,
-  type Symbol,
-} from '../constants';
-import type { TokenDetailApi } from '../services/tokenDetail/types';
+import { MULTI_TIMEFRAMES, type Symbol } from '../constants';
 
 import { fetchTradeDataList } from './crypto';
 
-/** @description TokenDetail APIクライアント（TokenDetailApiを実装） */
-export const tokenDetailApi: TokenDetailApi = {
-  fetchAllTimeframes: (
-    token: Symbol,
-    timeframes: readonly MultiTimeframe[] = MULTI_TIMEFRAMES,
-  ) => {
-    return timeframes.map(async (timeframe) => {
+export const tokenDetailApi = {
+  fetchAllTimeframes: (token: Symbol) => {
+    return MULTI_TIMEFRAMES.map(async (timeframe) => {
       const trades = await fetchTradeDataList({
         symbol: token,
         interval: timeframe,
@@ -25,4 +16,6 @@ export const tokenDetailApi: TokenDetailApi = {
       };
     });
   },
-};
+} as const;
+
+export type TokenDetailApi = typeof tokenDetailApi;

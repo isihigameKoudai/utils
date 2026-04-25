@@ -1,11 +1,11 @@
 import type { ActionsProps } from '@/utils/i-state';
 
+import type { TokenDetailApi } from '../../api/tokenDetail';
 import {
   MULTI_TIMEFRAMES,
   type MultiTimeframe,
   type Symbol,
 } from '../../constants';
-import type { TokenDetailApi } from '../../services/tokenDetail/types';
 
 import { queries } from './queries';
 import type {
@@ -32,9 +32,7 @@ export const actions = {
    * @command FetchAllTimeframes
    */
   async fetchAllTimeframes({ dispatch }, api: TokenDetailApi, token: Symbol) {
-    const settled = await Promise.allSettled(
-      api.fetchAllTimeframes(token, MULTI_TIMEFRAMES),
-    );
+    const settled = await Promise.allSettled(api.fetchAllTimeframes(token));
 
     const nextChartData: TokenDetailChartData = {};
     const nextErrors: TokenDetailErrorState = {};

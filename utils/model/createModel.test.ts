@@ -1,20 +1,18 @@
+import * as v from 'valibot';
 import { describe, it, expect } from 'vitest';
-import { z } from 'zod';
 
 import { createModelFactory } from './createModel';
 
 describe('createModelFactory', () => {
-  // テスト用のスキーマ定義
-  const userSchema = z.object({
-    id: z.string(),
-    firstName: z.string(),
-    lastName: z.string(),
-    age: z.number().min(0),
+  const userSchema = v.object({
+    id: v.string(),
+    firstName: v.string(),
+    lastName: v.string(),
+    age: v.pipe(v.number(), v.minValue(0)),
   });
 
-  type UserParams = z.infer<typeof userSchema>;
+  type UserParams = v.InferOutput<typeof userSchema>;
 
-  // 完成したモデルの型（パラメータ + 拡張）
   type User = UserParams & {
     readonly fullName: string;
     readonly isAdult: boolean;
@@ -63,7 +61,6 @@ describe('createModelFactory', () => {
         age: 25,
       });
 
-      // 戻り値の型は User
       expect(user.fullName).toBe('Taro Yamada');
       expect(user.isAdult).toBe(true);
       expect(user.greet()).toBe("Hello, I'm Taro!");
@@ -109,22 +106,21 @@ describe('createModelFactory', () => {
         age: 25,
       });
 
-      // strict modeではTypeError、そうでなければ暗黙の失敗
       expect(() => {
-        (user as { age: number }).age = 30;
+        (user as unknown as { age: number }).age = 30;
       }).toThrow();
     });
 
     it('ネストされたオブジェクトも不変である', () => {
-      const nestedSchema = z.object({
-        id: z.string(),
-        address: z.object({
-          city: z.string(),
-          zip: z.string(),
+      const nestedSchema = v.object({
+        id: v.string(),
+        address: v.object({
+          city: v.string(),
+          zip: v.string(),
         }),
       });
 
-      type NestedParams = z.infer<typeof nestedSchema>;
+      type NestedParams = v.InferOutput<typeof nestedSchema>;
 
       const createEntity = createModelFactory<NestedParams>({
         schema: nestedSchema,
@@ -144,12 +140,12 @@ describe('createModelFactory', () => {
     });
 
     it('配列も不変である', () => {
-      const arraySchema = z.object({
-        id: z.string(),
-        tags: z.array(z.string()),
+      const arraySchema = v.object({
+        id: v.string(),
+        tags: v.array(v.string()),
       });
 
-      type ArrayParams = z.infer<typeof arraySchema>;
+      type ArrayParams = v.InferOutput<typeof arraySchema>;
 
       const createEntity = createModelFactory<ArrayParams>({
         schema: arraySchema,
@@ -166,7 +162,7 @@ describe('createModelFactory', () => {
     });
   });
 
-  describe('Zodバリデーション', () => {
+  describe('Valibotバリデーション', () => {
     it('不正なパラメータに対してエラーをスローする', () => {
       const createUser = createModelFactory<UserParams>({
         schema: userSchema,
@@ -177,7 +173,7 @@ describe('createModelFactory', () => {
           id: '1',
           firstName: 'Taro',
           lastName: 'Yamada',
-          age: -1, // 負の値は不正
+          age: -1,
         });
       }).toThrow();
     });
@@ -191,7 +187,6 @@ describe('createModelFactory', () => {
         createUser({
           id: '1',
           firstName: 'Taro',
-          // lastName が欠けている
           age: 25,
         } as UserParams);
       }).toThrow();
@@ -207,7 +202,7 @@ describe('createModelFactory', () => {
           id: '1',
           firstName: 'Taro',
           lastName: 'Yamada',
-          age: '25', // string instead of number
+          age: '25',
         } as unknown as UserParams);
       }).toThrow();
     });
@@ -215,7 +210,6 @@ describe('createModelFactory', () => {
 
   describe('型推論と差分計算', () => {
     it('extensionはTModelとTParamsの差分のみを返す', () => {
-      // 拡張が少ないモデル型
       type SimpleUser = UserParams & {
         readonly fullName: string;
       };
@@ -223,7 +217,6 @@ describe('createModelFactory', () => {
       const createUser = createModelFactory<UserParams, SimpleUser>({
         schema: userSchema,
         extension: (params) => ({
-          // extentionは Omit<SimpleModel, keyof UserParams> = { fullName: string } を返す
           get fullName() {
             return `${params.firstName} ${params.lastName}`;
           },

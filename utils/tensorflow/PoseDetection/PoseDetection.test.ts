@@ -1,41 +1,23 @@
-import * as tf from '@tensorflow/tfjs';
-import * as poseDetection from '@tensorflow-models/pose-detection';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { PoseLandmarker } from '@mediapipe/tasks-vision';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   documentMock,
   navigatorMock,
   windowMock,
 } from '../../__test__/mocks/global';
+import { getVisionFileset } from '../vision';
 
+import { POSE_LANDMARKER_LITE_PATH } from './constants';
 import { PoseDetection } from './PoseDetection';
 
-vi.mock('@tensorflow/tfjs', () => ({
-  ready: vi.fn().mockResolvedValue(undefined),
+vi.mock('../vision', () => ({
+  getVisionFileset: vi.fn().mockResolvedValue({}),
 }));
 
-vi.mock('@tensorflow-models/pose-detection', () => ({
-  SupportedModels: {
-    MoveNet: 'MoveNet',
-    BlazePose: 'BlazePose',
-    PoseNet: 'PoseNet',
-  },
-  createDetector: vi.fn().mockResolvedValue({
-    estimatePoses: vi.fn().mockResolvedValue([
-      {
-        keypoints: [
-          { x: 0, y: 0, score: 0.9, name: 'nose' },
-          { x: 10, y: 10, score: 0.8, name: 'left_eye' },
-          { x: 20, y: 20, score: 0.85, name: 'right_eye' },
-        ],
-        score: 0.9,
-      },
-    ]),
-  }),
-  movenet: {
-    modelType: {
-      SINGLEPOSE_LIGHTNING: 'SINGLEPOSE_LIGHTNING',
-    },
+vi.mock('@mediapipe/tasks-vision', () => ({
+  PoseLandmarker: {
+    createFromOptions: vi.fn(),
   },
 }));
 
@@ -43,6 +25,32 @@ describe('PoseDetection', () => {
   let detector: PoseDetection;
 
   beforeEach(() => {
+    vi.mocked(PoseLandmarker.createFromOptions).mockResolvedValue({
+      setOptions: vi.fn(),
+      detect: vi.fn(),
+      detectForVideo: vi.fn().mockReturnValue({
+        landmarks: [
+          [
+            { x: 0, y: 0, z: 0, visibility: 0.9 },
+            { x: 0.1, y: 0.1, z: 0, visibility: 0.8 },
+            { x: 0.2, y: 0.2, z: 0, visibility: 0.85 },
+            { x: 0.3, y: 0.3, z: 0, visibility: 0.85 },
+            { x: 0.4, y: 0.4, z: 0, visibility: 0.85 },
+            { x: 0.5, y: 0.5, z: 0, visibility: 0.85 },
+            { x: 0.6, y: 0.6, z: 0, visibility: 0.85 },
+            { x: 0.7, y: 0.7, z: 0, visibility: 0.85 },
+            { x: 0.8, y: 0.8, z: 0, visibility: 0.85 },
+            { x: 0.9, y: 0.9, z: 0, visibility: 0.85 },
+            { x: 1, y: 1, z: 0, visibility: 0.85 },
+            { x: 0.4, y: 0.4, z: 0, visibility: 0.85 },
+            { x: 0.5, y: 0.5, z: 0, visibility: 0.85 },
+          ],
+        ],
+        worldLandmarks: [],
+      }),
+      close: vi.fn(),
+    });
+
     detector = new PoseDetection({
       navigator: navigatorMock,
       document: documentMock,
@@ -56,7 +64,7 @@ describe('PoseDetection', () => {
 
   describe('constructor', () => {
     it('should initialize with default values', () => {
-      expect(detector.model).toBe(poseDetection.SupportedModels.MoveNet);
+      expect(detector.model).toBe('MoveNet');
       expect(detector.detector).toBeNull();
       expect(detector.detectedPoses).toEqual([]);
       expect(detector.requestAnimationFrameId).toBe(0);
@@ -66,15 +74,28 @@ describe('PoseDetection', () => {
   describe('loadDetector', () => {
     it('should load the pose detection model', async () => {
       await detector.loadDetector();
-      expect(tf.ready).toHaveBeenCalled();
-      expect(poseDetection.createDetector).toHaveBeenCalled();
+
+      expect(getVisionFileset).toHaveBeenCalled();
+      expect(PoseLandmarker.createFromOptions).toHaveBeenCalledWith(
+        {},
+        expect.objectContaining({
+          baseOptions: expect.objectContaining({
+            modelAssetPath: POSE_LANDMARKER_LITE_PATH,
+            delegate: 'GPU',
+          }),
+          runningMode: 'VIDEO',
+          numPoses: 1,
+        }),
+      );
       expect(detector.detector).not.toBeNull();
     });
 
     it('should handle model loading errors', async () => {
       const error = new Error('Model loading failed');
-      vi.mocked(poseDetection.createDetector).mockRejectedValueOnce(error);
-      const consoleSpy = vi.spyOn(console, 'error');
+      vi.mocked(PoseLandmarker.createFromOptions).mockRejectedValueOnce(error);
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
 
       await expect(detector.loadDetector()).rejects.toThrow(error);
       expect(consoleSpy).toHaveBeenCalledWith(error);
@@ -112,8 +133,21 @@ describe('PoseDetection', () => {
       expect(windowMock.requestAnimationFrame).toHaveBeenCalled();
     });
 
+    it('should keep landmark names for find lookups', async () => {
+      const mockVideo = documentMock.createElement('video');
+      await detector.load({ $video: mockVideo });
+      await detector.start();
+
+      const leftShoulder = detector.detectedPoses[0].keypoints.find(
+        (keypoint) => keypoint.name === 'left_shoulder',
+      );
+      expect(leftShoulder).toBeDefined();
+    });
+
     it('should not start if detector is not loaded', async () => {
-      const consoleSpy = vi.spyOn(console, 'error');
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       await detector.start();
 
       expect(consoleSpy).toHaveBeenCalledWith(
@@ -124,7 +158,9 @@ describe('PoseDetection', () => {
 
     it('should not start if video is not loaded', async () => {
       await detector.loadDetector();
-      const consoleSpy = vi.spyOn(console, 'error');
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
 
       await detector.start();
 
