@@ -14,6 +14,7 @@ import { Route as StableFluidsRouteImport } from './routes/stable-fluids'
 import { Route as ShaderRouteImport } from './routes/shader'
 import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as MeltTheBorderRouteImport } from './routes/melt-the-border'
+import { Route as GeminiEmbeddingRouteImport } from './routes/gemini-embedding'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TradeIndexRouteImport } from './routes/trade/index'
 import { Route as ThreeDimensionIndexRouteImport } from './routes/three-dimension/index'
@@ -64,6 +65,11 @@ const PlaygroundRoute = PlaygroundRouteImport.update({
 const MeltTheBorderRoute = MeltTheBorderRouteImport.update({
   id: '/melt-the-border',
   path: '/melt-the-border',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GeminiEmbeddingRoute = GeminiEmbeddingRouteImport.update({
+  id: '/gemini-embedding',
+  path: '/gemini-embedding',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -199,6 +205,7 @@ const AggregateBillSummaryRoute = AggregateBillSummaryRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/gemini-embedding': typeof GeminiEmbeddingRoute
   '/melt-the-border': typeof MeltTheBorderRoute
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
@@ -232,6 +239,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/gemini-embedding': typeof GeminiEmbeddingRoute
   '/melt-the-border': typeof MeltTheBorderRoute
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
@@ -265,6 +273,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/gemini-embedding': typeof GeminiEmbeddingRoute
   '/melt-the-border': typeof MeltTheBorderRoute
   '/playground': typeof PlaygroundRoute
   '/shader': typeof ShaderRoute
@@ -300,6 +309,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/gemini-embedding'
     | '/melt-the-border'
     | '/playground'
     | '/shader'
@@ -333,6 +343,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/gemini-embedding'
     | '/melt-the-border'
     | '/playground'
     | '/shader'
@@ -365,6 +376,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/gemini-embedding'
     | '/melt-the-border'
     | '/playground'
     | '/shader'
@@ -399,6 +411,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GeminiEmbeddingRoute: typeof GeminiEmbeddingRoute
   MeltTheBorderRoute: typeof MeltTheBorderRoute
   PlaygroundRoute: typeof PlaygroundRoute
   ShaderRoute: typeof ShaderRoute
@@ -464,6 +477,13 @@ declare module '@tanstack/react-router' {
       path: '/melt-the-border'
       fullPath: '/melt-the-border'
       preLoaderRoute: typeof MeltTheBorderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gemini-embedding': {
+      id: '/gemini-embedding'
+      path: '/gemini-embedding'
+      fullPath: '/gemini-embedding'
+      preLoaderRoute: typeof GeminiEmbeddingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -665,6 +685,7 @@ const TradeRouteWithChildren = TradeRoute._addFileChildren(TradeRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GeminiEmbeddingRoute: GeminiEmbeddingRoute,
   MeltTheBorderRoute: MeltTheBorderRoute,
   PlaygroundRoute: PlaygroundRoute,
   ShaderRoute: ShaderRoute,

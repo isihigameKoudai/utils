@@ -12,10 +12,11 @@
     "format": "prettier --write '{src,utils}/**/*.{ts,tsx}'",
     "claude": "npx tsx script/claude.ts",
     "generate:cursorrules": "node script/generate-cursor-rules.js \"**/*.ai.md\" \".cursor/rules/main.mdc\"",
-    "tsr": "npx tsr -w 'src/main\\.ts$' '.*\\.test\\.ts$'",
+    "tsr": "npx tsr -p tsconfig.src.json -w 'src/main\\.ts$' '.*\\.test\\.ts$'",
     "prepare": "husky"
   },
   "dependencies": {
+    "@google/genai": "^1.51.0",
     "@mediapipe/tasks-vision": "^0.10.14",
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.3.0",

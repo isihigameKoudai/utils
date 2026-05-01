@@ -1,0 +1,6 @@
+{
+  "appliedMigrations": [
+    "model-version:anthropic/claude-opus-4-5->anthropic/claude-opus-4-6",
+    "provider:anthropic->github-copilot"
+  ]
+}
