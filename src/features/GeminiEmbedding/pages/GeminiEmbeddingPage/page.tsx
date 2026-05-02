@@ -1,308 +1,55 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { cosineSimilarity } from '@/utils/math';
-import { styled } from '@/utils/ui/styled';
+import { ALL_SUPPORTED_TYPES } from '../../constants';
+import { useEmbeddingFeature } from '../../hooks';
 
-import { useGeminiEmbedding } from '../hooks/useGeminiEmbedding';
+import {
+  Button,
+  Container,
+  ErrorBox,
+  InfoBox,
+  Input,
+  Label,
+  MetadataGrid,
+  MetadataItem,
+  MetadataLabel,
+  MetadataValue,
+  ResultBox,
+  ResultTitle,
+  Section,
+  Subtitle,
+  TextArea,
+  Title,
+  VectorPreview,
+} from './style';
 
-const Container = styled('div')({
-  maxWidth: '1200px',
-  margin: '0 auto',
-  padding: '2rem',
-  fontFamily: 'system-ui, -apple-system, sans-serif',
-});
-
-const Title = styled('h1')({
-  fontSize: '2rem',
-  fontWeight: '700',
-  marginBottom: '0.5rem',
-  color: '#1a1a1a',
-});
-
-const Subtitle = styled('p')({
-  fontSize: '1rem',
-  color: '#666',
-  marginBottom: '2rem',
-});
-
-const Section = styled('div')({
-  marginBottom: '2rem',
-});
-
-const Label = styled('label')({
-  display: 'block',
-  fontSize: '0.875rem',
-  fontWeight: '600',
-  marginBottom: '0.5rem',
-  color: '#374151',
-});
-
-const Input = styled('input')({
-  width: '100%',
-  padding: '0.75rem',
-  fontSize: '0.875rem',
-  border: '1px solid #d1d5db',
-  borderRadius: '0.375rem',
-  outline: 'none',
-  transition: 'border-color 0.15s',
-  boxSizing: 'border-box',
-  $nest: {
-    '&:focus': {
-      borderColor: '#3b82f6',
-      boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.1)',
-    },
-  },
-});
-
-const TextArea = styled('textarea')({
-  width: '100%',
-  padding: '0.75rem',
-  fontSize: '0.875rem',
-  border: '1px solid #d1d5db',
-  borderRadius: '0.375rem',
-  outline: 'none',
-  resize: 'vertical',
-  minHeight: '120px',
-  fontFamily: 'inherit',
-  boxSizing: 'border-box',
-  transition: 'border-color 0.15s',
-  $nest: {
-    '&:focus': {
-      borderColor: '#3b82f6',
-      boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.1)',
-    },
-  },
-});
-
-const Button = styled('button')({
-  padding: '0.75rem 1.5rem',
-  fontSize: '0.875rem',
-  fontWeight: '600',
-  color: 'white',
-  backgroundColor: '#3b82f6',
-  border: 'none',
-  borderRadius: '0.375rem',
-  cursor: 'pointer',
-  transition: 'background-color 0.15s',
-  $nest: {
-    '&:hover': {
-      backgroundColor: '#2563eb',
-    },
-    '&:disabled': {
-      backgroundColor: '#9ca3af',
-      cursor: 'not-allowed',
-    },
-  },
-});
-
-const ResultBox = styled('div')({
-  padding: '1.5rem',
-  backgroundColor: '#f9fafb',
-  border: '1px solid #e5e7eb',
-  borderRadius: '0.5rem',
-  marginTop: '1rem',
-});
-
-const ResultTitle = styled('h3')({
-  fontSize: '1.125rem',
-  fontWeight: '600',
-  marginBottom: '1rem',
-  color: '#1a1a1a',
-});
-
-const MetadataGrid = styled('div')({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-  gap: '1rem',
-  marginBottom: '1.5rem',
-});
-
-const MetadataItem = styled('div')({
-  padding: '0.75rem',
-  backgroundColor: 'white',
-  borderRadius: '0.375rem',
-  border: '1px solid #e5e7eb',
-});
-
-const MetadataLabel = styled('div')({
-  fontSize: '0.75rem',
-  color: '#6b7280',
-  marginBottom: '0.25rem',
-});
-
-const MetadataValue = styled('div')({
-  fontSize: '1rem',
-  fontWeight: '600',
-  color: '#1a1a1a',
-});
-
-const VectorPreview = styled('div')({
-  fontSize: '0.75rem',
-  fontFamily: 'monospace',
-  color: '#4b5563',
-  padding: '1rem',
-  backgroundColor: 'white',
-  borderRadius: '0.375rem',
-  border: '1px solid #e5e7eb',
-  overflowX: 'auto',
-  maxHeight: '200px',
-  overflowY: 'auto',
-});
-
-const ErrorBox = styled('div')({
-  padding: '1rem',
-  backgroundColor: '#fef2f2',
-  border: '1px solid #fecaca',
-  borderRadius: '0.375rem',
-  color: '#991b1b',
-  fontSize: '0.875rem',
-  marginTop: '1rem',
-});
-
-const InfoBox = styled('div')({
-  padding: '1rem',
-  backgroundColor: '#eff6ff',
-  border: '1px solid #bfdbfe',
-  borderRadius: '0.375rem',
-  fontSize: '0.875rem',
-  color: '#1e40af',
-  marginBottom: '2rem',
-});
-
-type InputMode = 'text' | 'file';
-
-type DatabaseItem = {
-  id: string;
-  label: string;
-  previewUrl: string | null;
-  values: number[];
-  type: InputMode;
-};
-
-const SUPPORTED_MIME_TYPES = {
-  image: ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'],
-  video: ['video/mp4', 'video/mov', 'video/mpeg', 'video/avi', 'video/webm'],
-  audio: ['audio/mp3', 'audio/wav', 'audio/flac', 'audio/aac', 'audio/mpeg'],
-  pdf: ['application/pdf'],
-};
-
-const ALL_SUPPORTED_TYPES = [
-  ...SUPPORTED_MIME_TYPES.image,
-  ...SUPPORTED_MIME_TYPES.video,
-  ...SUPPORTED_MIME_TYPES.audio,
-  ...SUPPORTED_MIME_TYPES.pdf,
-].join(',');
-
-const GeminiEmbeddingPage: React.FC = () => {
-  const [inputMode, setInputMode] = useState<InputMode>('text');
-  const [inputText, setInputText] = useState('');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
-  const [database, setDatabase] = useState<DatabaseItem[]>([]);
-  const [searchOrder, setSearchOrder] = useState<'closest' | 'furthest'>(
-    'closest',
-  );
-  const [searchResult, setSearchResult] = useState<Array<
-    DatabaseItem & { similarity: number }
-  > | null>(null);
-
+export const GeminiEmbeddingPage: React.FC = () => {
   const {
-    embed,
-    embedFile,
-    generateFileContent,
-    result,
+    inputMode,
+    setInputMode,
+    inputText,
+    setInputText,
+    selectedFile,
+    setSelectedFile,
+    filePreviewUrl,
+    embeddingResult,
     generationResult,
-    loading,
+    databaseItems,
+    searchResults,
+    searchOrder,
+    isLoading,
     error,
-    reset,
-  } = useGeminiEmbedding();
+    handleEmbed,
+    handleAddToDatabase,
+    handleSearchDatabase,
+    handleGenerateText,
+    handleReset,
+    setSearchOrder,
+  } = useEmbeddingFeature();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
-
-    setSelectedFile(file);
-
-    if (file.type.startsWith('image/')) {
-      const url = URL.createObjectURL(file);
-      setFilePreviewUrl(url);
-    } else if (
-      file.type.startsWith('video/') ||
-      file.type.startsWith('audio/')
-    ) {
-      const url = URL.createObjectURL(file);
-      setFilePreviewUrl(url);
-    } else {
-      setFilePreviewUrl(null);
-    }
-  };
-
-  const handleEmbed = () => {
-    if (inputMode === 'text') {
-      embed(inputText);
-    } else if (selectedFile) {
-      embedFile(selectedFile, inputText);
-    }
-  };
-
-  const handleAddToDatabase = async () => {
-    const res =
-      inputMode === 'text'
-        ? await embed(inputText)
-        : await embedFile(selectedFile!);
-
-    if (res) {
-      const newItem: DatabaseItem = {
-        id: crypto.randomUUID(),
-        label: inputMode === 'text' ? inputText : selectedFile!.name,
-        previewUrl: filePreviewUrl,
-        values: res.values,
-        type: inputMode,
-      };
-      setDatabase((prev) => [...prev, newItem]);
-    }
-  };
-
-  const handleSearchDatabase = async () => {
-    const res =
-      inputMode === 'text'
-        ? await embed(inputText)
-        : await embedFile(selectedFile!);
-
-    if (res) {
-      const results = database.map((item) => ({
-        ...item,
-        similarity: cosineSimilarity(res!.values, item.values),
-      }));
-      setSearchResult(results);
-    }
-  };
-
-  const sortedSearchResults = React.useMemo(() => {
-    if (!searchResult) return null;
-    return [...searchResult].sort((a, b) => {
-      if (searchOrder === 'closest') {
-        return b.similarity - a.similarity;
-      } else {
-        return a.similarity - b.similarity;
-      }
-    });
-  }, [searchResult, searchOrder]);
-
-  const handleGenerateText = () => {
-    if (selectedFile && inputText.trim()) {
-      generateFileContent(selectedFile, inputText);
-    }
-  };
-
-  const handleReset = () => {
-    reset();
-    setInputText('');
-    setSelectedFile(null);
-    if (filePreviewUrl) {
-      URL.revokeObjectURL(filePreviewUrl);
-      setFilePreviewUrl(null);
-    }
+    setSelectedFile(file ?? null);
   };
 
   return (
@@ -343,7 +90,7 @@ const GeminiEmbeddingPage: React.FC = () => {
                 name="inputMode"
                 value="text"
                 checked={inputMode === 'text'}
-                onChange={(e) => setInputMode(e.target.value as InputMode)}
+                onChange={() => setInputMode('text')}
               />
               Text
             </label>
@@ -360,7 +107,7 @@ const GeminiEmbeddingPage: React.FC = () => {
                 name="inputMode"
                 value="file"
                 checked={inputMode === 'file'}
-                onChange={(e) => setInputMode(e.target.value as InputMode)}
+                onChange={() => setInputMode('file')}
               />
               File (Image / Video / Audio / PDF)
             </label>
@@ -451,15 +198,15 @@ const GeminiEmbeddingPage: React.FC = () => {
         )}
 
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <Button type="button" onClick={handleEmbed} disabled={loading}>
-            {loading ? 'Processing...' : 'Generate Embedding'}
+          <Button type="button" onClick={handleEmbed} disabled={isLoading}>
+            {isLoading ? 'Processing...' : 'Generate Embedding'}
           </Button>
 
           <Button
             type="button"
             onClick={handleAddToDatabase}
             disabled={
-              loading ||
+              isLoading ||
               (inputMode === 'text' ? !inputText.trim() : !selectedFile)
             }
             style={{ backgroundColor: '#8b5cf6' }}
@@ -471,8 +218,8 @@ const GeminiEmbeddingPage: React.FC = () => {
             type="button"
             onClick={handleSearchDatabase}
             disabled={
-              loading ||
-              database.length === 0 ||
+              isLoading ||
+              databaseItems.length === 0 ||
               (inputMode === 'text' ? !inputText.trim() : !selectedFile)
             }
             style={{ backgroundColor: '#f59e0b' }}
@@ -484,22 +231,19 @@ const GeminiEmbeddingPage: React.FC = () => {
             <Button
               type="button"
               onClick={handleGenerateText}
-              disabled={loading || !selectedFile || !inputText.trim()}
+              disabled={isLoading || !selectedFile || !inputText.trim()}
               style={{ backgroundColor: '#10b981' }}
             >
               Ask Question (Generate Text)
             </Button>
           )}
 
-          {(result !== null ||
+          {(embeddingResult !== null ||
             generationResult !== null ||
-            searchResult !== null) && (
+            searchResults !== null) && (
             <Button
               type="button"
-              onClick={() => {
-                handleReset();
-                setSearchResult(null);
-              }}
+              onClick={handleReset}
               style={{ backgroundColor: '#6b7280' }}
             >
               Clear
@@ -510,40 +254,35 @@ const GeminiEmbeddingPage: React.FC = () => {
 
       {error !== null && <ErrorBox>Error: {error}</ErrorBox>}
 
-      {result !== null && (
+      {embeddingResult !== null && (
         <ResultBox>
           <ResultTitle>Embedding Result</ResultTitle>
 
           <MetadataGrid>
             <MetadataItem>
               <MetadataLabel>Model</MetadataLabel>
-              <MetadataValue>{result.model}</MetadataValue>
+              <MetadataValue>{embeddingResult.model}</MetadataValue>
             </MetadataItem>
             <MetadataItem>
               <MetadataLabel>Dimensions</MetadataLabel>
-              <MetadataValue>{result.dimensions}</MetadataValue>
+              <MetadataValue>{embeddingResult.dimensionsLabel}</MetadataValue>
             </MetadataItem>
             <MetadataItem>
               <MetadataLabel>Execution Time</MetadataLabel>
               <MetadataValue>
-                {result.executionTimeMs.toFixed(2)}ms
+                {embeddingResult.executionTimeLabel}
               </MetadataValue>
             </MetadataItem>
             <MetadataItem>
               <MetadataLabel>Vector Norm (L2)</MetadataLabel>
               <MetadataValue>
-                {Math.sqrt(
-                  result.values.reduce((sum, val) => sum + val * val, 0),
-                ).toFixed(4)}
+                {embeddingResult.vectorNorm.toFixed(4)}
               </MetadataValue>
             </MetadataItem>
           </MetadataGrid>
 
           <Label>Vector Preview (first 100 values)</Label>
-          <VectorPreview>
-            [{result.values.slice(0, 100).join(', ')}
-            {result.values.length > 100 && ', ...'}]
-          </VectorPreview>
+          <VectorPreview>{embeddingResult.previewString}</VectorPreview>
         </ResultBox>
       )}
 
@@ -559,7 +298,7 @@ const GeminiEmbeddingPage: React.FC = () => {
             <MetadataItem>
               <MetadataLabel>Execution Time</MetadataLabel>
               <MetadataValue>
-                {generationResult.executionTimeMs.toFixed(2)}ms
+                {generationResult.executionTimeLabel}
               </MetadataValue>
             </MetadataItem>
           </MetadataGrid>
@@ -581,10 +320,10 @@ const GeminiEmbeddingPage: React.FC = () => {
         </ResultBox>
       )}
 
-      {database.length > 0 && (
+      {databaseItems.length > 0 && (
         <Section style={{ marginTop: '2rem' }}>
           <Title style={{ fontSize: '1.5rem' }}>
-            Local Vector Database ({database.length} items)
+            Local Vector Database ({databaseItems.length} items)
           </Title>
           <div
             style={{
@@ -593,7 +332,7 @@ const GeminiEmbeddingPage: React.FC = () => {
               gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
             }}
           >
-            {database.map((item) => (
+            {databaseItems.map((item) => (
               <div
                 key={item.id}
                 style={{
@@ -621,26 +360,22 @@ const GeminiEmbeddingPage: React.FC = () => {
                 >
                   Type: {item.type}
                 </div>
-                {item.previewUrl && (
+                {item.hasPreview && (
                   <div style={{ marginTop: '0.5rem' }}>
-                    {item.type === 'file' && (
-                      <img
-                        src={item.previewUrl}
-                        alt=""
-                        style={{
-                          maxWidth: '100%',
-                          maxHeight: '100px',
-                          objectFit: 'cover',
-                        }}
-                        onError={(e) =>
-                          (e.currentTarget.style.display = 'none')
-                        }
-                      />
-                    )}
+                    <img
+                      src={item.previewUrl!}
+                      alt=""
+                      style={{
+                        maxWidth: '100%',
+                        maxHeight: '100px',
+                        objectFit: 'cover',
+                      }}
+                      onError={(e) => (e.currentTarget.style.display = 'none')}
+                    />
                   </div>
                 )}
                 <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
-                  Vector dimensions: {item.values.length}
+                  Vector dimensions: {item.dimensions}
                 </div>
               </div>
             ))}
@@ -648,7 +383,7 @@ const GeminiEmbeddingPage: React.FC = () => {
         </Section>
       )}
 
-      {sortedSearchResults !== null && (
+      {searchResults !== null && (
         <Section
           style={{
             marginTop: '2rem',
@@ -691,7 +426,7 @@ const GeminiEmbeddingPage: React.FC = () => {
           <div
             style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
           >
-            {sortedSearchResults.map((item, index) => (
+            {searchResults.map((item, index) => (
               <div
                 key={item.id}
                 style={{
@@ -732,9 +467,9 @@ const GeminiEmbeddingPage: React.FC = () => {
                     </strong>
                   </div>
                 </div>
-                {item.previewUrl && (
+                {item.hasPreview && (
                   <img
-                    src={item.previewUrl}
+                    src={item.previewUrl!}
                     alt=""
                     style={{
                       width: '80px',
@@ -753,5 +488,3 @@ const GeminiEmbeddingPage: React.FC = () => {
     </Container>
   );
 };
-
-export default GeminiEmbeddingPage;

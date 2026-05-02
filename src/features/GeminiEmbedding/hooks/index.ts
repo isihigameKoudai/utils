@@ -1,0 +1,1 @@
+export { useEmbeddingFeature } from './useEmbeddingFeature';
