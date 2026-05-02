@@ -40,12 +40,14 @@ export function useGeminiEmbedding() {
       const values = response.embeddings![0].values!;
       const executionTimeMs = performance.now() - startTime;
 
-      setResult({
+      const newResult: EmbeddingResult = {
         values,
         dimensions: values.length,
         model: 'gemini-embedding-2',
         executionTimeMs,
-      });
+      };
+      setResult(newResult);
+      return newResult;
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : 'Unknown error occurred';
@@ -68,12 +70,14 @@ export function useGeminiEmbedding() {
       const values = response.embeddings![0].values!;
       const executionTimeMs = performance.now() - startTime;
 
-      setResult({
+      const newResult: EmbeddingResult = {
         values,
         dimensions: values.length,
         model: 'gemini-embedding-2',
         executionTimeMs,
-      });
+      };
+      setResult(newResult);
+      return newResult;
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : 'Unknown error occurred';

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { cosineSimilarity } from '@/utils/math';
 import { styled } from '@/utils/ui/styled';
 
 import { useGeminiEmbedding } from '../hooks/useGeminiEmbedding';
@@ -170,6 +171,14 @@ const InfoBox = styled('div')({
 
 type InputMode = 'text' | 'file';
 
+type DatabaseItem = {
+  id: string;
+  label: string;
+  previewUrl: string | null;
+  values: number[];
+  type: InputMode;
+};
+
 const SUPPORTED_MIME_TYPES = {
   image: ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'],
   video: ['video/mp4', 'video/mov', 'video/mpeg', 'video/avi', 'video/webm'],
@@ -189,6 +198,13 @@ const GeminiEmbeddingPage: React.FC = () => {
   const [inputText, setInputText] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
+  const [database, setDatabase] = useState<DatabaseItem[]>([]);
+  const [searchOrder, setSearchOrder] = useState<'closest' | 'furthest'>(
+    'closest',
+  );
+  const [searchResult, setSearchResult] = useState<Array<
+    DatabaseItem & { similarity: number }
+  > | null>(null);
 
   const {
     embed,
@@ -228,6 +244,50 @@ const GeminiEmbeddingPage: React.FC = () => {
       embedFile(selectedFile, inputText);
     }
   };
+
+  const handleAddToDatabase = async () => {
+    const res =
+      inputMode === 'text'
+        ? await embed(inputText)
+        : await embedFile(selectedFile!);
+
+    if (res) {
+      const newItem: DatabaseItem = {
+        id: crypto.randomUUID(),
+        label: inputMode === 'text' ? inputText : selectedFile!.name,
+        previewUrl: filePreviewUrl,
+        values: res.values,
+        type: inputMode,
+      };
+      setDatabase((prev) => [...prev, newItem]);
+    }
+  };
+
+  const handleSearchDatabase = async () => {
+    const res =
+      inputMode === 'text'
+        ? await embed(inputText)
+        : await embedFile(selectedFile!);
+
+    if (res) {
+      const results = database.map((item) => ({
+        ...item,
+        similarity: cosineSimilarity(res!.values, item.values),
+      }));
+      setSearchResult(results);
+    }
+  };
+
+  const sortedSearchResults = React.useMemo(() => {
+    if (!searchResult) return null;
+    return [...searchResult].sort((a, b) => {
+      if (searchOrder === 'closest') {
+        return b.similarity - a.similarity;
+      } else {
+        return a.similarity - b.similarity;
+      }
+    });
+  }, [searchResult, searchOrder]);
 
   const handleGenerateText = () => {
     if (selectedFile && inputText.trim()) {
@@ -395,6 +455,31 @@ const GeminiEmbeddingPage: React.FC = () => {
             {loading ? 'Processing...' : 'Generate Embedding'}
           </Button>
 
+          <Button
+            type="button"
+            onClick={handleAddToDatabase}
+            disabled={
+              loading ||
+              (inputMode === 'text' ? !inputText.trim() : !selectedFile)
+            }
+            style={{ backgroundColor: '#8b5cf6' }}
+          >
+            Add to Database
+          </Button>
+
+          <Button
+            type="button"
+            onClick={handleSearchDatabase}
+            disabled={
+              loading ||
+              database.length === 0 ||
+              (inputMode === 'text' ? !inputText.trim() : !selectedFile)
+            }
+            style={{ backgroundColor: '#f59e0b' }}
+          >
+            Search Database
+          </Button>
+
           {inputMode === 'file' && (
             <Button
               type="button"
@@ -406,10 +491,15 @@ const GeminiEmbeddingPage: React.FC = () => {
             </Button>
           )}
 
-          {(result !== null || generationResult !== null) && (
+          {(result !== null ||
+            generationResult !== null ||
+            searchResult !== null) && (
             <Button
               type="button"
-              onClick={handleReset}
+              onClick={() => {
+                handleReset();
+                setSearchResult(null);
+              }}
               style={{ backgroundColor: '#6b7280' }}
             >
               Clear
@@ -489,6 +579,176 @@ const GeminiEmbeddingPage: React.FC = () => {
             {generationResult.text}
           </div>
         </ResultBox>
+      )}
+
+      {database.length > 0 && (
+        <Section style={{ marginTop: '2rem' }}>
+          <Title style={{ fontSize: '1.5rem' }}>
+            Local Vector Database ({database.length} items)
+          </Title>
+          <div
+            style={{
+              display: 'grid',
+              gap: '1rem',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+            }}
+          >
+            {database.map((item) => (
+              <div
+                key={item.id}
+                style={{
+                  padding: '1rem',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '0.5rem',
+                  backgroundColor: 'white',
+                }}
+              >
+                <div
+                  style={{
+                    fontWeight: '600',
+                    marginBottom: '0.5rem',
+                    wordBreak: 'break-all',
+                  }}
+                >
+                  {item.label}
+                </div>
+                <div
+                  style={{
+                    fontSize: '0.75rem',
+                    color: '#6b7280',
+                    marginBottom: '0.5rem',
+                  }}
+                >
+                  Type: {item.type}
+                </div>
+                {item.previewUrl && (
+                  <div style={{ marginTop: '0.5rem' }}>
+                    {item.type === 'file' && (
+                      <img
+                        src={item.previewUrl}
+                        alt=""
+                        style={{
+                          maxWidth: '100%',
+                          maxHeight: '100px',
+                          objectFit: 'cover',
+                        }}
+                        onError={(e) =>
+                          (e.currentTarget.style.display = 'none')
+                        }
+                      />
+                    )}
+                  </div>
+                )}
+                <div style={{ fontSize: '0.75rem', color: '#9ca3af' }}>
+                  Vector dimensions: {item.values.length}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {sortedSearchResults !== null && (
+        <Section
+          style={{
+            marginTop: '2rem',
+            padding: '1.5rem',
+            backgroundColor: '#fef3c7',
+            borderRadius: '0.5rem',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '1rem',
+              flexWrap: 'wrap',
+              gap: '1rem',
+            }}
+          >
+            <Title style={{ fontSize: '1.5rem', margin: 0 }}>
+              Search Results (Cosine Similarity)
+            </Title>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <Label style={{ margin: 0 }}>Sort Order:</Label>
+              <select
+                value={searchOrder}
+                onChange={(e) =>
+                  setSearchOrder(e.target.value as 'closest' | 'furthest')
+                }
+                style={{
+                  padding: '0.5rem',
+                  borderRadius: '0.25rem',
+                  border: '1px solid #d1d5db',
+                }}
+              >
+                <option value="closest">Closest (Most similar)</option>
+                <option value="furthest">Furthest (Least similar)</option>
+              </select>
+            </div>
+          </div>
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+          >
+            {sortedSearchResults.map((item, index) => (
+              <div
+                key={item.id}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  padding: '1rem',
+                  backgroundColor: 'white',
+                  borderRadius: '0.5rem',
+                  border: '1px solid #e5e7eb',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '1.5rem',
+                    fontWeight: 'bold',
+                    color: '#d97706',
+                    minWidth: '3rem',
+                  }}
+                >
+                  #{index + 1}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: '600', marginBottom: '0.25rem' }}>
+                    {item.label}
+                  </div>
+                  <div style={{ fontSize: '0.875rem', color: '#4b5563' }}>
+                    Similarity Score:{' '}
+                    <strong
+                      style={{
+                        color:
+                          searchOrder === 'closest' && index === 0
+                            ? '#10b981'
+                            : '#1f2937',
+                      }}
+                    >
+                      {item.similarity.toFixed(4)}
+                    </strong>
+                  </div>
+                </div>
+                {item.previewUrl && (
+                  <img
+                    src={item.previewUrl}
+                    alt=""
+                    style={{
+                      width: '80px',
+                      height: '80px',
+                      objectFit: 'cover',
+                      borderRadius: '0.25rem',
+                    }}
+                    onError={(e) => (e.currentTarget.style.display = 'none')}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        </Section>
       )}
     </Container>
   );

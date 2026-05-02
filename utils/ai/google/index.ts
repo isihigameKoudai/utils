@@ -4,6 +4,7 @@ import {
   type EmbedContentConfig,
   type GenerateContentConfig,
   type ContentListUnion,
+  type Content,
 } from '@google/genai';
 
 interface DefineConfig {
@@ -80,19 +81,18 @@ export const defineGemini = (config: DefineConfig) => {
       ),
     );
 
-    return embed({
-      parts: [
-        {
-          text: text,
-        },
-        {
-          inlineData: {
-            mimeType: file.type,
-            data: base64,
-          },
-        },
-      ],
+    const parts: Content['parts'] = [];
+    if (text) {
+      parts.push({ text });
+    }
+    parts.push({
+      inlineData: {
+        mimeType: file.type,
+        data: base64,
+      },
     });
+
+    return embed({ parts });
   };
 
   /**
@@ -129,21 +129,19 @@ export const defineGemini = (config: DefineConfig) => {
       throw new Error('File processing failed');
     }
 
-    const response = await embed([
+    const parts: Content['parts'] = [
       {
-        parts: [
-          {
-            fileData: {
-              mimeType: status.mimeType!,
-              fileUri: status.uri!,
-            },
-          },
-          {
-            text: text,
-          },
-        ],
+        fileData: {
+          mimeType: status.mimeType!,
+          fileUri: status.uri!,
+        },
       },
-    ]);
+    ];
+    if (text) {
+      parts.push({ text });
+    }
+
+    const response = await embed([{ parts }]);
 
     // Clean up uploaded file
     await ai.files.delete({ name: uploaded.name! });
@@ -189,15 +187,16 @@ export const defineGemini = (config: DefineConfig) => {
       ),
     );
 
-    const parts = [
-      { text },
-      {
-        inlineData: {
-          mimeType: file.type,
-          data: base64,
-        },
+    const parts: Content['parts'] = [];
+    if (text) {
+      parts.push({ text });
+    }
+    parts.push({
+      inlineData: {
+        mimeType: file.type,
+        data: base64,
       },
-    ];
+    });
 
     return generate({ parts });
   };
@@ -222,15 +221,16 @@ export const defineGemini = (config: DefineConfig) => {
       throw new Error('File processing failed');
     }
 
-    const parts = [
-      { text },
-      {
-        fileData: {
-          mimeType: status.mimeType!,
-          fileUri: status.uri!,
-        },
+    const parts: Content['parts'] = [];
+    if (text) {
+      parts.push({ text });
+    }
+    parts.push({
+      fileData: {
+        mimeType: status.mimeType!,
+        fileUri: status.uri!,
       },
-    ];
+    });
 
     const response = await generate([{ parts }]);
 
