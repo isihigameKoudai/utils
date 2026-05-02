@@ -1,11 +1,26 @@
 ---
 name: feature-scaffold
-description: Generate CQRS feature directory structure and boilerplate files using createModelFactory with Zod validation. Creates models, stores (actions as commands), services for DI, and components following repository conventions.
+description: Generate CQRS feature directory structure and boilerplate files using createModelFactory with Valibot validation. Creates models, stores (actions as commands), services for DI, and components following repository conventions.
 ---
 
 # Feature Scaffold Generator
 
 新規Feature開発のためのディレクトリ構造とボイラープレートファイルを自動生成するスキル。CQRSパターン（Store actionsをCommand役割として使用）に準拠したファイル構造を提供する。
+
+## Coding Constraints
+
+### Barrel File Prohibition (バレル禁止)
+
+**生成されるindex.tsでは一括re-exportを使用しない。**
+
+- ❌ **禁止**: `export * from './module'` (一括re-export)
+- ✅ **使用**: 明示的な名前付きexport
+
+### Validation Library
+
+**Valibotを使用する。**
+
+- ✅ **使用**: `valibot`
 
 ## Usage
 
@@ -24,38 +39,20 @@ Feature名: TaskManager
 
 ## Template Files
 
-### Schema Template
-
-```typescript
-// models/{entity}/scheme.ts
-import { z } from 'zod';
-
-/**
- * {Entity} validation schema
- * @description {Entity}のバリデーションスキーマ
- */
-export const {entity}Schema = z.object({
-  id: z.string().min(1, 'id is required'),
-  // TODO: Add entity properties
-  createdAt: z.string().datetime({ message: 'Invalid date format' }),
-  updatedAt: z.string().datetime({ message: 'Invalid date format' }),
-});
-```
-
 ### Types Template
 
 ```typescript
 // models/{entity}/types.ts
-import type { z } from 'zod';
+import type * as v from 'valibot';
 import type dayjs from 'dayjs';
 
-import type { {entity}Schema } from './scheme';
+import type { {entity}Schema } from './model';
 
 /**
  * Raw params type (Store/API用)
  * @description StoreやAPIで使用する生データ型
  */
-export type {Entity}Params = z.infer<typeof {entity}Schema>;
+export type {Entity}Params = v.InferOutput<typeof {entity}Schema>;
 
 /**
  * {Entity} Model type
@@ -72,16 +69,29 @@ export type {Entity} = {Entity}Params & {
 };
 ```
 
-### Model Template
+### Model Template (Schema + Factory Combined)
+
+**CRITICAL**: Schema and model factory MUST be in the same file.
 
 ```typescript
 // models/{entity}/model.ts
+import * as v from 'valibot';
 import dayjs from 'dayjs';
 
 import { createModelFactory } from '@/utils/model/createModel';
 
-import { {entity}Schema } from './scheme';
 import type { {Entity}, {Entity}Params } from './types';
+
+/**
+ * {Entity} validation schema
+ * @description {Entity}のバリデーションスキーマ
+ */
+export const {entity}Schema = v.object({
+  id: v.pipe(v.string(), v.minLength(1, 'id is required')),
+  // TODO: Add entity properties
+  createdAt: v.pipe(v.string(), v.isoDateTime('Invalid date format')),
+  updatedAt: v.pipe(v.string(), v.isoDateTime('Invalid date format')),
+});
 
 /**
  * {Entity} Model Factory
@@ -179,7 +189,7 @@ describe('{Entity} Model', () => {
       expect({entity}.id).toBe('1');
     });
 
-    it('should throw ZodError for missing id', () => {
+    it('should throw ValibotError for missing id', () => {
       expect(() => create{Entity}({ ...validParams, id: '' })).toThrow();
     });
 
@@ -719,13 +729,8 @@ export const {entity}Api: {Entity}Api = {
 
 ```typescript
 // models/{entity}/index.ts
-export { {entity}Schema } from './scheme';
+export { {entity}Schema, create{Entity}, is{Entity}Empty, create{Entity}Params } from './model';
 export type { {Entity}, {Entity}Params } from './types';
-export {
-  create{Entity},
-  is{Entity}Empty,
-  create{Entity}Params,
-} from './model';
 
 // stores/{entity}/index.ts
 import { defineStore } from '@/utils/i-state';
@@ -744,7 +749,7 @@ export type { {Entity}State } from './type';
 
 // services/index.ts
 export { create{Entity}Service } from './{entity}';
-export type * from './types';
+export type { {Entity}Api, {Entity}Actions } from './types';
 
 // hooks/index.ts
 export { use{FeatureName} } from './use{FeatureName}';
@@ -753,16 +758,16 @@ export { use{FeatureName} } from './use{FeatureName}';
 export { {entity}Api } from './{entity}';
 
 // components/index.ts
-// Export components as they are created
+// Export components as they are created (明示的エクスポート)
 
 // pages/{PageName}/index.ts
 export { {FeatureName}Page } from './page';
 
 // constants/index.ts
-// Export constants as they are defined
+// Export constants as they are defined (明示的エクスポート)
 
 // types/index.ts
-// Export shared types as they are defined
+// Export shared types as they are defined (明示的エクスポート)
 ```
 
 ## Naming Conventions
@@ -781,7 +786,7 @@ feature-scaffold固有の追加パターン：
 
 生成後の確認事項：
 
-- [ ] Schema: プロパティを追加（`models/schemas/{entity}.ts`）
+- [ ] Schema: プロパティを追加（`models/{entity}/model.ts`）、Valibot使用確認
 - [ ] Model: computed propertiesとメソッドを追加
 - [ ] Model Test: テストケースを追加
 - [ ] Store: 必要なactionsを追加
@@ -790,10 +795,11 @@ feature-scaffold固有の追加パターン：
 - [ ] Hook: 必要なコマンドを追加
 - [ ] UI: コンポーネントを実装
 - [ ] Route: ルーティングを設定
+- [ ] Index Files: バレル禁止（明示的エクスポート）を遵守
 
 ## Best Practices
 
-1. **まずSchemaから始める**: Zodスキーマでデータ構造を定義
+1. **まずSchemaから始める**: Valibotスキーマでデータ構造を定義
 2. **次にModel**: computed properties, validation, メソッドを実装
 3. **TDDでModel実装**: テストを書きながらModelを実装
 4. **stateに直結するロジックはactionsに書く**: データ取得（fetch）、フィルタ・マッピング等はactionsに含める（try/catchは書かない）
@@ -803,6 +809,7 @@ feature-scaffold固有の追加パターン：
 8. **UIは最後**: ロジックが固まってからUI実装
 9. **Hookに副作用を含めない**: useEffectなどの副作用はpage.tsxで扱う。Hookは値とコールバックのみ
 10. **Pages構造を守る**: `pages/{PageName}/index.ts` + `page.tsx` + `style.ts（任意）`
+11. **バレル禁止**: index.tsでは明示的な名前付きexportのみ（`export *` 禁止）
 
 ## Related Skills
 

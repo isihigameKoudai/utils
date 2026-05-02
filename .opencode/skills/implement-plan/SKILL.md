@@ -122,6 +122,8 @@ This allows the user to glance at plan.md at any point and see exactly where thi
 - Match naming conventions (camelCase for functions, PascalCase for components, etc.)
 - Handle error cases as specified in the plan
 - Keep files under the project's LOC limit (300 LOC per AGENTS.md)
+- **Use Valibot for validation**
+- **Use explicit exports in index.ts** (no `export *` barrel exports)
 
 ### MUST NOT DO
 
@@ -132,6 +134,7 @@ This allows the user to glance at plan.md at any point and see exactly where thi
 - Add features not in the plan (no scope creep)
 - Leave empty catch blocks `catch(e) {}`
 - Introduce new dependencies not specified in the plan
+- **Use barrel exports** (`export *` from index.ts files)
 
 ## Handling Issues During Implementation
 

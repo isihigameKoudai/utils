@@ -7,6 +7,21 @@ description: Implementation planning skill. Creates a detailed plan.md with appr
 
 A disciplined planning skill that produces a detailed `plan.md` artifact before any code is written. Supports iterative refinement through annotation cycles where the user adds inline notes directly into the document, and the agent updates the plan accordingly.
 
+## Coding Constraints
+
+**Plans must respect project coding constraints:**
+
+### Barrel File Prohibition (バレル禁止)
+
+- ❌ **Prohibited in plans**: `export * from './module'`
+- ✅ **Required in plans**: Explicit named exports in index.ts files
+
+### Validation Library
+
+- ✅ **Use in plans**: `valibot` for validation schemas
+
+Plans must explicitly state these constraints when relevant to the implementation.
+
 ## Core Principle
 
 **Never let code be written until the plan is reviewed and approved.** The separation of planning and execution prevents wasted effort, keeps the user in control of architecture decisions, and produces significantly better results than jumping straight to code.
