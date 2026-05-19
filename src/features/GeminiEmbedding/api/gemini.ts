@@ -3,8 +3,6 @@ import { defineGemini } from '@/utils/ai/google';
 import type { EmbeddingResultParams } from '../models/embeddingResult';
 import type { GenerationResultParams } from '../models/generationResult';
 
-import type { GeminiApi } from './types';
-
 const gemini = defineGemini({
   root: {
     apiKey: import.meta.env.VITE_GEMINI_API_KEY,
@@ -14,7 +12,7 @@ const gemini = defineGemini({
   },
 });
 
-export const geminiApi: GeminiApi = {
+export const geminiApi = {
   async embed(text: string): Promise<EmbeddingResultParams> {
     const startTime = performance.now();
     const response = await gemini.embed(text);

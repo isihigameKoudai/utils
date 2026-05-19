@@ -2,9 +2,11 @@ import React from 'react';
 
 import { ALL_SUPPORTED_TYPES } from '../../constants';
 import { useEmbeddingFeature } from '../../hooks';
+import type { ChromaStatus } from '../../stores/database';
 
 import {
   Button,
+  ChromaSection,
   Container,
   ErrorBox,
   InfoBox,
@@ -23,6 +25,20 @@ import {
   VectorPreview,
 } from './style';
 
+const chromaStatusBg = (status: ChromaStatus): string => {
+  if (status === 'connected') return '#dcfce7';
+  if (status === 'connecting') return '#fef9c3';
+  if (status === 'error') return '#fee2e2';
+  return '#f3f4f6';
+};
+
+const chromaStatusColor = (status: ChromaStatus): string => {
+  if (status === 'connected') return '#16a34a';
+  if (status === 'connecting') return '#ca8a04';
+  if (status === 'error') return '#dc2626';
+  return '#6b7280';
+};
+
 export const GeminiEmbeddingPage: React.FC = () => {
   const {
     inputMode,
@@ -39,9 +55,19 @@ export const GeminiEmbeddingPage: React.FC = () => {
     searchOrder,
     isLoading,
     error,
+    chromaUrl,
+    chromaCollectionName,
+    chromaStatus,
+    chromaError,
+    isChromaConnected,
+    setChromaUrl,
+    setChromaCollectionName,
     handleEmbed,
     handleAddToDatabase,
     handleSearchDatabase,
+    handleConnectChroma,
+    handleAddToChroma,
+    handleSearchChroma,
     handleGenerateText,
     handleReset,
     setSearchOrder,
@@ -253,6 +279,117 @@ export const GeminiEmbeddingPage: React.FC = () => {
       </div>
 
       {error !== null && <ErrorBox>Error: {error}</ErrorBox>}
+
+      <ChromaSection>
+        <Title style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>
+          ChromaDB Vector Store
+        </Title>
+
+        <div
+          style={{
+            display: 'flex',
+            gap: '1rem',
+            marginBottom: '1rem',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div style={{ flex: 2, minWidth: '200px' }}>
+            <Label htmlFor="chromaUrl">Server URL</Label>
+            <Input
+              id="chromaUrl"
+              type="text"
+              value={chromaUrl}
+              onChange={(e) => setChromaUrl(e.target.value)}
+              placeholder="http://localhost:8000"
+            />
+          </div>
+          <div style={{ flex: 1, minWidth: '160px' }}>
+            <Label htmlFor="chromaCollection">Collection Name</Label>
+            <Input
+              id="chromaCollection"
+              type="text"
+              value={chromaCollectionName}
+              onChange={(e) => setChromaCollectionName(e.target.value)}
+              placeholder="gemini-embeddings"
+            />
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            gap: '1rem',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
+          <Button
+            type="button"
+            onClick={handleConnectChroma}
+            disabled={isLoading || chromaStatus === 'connecting'}
+            style={{ backgroundColor: '#059669' }}
+          >
+            {chromaStatus === 'connecting' ? 'Connecting...' : 'Connect'}
+          </Button>
+
+          {isChromaConnected && (
+            <>
+              <Button
+                type="button"
+                onClick={handleAddToChroma}
+                disabled={
+                  isLoading ||
+                  (inputMode === 'text' ? !inputText.trim() : !selectedFile)
+                }
+                style={{ backgroundColor: '#7c3aed' }}
+              >
+                Add to ChromaDB
+              </Button>
+              <Button
+                type="button"
+                onClick={handleSearchChroma}
+                disabled={
+                  isLoading ||
+                  (inputMode === 'text' ? !inputText.trim() : !selectedFile)
+                }
+                style={{ backgroundColor: '#d97706' }}
+              >
+                Search ChromaDB
+              </Button>
+            </>
+          )}
+
+          <span
+            style={{
+              display: 'inline-block',
+              padding: '0.25rem 0.75rem',
+              borderRadius: '9999px',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              backgroundColor: chromaStatusBg(chromaStatus),
+              color: chromaStatusColor(chromaStatus),
+            }}
+          >
+            {chromaStatus}
+          </span>
+        </div>
+
+        {chromaError !== null && (
+          <div
+            style={{
+              marginTop: '0.75rem',
+              padding: '0.75rem',
+              backgroundColor: '#fef2f2',
+              border: '1px solid #fecaca',
+              borderRadius: '0.375rem',
+              color: '#991b1b',
+              fontSize: '0.875rem',
+            }}
+          >
+            {chromaError}
+          </div>
+        )}
+      </ChromaSection>
 
       {embeddingResult !== null && (
         <ResultBox>

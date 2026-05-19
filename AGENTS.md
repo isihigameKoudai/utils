@@ -10,20 +10,20 @@ React 19 + TypeScript project for creating reusable utilities and shared compone
 
 ```bash
 # Development
-npm run dev          # Start dev server (Vite)
-npm run build        # TypeScript compile + Vite build
-npm run preview      # Preview production build
+pnpm run dev         # Start dev server (Vite)
+pnpm run build       # TypeScript compile + Vite build
+pnpm run preview     # Preview production build
 
 # Testing with Vitest
-npm run test         # Run all tests in watch mode
-npx vitest run       # Run all tests once (CI mode)
-npx vitest run utils/array/array.test.ts           # Run single test file
-npx vitest run -t "splitMap"                       # Run tests matching pattern
-npx vitest run utils/array/array.test.ts -t "配列を指定した数で分割する"  # Specific test
+pnpm run test        # Run all tests in watch mode
+pnpm vitest run      # Run all tests once (CI mode)
+pnpm vitest run utils/array/array.test.ts          # Run single test file
+pnpm vitest run -t "splitMap"                      # Run tests matching pattern
+pnpm vitest run utils/array/array.test.ts -t "配列を指定した数で分割する"  # Specific test
 
 # Linting & Formatting
-npm run lint         # ESLint with auto-fix
-npm run format       # Prettier formatting
+pnpm run lint        # ESLint with auto-fix
+pnpm run format      # Prettier formatting
 ```
 
 ## Project Structure
@@ -86,7 +86,7 @@ routes → features → components → utils
 ESLint (`eslint-plugin-import`) により自動整形される。グループ間には空行を挿入し、各グループ内はアルファベット順。
 
 1. **builtin** - Node.js組み込みモジュール (`fs`, `path` 等)
-2. **external** - 外部ライブラリ (npm modules)
+2. **external** - 外部ライブラリ (pnpm modules)
 3. **internal** - リポジトリ内モジュール
    - `@/components/**` - 共通系components（先に配置）
    - `@/**` - その他の内部モジュール (`@/utils`, `@/shared` 等)
@@ -198,6 +198,6 @@ import { someFunction, type SomeType } from './module';
 Plan → Read → Verify → Implement → Test → Reflect
 
 - [ ] TypeScript strict mode compliance
-- [ ] Tests added/updated and passing (`npm run test`)
-- [ ] Lint/format pass (`npm run lint && npm run format`)
+- [ ] Tests added/updated and passing (`pnpm run test`)
+- [ ] Lint/format pass (`pnpm run lint && pnpm run format`)
 - [ ] File ≤ 300 LOC with JSDoc for public APIs

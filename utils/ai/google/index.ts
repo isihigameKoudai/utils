@@ -1,3 +1,6 @@
+/**
+ * pnpm install @google/genai
+ */
 import {
   GoogleGenAI,
   type GoogleGenAIOptions,

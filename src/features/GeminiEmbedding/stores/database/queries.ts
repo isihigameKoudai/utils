@@ -6,7 +6,7 @@ import {
   type DatabaseItem,
 } from '../../models/databaseItem';
 
-import type { DatabaseState } from './type';
+import type { ChromaStatus, DatabaseState } from './type';
 
 export const queries = {
   items: (state): DatabaseItem[] =>
@@ -39,4 +39,14 @@ export const queries = {
   hasSearchResults: (state): boolean => state.searchResults !== null,
 
   searchOrder: (state): 'closest' | 'furthest' => state.searchOrder,
+
+  chromaUrl: (state): string => state.chromaUrl,
+
+  chromaCollectionName: (state): string => state.chromaCollectionName,
+
+  chromaStatus: (state): ChromaStatus => state.chromaStatus,
+
+  chromaError: (state): string | null => state.chromaError,
+
+  isChromaConnected: (state): boolean => state.chromaStatus === 'connected',
 } satisfies QueriesProps<DatabaseState>;

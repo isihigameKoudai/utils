@@ -1,11 +1,7 @@
-import type { GeminiApi } from '../api/types';
+import type { geminiApi } from '../api/gemini';
 import type { EmbeddingStore } from '../stores/embedding';
 
-export type EmbeddingActions = ReturnType<
-  typeof EmbeddingStore.useStore
->['actions'];
-
 export type EmbeddingServiceDeps = {
-  api: GeminiApi;
-  actions: EmbeddingActions;
+  api: typeof geminiApi;
+  actions: ReturnType<typeof EmbeddingStore.useStore>['actions'];
 };

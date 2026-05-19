@@ -163,3 +163,11 @@ export const InfoBox = styled('div')({
   color: '#1e40af',
   marginBottom: '2rem',
 });
+
+export const ChromaSection = styled('div')({
+  padding: '1.5rem',
+  backgroundColor: '#f0fdf4',
+  border: '1px solid #bbf7d0',
+  borderRadius: '0.5rem',
+  marginTop: '2rem',
+});

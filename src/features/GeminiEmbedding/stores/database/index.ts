@@ -10,4 +10,4 @@ export const DatabaseStore = defineStore({
   actions,
 });
 
-export type { DatabaseState } from './type';
+export type { DatabaseState, ChromaStatus } from './type';

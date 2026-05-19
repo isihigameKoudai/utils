@@ -1,11 +1,14 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
+
+import { defineChroma, defineChromaFromUrl } from '@/utils/db/chroma';
+import type { Collection as ChromaCollection } from '@/utils/db/chroma';
 
 import { geminiApi } from '../api';
 import type { InputMode } from '../models/databaseItem';
 import {
+  createDatabaseService,
   createEmbeddingService,
   createGenerationService,
-  createDatabaseService,
 } from '../services';
 import { DatabaseStore } from '../stores/database';
 import { EmbeddingStore } from '../stores/embedding';
@@ -20,6 +23,16 @@ export const useEmbeddingFeature = () => {
   const [inputText, setInputText] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
+
+  const chromaCollectionRef = useRef<ChromaCollection | null>(null);
+
+  const chromaOps = useMemo(() => {
+    const c = defineChroma();
+    return {
+      addDocuments: c.addDocuments,
+      getDocuments: c.getDocuments,
+    };
+  }, []);
 
   const embeddingService = useMemo(
     () =>
@@ -40,8 +53,12 @@ export const useEmbeddingFeature = () => {
   );
 
   const databaseService = useMemo(
-    () => createDatabaseService({ actions: databaseStore.actions }),
-    [databaseStore.actions],
+    () =>
+      createDatabaseService({
+        actions: databaseStore.actions,
+        chroma: chromaOps,
+      }),
+    [databaseStore.actions, chromaOps],
   );
 
   const handleFileChange = useCallback(
@@ -104,6 +121,57 @@ export const useEmbeddingFeature = () => {
     }
   }, [handleEmbed, databaseStore.state.items, databaseService]);
 
+  const handleConnectChroma = useCallback(async () => {
+    const { chromaUrl, chromaCollectionName } = databaseStore.state;
+    databaseStore.actions.setChromaStatus('connecting');
+    databaseStore.actions.setChromaError(null);
+
+    try {
+      const chroma = defineChromaFromUrl(chromaUrl);
+      await chroma.connect();
+      const collection =
+        await chroma.getOrCreateCollection(chromaCollectionName);
+      chromaCollectionRef.current = collection;
+      databaseStore.actions.setChromaStatus('connected');
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      databaseStore.actions.setChromaStatus('error');
+      databaseStore.actions.setChromaError(msg);
+    }
+  }, [databaseStore.actions, databaseStore.state]);
+
+  const handleAddToChroma = useCallback(async () => {
+    if (!chromaCollectionRef.current) return;
+
+    const result = await handleEmbed();
+    if (result) {
+      const label = inputMode === 'text' ? inputText : selectedFile!.name;
+      await databaseService.addToChroma(
+        chromaCollectionRef.current,
+        result,
+        label,
+        inputMode,
+        filePreviewUrl,
+      );
+    }
+  }, [
+    handleEmbed,
+    inputMode,
+    inputText,
+    selectedFile,
+    filePreviewUrl,
+    databaseService,
+  ]);
+
+  const handleSearchChroma = useCallback(async () => {
+    if (!chromaCollectionRef.current) return;
+
+    const result = await handleEmbed();
+    if (result) {
+      await databaseService.searchChroma(chromaCollectionRef.current, result);
+    }
+  }, [handleEmbed, databaseService]);
+
   const handleGenerateText = useCallback(async () => {
     if (selectedFile && inputText.trim()) {
       return await generationService.generateFileContent(
@@ -141,6 +209,14 @@ export const useEmbeddingFeature = () => {
     searchResults: databaseStore.queries.searchResults,
     searchOrder: databaseStore.queries.searchOrder,
 
+    chromaUrl: databaseStore.queries.chromaUrl,
+    chromaCollectionName: databaseStore.queries.chromaCollectionName,
+    chromaStatus: databaseStore.queries.chromaStatus,
+    chromaError: databaseStore.queries.chromaError,
+    isChromaConnected: databaseStore.queries.isChromaConnected,
+    setChromaUrl: databaseStore.actions.setChromaUrl,
+    setChromaCollectionName: databaseStore.actions.setChromaCollectionName,
+
     isLoading:
       embeddingStore.queries.isLoading || generationStore.queries.isLoading,
     error: embeddingStore.queries.error || generationStore.queries.error,
@@ -148,6 +224,9 @@ export const useEmbeddingFeature = () => {
     handleEmbed,
     handleAddToDatabase,
     handleSearchDatabase,
+    handleConnectChroma,
+    handleAddToChroma,
+    handleSearchChroma,
     handleGenerateText,
     handleReset,
     setSearchOrder: databaseService.setSearchOrder,

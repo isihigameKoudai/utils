@@ -1,10 +1,10 @@
-import type { GeminiApi } from '../api/types';
+import type { geminiApi } from '../api/gemini';
 import type { GenerationStore } from '../stores/generation';
 
 type GenerationActions = ReturnType<typeof GenerationStore.useStore>['actions'];
 
 type GenerationServiceDeps = {
-  api: GeminiApi;
+  api: typeof geminiApi;
   actions: GenerationActions;
 };
 
