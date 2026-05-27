@@ -85,7 +85,9 @@ export const BillBarChart = ({ bills, groupingType }: Props) => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip
-              formatter={(value: number) => `${value.toLocaleString()}円`}
+              formatter={(value) =>
+                value != null ? `${Number(value).toLocaleString()}円` : ''
+              }
             />
             <Bar dataKey="amount" name="金額">
               {data.map((_, index) => (

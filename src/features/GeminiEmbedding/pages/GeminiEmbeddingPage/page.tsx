@@ -158,7 +158,6 @@ export const GeminiEmbeddingPage: React.FC = () => {
               <Input
                 id="fileInput"
                 type="file"
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 accept={ALL_SUPPORTED_TYPES}
                 onChange={handleFileChange}
                 required

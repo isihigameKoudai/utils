@@ -161,7 +161,7 @@ describe('Audio', () => {
       .mockImplementation(() => {
         audio['_mediaSource'] = mediaSourceMock;
         audio['_audioSource'] = audioSourceMock;
-        return {} as MediaStream;
+        return Promise.resolve({} as MediaStream);
       });
 
     // getAudioStreamを呼び出してmediaSourceを設定
