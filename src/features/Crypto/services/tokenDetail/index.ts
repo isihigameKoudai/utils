@@ -47,7 +47,7 @@ export const createTokenDetailService = ({
         actions.setLoading(createLoadingState(false));
       }
     },
-    async initialize(token: Symbol): Promise<void> {
+    initialize(token: Symbol): void {
       actions.initialize({ token });
     },
   };

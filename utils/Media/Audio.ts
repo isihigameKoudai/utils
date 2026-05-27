@@ -93,10 +93,10 @@ export class Audio extends Media {
    */
   pause() {
     if (this._context.state === 'running') {
-      this._context.suspend();
+      void this._context.suspend();
       this.isPlaying = false;
     } else if (this._context.state === 'suspended') {
-      this._context.resume();
+      void this._context.resume();
       this.isPlaying = true;
     }
   }

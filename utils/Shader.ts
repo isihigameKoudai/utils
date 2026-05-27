@@ -86,6 +86,7 @@ class Shader {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     this.material.uniforms.resolution.value.set(
       window.innerWidth,
       window.innerHeight,

@@ -24,7 +24,7 @@ const MicPage: React.FC = () => {
         basicParticle({ $canvas, timeDomainArray, frequencyBinCount });
       },
       {
-        $canvas: $particle.current!,
+        $canvas: $particle.current,
         smoothingTimeConstant: 0.1,
       },
     );
@@ -40,7 +40,7 @@ const MicPage: React.FC = () => {
         });
       },
       {
-        $canvas: $lineAudio.current!,
+        $canvas: $lineAudio.current,
       },
     );
   }, []);

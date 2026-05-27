@@ -96,7 +96,7 @@ export class PoseDetection extends Video {
     await this.loadDetector();
   }
 
-  async start(renderCallBack?: RenderCallBack) {
+  start(renderCallBack?: RenderCallBack) {
     if (!this.detector) {
       console.error('detector is empty. you should load detector');
       return;
@@ -131,7 +131,7 @@ export class PoseDetection extends Video {
     this._detectedPoses = poses;
 
     if (renderCallBack) {
-      renderCallBack(poses);
+      void renderCallBack(poses);
     }
 
     this._requestAnimationFrameId = this.window.requestAnimationFrame(

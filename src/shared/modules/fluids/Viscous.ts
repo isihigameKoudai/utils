@@ -72,10 +72,10 @@ export default class Viscous extends ShaderPass {
       const fbo_in = isOdd ? this.props.output0! : this.props.output1!;
       const fbo_out = isOdd ? this.props.output1! : this.props.output0!;
 
-      if (this.uniforms) this.uniforms.velocity_new!.value = fbo_in.texture;
+      if (this.uniforms) this.uniforms.velocity_new.value = fbo_in.texture;
       this.props.output = fbo_out;
       if (!!fbo_in && this.uniforms) {
-        this.uniforms.dt!.value = dt;
+        this.uniforms.dt.value = dt;
       }
 
       super.update();

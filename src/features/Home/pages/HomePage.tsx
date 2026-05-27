@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import React, { useCallback } from 'react';
 
 import { fetchFiles } from '@/utils/file';
@@ -25,20 +26,34 @@ const HomePage: React.FC = () => {
 
   return (
     <div id="index-page">
-      <p>
-        <button type="button" onClick={onOpenFile}>
-          open files
-        </button>
-        <button type="button" onClick={onOpenImages}>
-          image files
-        </button>
-        <button type="button" onClick={onOpenMovies}>
-          video files
-        </button>
-        <button type="button" onClick={onOpenAudios}>
-          audio files
-        </button>
-      </p>
+      <h1>Utils Playground</h1>
+
+      <section style={{ marginBottom: '2rem' }}>
+        <h2>AI Features</h2>
+        <p>
+          <Link to="/gemini-embedding">
+            <button type="button">Gemini Embedding 2 Playground</button>
+          </Link>
+        </p>
+      </section>
+
+      <section>
+        <h2>File Utils</h2>
+        <p>
+          <button type="button" onClick={onOpenFile}>
+            open files
+          </button>
+          <button type="button" onClick={onOpenImages}>
+            image files
+          </button>
+          <button type="button" onClick={onOpenMovies}>
+            video files
+          </button>
+          <button type="button" onClick={onOpenAudios}>
+            audio files
+          </button>
+        </p>
+      </section>
     </div>
   );
 };

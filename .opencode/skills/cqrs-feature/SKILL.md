@@ -11,11 +11,31 @@ React 19 + TypeScript + Zustandを使用したCQRSパターンに基づくFeatur
 
 CQRSは「Command Query Responsibility Segregation」の略で、データの読み取り（Query）と書き込み（Command）の責務を分離するアーキテクチャパターン。このリポジトリでは、既存の`i-state`（Zustandベース）を活用し、フロントエンドに最適化されたCQRS実装を行う。
 
+## Coding Constraints
+
+### Barrel File Prohibition (バレル禁止)
+
+**index.tsからの一括re-exportは禁止。**
+
+- ❌ **禁止**: `export * from './module'` (一括re-export)
+- ✅ **許可**: 明示的な名前付きexport (`export { specificItem } from './module'`)
+- ✅ **許可**: 型のみの一括re-export (`export type * from './types'`)
+
+**理由**: 一括re-exportは依存関係を不透明にし、ツリーシェイキングを妨げ、循環依存を引き起こしやすい。
+
+### Validation Library
+
+**Valibotを使用する。**
+
+- ✅ **使用**: `valibot` - 軽量で高速なバリデーションライブラリ
+
+**理由**: Valibotは小さく高速で、TypeScript型推論が優れている。
+
 ### Core Principles
 
 1. **Command**: Store actionsが担当（状態を変更する操作。stateに直結するデータ取得・ロジックも含む。ただしtry/catchは書かない）
 2. **Query**: Store queriesが担当（状態を読み取る操作、純粋関数）
-3. **Domain Model**: `createModelFactory`で作成するイミュータブルなモデル
+3. **Domain Model**: `createModelFactory`で作成するイミュータブルなモデル（Valibotでバリデーション）
 4. **Store**: Zustandベースの`i-state`パターン（actionsがCommand層。自storeのstateに直結するfetchやロジックはactionsに書いても良い。ただしtry/catchは書かない）
 5. **Service**: エラーハンドリング（try/catch + loading/error管理）＋ 複数store横断のorchestration ＋ DI
 
@@ -25,18 +45,19 @@ CQRSは「Command Query Responsibility Segregation」の略で、データの読
 - **commandsディレクトリなし**: Store actionsがCommand層の役割を担う
 - **actionsにstateに直結するロジックを含める**: データ取得（API呼び出し）、フィルタ・マッピングなど、自storeのstateに直結する処理はactionsに書く。ただし**actionsにtry/catchは書かない**。エラーハンドリング（try/catch + loading/error管理）はservice層で行う
 - **servicesディレクトリ**: エラーハンドリング（try/catch + loading/error管理）＋ 複数store操作のオーケストレーション ＋ 外部API統合 ＋ DI
+- **Valibot使用**: バリデーションはValibotで実装
+- **バレル禁止**: index.tsでの一括re-export (`export *`) は禁止。明示的な名前付きexportのみ許可
 
 ## Directory Structure
 
 ```
 src/features/<FeatureName>/
 ├── models/                      # Domain models (createModelFactory)
-│   ├── index.ts                 # Models re-export
+│   ├── index.ts                 # Models explicit export (NO barrel exports)
 │   └── <entity>/                # Entity別ディレクトリ
-│       ├── index.ts             # Entity re-export
-│       ├── scheme.ts            # Zod schema definition
+│       ├── index.ts             # Entity explicit export (NO barrel exports)
 │       ├── types.ts             # Params & Model type definitions
-│       └── model.ts             # createModelFactory implementation
+│       └── model.ts             # Valibot schema + createModelFactory (combined)
 ├── stores/                      # Zustand stores (i-state pattern)
 │   ├── index.ts                 # Store re-export
 │   └── <entity>/                # Entity別ディレクトリ（大きい場合）
@@ -86,39 +107,23 @@ src/features/<FeatureName>/
 models/
 └── todo/
     ├── index.ts      # re-export
-    ├── scheme.ts     # Zod schema definition
     ├── types.ts      # Params & Model type definitions
-    └── model.ts      # createModelFactory implementation
+    └── model.ts      # Valibot schema + createModelFactory implementation (combined)
 ```
 
-#### Step 1: Zod Schema Definition
+**IMPORTANT**: Schema and model factory MUST be in the same file (`model.ts`) for better cohesion.
 
-```typescript
-// models/todo/scheme.ts
-import { z } from 'zod';
-
-/** @description Todo entity validation schema */
-export const todoSchema = z.object({
-  id: z.string().min(1, 'id is required'),
-  title: z.string().min(1, 'title is required'),
-  description: z.string(),
-  status: z.enum(['pending', 'in_progress', 'completed']),
-  dueDate: z.string().datetime({ message: 'Invalid date format' }),
-  createdAt: z.string().datetime({ message: 'Invalid date format' }),
-});
-```
-
-#### Step 2: Types Definition
+#### Step 1: Types Definition
 
 ```typescript
 // models/todo/types.ts
-import type { z } from 'zod';
+import type * as v from 'valibot';
 import type dayjs from 'dayjs';
 
-import type { todoSchema } from './scheme';
+import type { todoSchema } from './model';
 
 /** @description Raw params type (store/API用) */
-export type TodoParams = z.infer<typeof todoSchema>;
+export type TodoParams = v.InferOutput<typeof todoSchema>;
 
 /** @description Status type */
 export type TodoStatus = TodoParams['status'];
@@ -145,16 +150,31 @@ export type Todo = TodoParams & {
 };
 ```
 
-#### Step 3: Model Factory
+#### Step 2: Schema + Model Factory (Combined)
+
+**CRITICAL**: Schema and model factory MUST be in the same file for cohesion.
 
 ```typescript
 // models/todo/model.ts
+import * as v from 'valibot';
 import dayjs from 'dayjs';
 
 import { createModelFactory } from '@/utils/model/createModel';
 
-import { todoSchema } from './scheme';
 import type { Todo, TodoParams, TodoStatus } from './types';
+
+/**
+ * Todo entity validation schema
+ * @description Todoのバリデーションスキーマ
+ */
+export const todoSchema = v.object({
+  id: v.pipe(v.string(), v.minLength(1, 'id is required')),
+  title: v.pipe(v.string(), v.minLength(1, 'title is required')),
+  description: v.string(),
+  status: v.picklist(['pending', 'in_progress', 'completed']),
+  dueDate: v.pipe(v.string(), v.isoDateTime('Invalid date format')),
+  createdAt: v.pipe(v.string(), v.isoDateTime('Invalid date format')),
+});
 
 /**
  * Todo Model Factory
@@ -218,18 +238,20 @@ export const isTodoEmpty = (params: Partial<TodoParams>): boolean => {
 };
 ```
 
-#### Step 4: Index Export
+#### Step 3: Index Export (明示的エクスポートのみ)
 
 ```typescript
 // models/todo/index.ts
-export { todoSchema } from './scheme';
+export { todoSchema, createTodo, isTodoEmpty } from './model';
 export type { Todo, TodoParams, TodoStatus } from './types';
-export { createTodo, isTodoEmpty } from './model';
 ```
 
 ```typescript
 // models/index.ts
-export * from './todo';
+// ❌ 禁止: export * from './todo';
+// ✅ 許可: 明示的な名前付きexport
+export { todoSchema, createTodo, isTodoEmpty } from './todo';
+export type { Todo, TodoParams, TodoStatus } from './todo';
 ```
 
 ````
@@ -484,7 +506,9 @@ export type { TodoState } from './type';
 
 ```typescript
 // stores/index.ts
-export { TodoStore, type TodoState } from './todo';
+// 明示的エクスポート（バレル禁止）
+export { TodoStore } from './todo';
+export type { TodoState } from './todo';
 ```
 ````
 
@@ -945,7 +969,7 @@ export { TodoListPage } from './page';
 
 | Layer     | Responsibility                                                                                                  | Dependencies       |
 | --------- | --------------------------------------------------------------------------------------------------------------- | ------------------ |
-| Model     | ドメインロジック、バリデーション、computed props                                                                | Zod, utils         |
+| Model     | ドメインロジック、バリデーション、computed props                                                                | Valibot, utils     |
 | Store     | 状態管理、Commands(actions)、Queries。stateに直結するfetch/ロジックもactionsに含んで良い（try/catchは書かない） | Model (types only) |
 | Service   | エラーハンドリング（try/catch + loading/error管理）、API統合、複数action orchestration、DI                      | Store              |
 | API       | HTTP通信、外部サービス連携                                                                                      | なし               |
@@ -956,10 +980,11 @@ export { TodoListPage } from './page';
 
 ### Model Guidelines (createModelFactory)
 
-1. **Schema First**: 必ずZodスキーマから始める
+1. **Schema First**: 必ずValibotスキーマから始める（Zod使用禁止）
 2. **Params = Raw Data**: APIレスポンス/Store保存用の型
 3. **Extension for Logic**: getterとメソッドでドメインロジックを定義
 4. **Helper Functions**: 静的メソッド相当は外部関数として定義
+5. **No Barrel Exports**: index.tsでは明示的な名前付きexportのみ（`export *` 禁止）
 
 ### Store Guidelines (i-state)
 
@@ -1132,15 +1157,17 @@ describe('TodoService', () => {
 5. **Mutableな状態**: createModelFactoryは自動でfreeze
 6. **型の緩和**: `as any`や`@ts-ignore`を使用しない
 7. **Hooksに副作用を含める**: `useEffect`等の副作用はコンポーネント側（page.tsx）で扱う
+8. **Barrel exportsを使用する**: `export *` は禁止。明示的な名前付きexportのみ
 
 ### DO
 
-1. **Zod Schema First**: バリデーションを最初に定義
+1. **Valibot Schema First**: バリデーションを最初に定義
 2. **Store = Raw Data**: stateにはParams型を保存
 3. **stateに直結するロジックはactionsに**: fetch、CRUD等はactionsに書く（try/catchは書かない）
 4. **エラーハンドリングはservice層で**: try/catch + loading/error管理はServiceが担当
 5. **Service for 複数Store横断のみ**: 複数storeを跨ぐorchestrationのみServiceで
 6. **Immutable Updates**: withXxxメソッドで新しいParamsを返す
+7. **Explicit Exports**: index.tsでは明示的な名前付きexportのみ使用
 
 ## Related Skills
 

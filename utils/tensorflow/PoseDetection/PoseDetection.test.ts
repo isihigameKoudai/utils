@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/require-await */
 import { PoseLandmarker } from '@mediapipe/tasks-vision';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -126,7 +127,7 @@ describe('PoseDetection', () => {
       const renderCallback = vi.fn();
 
       await detector.load({ $video: mockVideo });
-      await detector.start(renderCallback);
+      detector.start(renderCallback);
 
       expect(detector.detectedPoses).toHaveLength(1);
       expect(renderCallback).toHaveBeenCalledWith(detector.detectedPoses);
@@ -136,7 +137,7 @@ describe('PoseDetection', () => {
     it('should keep landmark names for find lookups', async () => {
       const mockVideo = documentMock.createElement('video');
       await detector.load({ $video: mockVideo });
-      await detector.start();
+      detector.start();
 
       const leftShoulder = detector.detectedPoses[0].keypoints.find(
         (keypoint) => keypoint.name === 'left_shoulder',
@@ -148,7 +149,7 @@ describe('PoseDetection', () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
-      await detector.start();
+      detector.start();
 
       expect(consoleSpy).toHaveBeenCalledWith(
         'detector is empty. you should load detector',
@@ -162,7 +163,7 @@ describe('PoseDetection', () => {
         .spyOn(console, 'error')
         .mockImplementation(() => {});
 
-      await detector.start();
+      detector.start();
 
       expect(consoleSpy).toHaveBeenCalledWith('$video is empty.');
     });
@@ -172,7 +173,7 @@ describe('PoseDetection', () => {
     it('should stop detection and clean up resources', async () => {
       const mockVideo = documentMock.createElement('video');
       await detector.load({ $video: mockVideo });
-      await detector.start();
+      detector.start();
 
       detector.stop();
 

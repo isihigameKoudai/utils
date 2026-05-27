@@ -1,11 +1,31 @@
 ---
 name: domain-model
-description: Create immutable Domain Models using createModelFactory with Zod validation, computed properties, and type-safe transformations. Follows DDD principles adapted for frontend React applications.
+description: Create immutable Domain Models using createModelFactory with Valibot validation, computed properties, and type-safe transformations. Follows DDD principles adapted for frontend React applications.
 ---
 
 # Domain Model Development Guide
 
 `createModelFactory`を使用したイミュータブルなDomain Modelの設計と実装ガイド。DDDプリンシプルをフロントエンドReactアプリケーションに最適化したパターンを提供する。
+
+## Coding Constraints
+
+### Barrel File Prohibition (バレル禁止)
+
+**index.tsからの一括re-exportは禁止。**
+
+- ❌ **禁止**: `export * from './module'` (一括re-export)
+- ✅ **許可**: 明示的な名前付きexport (`export { specificItem } from './module'`)
+- ✅ **許可**: 型のみの一括re-export (`export type * from './types'`)
+
+**理由**: 一括re-exportは依存関係を不透明にし、ツリーシェイキングを妨げ、循環依存を引き起こしやすい。
+
+### Validation Library
+
+**Valibotを使用する。**
+
+- ✅ **使用**: `valibot` - 軽量で高速なバリデーションライブラリ
+
+**理由**: Valibotは小さく高速で、TypeScript型推論が優れている。
 
 ## Core Principles
 
@@ -17,7 +37,7 @@ description: Create immutable Domain Models using createModelFactory with Zod va
 
 ### 2. Validation
 
-- Zodスキーマによるランタイムバリデーション
+- Valibotスキーマによるランタイムバリデーション
 - 不正なデータでのインスタンス化を防止
 - 明確なエラーメッセージ
 
@@ -34,40 +54,24 @@ description: Create immutable Domain Models using createModelFactory with Zod va
 ```
 models/
 └── {entity}/
-    ├── index.ts      # re-export
-    ├── scheme.ts     # Zod schema definition
+    ├── index.ts      # explicit export (NO barrel exports)
     ├── types.ts      # Params & Model type definitions
-    └── model.ts      # createModelFactory implementation
+    └── model.ts      # Valibot schema + createModelFactory implementation (combined)
 ```
 
-### Step 1: Zod Schema Definition
+**IMPORTANT**: Schema and model factory MUST be in the same file (`model.ts`) for better cohesion and maintainability.
 
-```typescript
-// models/{entity}/scheme.ts
-import { z } from 'zod';
-
-/** @description Entity validation schema */
-export const entitySchema = z.object({
-  id: z.string().min(1, 'id is required'),
-  name: z.string().min(1, 'name is required'),
-  status: z.enum(['active', 'inactive', 'pending']),
-  amount: z.number().min(0, 'amount must be non-negative'),
-  createdAt: z.string().datetime({ message: 'Invalid date format' }),
-  updatedAt: z.string().datetime({ message: 'Invalid date format' }),
-});
-```
-
-### Step 2: Types Definition
+### Step 1: Types Definition
 
 ```typescript
 // models/{entity}/types.ts
-import type { z } from 'zod';
+import type * as v from 'valibot';
 import type dayjs from 'dayjs';
 
-import type { entitySchema } from './scheme';
+import type { entitySchema } from './model';
 
 /** @description Raw params type (store/API用) */
-export type EntityParams = z.infer<typeof entitySchema>;
+export type EntityParams = v.InferOutput<typeof entitySchema>;
 
 /** @description Status type */
 export type EntityStatus = EntityParams['status'];
@@ -100,16 +104,31 @@ export type Entity = EntityParams & {
 };
 ```
 
-### Step 3: Model Factory
+### Step 2: Schema + Model Factory (Combined)
+
+**CRITICAL**: Schema and model factory MUST be in the same file for cohesion.
 
 ```typescript
 // models/{entity}/model.ts
+import * as v from 'valibot';
 import dayjs from 'dayjs';
 
 import { createModelFactory } from '@/utils/model/createModel';
 
-import { entitySchema } from './scheme';
 import type { Entity, EntityParams, EntityStatus } from './types';
+
+/**
+ * Entity validation schema
+ * @description Entityのバリデーションスキーマ
+ */
+export const entitySchema = v.object({
+  id: v.pipe(v.string(), v.minLength(1, 'id is required')),
+  name: v.pipe(v.string(), v.minLength(1, 'name is required')),
+  status: v.picklist(['active', 'inactive', 'pending']),
+  amount: v.pipe(v.number(), v.minValue(0, 'amount must be non-negative')),
+  createdAt: v.pipe(v.string(), v.isoDateTime('Invalid date format')),
+  updatedAt: v.pipe(v.string(), v.isoDateTime('Invalid date format')),
+});
 
 /**
  * Entity Model Factory
@@ -204,20 +223,20 @@ export const sortEntitiesByCreatedAt = (
 };
 ```
 
-### Step 4: Index Export
+### Step 3: Index Export (明示的エクスポートのみ)
 
 ```typescript
 // models/{entity}/index.ts
-export { entitySchema } from './scheme';
-export type { Entity, EntityParams, EntityStatus } from './types';
 export {
+  entitySchema,
   createEntity,
+  isEntityEmpty,
   createEntityParams,
-  sortEntitiesByCreatedAt,
 } from './model';
+export type { Entity, EntityParams, EntityStatus } from './types';
 ```
 
-## Validation Patterns (Zod Schema)
+## Validation Patterns (Valibot Schema)
 
 ### Required Fields
 
@@ -461,17 +480,17 @@ describe('Entity Model', () => {
       expect(entity.status).toBe('active');
     });
 
-    it('should throw ZodError for missing id', () => {
+    it('should throw ValibotError for missing id', () => {
       expect(() => createEntity({ ...validParams, id: '' })).toThrow();
     });
 
-    it('should throw ZodError for invalid status', () => {
+    it('should throw ValibotError for invalid status', () => {
       expect(() =>
         createEntity({ ...validParams, status: 'invalid' as any }),
       ).toThrow();
     });
 
-    it('should throw ZodError for invalid date', () => {
+    it('should throw ValibotError for invalid date', () => {
       expect(() =>
         createEntity({ ...validParams, createdAt: 'not-a-date' }),
       ).toThrow();
@@ -574,7 +593,7 @@ class BadEntity {
 // ❌ Mutable object (not using Object.freeze)
 const createBadEntity = (params: EntityParams) => ({
   ...params,
-  // これはミュータブル！
+  // これはミュータブル!
 });
 
 // ❌ External dependencies in model
@@ -588,13 +607,20 @@ const createBadEntity = createModelFactory({
 
 // ❌ Missing schema validation
 const createBadEntity = (params: EntityParams) => {
-  // Zodスキーマなしで直接生成
+  // Valibotスキーマなしで直接生成
   return Object.freeze({ ...params });
 };
 
+// ❌ Separate schema and factory files
+// models/{entity}/scheme.ts - ❌ DON'T create separate schema file
+export const entitySchema = v.object({ ... });
+
+// models/{entity}/model.ts
+import { entitySchema } from './scheme'; // ❌ DON'T import from separate file
+
 // ❌ Vague error messages in custom validation
-const schema = z.object({
-  id: z.string().min(1, 'Error'),  // 何のエラーかわからない
+const schema = v.object({
+  id: v.pipe(v.string(), v.minLength(1, 'Error')),  // 何のエラーかわからない
 });
 
 // ❌ Mutating params in extension
@@ -616,13 +642,25 @@ const createBadEntity = createModelFactory({
     },
   }),
 });
+
+// ❌ Barrel exports (must use explicit exports)
+export * from './entity';  // ❌ 一括re-export禁止
 ```
 
 ### DO
 
 ```typescript
-// ✅ Use createModelFactory with Zod schema
-const createEntity = createModelFactory<EntityParams, Entity>({
+// ✅ Schema and factory in the same file (model.ts)
+// models/{entity}/model.ts
+import * as v from 'valibot';
+import { createModelFactory } from '@/utils/model/createModel';
+
+export const entitySchema = v.object({
+  id: v.pipe(v.string(), v.minLength(1, 'id is required')),
+  // ... other fields
+});
+
+export const createEntity = createModelFactory<EntityParams, Entity>({
   schema: entitySchema,
   extension: (params) => ({ ... }),
 });
@@ -640,11 +678,14 @@ const createEntity = createModelFactory({
   }),
 });
 
-// ✅ Clear, specific validation messages
-const schema = z.object({
-  id: z.string().min(1, 'id is required'),
-  email: z.string().email('Invalid email format: must be valid email address'),
-  amount: z.number().min(0, 'amount must be non-negative'),
+// ✅ Clear, specific validation messages with Valibot
+const schema = v.object({
+  id: v.pipe(v.string(), v.minLength(1, 'id is required')),
+  email: v.pipe(
+    v.string(),
+    v.email('Invalid email format: must be valid email address'),
+  ),
+  amount: v.pipe(v.number(), v.minValue(0, 'amount must be non-negative')),
 });
 
 // ✅ Immutable updates returning Params (not Model)
@@ -662,6 +703,11 @@ const createEntity = createModelFactory({
 export const createEntityParams = (partial: Partial<EntityParams>): EntityParams => {
   return { ...defaultParams, ...partial };
 };
+
+// ✅ Explicit exports (no barrel exports)
+// models/{entity}/index.ts
+export { entitySchema, createEntity, createEntityParams } from './model';
+export type { Entity, EntityParams } from './types';
 ```
 
 ## Integration with Store

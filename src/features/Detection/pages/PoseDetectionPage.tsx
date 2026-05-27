@@ -18,7 +18,7 @@ const PoseDetectionPage = () => {
   );
 
   useEffect(() => {
-    (async () => {
+    void (async () => {
       await detector.load({
         $video: videoRef.current,
         width: 640,

@@ -29,6 +29,7 @@ const Scene: React.FC<Props> = ({
   useFrame((state, delta, frame) => {
     // eslint-disable-next-line react-hooks/immutability
     shaderMaterialArgs.uniforms.time = { value: state.clock.getElapsedTime() };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     shaderMaterialArgs.uniforms.resolution.value.set(
       window.innerWidth,
       window.innerHeight,

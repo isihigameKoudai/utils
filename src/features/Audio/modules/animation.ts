@@ -81,11 +81,11 @@ const createShader = function (
   type: number,
 ) {
   const shader = gl.createShader(type)!;
-  gl.shaderSource(shader!, source);
-  gl.compileShader(shader!);
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
 
-  if (!gl.getShaderParameter(shader!, gl.COMPILE_STATUS)) {
-    throw new Error(gl.getShaderInfoLog(shader!) + source);
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    throw new Error(gl.getShaderInfoLog(shader) + source);
   }
 
   return shader;
@@ -96,13 +96,13 @@ const createProgram = function (
   vertShader: WebGLShader,
   fragShader: WebGLShader,
 ) {
-  const program = gl.createProgram()!;
-  gl.attachShader(program!, vertShader);
-  gl.attachShader(program!, fragShader);
-  gl.linkProgram(program!);
+  const program = gl.createProgram();
+  gl.attachShader(program, vertShader);
+  gl.attachShader(program, fragShader);
+  gl.linkProgram(program);
 
-  if (!gl.getProgramParameter(program!, gl.LINK_STATUS)) {
-    throw new Error(gl.getProgramInfoLog(program!) || '');
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    throw new Error(gl.getProgramInfoLog(program) || '');
   }
 
   return program;
@@ -146,8 +146,10 @@ const injectWaveArray = ({
   const uniformLocs = getUniformLocs($gl, program, [...uniformKeys, 'u_color']);
   // TODO: vec2やvec3などのプリミティブではない値だった場合、自動で出し分けるようにする
   uniformKeys.forEach((uniformKey) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     $gl.uniform1f(uniformLocs.get(uniformKey), uniforms[uniformKey]);
   });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   $gl.uniform3f(uniformLocs.get('u_color'), color.r, color.g, color.b);
 
   $gl.enableVertexAttribArray(0);

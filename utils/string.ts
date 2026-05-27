@@ -17,5 +17,7 @@ export const toKebabCase = (inputString: string): string => {
  *  'kebab-Case' => 'camelCase'
  */
 export const toCamelCase = (inputString: string): string => {
-  return inputString.replace(/-([a-z])/g, (_, char) => char.toUpperCase());
+  return inputString.replace(/-([a-z])/g, (_, char: string) =>
+    char.toUpperCase(),
+  );
 };

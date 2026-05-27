@@ -25,7 +25,7 @@ const DetectorView: React.FC<DetectorViewProps> = ({
   const [objects, setObjects] = useState<DetectedObject[]>([]);
   const [isShow, setIsShow] = useState(false);
 
-  const handleDetect = useCallback(async () => {
+  const handleDetect = useCallback(() => {
     const detector = detectorRef.current;
     if (detector.$video && detector._$video && detector.model) {
       const video = detector.$video;
@@ -35,7 +35,7 @@ const DetectorView: React.FC<DetectorViewProps> = ({
       video.style.opacity = `${DETECTOR_OPACITY}`;
       $videoContainer.current?.appendChild(video);
     }
-    await detector.start((objectList) => {
+    void detector.start((objectList) => {
       const objects = objectList.filter((obj) => obj.class === 'person');
       setObjects(objects);
       onDetect(objects);
@@ -56,7 +56,7 @@ const DetectorView: React.FC<DetectorViewProps> = ({
       }
     };
 
-    init();
+    void init();
 
     return () => {
       detector.stop();

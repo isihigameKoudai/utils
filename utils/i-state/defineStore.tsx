@@ -114,6 +114,7 @@ export const defineStore = <
       ((...args: any[]) => {
         const { state, dispatch } = store.getState();
         const queries = computeQueries(state);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         return fn({ state, queries, dispatch }, ...args);
       }) as Actions<S, Q, A>[keyof A],
     ]),

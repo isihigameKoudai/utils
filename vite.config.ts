@@ -17,6 +17,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './'),
+      '@chroma-core/default-embed': path.resolve(__dirname, './utils/db/chroma/dummy-embed.ts'),
     },
   },
   optimizeDeps: {
