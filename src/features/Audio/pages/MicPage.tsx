@@ -53,7 +53,7 @@ const MicPage: React.FC = () => {
   return (
     <div className="audio-page">
       <p>
-        <button type="button" onClick={() => void onActivateMic()}>
+        <button type="button" onClick={onActivateMic}>
           activate mic
         </button>
         <button type="button" onClick={onStopDeviceAudio}>

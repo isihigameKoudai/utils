@@ -40,16 +40,16 @@ const HomePage: React.FC = () => {
       <section>
         <h2>File Utils</h2>
         <p>
-          <button type="button" onClick={() => void onOpenFile()}>
+          <button type="button" onClick={onOpenFile}>
             open files
           </button>
-          <button type="button" onClick={() => void onOpenImages()}>
+          <button type="button" onClick={onOpenImages}>
             image files
           </button>
-          <button type="button" onClick={() => void onOpenMovies()}>
+          <button type="button" onClick={onOpenMovies}>
             video files
           </button>
-          <button type="button" onClick={() => void onOpenAudios()}>
+          <button type="button" onClick={onOpenAudios}>
             audio files
           </button>
         </p>

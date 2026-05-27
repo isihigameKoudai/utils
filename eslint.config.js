@@ -37,6 +37,7 @@ export default [
       ...reactPlugin.configs.recommended.rules,
       ...hooksPlugin.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
       'import/order': [
         'error',
         {

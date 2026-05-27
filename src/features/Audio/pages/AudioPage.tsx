@@ -39,7 +39,7 @@ const AudioPage: React.FC = () => {
   return (
     <div className="audio-page">
       <p>
-        <button type="button" onClick={() => void onPlayAudio()}>
+        <button type="button" onClick={onPlayAudio}>
           play vis
         </button>
         <button type="button" onClick={onPauseAudio}>

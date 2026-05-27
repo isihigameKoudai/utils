@@ -66,7 +66,7 @@ const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({
 
   return (
     <div>
-      <button onClick={() => void handleLoad()}>Load</button>
+      <button onClick={handleLoad}>Load</button>
       <button onClick={handleStart}>Start</button>
       <button onClick={handleStop}>Stop</button>
       <div
