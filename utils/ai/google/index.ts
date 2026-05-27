@@ -167,87 +167,92 @@ export const defineGemini = (config: DefineConfig) => {
   /**
    * Google Gemini Generate Content APIを呼び出す関数
    */
-  const generate = (content: ContentListUnion) => {
-    return ai.models.generateContent({
-      ...config.generation,
-      model: MODELS.GEMINI_3_FLASH_PREVIEW,
-      contents: content,
-    });
+  // const generate = (content: ContentListUnion) => {
+  //   return ai.models.generateContent({
+  //     ...config.generation,
+  //     model: MODELS.GEMINI_3_FLASH_PREVIEW,
+  //     contents: content,
+  //   });
+  // };
+
+  // const generateInlineFile = async (file: File, text: string) => {
+  //   if (INLINE_SIZE_LIMIT < file.size) {
+  //     throw new Error(
+  //       `File size must be less than ${INLINE_SIZE_LIMIT / (1024 * 1024)} MB`,
+  //     );
+  //   }
+
+  //   const arrayBuffer = await file.arrayBuffer();
+  //   const base64 = btoa(
+  //     new Uint8Array(arrayBuffer).reduce(
+  //       (data, byte) => data + String.fromCharCode(byte),
+  //       '',
+  //     ),
+  //   );
+
+  //   const parts: Content['parts'] = [];
+  //   if (text) {
+  //     parts.push({ text });
+  //   }
+  //   parts.push({
+  //     inlineData: {
+  //       mimeType: file.type,
+  //       data: base64,
+  //     },
+  //   });
+
+  //   return generate({ parts });
+  // };
+
+  // const generateLargeFile = async (file: File, text: string) => {
+  //   if (FILE_SIZE_LIMIT < file.size) {
+  //     throw new Error('File size is too large for generation');
+  //   }
+
+  //   const uploaded = await ai.files.upload({
+  //     file: new Blob([await file.arrayBuffer()], { type: file.type }),
+  //     config: { mimeType: file.type },
+  //   });
+
+  //   let status = await ai.files.get({ name: uploaded.name! });
+  //   while (status.state === 'PROCESSING') {
+  //     await new Promise((r) => setTimeout(r, 2000));
+  //     status = await ai.files.get({ name: uploaded.name! });
+  //   }
+
+  //   if (status.state === 'FAILED') {
+  //     throw new Error('File processing failed');
+  //   }
+
+  //   const parts: Content['parts'] = [];
+  //   if (text) {
+  //     parts.push({ text });
+  //   }
+  //   parts.push({
+  //     fileData: {
+  //       mimeType: status.mimeType!,
+  //       fileUri: status.uri!,
+  //     },
+  //   });
+
+  //   const response = await generate([{ parts }]);
+
+  //   await ai.files.delete({ name: uploaded.name! });
+
+  //   return response;
+  // };
+
+  // const generateFile = (file: File, text: string) => {
+  //   if (file.size < INLINE_SIZE_LIMIT) {
+  //     return generateInlineFile(file, text);
+  //   }
+  //   return generateLargeFile(file, text);
+  // };
+
+  return {
+    embed,
+    embedFile,
+    // generate,
+    // generateFile
   };
-
-  const generateInlineFile = async (file: File, text: string) => {
-    if (INLINE_SIZE_LIMIT < file.size) {
-      throw new Error(
-        `File size must be less than ${INLINE_SIZE_LIMIT / (1024 * 1024)} MB`,
-      );
-    }
-
-    const arrayBuffer = await file.arrayBuffer();
-    const base64 = btoa(
-      new Uint8Array(arrayBuffer).reduce(
-        (data, byte) => data + String.fromCharCode(byte),
-        '',
-      ),
-    );
-
-    const parts: Content['parts'] = [];
-    if (text) {
-      parts.push({ text });
-    }
-    parts.push({
-      inlineData: {
-        mimeType: file.type,
-        data: base64,
-      },
-    });
-
-    return generate({ parts });
-  };
-
-  const generateLargeFile = async (file: File, text: string) => {
-    if (FILE_SIZE_LIMIT < file.size) {
-      throw new Error('File size is too large for generation');
-    }
-
-    const uploaded = await ai.files.upload({
-      file: new Blob([await file.arrayBuffer()], { type: file.type }),
-      config: { mimeType: file.type },
-    });
-
-    let status = await ai.files.get({ name: uploaded.name! });
-    while (status.state === 'PROCESSING') {
-      await new Promise((r) => setTimeout(r, 2000));
-      status = await ai.files.get({ name: uploaded.name! });
-    }
-
-    if (status.state === 'FAILED') {
-      throw new Error('File processing failed');
-    }
-
-    const parts: Content['parts'] = [];
-    if (text) {
-      parts.push({ text });
-    }
-    parts.push({
-      fileData: {
-        mimeType: status.mimeType!,
-        fileUri: status.uri!,
-      },
-    });
-
-    const response = await generate([{ parts }]);
-
-    await ai.files.delete({ name: uploaded.name! });
-
-    return response;
-  };
-
-  const generateFile = (file: File, text: string) => {
-    if (file.size < INLINE_SIZE_LIMIT) {
-      return generateInlineFile(file, text);
-    }
-    return generateLargeFile(file, text);
-  };
-
-  return { embed, embedFile, generate, generateFile };
 };
