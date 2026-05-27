@@ -99,7 +99,7 @@ export class HandPoseDetection extends Video {
     await this.loadModel();
   }
 
-  async start(renderCallBack?: RenderCallBack) {
+  start(renderCallBack?: RenderCallBack) {
     if (!this.detector) {
       console.error('detector is empty. you should load model');
       return;
@@ -132,7 +132,7 @@ export class HandPoseDetection extends Video {
 
     this._detectedRawHands = hands;
 
-    renderCallBack?.(this.detectedRawHands);
+    void renderCallBack?.(this.detectedRawHands);
 
     this._requestAnimationFrameId = this.window.requestAnimationFrame(
       this.start.bind(this, renderCallBack),

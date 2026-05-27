@@ -30,7 +30,7 @@ export const TokenDetailPage = ({ token }: TokenDetailPageProps) => {
 
   useEffect(() => {
     if (!queries.token) return;
-    fetchAllTimeframes(queries.token);
+    void fetchAllTimeframes(queries.token);
   }, [fetchAllTimeframes, queries.token]);
 
   return (

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/require-await */
 import { FaceLandmarker } from '@mediapipe/tasks-vision';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -120,7 +121,7 @@ describe('FaceLandmarkDetection', () => {
       const renderCallback = vi.fn();
 
       await detector.load({ $video: mockVideo });
-      await detector.start(renderCallback);
+      detector.start(renderCallback);
 
       expect(detector.detectedRawFaces).toHaveLength(1);
       expect(renderCallback).toHaveBeenCalledWith(detector.detectedRawFaces);
@@ -131,7 +132,7 @@ describe('FaceLandmarkDetection', () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
-      await detector.start();
+      detector.start();
 
       expect(consoleSpy).toHaveBeenCalledWith(
         'detector is empty. you should load model',
@@ -145,7 +146,7 @@ describe('FaceLandmarkDetection', () => {
         .spyOn(console, 'error')
         .mockImplementation(() => {});
 
-      await detector.start();
+      detector.start();
 
       expect(consoleSpy).toHaveBeenCalledWith('$video is empty.');
     });
@@ -155,7 +156,7 @@ describe('FaceLandmarkDetection', () => {
     it('should stop detection and clean up resources', async () => {
       const mockVideo = documentMock.createElement('video');
       await detector.load({ $video: mockVideo });
-      await detector.start();
+      detector.start();
 
       detector.stop();
 

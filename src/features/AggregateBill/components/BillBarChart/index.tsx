@@ -32,7 +32,7 @@ import {
   SortButton,
   SortControls,
 } from './styles';
-import type { Props, SortOrder } from './types';
+import type { Props } from './types';
 
 /**
  * 請求書データを棒グラフで表示
@@ -70,7 +70,7 @@ export const BillBarChart = ({ bills, groupingType }: Props) => {
           <SortButton
             key={order}
             data-active={sortOrder === order}
-            onClick={() => setSortOrder(order as SortOrder)}
+            onClick={() => setSortOrder(order)}
           >
             {SORT_ORDER_LABELS[order]}
           </SortButton>

@@ -33,20 +33,20 @@ export async function streaming(
 
   if (!response.ok) {
     const error = new Error(`HTTP error! status: ${response.status}`);
-    onError?.(error);
+    void onError?.(error);
     throw error;
   }
 
   if (!response.body) {
     const error = new Error('Response body is null');
-    onError?.(error);
+    void onError?.(error);
     throw error;
   }
 
   const reader = response.body.getReader();
 
   // メイン処理
-  (async () => {
+  void (async () => {
     const decoder = decodeText ? new TextDecoder() : null;
     let buffer = '';
 
@@ -57,7 +57,7 @@ export async function streaming(
         if (done) {
           // 最後のバッファがあれば処理
           if (buffer && decodeText) {
-            onRecieve?.(buffer);
+            void onRecieve?.(buffer);
           }
           await onComplete?.();
           break;

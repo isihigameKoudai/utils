@@ -71,8 +71,11 @@ export default class ExternalForce extends ShaderPass {
     // const uniforms = (this.mouse.material as THREE.ShaderMaterial).uniforms;
     const uniforms = (this.mouse.material as THREE.ShaderMaterial).uniforms;
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     uniforms.force.value.set(forceX, forceY);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     uniforms.center.value.set(centerX, centerY);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     uniforms.scale.value.set(props.cursor_size, props.cursor_size);
 
     super.update();

@@ -158,6 +158,7 @@ export const GeminiEmbeddingPage: React.FC = () => {
               <Input
                 id="fileInput"
                 type="file"
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 accept={ALL_SUPPORTED_TYPES}
                 onChange={handleFileChange}
                 required
@@ -224,13 +225,17 @@ export const GeminiEmbeddingPage: React.FC = () => {
         )}
 
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <Button type="button" onClick={handleEmbed} disabled={isLoading}>
+          <Button
+            type="button"
+            onClick={() => void handleEmbed()}
+            disabled={isLoading}
+          >
             {isLoading ? 'Processing...' : 'Generate Embedding'}
           </Button>
 
           <Button
             type="button"
-            onClick={handleAddToDatabase}
+            onClick={() => void handleAddToDatabase()}
             disabled={
               isLoading ||
               (inputMode === 'text' ? !inputText.trim() : !selectedFile)
@@ -242,7 +247,7 @@ export const GeminiEmbeddingPage: React.FC = () => {
 
           <Button
             type="button"
-            onClick={handleSearchDatabase}
+            onClick={() => void handleSearchDatabase()}
             disabled={
               isLoading ||
               databaseItems.length === 0 ||
@@ -256,7 +261,7 @@ export const GeminiEmbeddingPage: React.FC = () => {
           {inputMode === 'file' && (
             <Button
               type="button"
-              onClick={handleGenerateText}
+              onClick={() => void handleGenerateText()}
               disabled={isLoading || !selectedFile || !inputText.trim()}
               style={{ backgroundColor: '#10b981' }}
             >
@@ -325,7 +330,7 @@ export const GeminiEmbeddingPage: React.FC = () => {
         >
           <Button
             type="button"
-            onClick={handleConnectChroma}
+            onClick={() => void handleConnectChroma()}
             disabled={isLoading || chromaStatus === 'connecting'}
             style={{ backgroundColor: '#059669' }}
           >
@@ -336,7 +341,7 @@ export const GeminiEmbeddingPage: React.FC = () => {
             <>
               <Button
                 type="button"
-                onClick={handleAddToChroma}
+                onClick={() => void handleAddToChroma()}
                 disabled={
                   isLoading ||
                   (inputMode === 'text' ? !inputText.trim() : !selectedFile)
@@ -347,7 +352,7 @@ export const GeminiEmbeddingPage: React.FC = () => {
               </Button>
               <Button
                 type="button"
-                onClick={handleSearchChroma}
+                onClick={() => void handleSearchChroma()}
                 disabled={
                   isLoading ||
                   (inputMode === 'text' ? !inputText.trim() : !selectedFile)

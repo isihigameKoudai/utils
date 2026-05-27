@@ -15,7 +15,7 @@ export const useTokenDetail = () => {
 
   const initialize = useCallback(
     (token: Symbol) => {
-      service.initialize(token);
+      void service.initialize(token);
     },
     [service],
   );

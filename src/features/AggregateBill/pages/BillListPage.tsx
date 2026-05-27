@@ -99,7 +99,9 @@ export const BillListPage = () => {
             <BrandFileOpener key={brand.value}>
               <ImportButton
                 type="button"
-                onClick={() => actions.fetchCSVFiles({ brand: brand.value })}
+                onClick={() => {
+                  void actions.fetchCSVFiles({ brand: brand.value });
+                }}
               >
                 {brand.label}CSV取り込み
               </ImportButton>

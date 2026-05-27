@@ -157,7 +157,7 @@ describe('createModelFactory', () => {
       });
 
       expect(() => {
-        (entity.tags as string[]).push('d');
+        entity.tags.push('d');
       }).toThrow();
     });
   });

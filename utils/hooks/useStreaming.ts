@@ -36,21 +36,21 @@ export function useStreaming(input: RequestInfo | URL) {
                 setText((prev) => prev + chunk);
               }
             });
-            options?.onRecieve?.(chunk);
+            void options?.onRecieve?.(chunk);
           },
           onComplete: () => {
             setIsStreaming(false);
-            options?.onComplete?.();
+            void options?.onComplete?.();
           },
           onError: (e) => {
             setIsStreaming(false);
-            options?.onError?.(e);
+            void options?.onError?.(e);
           },
         });
       } catch (e) {
         if ((e as Error).name !== 'AbortError') {
           console.error(e);
-          options?.onError?.(e as Error);
+          void options?.onError?.(e as Error);
         }
         setIsStreaming(false);
       }

@@ -121,7 +121,7 @@ export class FaceDetection extends Video {
     await this.loadModel();
   }
 
-  async start(renderCallBack?: RenderCallBack) {
+  start(renderCallBack?: RenderCallBack) {
     if (!this.detector) {
       console.error('detector is empty. you should load model');
       return;
@@ -162,7 +162,7 @@ export class FaceDetection extends Video {
 
     this._detectedRawFaces = faces;
 
-    renderCallBack?.(this.detectedFaces);
+    void renderCallBack?.(this.detectedFaces);
 
     this._requestAnimationFrameId = this.window.requestAnimationFrame(
       this.start.bind(this, renderCallBack),

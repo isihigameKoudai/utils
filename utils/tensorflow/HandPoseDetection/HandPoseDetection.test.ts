@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/require-await */
 import { HandLandmarker } from '@mediapipe/tasks-vision';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -126,7 +127,7 @@ describe('HandPoseDetection', () => {
       const renderCallback = vi.fn();
 
       await detector.load({ $video: mockVideo });
-      await detector.start(renderCallback);
+      detector.start(renderCallback);
 
       expect(detector.detectedRawHands).toHaveLength(2);
       expect(renderCallback).toHaveBeenCalledWith(detector.detectedRawHands);
@@ -136,7 +137,7 @@ describe('HandPoseDetection', () => {
     it('should detect both left and right hands', async () => {
       const mockVideo = documentMock.createElement('video');
       await detector.load({ $video: mockVideo });
-      await detector.start();
+      detector.start();
 
       const hands = detector.detectedRawHands;
       expect(hands[0].handedness).toBe('Left');
@@ -148,7 +149,7 @@ describe('HandPoseDetection', () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
-      await detector.start();
+      detector.start();
 
       expect(consoleSpy).toHaveBeenCalledWith(
         'detector is empty. you should load model',
@@ -162,7 +163,7 @@ describe('HandPoseDetection', () => {
         .spyOn(console, 'error')
         .mockImplementation(() => {});
 
-      await detector.start();
+      detector.start();
 
       expect(consoleSpy).toHaveBeenCalledWith('$video is empty.');
     });
@@ -172,7 +173,7 @@ describe('HandPoseDetection', () => {
     it('should stop detection and clean up resources', async () => {
       const mockVideo = documentMock.createElement('video');
       await detector.load({ $video: mockVideo });
-      await detector.start();
+      detector.start();
 
       detector.stop();
 

@@ -112,6 +112,6 @@ export const sumByKey = <
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([key, value]) => ({
       [String(orderKey)]: key as T[keyof T],
-      [String(numKey)]: value as number,
+      [String(numKey)]: value,
     }));
 };

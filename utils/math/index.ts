@@ -48,7 +48,7 @@ export const dotProduct = (a: number[], b: number[]): number => {
   if (a.length !== b.length) {
     throw new Error('Vectors must be of the same length');
   }
-  return a.reduce((sum, val, i) => sum + val * b[i]!, 0);
+  return a.reduce((sum, val, i) => sum + val * b[i], 0);
 };
 
 /**

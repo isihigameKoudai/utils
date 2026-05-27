@@ -52,7 +52,7 @@ const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({
     });
   };
 
-  const handleStart = async () => {
+  const handleStart = () => {
     detector.start((faces) => {
       if (faces.length > 0) {
         setFace(faces[0]);
@@ -66,7 +66,7 @@ const FaceDetectionView: React.FC<FaceDetectionViewProps> = ({
 
   return (
     <div>
-      <button onClick={handleLoad}>Load</button>
+      <button onClick={() => void handleLoad()}>Load</button>
       <button onClick={handleStart}>Start</button>
       <button onClick={handleStop}>Stop</button>
       <div

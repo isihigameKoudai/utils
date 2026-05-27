@@ -116,7 +116,7 @@ export class VisualDetection extends Video {
     return $video;
   }
 
-  async start(renderCallBack?: RenderCallBack) {
+  start(renderCallBack?: RenderCallBack) {
     if (!this.model) {
       console.error('model is empty. you should load model');
       return;
@@ -134,7 +134,7 @@ export class VisualDetection extends Video {
     this._detectedRawObjects = detectedRawObjects.detections;
 
     if (renderCallBack) {
-      renderCallBack(this.detectedObjects);
+      void renderCallBack(this.detectedObjects);
     }
 
     this._requestAnimationFrameId = this.window.requestAnimationFrame(

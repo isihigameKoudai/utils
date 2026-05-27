@@ -72,6 +72,7 @@ describe('Audio', () => {
     await audio.setAudio(mockArrayBuffer);
 
     expect(audio.audioSource).not.toBeNull();
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(audio.context.decodeAudioData).toHaveBeenCalledWith(mockArrayBuffer);
     expect(mockBufferSource.buffer).not.toBeNull();
   });
@@ -118,6 +119,7 @@ describe('Audio', () => {
       state: 'running',
     } as unknown as AudioContext;
 
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     await audio.pause();
     expect(mockSuspend).toHaveBeenCalled();
     expect(audio.isPlaying).toBe(false);
@@ -126,6 +128,7 @@ describe('Audio', () => {
       value: 'suspended',
       writable: true,
     });
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     await audio.pause();
     expect(mockResume).toHaveBeenCalled();
     expect(audio.isPlaying).toBe(true);
@@ -155,7 +158,7 @@ describe('Audio', () => {
     // AudioクラスのgetAudioStreamメソッドをモック
     const getAudioStreamMock = vi
       .spyOn(Audio.prototype, 'getAudioStream')
-      .mockImplementation(async () => {
+      .mockImplementation(() => {
         audio['_mediaSource'] = mediaSourceMock;
         audio['_audioSource'] = audioSourceMock;
         return {} as MediaStream;

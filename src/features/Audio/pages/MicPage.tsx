@@ -24,7 +24,7 @@ const MicPage: React.FC = () => {
         basicParticle({ $canvas, timeDomainArray, frequencyBinCount });
       },
       {
-        $canvas: $particle.current!,
+        $canvas: $particle.current,
         smoothingTimeConstant: 0.1,
       },
     );
@@ -40,7 +40,7 @@ const MicPage: React.FC = () => {
         });
       },
       {
-        $canvas: $lineAudio.current!,
+        $canvas: $lineAudio.current,
       },
     );
   }, []);
@@ -53,7 +53,7 @@ const MicPage: React.FC = () => {
   return (
     <div className="audio-page">
       <p>
-        <button type="button" onClick={onActivateMic}>
+        <button type="button" onClick={() => void onActivateMic()}>
           activate mic
         </button>
         <button type="button" onClick={onStopDeviceAudio}>

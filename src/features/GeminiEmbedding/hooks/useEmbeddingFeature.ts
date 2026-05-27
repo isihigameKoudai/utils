@@ -229,6 +229,6 @@ export const useEmbeddingFeature = () => {
     handleSearchChroma,
     handleGenerateText,
     handleReset,
-    setSearchOrder: databaseService.setSearchOrder,
+    setSearchOrder: databaseService.setSearchOrder.bind(databaseService),
   };
 };

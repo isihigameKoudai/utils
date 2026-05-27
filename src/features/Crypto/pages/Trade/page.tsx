@@ -31,11 +31,11 @@ export const TradePage = () => {
   const availableSymbols = SYMBOLS.filter((s) => !selectedSymbols.includes(s));
 
   useEffect(() => {
-    actions.fetchAllChartData();
+    void actions.fetchAllChartData();
   }, []);
 
   const handleAddSymbol = () => {
-    actions.addSymbolAndFetch({ symbol: symbolToAdd });
+    void actions.addSymbolAndFetch({ symbol: symbolToAdd });
 
     const nextAvailable = availableSymbols.filter((s) => s !== symbolToAdd);
     if (nextAvailable.length > 0) {
@@ -55,7 +55,7 @@ export const TradePage = () => {
             <TimeframeButton
               key={tf}
               type="button"
-              onClick={() => actions.changeTimeframe({ timeframe: tf })}
+              onClick={() => void actions.changeTimeframe({ timeframe: tf })}
             >
               {label}
             </TimeframeButton>

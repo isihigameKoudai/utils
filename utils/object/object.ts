@@ -66,6 +66,7 @@ const immutarize = <T extends Record<string, unknown>>(
     return {
       enumerable: true,
       configurable: false,
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       get: descriptor.get,
     };
   }
@@ -76,6 +77,7 @@ const immutarize = <T extends Record<string, unknown>>(
       enumerable: true,
       configurable: false,
       writable: false,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       value: descriptor.value,
     };
   }
@@ -85,6 +87,7 @@ const immutarize = <T extends Record<string, unknown>>(
     enumerable: true,
     configurable: false,
     writable: false,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     value: descriptor.value,
   };
 };

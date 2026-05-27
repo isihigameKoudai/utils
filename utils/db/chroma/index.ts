@@ -87,8 +87,8 @@ export const defineChroma = (config?: ChromaConfig) => {
     client.getOrCreateCollection({
       name,
       // 事前計算した embedding を使うため、Chroma 側の自動 embedding は無効化
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      embeddingFunction: null as any,
+
+      embeddingFunction: null,
       metadata: { 'hnsw:space': space },
     });
 
@@ -102,7 +102,7 @@ export const defineChroma = (config?: ChromaConfig) => {
     client.getCollection({
       name,
       // 事前計算した embedding を使うため、Chroma 側の自動 embedding は無効化
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
       embeddingFunction: null as any,
     });
 

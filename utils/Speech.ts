@@ -66,7 +66,7 @@ export default class Speech {
   }
 
   setOnResult(onResult: (e: ISpeechRecognitionEvent) => void | Promise<void>) {
-    this.recognition.onresult = onResult;
+    this.recognition.onresult = (e) => void onResult(e);
   }
 
   start() {

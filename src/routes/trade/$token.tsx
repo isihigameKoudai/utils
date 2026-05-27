@@ -14,6 +14,7 @@ const TokenDetailRoute = () => {
 export const Route = createFileRoute('/trade/$token')({
   beforeLoad: ({ params: { token } }) => {
     if (!isSymbol(token)) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw notFound();
     }
   },

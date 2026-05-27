@@ -49,9 +49,12 @@ const Menu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 }}
                 to={item.menuPath || item.path}
               >
-                {[...new Array(item.path.match(new RegExp('/', 'g'))?.length)]
-                  .map(() => '- ')
-                  .join(' ')}
+                {
+                  /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
+                  [...new Array(item.path.match(new RegExp('/', 'g'))?.length)]
+                    .map(() => '- ')
+                    .join(' ')
+                }
                 {item.title}
               </Link>
             </li>

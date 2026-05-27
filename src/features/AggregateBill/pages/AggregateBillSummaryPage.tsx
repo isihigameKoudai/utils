@@ -53,7 +53,7 @@ const AggregateBillSummaryPage = () => {
       <Container>
         <h2>集計結果一覧</h2>
         <ButtonGroup>
-          <Button type="button" onClick={handleImport}>
+          <Button type="button" onClick={() => void handleImport()}>
             CSVファイルを読み込む
           </Button>
           <Button

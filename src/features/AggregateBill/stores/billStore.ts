@@ -45,7 +45,7 @@ const queries = {
   }>(
     Object.values(BRAND).map((brand) => [
       `${brand.value}Records`,
-      (state) => state[brand.value as Brand],
+      (state) => state[brand.value],
     ]),
   ),
   isEmptyAllRecords: (state) =>
@@ -92,17 +92,17 @@ const actions = {
         }
         const brandColumns = Array.from(BRAND[brand.value].columns);
         const brandRows = records.getColumns(brandColumns);
-        return normalizeBrandRows(brand.value as Brand, brandRows);
+        return normalizeBrandRows(brand.value, brandRows);
       })
       .filter<BillProps[]>(isTruthy);
     if (allRecords.length === 0) {
       throw new Error('集計するデータがありません');
     }
-    dispatch('totalRecords', allRecords.flat() as BillState['totalRecords']);
+    dispatch('totalRecords', allRecords.flat());
   },
   saveTotalRecords({ queries }) {
     try {
-      const totalRecords = queries.totalRecords as Bill[];
+      const totalRecords = queries.totalRecords;
       const isEmptyTotalRecords = queries.isEmptyTotalRecords;
 
       if (isEmptyTotalRecords) {

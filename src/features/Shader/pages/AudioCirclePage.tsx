@@ -42,7 +42,7 @@ const AudioCirclePage: React.FC = () => {
 
   return (
     <div>
-      <button type="button" onClick={handleStart}>
+      <button type="button" onClick={() => void handleStart()}>
         start
       </button>
       <button type="button" onClick={handleStop}>

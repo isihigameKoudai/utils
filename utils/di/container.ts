@@ -56,8 +56,8 @@ export class Container {
     factory: (container: Container) => T,
     lifetime: Lifetime = 'transient',
   ): void {
-    this.registrations.set(token as symbol, {
-      factory: factory as (container: Container) => unknown,
+    this.registrations.set(token, {
+      factory: factory,
       lifetime,
     });
   }
@@ -79,7 +79,7 @@ export class Container {
    * ```
    */
   resolve<T>(token: Token<T>): T {
-    const registration = this.registrations.get(token as symbol);
+    const registration = this.registrations.get(token);
 
     if (!registration) {
       throw new Error(
@@ -146,7 +146,7 @@ export class Container {
    * @returns 登録済みなら `true`
    */
   has(token: Token<unknown>): boolean {
-    return this.registrations.has(token as symbol);
+    return this.registrations.has(token);
   }
 
   /**

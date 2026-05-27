@@ -35,7 +35,7 @@ export default function DetectorPage() {
       });
       setIsShow(true);
     };
-    init();
+    void init();
 
     return () => {
       detector.stop();

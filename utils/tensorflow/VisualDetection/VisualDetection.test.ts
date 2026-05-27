@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
 import { ObjectDetector } from '@mediapipe/tasks-vision';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -149,7 +150,7 @@ describe('VisualDetection', () => {
       await visualDetector.loadEl({});
 
       const mockCallback = vi.fn();
-      await visualDetector.start(mockCallback);
+      visualDetector.start(mockCallback);
 
       expect(mockCallback).toHaveBeenCalled();
     });

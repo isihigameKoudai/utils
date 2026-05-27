@@ -120,8 +120,10 @@ describe('defineStore', () => {
           doubled: (state) => state.count * 2,
         },
         actions: {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
           setValue: ({ dispatch }, value: number) => dispatch('count', value),
           setMultiple: ({ dispatch }, a: number, b: string) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
             dispatch('count', a);
             console.log(b);
           },

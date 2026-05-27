@@ -49,7 +49,7 @@ export default class Poisson extends ShaderPass {
       p_in = isOdd ? this.props.output0 : this.props.output1;
       p_out = isOdd ? this.props.output1 : this.props.output0;
 
-      this.uniforms!.pressure.value = p_in!.texture;
+      this.uniforms!.pressure.value = p_in.texture;
       this.props.output = p_out;
       super.update();
     }

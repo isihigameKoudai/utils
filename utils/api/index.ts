@@ -9,7 +9,7 @@ const request = async <T = unknown>(
       throw new Error(`${response.status} ${response.statusText}`);
     }
 
-    const json = await response.json();
+    const json: unknown = await response.json();
 
     return json as T;
   } catch (error) {

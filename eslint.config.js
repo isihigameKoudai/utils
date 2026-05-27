@@ -15,7 +15,7 @@ export default [
       '**/*.gen.*',
     ],
   },
-  ...tseslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
   {
     files: ['**/*.{ts,tsx}'],
     plugins: {

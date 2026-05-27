@@ -44,7 +44,7 @@ export const actions = {
         chartDataUpdate[key] = result.value.data;
         errorsUpdate[key] = undefined;
       } else {
-        const err = result.reason;
+        const err: unknown = result.reason;
         errorsUpdate[key] =
           err instanceof Error ? err.message : 'データ取得に失敗しました';
       }
@@ -96,7 +96,7 @@ export const actions = {
         chartDataUpdate[key] = result.value.data;
         errorsUpdate[key] = undefined;
       } else {
-        const err = result.reason;
+        const err: unknown = result.reason;
         errorsUpdate[key] =
           err instanceof Error ? err.message : 'データ取得に失敗しました';
       }

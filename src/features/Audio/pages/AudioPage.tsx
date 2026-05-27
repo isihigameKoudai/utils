@@ -17,7 +17,7 @@ const AudioPage: React.FC = () => {
     const visualizer = visualizerRef.current;
     const { files } = await fetchAudio();
     const buffer = await files[0].arrayBuffer();
-    visualizer.setAudio(buffer);
+    void visualizer.setAudio(buffer);
     visualizer.start(
       ({ $canvas, timeDomainArray, frequencyBinCount }) => {
         basicParticle({ $canvas, timeDomainArray, frequencyBinCount });
@@ -39,7 +39,7 @@ const AudioPage: React.FC = () => {
   return (
     <div className="audio-page">
       <p>
-        <button type="button" onClick={onPlayAudio}>
+        <button type="button" onClick={() => void onPlayAudio()}>
           play vis
         </button>
         <button type="button" onClick={onPauseAudio}>

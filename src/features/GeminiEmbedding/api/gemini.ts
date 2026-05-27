@@ -5,6 +5,7 @@ import type { GenerationResultParams } from '../models/generationResult';
 
 const gemini = defineGemini({
   root: {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     apiKey: import.meta.env.VITE_GEMINI_API_KEY,
   },
   embedding: {

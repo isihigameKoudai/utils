@@ -14,11 +14,11 @@ export default function FluidDetectPage() {
   const [objects, setObjects] = useState<DetectedObject[]>([]);
   const [isShow, setIsShow] = useState(true);
 
-  const handleDetect = useCallback(async () => {
+  const handleDetect = useCallback(() => {
     if (!detectorInstance) return;
 
     // ビデオ要素の設定をuseEffectまたは別の場所で行う
-    await detectorInstance.start((objectList) => {
+    detectorInstance.start((objectList) => {
       const objects = objectList.filter((obj) => obj.class === 'person');
       objects.forEach((obj) => {
         Mouse.setCoords(obj.center.x, obj.center.y);
@@ -29,6 +29,7 @@ export default function FluidDetectPage() {
   }, [detectorInstance]);
 
   // ビデオ要素のスタイル設定
+  // eslint-disable-next-line react-hooks/immutability
   useEffect(() => {
     if (detectorInstance?.$video && detectorInstance._$video) {
       // DOM操作なので、stateの変更ではない
@@ -48,7 +49,7 @@ export default function FluidDetectPage() {
   useEffect(() => {
     let detector: VisualDetection | undefined;
 
-    (async () => {
+    void (async () => {
       if (isInitRef.current) {
         const gl = new WebGL({
           $wrapper: $ref.current,

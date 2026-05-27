@@ -16,8 +16,8 @@ export default function FaceLandmarkDetectorPage() {
   const $video = useRef<HTMLVideoElement>(null!);
   const [faces, setFaces] = useState<Face[]>([]);
 
-  const handleDetect = useCallback(async () => {
-    await detectorRef.current.start((faces) => {
+  const handleDetect = useCallback(() => {
+    detectorRef.current.start((faces) => {
       setFaces(faces);
     });
   }, []);
@@ -29,7 +29,7 @@ export default function FaceLandmarkDetectorPage() {
   useEffect(() => {
     // モデルのロード
     const detector = detectorRef.current;
-    (async () => {
+    void (async () => {
       await detector.load({
         $video: $video.current,
       });
