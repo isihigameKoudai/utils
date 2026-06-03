@@ -4,6 +4,8 @@
 import {
   FileState,
   GoogleGenAI,
+  HarmBlockThreshold,
+  HarmCategory,
   type GoogleGenAIOptions,
   type EmbedContentConfig,
   type GenerateContentConfig,
@@ -169,11 +171,34 @@ export const defineGemini = (config: DefineConfig) => {
    * Google Gemini Generate Content APIを呼び出す関数
    */
   const generate = (content: ContentListUnion) => {
-    return ai.models.generateContent({
-      ...config.generation,
+    const request = {
       model: MODELS.GEMINI_3_FLASH_PREVIEW,
       contents: content,
-    });
+      config: {
+        // AIによる有害なテキスト生成を防ぐデフォルトの安全基準
+        // (各有害カテゴリで中程度以上の確率と判定された場合にブロック)
+        safetySettings: [
+          {
+            category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+            threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+          },
+          {
+            category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+            threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+          },
+          {
+            category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+            threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+          },
+          {
+            category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+            threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+          },
+        ],
+        ...config.generation,
+      },
+    };
+    return ai.models.generateContent(request);
   };
 
   const generateInlineFile = async (file: File, text: string) => {
