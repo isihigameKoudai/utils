@@ -4,13 +4,13 @@
     "prometheus": {
       "enabled": true,
       "replace_plan": true,
-      "model": "github-copilot/claude-opus-4.7"
+      "model": "github-copilot/claude-opus-4.8"
     },
     "sisyphus": {
-      "model": "github-copilot/claude-opus-4.7"
+      "model": "github-copilot/claude-opus-4.8"
     },
     "oracle": {
-      "model": "github-copilot/claude-opus-4.7"
+      "model": "github-copilot/claude-opus-4.8"
     },
     "frontend-ui-ux-engineer": {
       "model": "github-copilot/claude-sonnet-4.6"
@@ -19,7 +19,7 @@
       "model": "github-copilot/claude-sonnet-4.6"
     },
     "explore": {
-      "model": "github-copilot/claude-haiku-4.6"
+      "model": "github-copilot/claude-haiku-4.5"
     },
     "document-writer": {
       "model": "github-copilot/claude-sonnet-4.6"
