@@ -4,28 +4,28 @@
     "prometheus": {
       "enabled": true,
       "replace_plan": true,
-      "model": "github-copilot/claude-opus-4.8"
+      "model": "anthropic/claude-opus-4-8"
     },
     "sisyphus": {
-      "model": "github-copilot/claude-opus-4.8"
+      "model": "anthropic/claude-opus-4-8"
     },
     "oracle": {
-      "model": "github-copilot/claude-opus-4.8"
+      "model": "anthropic/claude-opus-4-8"
     },
     "frontend-ui-ux-engineer": {
-      "model": "github-copilot/claude-sonnet-4.6"
+      "model": "anthropic/claude-sonnet-4-6"
     },
     "librarian": {
-      "model": "github-copilot/claude-sonnet-4.6"
+      "model": "anthropic/claude-sonnet-4-6"
     },
     "explore": {
-      "model": "github-copilot/claude-haiku-4.5"
+      "model": "google/gemini-2.5-flash"
     },
     "document-writer": {
-      "model": "github-copilot/claude-sonnet-4.6"
+      "model": "anthropic/claude-sonnet-4-6"
     },
     "multimodal-looker": {
-      "model": "github-copilot/claude-sonnet-4.6"
+      "model": "google/gemini-2.5-flash"
     }
   }
 }
