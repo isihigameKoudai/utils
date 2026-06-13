@@ -27,6 +27,7 @@
     "dayjs": "^1.11.18",
     "lightweight-charts": "^5.0.9",
     "lodash-es": "^4.17.21",
+    "pnpm": "^11.5.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "recharts": "^3.5.1",

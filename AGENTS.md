@@ -35,8 +35,9 @@ src/
   ├── features/      # Feature-specific modules with pages, components, and business logic
   │   ├── AggregateBill/   # Credit card billing aggregation
   │   ├── Audio/           # Audio visualization and processing
-  │   ├── CryptoCharts/    # Cryptocurrency charts
-  │   ├── Detection/       # ML-based detection (pose, hand, face)
+│   ├── CryptoCharts/    # Cryptocurrency charts
+│   ├── CsvSpreadsheet/  # CSV spreadsheet editor with import/export
+│   ├── Detection/       # ML-based detection (pose, hand, face)
   │   ├── Home/            # Homepage
   │   ├── MeltTheBorder/   # Shader + ML detection demo
   │   ├── Noise/           # Noise shaders (fBM, fractal, cellular)

@@ -133,4 +133,8 @@ export const routeList: IRoute[] = [
     title: 'クレジットカード集計サマリー',
     path: '/aggregate-bill/summary',
   },
+  {
+    title: 'CSVスプレッドシート',
+    path: '/csv-spreadsheet',
+  },
 ];

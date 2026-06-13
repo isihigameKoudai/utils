@@ -15,6 +15,7 @@ import { Route as ShaderRouteImport } from './../routes/shader'
 import { Route as PlaygroundRouteImport } from './../routes/playground'
 import { Route as MeltTheBorderRouteImport } from './../routes/melt-the-border'
 import { Route as GeminiEmbeddingRouteImport } from './../routes/gemini-embedding'
+import { Route as CsvSpreadsheetRouteImport } from './../routes/csv-spreadsheet'
 import { Route as IndexRouteImport } from './../routes/index'
 import { Route as TradeIndexRouteImport } from './../routes/trade/index'
 import { Route as ThreeDimensionIndexRouteImport } from './../routes/three-dimension/index'
@@ -70,6 +71,11 @@ const MeltTheBorderRoute = MeltTheBorderRouteImport.update({
 const GeminiEmbeddingRoute = GeminiEmbeddingRouteImport.update({
   id: '/gemini-embedding',
   path: '/gemini-embedding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CsvSpreadsheetRoute = CsvSpreadsheetRouteImport.update({
+  id: '/csv-spreadsheet',
+  path: '/csv-spreadsheet',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -205,6 +211,7 @@ const AggregateBillSummaryRoute = AggregateBillSummaryRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/csv-spreadsheet': typeof CsvSpreadsheetRoute
   '/gemini-embedding': typeof GeminiEmbeddingRoute
   '/melt-the-border': typeof MeltTheBorderRoute
   '/playground': typeof PlaygroundRoute
@@ -239,6 +246,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/csv-spreadsheet': typeof CsvSpreadsheetRoute
   '/gemini-embedding': typeof GeminiEmbeddingRoute
   '/melt-the-border': typeof MeltTheBorderRoute
   '/playground': typeof PlaygroundRoute
@@ -273,6 +281,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/csv-spreadsheet': typeof CsvSpreadsheetRoute
   '/gemini-embedding': typeof GeminiEmbeddingRoute
   '/melt-the-border': typeof MeltTheBorderRoute
   '/playground': typeof PlaygroundRoute
@@ -309,6 +318,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/csv-spreadsheet'
     | '/gemini-embedding'
     | '/melt-the-border'
     | '/playground'
@@ -343,6 +353,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/csv-spreadsheet'
     | '/gemini-embedding'
     | '/melt-the-border'
     | '/playground'
@@ -376,6 +387,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/csv-spreadsheet'
     | '/gemini-embedding'
     | '/melt-the-border'
     | '/playground'
@@ -411,6 +423,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CsvSpreadsheetRoute: typeof CsvSpreadsheetRoute
   GeminiEmbeddingRoute: typeof GeminiEmbeddingRoute
   MeltTheBorderRoute: typeof MeltTheBorderRoute
   PlaygroundRoute: typeof PlaygroundRoute
@@ -484,6 +497,13 @@ declare module '@tanstack/react-router' {
       path: '/gemini-embedding'
       fullPath: '/gemini-embedding'
       preLoaderRoute: typeof GeminiEmbeddingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/csv-spreadsheet': {
+      id: '/csv-spreadsheet'
+      path: '/csv-spreadsheet'
+      fullPath: '/csv-spreadsheet'
+      preLoaderRoute: typeof CsvSpreadsheetRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -685,6 +705,7 @@ const TradeRouteWithChildren = TradeRoute._addFileChildren(TradeRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CsvSpreadsheetRoute: CsvSpreadsheetRoute,
   GeminiEmbeddingRoute: GeminiEmbeddingRoute,
   MeltTheBorderRoute: MeltTheBorderRoute,
   PlaygroundRoute: PlaygroundRoute,
