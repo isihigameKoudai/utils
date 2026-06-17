@@ -782,6 +782,68 @@ feature-scaffold固有の追加パターン：
 | Page Dir       | `pages/{PageName}/`    | `pages/TaskManager/` |
 | Style File     | `style.ts`             | `style.ts`           |
 
+## Simple Feature Template（外部 API なし）
+
+models / services / api / hooks が不要な場合のテンプレート。
+
+### ユースケース例
+
+- ローカルファイル読み書きのみ（File API / `input[type=file]`）
+- サーバー通信なしの純粋フロントエンド状態管理
+- ブラウザ API のみで完結する feature（例: CsvSpreadsheet）
+
+### 最小ディレクトリ構成
+
+```
+src/features/<FeatureName>/
+├── stores/<entity>/
+│   ├── index.ts
+│   ├── type.ts
+│   ├── state.ts
+│   ├── queries.ts
+│   └── actions.ts   # try/catch はここに書いてよい（service 層がないため）
+├── components/<ComponentName>/
+│   ├── index.tsx
+│   └── style.ts
+└── pages/<PageName>/
+    ├── index.ts
+    ├── page.tsx
+    └── style.ts
+```
+
+### Actions Template（Simple Feature 用）
+
+> **Simple Feature では actions に try/catch を書いてよい**。service 層がないため、loading / error の state 管理も action 内で完結させる。
+
+```typescript
+// stores/{entity}/actions.ts（Simple Feature 用）
+import type { ActionsProps } from '@/utils/i-state';
+
+import type { {Entity}State } from './type';
+import type { queries } from './queries';
+
+export const actions = {
+  /**
+   * @description ファイル読み込み（Simple Feature: try/catch を actions に書く）
+   */
+  async loadFile({ dispatch }, file: File) {
+    dispatch('isLoading', true);
+    dispatch('error', null);
+    try {
+      const text = await file.text();
+      // ... 処理
+      dispatch('data', text);
+    } catch (e) {
+      dispatch('error', e instanceof Error ? e.message : 'Failed to load file');
+    } finally {
+      dispatch('isLoading', false);
+    }
+  },
+
+  // ... 他の actions
+} satisfies ActionsProps<{Entity}State, typeof queries>;
+```
+
 ## Checklist
 
 生成後の確認事項：

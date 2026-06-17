@@ -43,7 +43,7 @@ CQRSは「Command Query Responsibility Segregation」の略で、データの読
 
 - **classを使わない**: `createModelFactory`でイミュータブルなモデルを生成
 - **commandsディレクトリなし**: Store actionsがCommand層の役割を担う
-- **actionsにstateに直結するロジックを含める**: データ取得（API呼び出し）、フィルタ・マッピングなど、自storeのstateに直結する処理はactionsに書く。ただし**actionsにtry/catchは書かない**。エラーハンドリング（try/catch + loading/error管理）はservice層で行う
+- **actionsにstateに直結するロジックを含める**: データ取得（API呼び出し）、フィルタ・マッピングなど、自storeのstateに直結する処理はactionsに書く。ただし**actionsにtry/catchは書かない**。エラーハンドリング（try/catch + loading/error管理）はservice層で行う。**例外**: service 層が存在しない Simple Feature では actions 内に try/catch を書いてよい（loading/error の state 管理も action 内で完結させること）
 - **servicesディレクトリ**: エラーハンドリング（try/catch + loading/error管理）＋ 複数store操作のオーケストレーション ＋ 外部API統合 ＋ DI
 - **Valibot使用**: バリデーションはValibotで実装
 - **バレル禁止**: index.tsでの一括re-export (`export *`) は禁止。明示的な名前付きexportのみ許可
@@ -94,6 +94,38 @@ src/features/<FeatureName>/
 └── types/                       # Shared feature types
     └── index.ts
 ```
+
+### Simple Feature（外部 API なし・Domain Model なし）
+
+外部APIなし・純粋フロントエンド状態管理のみのfeatureには不要な層を省略した「シンプル feature パターン」を適用する。models / services / api / hooks が不要な場合はすべて省略可。
+
+**適用条件**:
+
+- サーバー通信なし（File API・ブラウザ API のみ）
+- Domain Model (createModelFactory) 不要
+- Service 層不要（複数store横断なし）
+
+```
+src/features/<FeatureName>/
+├── stores/
+│   └── <entity>/
+│       ├── index.ts
+│       ├── type.ts
+│       ├── state.ts
+│       ├── queries.ts
+│       └── actions.ts   # try/catch はここに書いてよい（service 層がないため）
+├── components/
+│   └── <ComponentName>/
+│       ├── index.tsx
+│       └── style.ts
+└── pages/
+    └── <PageName>/
+        ├── index.ts
+        ├── page.tsx
+        └── style.ts
+```
+
+> **CsvSpreadsheet** がこのパターンの代表例。CSV の読み書きは File API のみで完結し、Domain Model・Service 層・外部 API は持たない。
 
 ## Implementation Patterns
 
@@ -992,7 +1024,7 @@ export { TodoListPage } from './page';
 2. **Query → Model**: QueriesでDomain Modelに変換して返す
 3. **Actions = Commands**: 状態変更は全てactionsで行う
 4. **stateに直結するロジックはactionsに書く**: データ取得（API呼び出し）、フィルタ・マッピングなど、自storeのstateに直結する処理はactionsに含めて良い。asyncも可
-5. **actionsにtry/catchは書かない**: エラーハンドリング（try/catch + loading/error管理）はservice層で行う
+5. **actionsにtry/catchは書かない**: エラーハンドリング（try/catch + loading/error管理）はservice層で行う。**例外**: service 層が存在しない Simple Feature では actions 内に try/catch を書いてよい
 6. **JSDoc @command**: action にCommandとしての役割を明示
 
 ### Service Guidelines
