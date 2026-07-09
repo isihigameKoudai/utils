@@ -1,79 +1,79 @@
 interface ISpeechRecognitionEvent {
-  isTrusted?: boolean;
-  results: {
-    isFinal: boolean;
-    [key: number]:
-      | undefined
-      | {
-          transcript: string;
-        };
-  }[];
+	isTrusted?: boolean;
+	results: {
+		isFinal: boolean;
+		[key: number]:
+			| undefined
+			| {
+					transcript: string;
+			  };
+	}[];
 }
 
 interface ISpeechRecognitionInstance extends EventTarget {
-  // properties
-  grammars: string;
-  lang: string;
-  continuous: boolean;
-  interimResults: boolean;
-  maxAlternatives: number;
-  serviceURI: string;
+	// properties
+	grammars: string;
+	lang: string;
+	continuous: boolean;
+	interimResults: boolean;
+	maxAlternatives: number;
+	serviceURI: string;
 
-  // event handlers
-  onaudiostart: () => void;
-  onaudioend: () => void;
-  onend: () => void;
-  onerror: () => void;
-  onnomatch: () => void;
-  onresult: (event: ISpeechRecognitionEvent) => void;
-  onsoundstart: () => void;
-  onsoundend: () => void;
-  onspeechstart: () => void;
-  onspeechend: () => void;
-  onstart: () => void;
+	// event handlers
+	onaudiostart: () => void;
+	onaudioend: () => void;
+	onend: () => void;
+	onerror: () => void;
+	onnomatch: () => void;
+	onresult: (event: ISpeechRecognitionEvent) => void;
+	onsoundstart: () => void;
+	onsoundend: () => void;
+	onspeechstart: () => void;
+	onspeechend: () => void;
+	onstart: () => void;
 
-  // methods
-  abort(): void;
-  start(): void;
-  stop(): void;
+	// methods
+	abort(): void;
+	start(): void;
+	stop(): void;
 }
 
 interface ISpeechRecognition {
-  new (): ISpeechRecognitionInstance;
+	new (): ISpeechRecognitionInstance;
 }
 
 //windowにISpeechRecognitionConstructorを定義にもつSpeechRecognitionとwebkitSpeechRecognitionを追加
 interface IWindow extends Window {
-  SpeechRecognition: ISpeechRecognition;
-  webkitSpeechRecognition: ISpeechRecognition;
+	SpeechRecognition: ISpeechRecognition;
+	webkitSpeechRecognition: ISpeechRecognition;
 }
 
 declare const window: IWindow;
 
 const SpeechRecognition =
-  window.webkitSpeechRecognition || window.SpeechRecognition;
+	window.webkitSpeechRecognition || window.SpeechRecognition;
 
 /**
  * Web上で音声認識・音声合成などをを司るクラス
  * https://developer.mozilla.org/ja/docs/Web/API/Web_Speech_API
  */
 export default class Speech {
-  recognition: ISpeechRecognitionInstance;
-  constructor() {
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'ja-JP';
-    this.recognition = recognition;
-  }
+	recognition: ISpeechRecognitionInstance;
+	constructor() {
+		const recognition = new SpeechRecognition();
+		recognition.lang = 'ja-JP';
+		this.recognition = recognition;
+	}
 
-  setOnResult(onResult: (e: ISpeechRecognitionEvent) => void | Promise<void>) {
-    this.recognition.onresult = (e) => void onResult(e);
-  }
+	setOnResult(onResult: (e: ISpeechRecognitionEvent) => void | Promise<void>) {
+		this.recognition.onresult = (e) => void onResult(e);
+	}
 
-  start() {
-    this.recognition.start();
-  }
+	start() {
+		this.recognition.start();
+	}
 
-  stop() {
-    this.recognition.stop();
-  }
+	stop() {
+		this.recognition.stop();
+	}
 }

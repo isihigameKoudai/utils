@@ -1,5 +1,5 @@
-import * as THREE from 'three';
+import type * as THREE from 'three';
 
 export type SimProps = {
-  cellScale: THREE.Vector2;
+	cellScale: THREE.Vector2;
 };

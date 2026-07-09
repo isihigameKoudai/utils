@@ -13,14 +13,14 @@ export type EmbeddingResultParams = InferOutput<typeof embeddingResultSchema>;
  * @description EmbeddingResultParams + computed properties + methods
  */
 export type EmbeddingResult = EmbeddingResultParams & {
-  /** @description 表示用の次元数 */
-  readonly dimensionsLabel: string;
-  /** @description 表示用の実行時間 */
-  readonly executionTimeLabel: string;
-  /** @description ベクトルのL2ノルム */
-  readonly vectorNorm: number;
-  /** @description プレビュー用の値（最初の100個） */
-  readonly previewValues: number[];
-  /** @description プレビュー用の文字列 */
-  readonly previewString: string;
+	/** @description 表示用の次元数 */
+	readonly dimensionsLabel: string;
+	/** @description 表示用の実行時間 */
+	readonly executionTimeLabel: string;
+	/** @description ベクトルのL2ノルム */
+	readonly vectorNorm: number;
+	/** @description プレビュー用の値（最初の100個） */
+	readonly previewValues: number[];
+	/** @description プレビュー用の文字列 */
+	readonly previewString: string;
 };

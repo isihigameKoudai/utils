@@ -1,9 +1,9 @@
 import type { Lifetime, Token } from './type';
 
 interface Registration<T> {
-  readonly factory: (container: Container) => T;
-  readonly lifetime: Lifetime;
-  instance?: T;
+	readonly factory: (container: Container) => T;
+	readonly lifetime: Lifetime;
+	instance?: T;
 }
 
 /**
@@ -32,129 +32,129 @@ interface Registration<T> {
  *   （usage-example.ts を参照）
  */
 export class Container {
-  private readonly registrations = new Map<symbol, Registration<unknown>>();
+	private readonly registrations = new Map<symbol, Registration<unknown>>();
 
-  private readonly resolvingStack = new Set<symbol>();
+	private readonly resolvingStack = new Set<symbol>();
 
-  /**
-   * 依存をコンテナに登録する。
-   *
-   * @template T トークンの型パラメータから自動推論される
-   * @param token 依存を識別するトークン
-   * @param factory 依存を生成するファクトリー関数。引数にコンテナ自身を受け取る。
-   * @param lifetime ライフタイム（デフォルト: `'transient'`）
-   * @example
-   * ```ts
-   * container.register(LoggerToken, () => new ConsoleLogger(), 'singleton');
-   * container.register(UserServiceToken, (c) => {
-   *   return new UserService(c.resolve(LoggerToken), c.resolve(DbToken));
-   * });
-   * ```
-   */
-  register<T>(
-    token: Token<T>,
-    factory: (container: Container) => T,
-    lifetime: Lifetime = 'transient',
-  ): void {
-    this.registrations.set(token, {
-      factory: factory,
-      lifetime,
-    });
-  }
+	/**
+	 * 依存をコンテナに登録する。
+	 *
+	 * @template T トークンの型パラメータから自動推論される
+	 * @param token 依存を識別するトークン
+	 * @param factory 依存を生成するファクトリー関数。引数にコンテナ自身を受け取る。
+	 * @param lifetime ライフタイム（デフォルト: `'transient'`）
+	 * @example
+	 * ```ts
+	 * container.register(LoggerToken, () => new ConsoleLogger(), 'singleton');
+	 * container.register(UserServiceToken, (c) => {
+	 *   return new UserService(c.resolve(LoggerToken), c.resolve(DbToken));
+	 * });
+	 * ```
+	 */
+	register<T>(
+		token: Token<T>,
+		factory: (container: Container) => T,
+		lifetime: Lifetime = 'transient',
+	): void {
+		this.registrations.set(token, {
+			factory: factory,
+			lifetime,
+		});
+	}
 
-  /**
-   * 登録済みの依存を解決して返す。
-   *
-   * - `singleton` の場合はキャッシュから返す（初回はファクトリー実行）。
-   * - `transient` の場合は毎回ファクトリーを実行する。
-   *
-   * @template T トークンの型パラメータから自動推論される
-   * @param token 解決対象のトークン
-   * @returns 解決された依存のインスタンス
-   * @throws {Error} トークンが未登録の場合
-   * @example
-   * ```ts
-   * const logger = container.resolve(LoggerToken);
-   * //    ^? Logger
-   * ```
-   */
-  resolve<T>(token: Token<T>): T {
-    const registration = this.registrations.get(token);
+	/**
+	 * 登録済みの依存を解決して返す。
+	 *
+	 * - `singleton` の場合はキャッシュから返す（初回はファクトリー実行）。
+	 * - `transient` の場合は毎回ファクトリーを実行する。
+	 *
+	 * @template T トークンの型パラメータから自動推論される
+	 * @param token 解決対象のトークン
+	 * @returns 解決された依存のインスタンス
+	 * @throws {Error} トークンが未登録の場合
+	 * @example
+	 * ```ts
+	 * const logger = container.resolve(LoggerToken);
+	 * //    ^? Logger
+	 * ```
+	 */
+	resolve<T>(token: Token<T>): T {
+		const registration = this.registrations.get(token);
 
-    if (!registration) {
-      throw new Error(
-        `[DI] Token "${token.toString()}" is not registered. ` +
-          'Did you forget to call container.register()?',
-      );
-    }
+		if (!registration) {
+			throw new Error(
+				`[DI] Token "${token.toString()}" is not registered. ` +
+					'Did you forget to call container.register()?',
+			);
+		}
 
-    if (
-      registration.lifetime === 'singleton' &&
-      registration.instance !== undefined
-    ) {
-      return registration.instance as T;
-    }
+		if (
+			registration.lifetime === 'singleton' &&
+			registration.instance !== undefined
+		) {
+			return registration.instance as T;
+		}
 
-    const sym = token as symbol;
+		const sym = token as symbol;
 
-    if (this.resolvingStack.has(sym)) {
-      const chain = [...this.resolvingStack, sym]
-        .map((s) => s.toString())
-        .join(' → ');
-      throw new Error(`[DI] Circular dependency detected: ${chain}`);
-    }
+		if (this.resolvingStack.has(sym)) {
+			const chain = [...this.resolvingStack, sym]
+				.map((s) => s.toString())
+				.join(' → ');
+			throw new Error(`[DI] Circular dependency detected: ${chain}`);
+		}
 
-    this.resolvingStack.add(sym);
-    try {
-      const instance = registration.factory(this);
+		this.resolvingStack.add(sym);
+		try {
+			const instance = registration.factory(this);
 
-      if (registration.lifetime === 'singleton') {
-        registration.instance = instance;
-      }
+			if (registration.lifetime === 'singleton') {
+				registration.instance = instance;
+			}
 
-      return instance as T;
-    } finally {
-      this.resolvingStack.delete(sym);
-    }
-  }
+			return instance as T;
+		} finally {
+			this.resolvingStack.delete(sym);
+		}
+	}
 
-  /**
-   * 複数のトークンをまとめて解決する。
-   *
-   * タプル型を維持するため、戻り値の各要素は対応するトークンの型になる。
-   *
-   * @param tokens 解決対象のトークン配列
-   * @returns 解決された依存のタプル
-   * @example
-   * ```ts
-   * const [logger, db] = container.resolveAll(LoggerToken, DbToken);
-   * //     ^? Logger    ^? DbClient
-   * ```
-   */
-  resolveAll<Tokens extends readonly Token<unknown>[]>(
-    ...tokens: [...Tokens]
-  ): { [I in keyof Tokens]: Tokens[I] extends Token<infer U> ? U : never } {
-    return tokens.map((token) => this.resolve(token)) as {
-      [I in keyof Tokens]: Tokens[I] extends Token<infer U> ? U : never;
-    };
-  }
+	/**
+	 * 複数のトークンをまとめて解決する。
+	 *
+	 * タプル型を維持するため、戻り値の各要素は対応するトークンの型になる。
+	 *
+	 * @param tokens 解決対象のトークン配列
+	 * @returns 解決された依存のタプル
+	 * @example
+	 * ```ts
+	 * const [logger, db] = container.resolveAll(LoggerToken, DbToken);
+	 * //     ^? Logger    ^? DbClient
+	 * ```
+	 */
+	resolveAll<Tokens extends readonly Token<unknown>[]>(
+		...tokens: [...Tokens]
+	): { [I in keyof Tokens]: Tokens[I] extends Token<infer U> ? U : never } {
+		return tokens.map((token) => this.resolve(token)) as {
+			[I in keyof Tokens]: Tokens[I] extends Token<infer U> ? U : never;
+		};
+	}
 
-  /**
-   * トークンが登録済みかどうかを確認する。
-   *
-   * @param token 確認対象のトークン
-   * @returns 登録済みなら `true`
-   */
-  has(token: Token<unknown>): boolean {
-    return this.registrations.has(token);
-  }
+	/**
+	 * トークンが登録済みかどうかを確認する。
+	 *
+	 * @param token 確認対象のトークン
+	 * @returns 登録済みなら `true`
+	 */
+	has(token: Token<unknown>): boolean {
+		return this.registrations.has(token);
+	}
 
-  /**
-   * すべての登録を解除し、singleton キャッシュもクリアする。
-   *
-   * テスト時のリセットに便利。
-   */
-  clear(): void {
-    this.registrations.clear();
-  }
+	/**
+	 * すべての登録を解除し、singleton キャッシュもクリアする。
+	 *
+	 * テスト時のリセットに便利。
+	 */
+	clear(): void {
+		this.registrations.clear();
+	}
 }

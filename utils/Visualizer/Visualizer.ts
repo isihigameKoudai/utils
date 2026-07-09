@@ -4,133 +4,134 @@ import type { RenderCallBack, RenderOptions } from './type';
 
 // requestAnimationFrame の定義を修正
 export const getRequestAnimationFrame = (win: Window & typeof globalThis) =>
-  win.requestAnimationFrame ||
-  win.mozRequestAnimationFrame ||
-  win.webkitRequestAnimationFrame ||
-  win.msRequestAnimationFrame;
+	win.requestAnimationFrame ||
+	win.mozRequestAnimationFrame ||
+	win.webkitRequestAnimationFrame ||
+	win.msRequestAnimationFrame;
 
 // cancelAnimationFrame の定義を修正
 export const getCancelAnimationFrame = (win: Window & typeof globalThis) =>
-  win.cancelAnimationFrame ||
-  win.webkitCancelAnimationFrame ||
-  win.mozCancelAnimationFrame ||
-  win.msCancelAnimationFrame ||
-  win.oCancelAnimationFrame;
+	win.cancelAnimationFrame ||
+	win.webkitCancelAnimationFrame ||
+	win.mozCancelAnimationFrame ||
+	win.msCancelAnimationFrame ||
+	win.oCancelAnimationFrame;
 
 interface Params {
-  navigator: Navigator;
-  window: Window & typeof globalThis;
+	navigator: Navigator;
+	window: Window & typeof globalThis;
 }
 
 /**
  * 取り込んだ音声を任意のビジュアルに変換・描画の機能を司る
  */
 export class Visualizer extends Audio {
-  analyzer: AnalyserNode | null;
-  timeDomainArray: Uint8Array<ArrayBuffer>;
-  spectrumArray: Uint8Array<ArrayBuffer>;
-  timeDomainRawArray: Float32Array<ArrayBuffer>;
-  spectrumRawArray: Float32Array<ArrayBuffer>;
-  $canvas: HTMLCanvasElement | null;
-  requestAnimationFrameId: number;
+	analyzer: AnalyserNode | null;
+	timeDomainArray: Uint8Array<ArrayBuffer>;
+	spectrumArray: Uint8Array<ArrayBuffer>;
+	timeDomainRawArray: Float32Array<ArrayBuffer>;
+	spectrumRawArray: Float32Array<ArrayBuffer>;
+	$canvas: HTMLCanvasElement | null;
+	requestAnimationFrameId: number;
 
-  constructor(params: Params) {
-    super(params);
-    this.analyzer = null;
-    this.timeDomainArray = new Uint8Array();
-    this.spectrumArray = new Uint8Array();
-    this.timeDomainRawArray = new Float32Array();
-    this.spectrumRawArray = new Float32Array();
-    this.$canvas = null;
-    this.requestAnimationFrameId = 0;
-    this.window.requestAnimationFrame = getRequestAnimationFrame(this.window);
-    this.window.cancelAnimationFrame = getCancelAnimationFrame(this.window);
-  }
+	constructor(params: Params) {
+		super(params);
+		this.analyzer = null;
+		this.timeDomainArray = new Uint8Array();
+		this.spectrumArray = new Uint8Array();
+		this.timeDomainRawArray = new Float32Array();
+		this.spectrumRawArray = new Float32Array();
+		this.$canvas = null;
+		this.requestAnimationFrameId = 0;
+		this.window.requestAnimationFrame = getRequestAnimationFrame(this.window);
+		this.window.cancelAnimationFrame = getCancelAnimationFrame(this.window);
+	}
 
-  /**
-   * 音声再生と描画の開始
-   * @param {Function} renderCallBack webglに描画する内容。 シェーダーなど任意の描画内容を記述する。
-   * @param {Object} renderOptions 描画に関する設定
-   * @param {Object} renderOptions.$canvas webglの描画先
-   * @param {number} renderOptions.canvasWidth 描画先canvasのwidth
-   * @param {number} renderOptions.canvasHeight 描画先canvasのheight
-   * @param {number} renderOptions.smoothingTimeConstant 0~1まで設定でき、0に近いほど描画の更新がスムーズになり, 1に近いほど描画の更新が鈍くなる。
-   * @param {number}  option.fftSize FFTサイズを指定する。デフォルトは2048。
-   */
-  start(
-    renderCallBack: RenderCallBack,
-    {
-      $canvas,
-      canvasWidth = this.window.innerWidth,
-      canvasHeight = this.window.innerHeight,
-      smoothingTimeConstant = 0.5,
-      fftSize = 2048,
-    }: RenderOptions,
-  ) {
-    // 音声の再生
-    super.play();
-    // ビジュアライザーの初期化
-    this.analyzer = this.context.createAnalyser(); // AnalyserNodeを作成
-    this.analyzer.smoothingTimeConstant = smoothingTimeConstant;
-    this.analyzer.fftSize = fftSize;
-    this.timeDomainArray = new Uint8Array(this.analyzer.frequencyBinCount); // 時間領域の波形データを格納する配列を生成
-    this.spectrumArray = new Uint8Array(this.analyzer.frequencyBinCount);
-    this.timeDomainRawArray = new Float32Array(this.analyzer.fftSize); // 波形表示用データ
-    this.spectrumRawArray = new Float32Array(this.analyzer.frequencyBinCount); // スペクトル波形用データ
+	/**
+	 * 音声再生と描画の開始
+	 * @param {Function} renderCallBack webglに描画する内容。 シェーダーなど任意の描画内容を記述する。
+	 * @param {Object} renderOptions 描画に関する設定
+	 * @param {Object} renderOptions.$canvas webglの描画先
+	 * @param {number} renderOptions.canvasWidth 描画先canvasのwidth
+	 * @param {number} renderOptions.canvasHeight 描画先canvasのheight
+	 * @param {number} renderOptions.smoothingTimeConstant 0~1まで設定でき、0に近いほど描画の更新がスムーズになり, 1に近いほど描画の更新が鈍くなる。
+	 * @param {number}  option.fftSize FFTサイズを指定する。デフォルトは2048。
+	 */
+	start(
+		renderCallBack: RenderCallBack,
+		{
+			$canvas,
+			canvasWidth = this.window.innerWidth,
+			canvasHeight = this.window.innerHeight,
+			smoothingTimeConstant = 0.5,
+			fftSize = 2048,
+		}: RenderOptions,
+	) {
+		// 音声の再生
+		super.play();
+		// ビジュアライザーの初期化
+		this.analyzer = this.context.createAnalyser(); // AnalyserNodeを作成
+		this.analyzer.smoothingTimeConstant = smoothingTimeConstant;
+		this.analyzer.fftSize = fftSize;
+		this.timeDomainArray = new Uint8Array(this.analyzer.frequencyBinCount); // 時間領域の波形データを格納する配列を生成
+		this.spectrumArray = new Uint8Array(this.analyzer.frequencyBinCount);
+		this.timeDomainRawArray = new Float32Array(this.analyzer.fftSize); // 波形表示用データ
+		this.spectrumRawArray = new Float32Array(this.analyzer.frequencyBinCount); // スペクトル波形用データ
 
-    if (this._audioSource) {
-      this._audioSource.connect(this.analyzer);
-    }
+		if (this._audioSource) {
+			this._audioSource.connect(this.analyzer);
+		}
 
-    if (this._mediaSource) {
-      this._mediaSource.connect(this.analyzer);
-    }
+		if (this._mediaSource) {
+			this._mediaSource.connect(this.analyzer);
+		}
 
-    // ビジュアライザーをcanvasに反映
-    if ($canvas) {
-      $canvas.width = canvasWidth;
-      $canvas.height = canvasHeight;
-      this.$canvas = $canvas;
-    }
+		// ビジュアライザーをcanvasに反映
+		if ($canvas) {
+			$canvas.width = canvasWidth;
+			$canvas.height = canvasHeight;
+			this.$canvas = $canvas;
+		}
 
-    this.render(renderCallBack);
-  }
+		this.render(renderCallBack);
+	}
 
-  /**
-   * CallBackを受け取って再起的に描画処理を実行する。
-   * @param {Function} renderCallBack webglに描画する内容。 シェーダーなど任意の描画内容を記述する。
-   */
-  render(renderCallBack: RenderCallBack) {
-    if (!this.analyzer) {
-      throw new Error('analyzer is null');
-    }
+	/**
+	 * CallBackを受け取って再起的に描画処理を実行する。
+	 * @param {Function} renderCallBack webglに描画する内容。 シェーダーなど任意の描画内容を記述する。
+	 */
+	render(renderCallBack: RenderCallBack) {
+		if (!this.analyzer) {
+			throw new Error('analyzer is null');
+		}
 
-    // その時点での波形データを元にした配列を取得
-    this.analyzer.getByteTimeDomainData(this.timeDomainArray);
-    this.analyzer.getByteFrequencyData(this.spectrumArray);
-    this.analyzer.getFloatTimeDomainData(this.timeDomainRawArray);
-    this.analyzer.getFloatFrequencyData(this.spectrumRawArray);
+		// その時点での波形データを元にした配列を取得
+		this.analyzer.getByteTimeDomainData(this.timeDomainArray);
+		this.analyzer.getByteFrequencyData(this.spectrumArray);
+		this.analyzer.getFloatTimeDomainData(this.timeDomainRawArray);
+		this.analyzer.getFloatFrequencyData(this.spectrumRawArray);
 
-    renderCallBack({
-      $canvas: this.$canvas!,
-      frequencyBinCount: this.analyzer.frequencyBinCount,
-      timeDomainArray: this.timeDomainArray,
-      spectrumArray: this.spectrumArray,
-      timeDomainRawArray: this.timeDomainRawArray,
-      spectrumRawArray: this.spectrumRawArray,
-    });
+		renderCallBack({
+			// biome-ignore lint/style/noNonNullAssertion: initialized
+			$canvas: this.$canvas!,
+			frequencyBinCount: this.analyzer.frequencyBinCount,
+			timeDomainArray: this.timeDomainArray,
+			spectrumArray: this.spectrumArray,
+			timeDomainRawArray: this.timeDomainRawArray,
+			spectrumRawArray: this.spectrumRawArray,
+		});
 
-    this.requestAnimationFrameId = this.window.requestAnimationFrame(
-      this.render.bind(this, renderCallBack),
-    );
-  }
+		this.requestAnimationFrameId = this.window.requestAnimationFrame(
+			this.render.bind(this, renderCallBack),
+		);
+	}
 
-  /**
-   * 音声とビジュアライザーを停止させる
-   */
-  stop() {
-    super.stop();
-    this.analyzer?.disconnect();
-    this.window.cancelAnimationFrame(this.requestAnimationFrameId);
-  }
+	/**
+	 * 音声とビジュアライザーを停止させる
+	 */
+	stop() {
+		super.stop();
+		this.analyzer?.disconnect();
+		this.window.cancelAnimationFrame(this.requestAnimationFrameId);
+	}
 }

@@ -66,3 +66,6 @@ Thumbs.db
 # *.avi
 # *.mkv
 # *.webm
+
+biome_errors.txt
+biome_report.json

@@ -1,49 +1,49 @@
 const request = async <T = unknown>(
-  url: RequestInfo | URL,
-  options?: RequestInit,
+	url: RequestInfo | URL,
+	options?: RequestInit,
 ): Promise<T> => {
-  try {
-    const response = await fetch(url, options);
+	try {
+		const response = await fetch(url, options);
 
-    if (!response.ok) {
-      throw new Error(`${response.status} ${response.statusText}`);
-    }
+		if (!response.ok) {
+			throw new Error(`${response.status} ${response.statusText}`);
+		}
 
-    const json: unknown = await response.json();
+		const json: unknown = await response.json();
 
-    return json as T;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+		return json as T;
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
 };
 
 const api = {
-  request,
-  get: async <T = unknown>(
-    url: RequestInfo | URL,
-    options?: RequestInit,
-  ): Promise<T> => {
-    return request(url, { ...options, method: 'GET' });
-  },
-  post: async <T = unknown>(
-    url: RequestInfo | URL,
-    options?: RequestInit,
-  ): Promise<T> => {
-    return request(url, { ...options, method: 'POST' });
-  },
-  put: async <T = unknown>(
-    url: RequestInfo | URL,
-    options?: RequestInit,
-  ): Promise<T> => {
-    return request(url, { ...options, method: 'PUT' });
-  },
-  delete: async <T = unknown>(
-    url: RequestInfo | URL,
-    options?: RequestInit,
-  ): Promise<T> => {
-    return request(url, { ...options, method: 'DELETE' });
-  },
+	request,
+	get: async <T = unknown>(
+		url: RequestInfo | URL,
+		options?: RequestInit,
+	): Promise<T> => {
+		return request(url, { ...options, method: 'GET' });
+	},
+	post: async <T = unknown>(
+		url: RequestInfo | URL,
+		options?: RequestInit,
+	): Promise<T> => {
+		return request(url, { ...options, method: 'POST' });
+	},
+	put: async <T = unknown>(
+		url: RequestInfo | URL,
+		options?: RequestInit,
+	): Promise<T> => {
+		return request(url, { ...options, method: 'PUT' });
+	},
+	delete: async <T = unknown>(
+		url: RequestInfo | URL,
+		options?: RequestInit,
+	): Promise<T> => {
+		return request(url, { ...options, method: 'DELETE' });
+	},
 };
 
 export default api;

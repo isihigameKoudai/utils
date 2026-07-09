@@ -13,22 +13,22 @@ import type { Brand } from '../types/brand';
  * @returns 正規化された数値文字列 (例: "1000", "-1200", "-500")
  */
 const sanitizeAmount = (raw: string): string => {
-  const normalized = raw.trim().replace(/−/g, '-');
-  const digitsOnly = normalized.replace(/[^0-9-]/g, '');
+	const normalized = raw.trim().replace(/−/g, '-');
+	const digitsOnly = normalized.replace(/[^0-9-]/g, '');
 
-  if (digitsOnly === '' || digitsOnly === '-') {
-    return '0';
-  }
+	if (digitsOnly === '' || digitsOnly === '-') {
+		return '0';
+	}
 
-  const isNegative = digitsOnly.startsWith('-');
-  const numericPart = digitsOnly.replace(/-/g, '');
+	const isNegative = digitsOnly.startsWith('-');
+	const numericPart = digitsOnly.replace(/-/g, '');
 
-  if (numericPart === '') {
-    return '0';
-  }
+	if (numericPart === '') {
+		return '0';
+	}
 
-  const sanitizedNumeric = numericPart.replace(/^0+(?=\d)/, '') || '0';
-  return isNegative ? `-${sanitizedNumeric}` : sanitizedNumeric;
+	const sanitizedNumeric = numericPart.replace(/^0+(?=\d)/, '') || '0';
+	return isNegative ? `-${sanitizedNumeric}` : sanitizedNumeric;
 };
 
 /**
@@ -39,15 +39,15 @@ const sanitizeAmount = (raw: string): string => {
  * @returns 正規化された BillProps
  */
 const normalizeCommon = ([date, store, amount]: string[]): BillProps => [
-  date.trim(),
-  store.trim(),
-  sanitizeAmount(amount),
+	date.trim(),
+	store.trim(),
+	sanitizeAmount(amount),
 ];
 
 type Normalizer = (row: string[]) => BillProps;
 
 const brandNormalizers: Partial<Record<Brand, Normalizer>> = {
-  jcb_gold: normalizeCommon,
+	jcb_gold: normalizeCommon,
 };
 
 /**
@@ -59,8 +59,8 @@ const brandNormalizers: Partial<Record<Brand, Normalizer>> = {
  * @returns 正規化された BillProps
  */
 export const normalizeBrandRow = (brand: Brand, row: string[]): BillProps => {
-  const normalizer = brandNormalizers[brand] ?? normalizeCommon;
-  return normalizer(row);
+	const normalizer = brandNormalizers[brand] ?? normalizeCommon;
+	return normalizer(row);
 };
 
 /**
@@ -71,6 +71,6 @@ export const normalizeBrandRow = (brand: Brand, row: string[]): BillProps => {
  * @returns 正規化された BillProps の配列
  */
 export const normalizeBrandRows = (
-  brand: Brand,
-  rows: string[][],
+	brand: Brand,
+	rows: string[][],
 ): BillProps[] => rows.map((row) => normalizeBrandRow(brand, row));

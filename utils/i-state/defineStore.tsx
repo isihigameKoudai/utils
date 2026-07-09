@@ -7,12 +7,12 @@ import { create } from 'zustand';
 import { fromEntries } from '@/utils/object';
 
 import type {
-  StateProps,
-  QueriesProps,
-  ActionsProps,
-  Actions,
-  Dispatch,
-  Queries,
+	Actions,
+	ActionsProps,
+	Dispatch,
+	Queries,
+	QueriesProps,
+	StateProps,
 } from './type';
 
 /**
@@ -71,71 +71,71 @@ import type {
  * };
  */
 export const defineStore = <
-  S extends StateProps,
-  Q extends QueriesProps<S> = QueriesProps<S>,
-  A extends ActionsProps<S, Q> = ActionsProps<S, Q>,
+	S extends StateProps,
+	Q extends QueriesProps<S> = QueriesProps<S>,
+	A extends ActionsProps<S, Q> = ActionsProps<S, Q>,
 >(config: {
-  state: S;
-  queries: Q;
-  actions?: A;
+	state: S;
+	queries: Q;
+	actions?: A;
 }) => {
-  const {
-    state: initialState,
-    queries: queryFns,
-    actions: actionFns = {} as A,
-  } = config;
+	const {
+		state: initialState,
+		queries: queryFns,
+		actions: actionFns = {} as A,
+	} = config;
 
-  const store = create<{
-    state: S;
-    dispatch: Dispatch<S>;
-  }>((set) => ({
-    state: initialState,
-    dispatch: <K extends keyof S>(key: K, value: S[K]) => {
-      set((prev) => ({
-        ...prev,
-        state: { ...prev.state, [key]: value },
-      }));
-    },
-  }));
+	const store = create<{
+		state: S;
+		dispatch: Dispatch<S>;
+	}>((set) => ({
+		state: initialState,
+		dispatch: <K extends keyof S>(key: K, value: S[K]) => {
+			set((prev) => ({
+				...prev,
+				state: { ...prev.state, [key]: value },
+			}));
+		},
+	}));
 
-  const computeQueries = (state: S): Queries<Q> =>
-    fromEntries<Queries<Q>>(
-      Object.entries(queryFns).map(([key, fn]) => [
-        key as keyof Q,
-        fn(state),
-      ]) as [keyof Q, Queries<Q>[keyof Q]][],
-    );
+	const computeQueries = (state: S): Queries<Q> =>
+		fromEntries<Queries<Q>>(
+			Object.entries(queryFns).map(([key, fn]) => [
+				key as keyof Q,
+				fn(state),
+			]) as [keyof Q, Queries<Q>[keyof Q]][],
+		);
 
-  // 参照安定化: 呼び出し時に getState() で最新値を取得
-  const stableActions = fromEntries<Actions<S, Q, A>>(
-    Object.entries(actionFns).map(([key, fn]) => [
-      key as keyof A,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ((...args: any[]) => {
-        const { state, dispatch } = store.getState();
-        const queries = computeQueries(state);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        return fn({ state, queries, dispatch }, ...args);
-      }) as Actions<S, Q, A>[keyof A],
-    ]),
-  );
+	// 参照安定化: 呼び出し時に getState() で最新値を取得
+	const stableActions = fromEntries<Actions<S, Q, A>>(
+		Object.entries(actionFns).map(([key, fn]) => [
+			key as keyof A,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			((...args: any[]) => {
+				const { state, dispatch } = store.getState();
+				const queries = computeQueries(state);
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+				return fn({ state, queries, dispatch }, ...args);
+			}) as Actions<S, Q, A>[keyof A],
+		]),
+	);
 
-  // ストアを使用するためのフック（型情報を保持）
-  const useStore = () => {
-    const { state } = store();
+	// ストアを使用するためのフック（型情報を保持）
+	const useStore = () => {
+		const { state } = store();
 
-    const queries = useMemo(() => computeQueries(state), [state]);
+		const queries = useMemo(() => computeQueries(state), [state]);
 
-    const actions = useMemo(() => stableActions, []);
+		const actions = useMemo(() => stableActions, []);
 
-    return {
-      state,
-      queries,
-      actions,
-    };
-  };
+		return {
+			state,
+			queries,
+			actions,
+		};
+	};
 
-  return {
-    useStore,
-  };
+	return {
+		useStore,
+	};
 };

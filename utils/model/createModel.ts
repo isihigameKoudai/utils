@@ -1,6 +1,6 @@
 import { parse } from 'valibot';
 
-import { deepFreeze, createImmutableObject } from '@/utils/object/object';
+import { createImmutableObject, deepFreeze } from '@/utils/object/object';
 
 import type { Config } from './type';
 
@@ -87,31 +87,31 @@ import type { Config } from './type';
  * });
  */
 export const createModelFactory = <
-  Params extends Record<string, unknown>,
-  Model extends Params = Params,
+	Params extends Record<string, unknown>,
+	Model extends Params = Params,
 >(
-  config: Config<Params, Model>,
+	config: Config<Params, Model>,
 ): ((params: Params) => Readonly<Model>) => {
-  const { schema, extension } = config;
+	const { schema, extension } = config;
 
-  return (params: Params): Readonly<Model> => {
-    // Valibotによるバリデーション（失敗時は例外をスロー）
-    const validatedParams = parse(schema, params);
+	return (params: Params): Readonly<Model> => {
+		// Valibotによるバリデーション（失敗時は例外をスロー）
+		const validatedParams = parse(schema, params);
 
-    // ベースとなるイミュータブルオブジェクトを作成
-    const frozenParams = deepFreeze(validatedParams);
+		// ベースとなるイミュータブルオブジェクトを作成
+		const frozenParams = deepFreeze(validatedParams);
 
-    // 拡張プロパティがない場合はパラメータのみを返す
-    if (!extension) {
-      return frozenParams as Readonly<Model>;
-    }
+		// 拡張プロパティがない場合はパラメータのみを返す
+		if (!extension) {
+			return frozenParams as Readonly<Model>;
+		}
 
-    // 拡張プロパティを生成
-    const extensionProps = extension(frozenParams);
+		// 拡張プロパティを生成
+		const extensionProps = extension(frozenParams);
 
-    // getterを持つプロパティをマージしてモデルを作成
-    const model = createImmutableObject<Model>(frozenParams, extensionProps);
+		// getterを持つプロパティをマージしてモデルを作成
+		const model = createImmutableObject<Model>(frozenParams, extensionProps);
 
-    return Object.freeze(model);
-  };
+		return Object.freeze(model);
+	};
 };

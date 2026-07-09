@@ -4,8 +4,8 @@ import type { GenericSchema } from 'valibot';
  * Model から Params のキーを除外した型（拡張プロパティ）
  */
 type Extension<
-  Params extends Record<string, unknown>,
-  Model extends Params,
+	Params extends Record<string, unknown>,
+	Model extends Params,
 > = Omit<Model, keyof Params>;
 
 /**
@@ -14,8 +14,8 @@ type Extension<
  * @template Model - 完成したモデルの型
  */
 type ExtensionFactory<
-  Params extends Record<string, unknown>,
-  Model extends Params,
+	Params extends Record<string, unknown>,
+	Model extends Params,
 > = (params: Readonly<Params>) => Extension<Params, Model>;
 
 /**
@@ -24,11 +24,11 @@ type ExtensionFactory<
  * @template Model - 最終的なモデルの型
  */
 export interface Config<
-  Params extends Record<string, unknown>,
-  Model extends Params = Params,
+	Params extends Record<string, unknown>,
+	Model extends Params = Params,
 > {
-  /** Valibotスキーマによるパラメータ検証 */
-  readonly schema: GenericSchema<Params>;
-  /** 拡張プロパティ（getter・メソッド等）を生成するファクトリ関数（Model が Params と異なる場合は必須） */
-  readonly extension?: ExtensionFactory<Params, Model>;
+	/** Valibotスキーマによるパラメータ検証 */
+	readonly schema: GenericSchema<Params>;
+	/** 拡張プロパティ（getter・メソッド等）を生成するファクトリ関数（Model が Params と異なる場合は必須） */
+	readonly extension?: ExtensionFactory<Params, Model>;
 }

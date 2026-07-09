@@ -10,18 +10,18 @@
  * @returns
  */
 export const splitMap = (
-  originArray: number[],
-  sliceNum: number,
+	originArray: number[],
+	sliceNum: number,
 ): number[][] => {
-  const array: number[][] = [];
-  for (let i = 0; i * sliceNum < originArray.length; i++) {
-    const currentIndex = i * sliceNum;
-    const nextIndex = (i + 1) * sliceNum;
-    const newArray = originArray.slice(currentIndex, nextIndex);
-    array.push(newArray);
-  }
+	const array: number[][] = [];
+	for (let i = 0; i * sliceNum < originArray.length; i++) {
+		const currentIndex = i * sliceNum;
+		const nextIndex = (i + 1) * sliceNum;
+		const newArray = originArray.slice(currentIndex, nextIndex);
+		array.push(newArray);
+	}
 
-  return array;
+	return array;
 };
 
 /**
@@ -29,11 +29,11 @@ export const splitMap = (
  * ex: unique([9,2,3,5,2,1,5,'1','10']) => [9,2,3,5,1,10]
  */
 export const unique = (arr: (number | string | undefined)[]) => [
-  ...new Set(
-    arr
-      .map((item) => Number(item))
-      .filter((item) => item !== undefined && !Number.isNaN(item)),
-  ),
+	...new Set(
+		arr
+			.map((item) => Number(item))
+			.filter((item) => item !== undefined && !Number.isNaN(item)),
+	),
 ];
 
 /**
@@ -52,21 +52,21 @@ export const unique = (arr: (number | string | undefined)[]) => [
  */
 export type ListItem = { key: string; value: number };
 export const sortByKey = <
-  T extends Record<string, unknown> = Record<string, unknown>,
+	T extends Record<string, unknown> = Record<string, unknown>,
 >(
-  arr: T[],
-  key: keyof T,
-  order: 'desc' | 'asc',
+	arr: T[],
+	key: keyof T,
+	order: 'desc' | 'asc',
 ): T[] => {
-  return arr.sort((a, b) => {
-    if (a[key] < b[key]) {
-      return order === 'desc' ? 1 : -1;
-    }
-    if (a[key] > b[key]) {
-      return order === 'desc' ? -1 : 1;
-    }
-    return 0;
-  });
+	return arr.sort((a, b) => {
+		if (a[key] < b[key]) {
+			return order === 'desc' ? 1 : -1;
+		}
+		if (a[key] > b[key]) {
+			return order === 'desc' ? -1 : 1;
+		}
+		return 0;
+	});
 };
 
 /**
@@ -86,32 +86,32 @@ export const sortByKey = <
  * ]
  */
 export const sumByKey = <
-  T extends Record<string, unknown> = Record<string, unknown>,
+	T extends Record<string, unknown> = Record<string, unknown>,
 >(
-  array: T[],
-  { orderKey, numKey }: { orderKey: keyof T; numKey: keyof T },
+	array: T[],
+	{ orderKey, numKey }: { orderKey: keyof T; numKey: keyof T },
 ): {
-  [key in string]: T[keyof T] | number;
+	[key in string]: T[keyof T] | number;
 }[] => {
-  // キーごとの合計を格納するMapを作成
-  const sumMap = new Map<string, number>();
+	// キーごとの合計を格納するMapを作成
+	const sumMap = new Map<string, number>();
 
-  // 各要素を処理して合計を計算
-  array.forEach((item) => {
-    const key = String(item[orderKey]);
-    const value = Number(item[numKey]);
+	// 各要素を処理して合計を計算
+	array.forEach((item) => {
+		const key = String(item[orderKey]);
+		const value = Number(item[numKey]);
 
-    if (!Number.isNaN(value)) {
-      const currentSum = sumMap.get(key) || 0;
-      sumMap.set(key, currentSum + value);
-    }
-  });
+		if (!Number.isNaN(value)) {
+			const currentSum = sumMap.get(key) || 0;
+			sumMap.set(key, currentSum + value);
+		}
+	});
 
-  // Mapを配列に変換し、キーでソート
-  return Array.from(sumMap.entries())
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([key, value]) => ({
-      [String(orderKey)]: key as T[keyof T],
-      [String(numKey)]: value,
-    }));
+	// Mapを配列に変換し、キーでソート
+	return Array.from(sumMap.entries())
+		.sort(([a], [b]) => a.localeCompare(b))
+		.map(([key, value]) => ({
+			[String(orderKey)]: key as T[keyof T],
+			[String(numKey)]: value,
+		}));
 };

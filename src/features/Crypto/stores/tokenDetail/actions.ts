@@ -2,71 +2,75 @@ import type { ActionsProps } from '@/utils/i-state';
 
 import type { TokenDetailApi } from '../../api/tokenDetail';
 import {
-  MULTI_TIMEFRAMES,
-  type MultiTimeframe,
-  type Symbol,
+	MULTI_TIMEFRAMES,
+	type MultiTimeframe,
+	type TokenSymbol,
 } from '../../constants';
 
-import { queries } from './queries';
+import type { queries } from './queries';
 import type {
-  TokenDetailChartData,
-  TokenDetailErrorState,
-  TokenDetailLoadingState,
-  TokenDetailState,
+	TokenDetailChartData,
+	TokenDetailErrorState,
+	TokenDetailLoadingState,
+	TokenDetailState,
 } from './type';
 
 export const actions = {
-  /**
-   * @description トークンを初期化する
-   * @command Initialize
-   */
-  initialize({ dispatch }, { token }: { token: Symbol }) {
-    dispatch('token', token);
-    dispatch('chartData', {});
-    dispatch('loading', {});
-    dispatch('errors', {});
-  },
+	/**
+	 * @description トークンを初期化する
+	 * @command Initialize
+	 */
+	initialize({ dispatch }, { token }: { token: TokenSymbol }) {
+		dispatch('token', token);
+		dispatch('chartData', {});
+		dispatch('loading', {});
+		dispatch('errors', {});
+	},
 
-  /**
-   * @description APIから全タイムフレームのデータを取得してstateに反映
-   * @command FetchAllTimeframes
-   */
-  async fetchAllTimeframes({ dispatch }, api: TokenDetailApi, token: Symbol) {
-    const settled = await Promise.allSettled(api.fetchAllTimeframes(token));
+	/**
+	 * @description APIから全タイムフレームのデータを取得してstateに反映
+	 * @command FetchAllTimeframes
+	 */
+	async fetchAllTimeframes(
+		{ dispatch },
+		api: TokenDetailApi,
+		token: TokenSymbol,
+	) {
+		const settled = await Promise.allSettled(api.fetchAllTimeframes(token));
 
-    const nextChartData: TokenDetailChartData = {};
-    const nextErrors: TokenDetailErrorState = {};
-    const nextLoading: TokenDetailLoadingState = {};
+		const nextChartData: TokenDetailChartData = {};
+		const nextErrors: TokenDetailErrorState = {};
+		const nextLoading: TokenDetailLoadingState = {};
 
-    settled.forEach((result, index) => {
-      const timeframe: MultiTimeframe = MULTI_TIMEFRAMES[index];
-      nextLoading[timeframe] = false;
+		settled.forEach((result, index) => {
+			const timeframe: MultiTimeframe = MULTI_TIMEFRAMES[index];
+			nextLoading[timeframe] = false;
 
-      if (result.status === 'fulfilled') {
-        nextChartData[timeframe] = result.value.data;
-        return;
-      }
+			if (result.status === 'fulfilled') {
+				nextChartData[timeframe] = result.value.data;
+				return;
+			}
 
-      nextErrors[timeframe] =
-        result.reason instanceof Error
-          ? result.reason.message
-          : 'データ取得に失敗しました';
-    });
+			nextErrors[timeframe] =
+				result.reason instanceof Error
+					? result.reason.message
+					: 'データ取得に失敗しました';
+		});
 
-    dispatch('chartData', nextChartData);
-    dispatch('errors', nextErrors);
-    dispatch('loading', nextLoading);
-  },
+		dispatch('chartData', nextChartData);
+		dispatch('errors', nextErrors);
+		dispatch('loading', nextLoading);
+	},
 
-  setLoading({ dispatch }, loading: TokenDetailLoadingState) {
-    dispatch('loading', loading);
-  },
+	setLoading({ dispatch }, loading: TokenDetailLoadingState) {
+		dispatch('loading', loading);
+	},
 
-  setErrors({ dispatch }, errors: TokenDetailErrorState) {
-    dispatch('errors', errors);
-  },
+	setErrors({ dispatch }, errors: TokenDetailErrorState) {
+		dispatch('errors', errors);
+	},
 
-  setChartData({ dispatch }, chartData: TokenDetailChartData) {
-    dispatch('chartData', chartData);
-  },
+	setChartData({ dispatch }, chartData: TokenDetailChartData) {
+		dispatch('chartData', chartData);
+	},
 } satisfies ActionsProps<TokenDetailState, typeof queries>;

@@ -8,7 +8,7 @@ export { toChartDataKey } from './queries';
 export type { ChartDataKey, TradeState } from './type';
 
 export const TradeStore = defineStore({
-  state: initialState,
-  queries,
-  actions,
+	state: initialState,
+	queries,
+	actions,
 });

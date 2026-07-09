@@ -1,27 +1,27 @@
 import { isTruthy } from '../guards';
 import { deferred } from '../promise/promise';
 
-import type { Option, FetchFiles } from './type';
+import type { FetchFiles, Option } from './type';
 
 type DecoderCandidate = {
-  label: string;
-  options?: TextDecoderOptions;
+	label: string;
+	options?: TextDecoderOptions;
 };
 
 const TEXT_DECODER_CANDIDATES: DecoderCandidate[] = [
-  { label: 'utf-8', options: { fatal: true } },
-  { label: 'shift_jis' },
-  { label: 'windows-31j' },
+	{ label: 'utf-8', options: { fatal: true } },
+	{ label: 'shift_jis' },
+	{ label: 'windows-31j' },
 ];
 
 const isDecodingFailure = (error: unknown): boolean => {
-  if (error instanceof TypeError) {
-    return true;
-  }
-  if (typeof DOMException !== 'undefined' && error instanceof DOMException) {
-    return true;
-  }
-  return false;
+	if (error instanceof TypeError) {
+		return true;
+	}
+	if (typeof DOMException !== 'undefined' && error instanceof DOMException) {
+		return true;
+	}
+	return false;
 };
 
 /**
@@ -32,19 +32,19 @@ const isDecodingFailure = (error: unknown): boolean => {
  * @returns デコードされた文字列
  */
 export const decodeCsvBuffer = (
-  buffer: ArrayBuffer | ArrayBufferView,
+	buffer: ArrayBuffer | ArrayBufferView,
 ): string => {
-  for (const { label, options } of TEXT_DECODER_CANDIDATES) {
-    try {
-      return new TextDecoder(label, options).decode(buffer);
-    } catch (error) {
-      if (isDecodingFailure(error)) {
-        continue;
-      }
-      throw error;
-    }
-  }
-  return new TextDecoder('utf-8').decode(buffer);
+	for (const { label, options } of TEXT_DECODER_CANDIDATES) {
+		try {
+			return new TextDecoder(label, options).decode(buffer);
+		} catch (error) {
+			if (isDecodingFailure(error)) {
+				continue;
+			}
+			throw error;
+		}
+	}
+	return new TextDecoder('utf-8').decode(buffer);
 };
 
 /**
@@ -55,8 +55,8 @@ export const decodeCsvBuffer = (
  * @returns ファイルの内容（文字列）
  */
 export const readCsvFileAsText = async (file: File): Promise<string> => {
-  const buffer = await file.arrayBuffer();
-  return decodeCsvBuffer(buffer);
+	const buffer = await file.arrayBuffer();
+	return decodeCsvBuffer(buffer);
 };
 
 /**
@@ -68,11 +68,11 @@ export const readCsvFileAsText = async (file: File): Promise<string> => {
  * @returns
  */
 export const csv2array = (csv: string): string[][] =>
-  csv
-    .replaceAll('\r', '')
-    .split('\n')
-    .filter(isTruthy)
-    .map((row) => row.split(',').map((cell) => cell.replace(/^"|"$/g, '')));
+	csv
+		.replaceAll('\r', '')
+		.split('\n')
+		.filter(isTruthy)
+		.map((row) => row.split(',').map((cell) => cell.replace(/^"|"$/g, '')));
 
 /**
  * 2次元配列をCSV形式のテキストに変換する
@@ -86,7 +86,7 @@ export const csv2array = (csv: string): string[][] =>
  * => 'header1,header2,header3\nddddddd,eeeeeee,fffffff\nggggggg,hhhhhhh,iiiiiii'
  */
 export const array2csv = (array: string[][]): string =>
-  array.map((row) => row.join(',')).join('\n');
+	array.map((row) => row.join(',')).join('\n');
 
 /**
  * CSV形式のテキストをjsonに変換する
@@ -97,15 +97,15 @@ export const array2csv = (array: string[][]): string =>
  * ]
  */
 export const csv2json = <T = Record<string, string>>(csv: string): T[] => {
-  const [header, ...rows] = csv2array(csv);
-  return rows.map((row) =>
-    row.reduce((acc, cur, i) => {
-      return {
-        ...acc,
-        [header[i]]: cur,
-      };
-    }, {}),
-  ) as T[];
+	const [header, ...rows] = csv2array(csv);
+	return rows.map((row) =>
+		row.reduce((acc, cur, i) => {
+			return {
+				...acc,
+				[header[i]]: cur,
+			};
+		}, {}),
+	) as T[];
 };
 
 /**
@@ -142,11 +142,11 @@ export const csv2json = <T = Record<string, string>>(csv: string): T[] => {
  * ];
  */
 export const mergeStringifyCSVs = (_csvs: string[]): string[][] => {
-  if (_csvs.length === 0) return [];
-  const csvs = _csvs.map((csv) => csv2array(csv));
-  const header = csvs[0][0];
-  const rows = csvs.map((csv) => csv.slice(1));
-  return [header, ...rows.flat()];
+	if (_csvs.length === 0) return [];
+	const csvs = _csvs.map((csv) => csv2array(csv));
+	const header = csvs[0][0];
+	const rows = csvs.map((csv) => csv.slice(1));
+	return [header, ...rows.flat()];
 };
 
 /**
@@ -171,10 +171,10 @@ export const mergeStringifyCSVs = (_csvs: string[]): string[][] => {
  * => 'name,amount,date\nAlice,100,2021-01-01\nBob,200,2021-01-02\nAlice,200,2022-01-01\nBob,300,2024-01-02\n'
  */
 export const mergeArrayedCSVs = (_csvs: string[][][]): string[][] => {
-  if (_csvs.length === 0) return [];
-  const header = _csvs[0][0];
-  const rows = _csvs.map((csv) => csv.slice(1));
-  return [header, ...rows.flat()];
+	if (_csvs.length === 0) return [];
+	const header = _csvs[0][0];
+	const rows = _csvs.map((csv) => csv.slice(1));
+	return [header, ...rows.flat()];
 };
 
 /**
@@ -185,15 +185,15 @@ export const mergeArrayedCSVs = (_csvs: string[][][]): string[][] => {
  * @returns マージされた2次元配列
  */
 export const mergeCSVs = (csvs: string[] | string[][][]): string[][] => {
-  if (Array.isArray(csvs[0])) {
-    return mergeArrayedCSVs(csvs as string[][][]);
-  }
-  return mergeStringifyCSVs(csvs as string[]);
+	if (Array.isArray(csvs[0])) {
+		return mergeArrayedCSVs(csvs as string[][][]);
+	}
+	return mergeStringifyCSVs(csvs as string[]);
 };
 
 const initialOption: Option = {
-  isMultiple: false,
-  accept: '*',
+	isMultiple: false,
+	accept: '*',
 };
 
 /**
@@ -206,50 +206,50 @@ const initialOption: Option = {
  *
  */
 export const fetchFiles: FetchFiles = ({
-  isMultiple = false,
-  accept = '*',
+	isMultiple = false,
+	accept = '*',
 } = initialOption) => {
-  const { promise, resolve, reject } = deferred<{
-    status: 'success' | 'error';
-    files: File[];
-  }>();
+	const { promise, resolve, reject } = deferred<{
+		status: 'success' | 'error';
+		files: File[];
+	}>();
 
-  const isAvailable: boolean = !!(
-    window.File &&
-    window.FileReader &&
-    window.FileList &&
-    window.Blob
-  );
+	const isAvailable: boolean = !!(
+		window.File &&
+		window.FileReader &&
+		window.FileList &&
+		window.Blob
+	);
 
-  if (!isAvailable) {
-    reject({
-      status: 'The File APIs are not fully supported in this browser.',
-      files: [],
-    });
-    return promise;
-  }
+	if (!isAvailable) {
+		reject({
+			status: 'The File APIs are not fully supported in this browser.',
+			files: [],
+		});
+		return promise;
+	}
 
-  const $input: HTMLInputElement = document.createElement('input');
-  $input.type = 'file';
-  $input.multiple = isMultiple;
-  $input.accept = accept;
-  $input.onchange = (e: Event) => {
-    const target = e.target as HTMLInputElement;
-    if (!target || !target.files) {
-      reject({
-        status: 'error',
-        files: [],
-      });
-      return;
-    }
+	const $input: HTMLInputElement = document.createElement('input');
+	$input.type = 'file';
+	$input.multiple = isMultiple;
+	$input.accept = accept;
+	$input.onchange = (e: Event) => {
+		const target = e.target as HTMLInputElement;
+		if (!target?.files) {
+			reject({
+				status: 'error',
+				files: [],
+			});
+			return;
+		}
 
-    const files = [...target.files];
-    resolve({
-      status: 'success',
-      files,
-    });
-  };
-  $input.click();
+		const files = [...target.files];
+		resolve({
+			status: 'success',
+			files,
+		});
+	};
+	$input.click();
 
-  return promise;
+	return promise;
 };

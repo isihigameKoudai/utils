@@ -9,7 +9,7 @@ export { queries } from './queries';
 export type { CellPosition, CsvSpreadsheetState } from './type';
 
 export const CsvSpreadsheetStore = defineStore({
-  state: initialState,
-  queries,
-  actions,
+	state: initialState,
+	queries,
+	actions,
 });

@@ -10,9 +10,9 @@
  * }
  */
 export function isFunction(
-  value: unknown,
+	value: unknown,
 ): value is (...args: unknown[]) => unknown {
-  return typeof value === 'function';
+	return typeof value === 'function';
 }
 
 /**
@@ -27,14 +27,14 @@ export function isFunction(
  * }
  */
 export function isPromiseFunction(
-  fn: unknown,
+	fn: unknown,
 ): fn is (...args: unknown[]) => Promise<unknown> {
-  if (!isFunction(fn)) {
-    return false;
-  }
+	if (!isFunction(fn)) {
+		return false;
+	}
 
-  const fnStr = fn.toString();
-  return fnStr.includes('new Promise') || fnStr.includes('async');
+	const fnStr = fn.toString();
+	return fnStr.includes('new Promise') || fnStr.includes('async');
 }
 
 /**
@@ -49,15 +49,15 @@ export function isPromiseFunction(
  * }
  */
 export function isPromise<T = unknown>(value: unknown): value is Promise<T> {
-  return (
-    value instanceof Promise ||
-    (value !== null &&
-      typeof value === 'object' &&
-      'then' in value &&
-      isFunction((value as Record<string, unknown>).then) &&
-      'catch' in value &&
-      isFunction((value as Record<string, unknown>).catch))
-  );
+	return (
+		value instanceof Promise ||
+		(value !== null &&
+			typeof value === 'object' &&
+			'then' in value &&
+			isFunction((value as Record<string, unknown>).then) &&
+			'catch' in value &&
+			isFunction((value as Record<string, unknown>).catch))
+	);
 }
 
 /**
@@ -72,7 +72,7 @@ export function isPromise<T = unknown>(value: unknown): value is Promise<T> {
  * }
  */
 export function isError(value: unknown): value is Error {
-  return value instanceof Error;
+	return value instanceof Error;
 }
 
 /**
@@ -108,35 +108,35 @@ export function isError(value: unknown): value is Error {
  * isEmpty(new String('abc')) // false
  */
 export const isEmpty = (value: unknown): boolean => {
-  if (value === null || value === undefined) {
-    return true;
-  }
-  if (typeof value === 'string') {
-    return value === '';
-  }
-  if (typeof value === 'number') {
-    return value === 0;
-  }
-  if (typeof value === 'boolean') {
-    return value === false;
-  }
-  if (typeof value === 'symbol') {
-    return value === Symbol();
-  }
-  if (value instanceof String) {
-    return value.toString() === '';
-  }
-  if (value instanceof Boolean) {
-    return true;
-  }
-  if (value instanceof Map || value instanceof Set) {
-    return value.size === 0;
-  }
-  if (value instanceof Object) {
-    return Object.keys(value).length === 0;
-  }
-  if (Array.isArray(value)) {
-    return value.length === 0;
-  }
-  return false;
+	if (value === null || value === undefined) {
+		return true;
+	}
+	if (typeof value === 'string') {
+		return value === '';
+	}
+	if (typeof value === 'number') {
+		return value === 0;
+	}
+	if (typeof value === 'boolean') {
+		return value === false;
+	}
+	if (typeof value === 'symbol') {
+		return value === Symbol();
+	}
+	if (value instanceof String) {
+		return value.toString() === '';
+	}
+	if (value instanceof Boolean) {
+		return true;
+	}
+	if (value instanceof Map || value instanceof Set) {
+		return value.size === 0;
+	}
+	if (value instanceof Object) {
+		return Object.keys(value).length === 0;
+	}
+	if (Array.isArray(value)) {
+		return value.length === 0;
+	}
+	return false;
 };

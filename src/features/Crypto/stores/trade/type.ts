@@ -1,11 +1,11 @@
 import type { CandlestickData, UTCTimestamp } from 'lightweight-charts';
 
-import type { MultiTimeframe, Symbol } from '../../constants';
+import type { MultiTimeframe, TokenSymbol } from '../../constants';
 
-export type ChartDataKey = `${Symbol}_${MultiTimeframe}`;
+export type ChartDataKey = `${TokenSymbol}_${MultiTimeframe}`;
 
 export type ChartDataCache = Partial<
-  Record<ChartDataKey, CandlestickData<UTCTimestamp>[]>
+	Record<ChartDataKey, CandlestickData<UTCTimestamp>[]>
 >;
 
 export type LoadingState = Partial<Record<ChartDataKey, boolean>>;
@@ -13,9 +13,9 @@ export type LoadingState = Partial<Record<ChartDataKey, boolean>>;
 export type ErrorState = Partial<Record<ChartDataKey, string>>;
 
 export type TradeState = {
-  selectedSymbols: Symbol[];
-  selectedTimeframe: MultiTimeframe;
-  chartData: ChartDataCache;
-  loading: LoadingState;
-  errors: ErrorState;
+	selectedSymbols: TokenSymbol[];
+	selectedTimeframe: MultiTimeframe;
+	chartData: ChartDataCache;
+	loading: LoadingState;
+	errors: ErrorState;
 };

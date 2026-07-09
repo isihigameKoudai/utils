@@ -8,5 +8,5 @@
  * const num: number = yen; // Error
  */
 export type Branded<T, Brand = unknown> = T & {
-  readonly __brand: Brand;
+	readonly __brand: Brand;
 };

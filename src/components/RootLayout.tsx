@@ -1,16 +1,16 @@
-import React from 'react';
+import type React from 'react';
 
 import { NavigationHeader } from './NavigationHeader';
 
 interface RootLayoutProps {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }
 
 export const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
-  return (
-    <>
-      <NavigationHeader />
-      {children}
-    </>
-  );
+	return (
+		<>
+			<NavigationHeader />
+			{children}
+		</>
+	);
 };

@@ -1,63 +1,63 @@
 import { useEffect } from 'react';
 
 import { CryptoChart } from '../../components/CryptoChart';
-import type { Symbol } from '../../constants';
+import type { TokenSymbol } from '../../constants';
 import { useTokenDetail } from '../../hooks/useTokenDetail';
 
 import {
-  Breadcrumb,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-  BreadcrumbText,
-  ChartCell,
-  ChartGrid,
-  Header,
-  Overlay,
-  PageContainer,
-  TimeframeLabel,
+	Breadcrumb,
+	BreadcrumbLink,
+	BreadcrumbSeparator,
+	BreadcrumbText,
+	ChartCell,
+	ChartGrid,
+	Header,
+	Overlay,
+	PageContainer,
+	TimeframeLabel,
 } from './style';
 
 type TokenDetailPageProps = {
-  token: Symbol;
+	token: TokenSymbol;
 };
 
 export const TokenDetailPage = ({ token }: TokenDetailPageProps) => {
-  const { queries, initialize, fetchAllTimeframes } = useTokenDetail();
+	const { queries, initialize, fetchAllTimeframes } = useTokenDetail();
 
-  useEffect(() => {
-    initialize(token);
-  }, [initialize, token]);
+	useEffect(() => {
+		initialize(token);
+	}, [initialize, token]);
 
-  useEffect(() => {
-    if (!queries.token) return;
-    void fetchAllTimeframes(queries.token);
-  }, [fetchAllTimeframes, queries.token]);
+	useEffect(() => {
+		if (!queries.token) return;
+		void fetchAllTimeframes(queries.token);
+	}, [fetchAllTimeframes, queries.token]);
 
-  return (
-    <PageContainer>
-      <Header>
-        <Breadcrumb>
-          <BreadcrumbLink to="/trade">trade</BreadcrumbLink>
-          <BreadcrumbSeparator>&gt;</BreadcrumbSeparator>
-          <BreadcrumbText>{queries.token ?? token}</BreadcrumbText>
-        </Breadcrumb>
-      </Header>
+	return (
+		<PageContainer>
+			<Header>
+				<Breadcrumb>
+					<BreadcrumbLink to="/trade">trade</BreadcrumbLink>
+					<BreadcrumbSeparator>&gt;</BreadcrumbSeparator>
+					<BreadcrumbText>{queries.token ?? token}</BreadcrumbText>
+				</Breadcrumb>
+			</Header>
 
-      <ChartGrid>
-        {queries.chartPanels.map(
-          ({ timeframe, label, data, isLoading, error }) => (
-            <ChartCell key={timeframe}>
-              <TimeframeLabel>{label}</TimeframeLabel>
-              {isLoading && <Overlay>読み込み中...</Overlay>}
-              {!isLoading && error && <Overlay>{error}</Overlay>}
-              {!isLoading && !error && data && (
-                <CryptoChart data={data} isDark />
-              )}
-              {!isLoading && !error && !data && <Overlay>データなし</Overlay>}
-            </ChartCell>
-          ),
-        )}
-      </ChartGrid>
-    </PageContainer>
-  );
+			<ChartGrid>
+				{queries.chartPanels.map(
+					({ timeframe, label, data, isLoading, error }) => (
+						<ChartCell key={timeframe}>
+							<TimeframeLabel>{label}</TimeframeLabel>
+							{isLoading && <Overlay>読み込み中...</Overlay>}
+							{!isLoading && error && <Overlay>{error}</Overlay>}
+							{!isLoading && !error && data && (
+								<CryptoChart data={data} isDark />
+							)}
+							{!isLoading && !error && !data && <Overlay>データなし</Overlay>}
+						</ChartCell>
+					),
+				)}
+			</ChartGrid>
+		</PageContainer>
+	);
 };

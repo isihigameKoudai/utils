@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import type React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import VisualDetectionView from '@/src/features/Detection/components/VisualDetectionView';
 import { type DetectedObject, VisualDetection } from '@/utils/tensorflow';
@@ -6,78 +7,78 @@ import { type DetectedObject, VisualDetection } from '@/utils/tensorflow';
 import { DETECTOR_OPACITY } from '../constants';
 
 type DetectorViewProps = {
-  opacity?: number;
-  onDetect?: (objects: DetectedObject[]) => void;
+	opacity?: number;
+	onDetect?: (objects: DetectedObject[]) => void;
 };
 const DetectorView: React.FC<DetectorViewProps> = ({
-  opacity = 1.0,
-  onDetect = () => {},
+	opacity = 1.0,
+	onDetect = () => {},
 }) => {
-  const isInitRef = useRef(true);
-  const detectorRef = useRef(
-    new VisualDetection({
-      navigator: window.navigator,
-      document,
-      window,
-    }),
-  );
-  const $videoContainer = useRef<HTMLDivElement>(null);
-  const [objects, setObjects] = useState<DetectedObject[]>([]);
-  const [isShow, setIsShow] = useState(false);
+	const isInitRef = useRef(true);
+	const detectorRef = useRef(
+		new VisualDetection({
+			navigator: window.navigator,
+			document,
+			window,
+		}),
+	);
+	const $videoContainer = useRef<HTMLDivElement>(null);
+	const [objects, setObjects] = useState<DetectedObject[]>([]);
+	const [isShow, setIsShow] = useState(false);
 
-  const handleDetect = useCallback(() => {
-    const detector = detectorRef.current;
-    if (detector.$video && detector._$video && detector.model) {
-      const video = detector.$video;
-      video.style.position = 'absolute';
-      video.style.top = '0px';
-      video.style.left = '0px';
-      video.style.opacity = `${DETECTOR_OPACITY}`;
-      $videoContainer.current?.appendChild(video);
-    }
-    void detector.start((objectList) => {
-      const objects = objectList.filter((obj) => obj.class === 'person');
-      setObjects(objects);
-      onDetect(objects);
-    });
-    setIsShow(false);
-  }, [onDetect]);
+	const handleDetect = useCallback(() => {
+		const detector = detectorRef.current;
+		if (detector.$video && detector._$video && detector.model) {
+			const video = detector.$video;
+			video.style.position = 'absolute';
+			video.style.top = '0px';
+			video.style.left = '0px';
+			video.style.opacity = `${DETECTOR_OPACITY}`;
+			$videoContainer.current?.appendChild(video);
+		}
+		void detector.start((objectList) => {
+			const objects = objectList.filter((obj) => obj.class === 'person');
+			setObjects(objects);
+			onDetect(objects);
+		});
+		setIsShow(false);
+	}, [onDetect]);
 
-  useEffect(() => {
-    const detector = detectorRef.current;
-    const init = async () => {
-      if (isInitRef.current) {
-        isInitRef.current = false;
-        await detector.load({
-          width: window.innerWidth,
-          height: window.innerHeight,
-        });
-        setIsShow(true);
-      }
-    };
+	useEffect(() => {
+		const detector = detectorRef.current;
+		const init = async () => {
+			if (isInitRef.current) {
+				isInitRef.current = false;
+				await detector.load({
+					width: window.innerWidth,
+					height: window.innerHeight,
+				});
+				setIsShow(true);
+			}
+		};
 
-    void init();
+		void init();
 
-    return () => {
-      detector.stop();
-    };
-  }, []);
+		return () => {
+			detector.stop();
+		};
+	}, []);
 
-  return (
-    <>
-      {isShow && (
-        <button type="button" onClick={handleDetect}>
-          start detect
-        </button>
-      )}
-      <VisualDetectionView
-        ref={$videoContainer}
-        objects={objects}
-        opacity={opacity}
-        showCenter
-      />
-    </>
-  );
+	return (
+		<>
+			{isShow && (
+				<button type="button" onClick={handleDetect}>
+					start detect
+				</button>
+			)}
+			<VisualDetectionView
+				ref={$videoContainer}
+				objects={objects}
+				opacity={opacity}
+				showCenter
+			/>
+		</>
+	);
 };
 
 export default DetectorView;
