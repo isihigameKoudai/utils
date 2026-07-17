@@ -95,7 +95,8 @@ export const useEmbeddingFeature = () => {
 	const handleAddToDatabase = useCallback(async () => {
 		const result = await handleEmbed();
 		if (result) {
-			const label = inputMode === 'text' ? inputText : selectedFile?.name;
+			const label =
+				inputMode === 'text' ? inputText : (selectedFile?.name ?? '');
 			databaseService.addItemFromEmbedding(
 				result,
 				label,
@@ -144,7 +145,8 @@ export const useEmbeddingFeature = () => {
 
 		const result = await handleEmbed();
 		if (result) {
-			const label = inputMode === 'text' ? inputText : selectedFile?.name;
+			const label =
+				inputMode === 'text' ? inputText : (selectedFile?.name ?? '');
 			await databaseService.addToChroma(
 				chromaCollectionRef.current,
 				result,

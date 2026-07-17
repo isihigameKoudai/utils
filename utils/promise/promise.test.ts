@@ -32,7 +32,7 @@ describe('promise utils', () => {
 		});
 
 		it('should wait for previous promise to complete before reset', async () => {
-			let resolveFirst: (value: string) => void;
+			let resolveFirst: ((value: string) => void) | undefined;
 			const mockFn = vi.fn().mockImplementation(() => {
 				return new Promise<string>((resolve) => {
 					resolveFirst = resolve;

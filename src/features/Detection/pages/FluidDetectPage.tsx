@@ -50,7 +50,7 @@ export default function FluidDetectPage() {
 		let detector: VisualDetection | undefined;
 
 		void (async () => {
-			if (isInitRef.current) {
+			if (isInitRef.current && $ref.current) {
 				const gl = new WebGL({
 					$wrapper: $ref.current,
 				});

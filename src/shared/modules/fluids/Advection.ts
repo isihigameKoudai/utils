@@ -87,7 +87,7 @@ export default class Advection extends ShaderPass {
 		if (this.uniforms) this.uniforms.dt.value = dt;
 		// biome-ignore lint/style/noNonNullAssertion: Initialized in createBoundary
 		this.line!.visible = isBounce;
-		this.uniforms?.isBFECC.value = BFECC;
+		if (this.uniforms) this.uniforms.isBFECC.value = BFECC;
 
 		super.update();
 	}

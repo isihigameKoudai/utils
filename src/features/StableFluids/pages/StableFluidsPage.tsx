@@ -8,7 +8,7 @@ const StableFluidsPage: React.FC = () => {
 	const isInitRef = useRef(true);
 
 	useEffect(() => {
-		if (isInitRef.current) {
+		if (isInitRef.current && $ref.current) {
 			new WebGL({
 				$wrapper: $ref.current,
 			});

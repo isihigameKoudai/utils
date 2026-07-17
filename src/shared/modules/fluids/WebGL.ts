@@ -15,7 +15,8 @@ export default class WebGL {
 		Common.init();
 		Mouse.init();
 
-		this.$wrapper.prepend(Common.renderer?.domElement);
+		// biome-ignore lint/style/noNonNullAssertion: renderer is initialized by Common.init() above
+		this.$wrapper.prepend(Common.renderer!.domElement);
 		this.output = new Output();
 		this.loop();
 

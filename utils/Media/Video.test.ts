@@ -36,14 +36,13 @@ describe('Video', () => {
 		expect(result).toBe(mockStream);
 	});
 
-	test('setVideoが正常に動作すること', () => {
-		const mockStream = {} as MediaStream;
+	test('setVideoが正常に動作すること', async () => {
 		const mockVideo = { srcObject: null } as HTMLVideoElement;
 
-		video._stream = mockStream;
+		const stream = await video.getVideoStream();
 		video.setVideo(mockVideo);
 
-		expect(mockVideo.srcObject).toBe(mockStream);
+		expect(mockVideo.srcObject).toBe(stream);
 		expect(video.$video).toBe(mockVideo);
 	});
 
