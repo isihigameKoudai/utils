@@ -11,8 +11,8 @@
  * ```
  */
 export type Token<T = unknown> = symbol & {
-  readonly __brand: 'DI_TOKEN';
-  readonly __type: T;
+	readonly __brand: 'DI_TOKEN';
+	readonly __type: T;
 };
 
 /**

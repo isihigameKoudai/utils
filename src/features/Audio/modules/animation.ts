@@ -1,32 +1,33 @@
 type Props = {
-  $canvas: HTMLCanvasElement;
-  frequencyBinCount: number;
-  timeDomainArray: Uint8Array | Float32Array;
+	$canvas: HTMLCanvasElement;
+	frequencyBinCount: number;
+	timeDomainArray: Uint8Array | Float32Array;
 };
 
 export const basicParticle = ({
-  $canvas,
-  frequencyBinCount,
-  timeDomainArray,
+	$canvas,
+	frequencyBinCount,
+	timeDomainArray,
 }: Props) => {
-  const $gl = $canvas.getContext('2d');
-  const barWidth = window.innerWidth / frequencyBinCount;
+	const $gl = $canvas.getContext('2d');
+	if (!$gl) return;
+	const barWidth = window.innerWidth / frequencyBinCount;
 
-  //  1フレームごとにリセット
-  $gl!.fillStyle = 'rgba(0, 0, 0, 1)';
-  $gl!.fillRect(0, 0, window.innerWidth, window.innerHeight);
+	//  1フレームごとにリセット
+	$gl.fillStyle = 'rgba(0, 0, 0, 1)';
+	$gl.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
-  // analyserNode.frequencyBinCountはanalyserNode.fftSize / 2の数値。よって今回は1024。
-  timeDomainArray.forEach((time, i) => {
-    const percent = time / 255; // 255が最大値なので波形データの%が算出できる。
-    const height = window.innerHeight * percent; // %に基づく高さを算出
-    const offset = window.innerHeight - height; // y座標の描画開始位置を算出
+	// analyserNode.frequencyBinCountはanalyserNode.fftSize / 2の数値。よって今回は1024。
+	timeDomainArray.forEach((time, i) => {
+		const percent = time / 255; // 255が最大値なので波形データの%が算出できる。
+		const height = window.innerHeight * percent; // %に基づく高さを算出
+		const offset = window.innerHeight - height; // y座標の描画開始位置を算出
 
-    const r = time;
-    // 対象のドットを描写
-    $gl!.fillStyle = `rgb(${r}, ${r}, ${r})`;
-    $gl!.fillRect(i * barWidth, offset, barWidth, 2);
-  });
+		const r = time;
+		// 対象のドットを描写
+		$gl.fillStyle = `rgb(${r}, ${r}, ${r})`;
+		$gl.fillRect(i * barWidth, offset, barWidth, 2);
+	});
 };
 
 const renderLineVertex = `#version 300 es
@@ -56,146 +57,149 @@ void main(void) {
 `;
 
 type LineAudioProps = {
-  $canvas: HTMLCanvasElement;
-  analyzer: AnalyserNode;
-  timeDomainRawArray: Float32Array;
-  spectrumRawArray: Float32Array;
+	$canvas: HTMLCanvasElement;
+	analyzer: AnalyserNode;
+	timeDomainRawArray: Float32Array;
+	spectrumRawArray: Float32Array;
 };
 
 const createVbo = (
-  gl: WebGL2RenderingContext,
-  array: Float32Array,
-  usage: number,
+	gl: WebGL2RenderingContext,
+	array: Float32Array,
+	usage: number,
 ) => {
-  const vbo = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
-  gl.bufferData(gl.ARRAY_BUFFER, array, usage);
-  gl.bindBuffer(gl.ARRAY_BUFFER, null);
-  return vbo;
+	const vbo = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+	gl.bufferData(gl.ARRAY_BUFFER, array, usage);
+	gl.bindBuffer(gl.ARRAY_BUFFER, null);
+	return vbo;
 };
 
 // シェーダーのソースコードをWebGLに適用させる
-const createShader = function (
-  gl: WebGL2RenderingContext,
-  source: string,
-  type: number,
-) {
-  const shader = gl.createShader(type)!;
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
+const createShader = (
+	gl: WebGL2RenderingContext,
+	source: string,
+	type: number,
+) => {
+	const shader = gl.createShader(type)!;
+	gl.shaderSource(shader, source);
+	gl.compileShader(shader);
 
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    throw new Error(gl.getShaderInfoLog(shader) + source);
-  }
+	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+		throw new Error(gl.getShaderInfoLog(shader) + source);
+	}
 
-  return shader;
+	return shader;
 };
 
-const createProgram = function (
-  gl: WebGL2RenderingContext,
-  vertShader: WebGLShader,
-  fragShader: WebGLShader,
-) {
-  const program = gl.createProgram();
-  gl.attachShader(program, vertShader);
-  gl.attachShader(program, fragShader);
-  gl.linkProgram(program);
+const createProgram = (
+	gl: WebGL2RenderingContext,
+	vertShader: WebGLShader,
+	fragShader: WebGLShader,
+) => {
+	const program = gl.createProgram();
+	gl.attachShader(program, vertShader);
+	gl.attachShader(program, fragShader);
+	gl.linkProgram(program);
 
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    throw new Error(gl.getProgramInfoLog(program) || '');
-  }
+	if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+		throw new Error(gl.getProgramInfoLog(program) || '');
+	}
 
-  return program;
+	return program;
 };
 
-const getUniformLocs = function (
-  gl: WebGL2RenderingContext,
-  program: WebGLProgram,
-  names: string[],
-) {
-  const map = new Map();
-  names.forEach((name) => map.set(name, gl.getUniformLocation(program, name)));
-  return map;
+const getUniformLocs = (
+	gl: WebGL2RenderingContext,
+	program: WebGLProgram,
+	names: string[],
+) => {
+	const map = new Map();
+	names.forEach((name) => {
+		map.set(name, gl.getUniformLocation(program, name));
+	});
+	return map;
 };
 
 type UniformsForGl = {
-  [key: string]: number;
+	[key: string]: number;
 };
 
 const injectWaveArray = ({
-  $gl,
-  waveArray,
-  color,
-  uniforms,
+	$gl,
+	waveArray,
+	color,
+	uniforms,
 }: {
-  $gl: WebGL2RenderingContext;
-  waveArray: Float32Array;
-  color: { r: number; g: number; b: number };
-  uniforms: UniformsForGl;
+	$gl: WebGL2RenderingContext;
+	waveArray: Float32Array;
+	color: { r: number; g: number; b: number };
+	uniforms: UniformsForGl;
 }) => {
-  const vbo = createVbo($gl, waveArray, $gl.DYNAMIC_DRAW);
-  $gl.bindBuffer($gl.ARRAY_BUFFER, vbo);
-  $gl.bufferSubData($gl.ARRAY_BUFFER, 0, waveArray);
-  const program = createProgram(
-    $gl,
-    createShader($gl, renderLineVertex, $gl.VERTEX_SHADER),
-    createShader($gl, renderLineFragment, $gl.FRAGMENT_SHADER),
-  );
-  $gl?.useProgram(program);
-  const uniformKeys = Object.keys(uniforms);
-  const uniformLocs = getUniformLocs($gl, program, [...uniformKeys, 'u_color']);
-  // TODO: vec2やvec3などのプリミティブではない値だった場合、自動で出し分けるようにする
-  uniformKeys.forEach((uniformKey) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    $gl.uniform1f(uniformLocs.get(uniformKey), uniforms[uniformKey]);
-  });
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  $gl.uniform3f(uniformLocs.get('u_color'), color.r, color.g, color.b);
+	const vbo = createVbo($gl, waveArray, $gl.DYNAMIC_DRAW);
+	$gl.bindBuffer($gl.ARRAY_BUFFER, vbo);
+	$gl.bufferSubData($gl.ARRAY_BUFFER, 0, waveArray);
+	const program = createProgram(
+		$gl,
+		createShader($gl, renderLineVertex, $gl.VERTEX_SHADER),
+		createShader($gl, renderLineFragment, $gl.FRAGMENT_SHADER),
+	);
+	// biome-ignore lint/correctness/useHookAtTopLevel: useProgram is WebGL method
+	$gl?.useProgram(program);
+	const uniformKeys = Object.keys(uniforms);
+	const uniformLocs = getUniformLocs($gl, program, [...uniformKeys, 'u_color']);
+	// TODO: vec2やvec3などのプリミティブではない値だった場合、自動で出し分けるようにする
+	uniformKeys.forEach((uniformKey) => {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+		$gl.uniform1f(uniformLocs.get(uniformKey), uniforms[uniformKey]);
+	});
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+	$gl.uniform3f(uniformLocs.get('u_color'), color.r, color.g, color.b);
 
-  $gl.enableVertexAttribArray(0);
-  $gl.vertexAttribPointer(0, 1, $gl.FLOAT, false, 0, 0);
-  $gl.drawArrays($gl.LINE_STRIP, 0, waveArray.length);
+	$gl.enableVertexAttribArray(0);
+	$gl.vertexAttribPointer(0, 1, $gl.FLOAT, false, 0, 0);
+	$gl.drawArrays($gl.LINE_STRIP, 0, waveArray.length);
 };
 
 export const lineAudio = ({
-  $canvas,
-  analyzer,
-  timeDomainRawArray,
-  spectrumRawArray,
+	$canvas,
+	analyzer,
+	timeDomainRawArray,
+	spectrumRawArray,
 }: LineAudioProps) => {
-  const $gl = $canvas.getContext('webgl2');
-  if (!$gl) return;
+	const $gl = $canvas.getContext('webgl2');
+	if (!$gl) return;
 
-  $gl.clear($gl.COLOR_BUFFER_BIT | $gl.DEPTH_BUFFER_BIT);
-  $gl.clearColor(0, 0, 0, 1);
+	$gl.clear($gl.COLOR_BUFFER_BIT | $gl.DEPTH_BUFFER_BIT);
+	$gl.clearColor(0, 0, 0, 1);
 
-  injectWaveArray({
-    waveArray: timeDomainRawArray,
-    $gl,
-    color: {
-      r: 1.0,
-      g: 0.0,
-      b: 1.0,
-    },
-    uniforms: {
-      u_length: timeDomainRawArray.length,
-      u_minValue: -1.0,
-      u_maxValue: 1.0,
-    },
-  });
+	injectWaveArray({
+		waveArray: timeDomainRawArray,
+		$gl,
+		color: {
+			r: 1.0,
+			g: 0.0,
+			b: 1.0,
+		},
+		uniforms: {
+			u_length: timeDomainRawArray.length,
+			u_minValue: -1.0,
+			u_maxValue: 1.0,
+		},
+	});
 
-  injectWaveArray({
-    waveArray: spectrumRawArray,
-    $gl,
-    color: {
-      r: 1.0,
-      g: 0.0,
-      b: 0.3,
-    },
-    uniforms: {
-      u_length: spectrumRawArray.length,
-      u_minValue: analyzer.minDecibels,
-      u_maxValue: analyzer.maxDecibels,
-    },
-  });
+	injectWaveArray({
+		waveArray: spectrumRawArray,
+		$gl,
+		color: {
+			r: 1.0,
+			g: 0.0,
+			b: 0.3,
+		},
+		uniforms: {
+			u_length: spectrumRawArray.length,
+			u_minValue: analyzer.minDecibels,
+			u_maxValue: analyzer.maxDecibels,
+		},
+	});
 };

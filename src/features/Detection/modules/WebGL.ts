@@ -2,30 +2,30 @@ import { WebGL as BaseWebGL } from '@/src/shared/modules/fluids';
 import { VisualDetection } from '@/utils/tensorflow';
 
 type Props = {
-  $wrapper: HTMLElement;
+	$wrapper: HTMLElement;
 };
 
 export default class WebGL extends BaseWebGL {
-  $video: HTMLVideoElement | null;
+	$video: HTMLVideoElement | null;
 
-  constructor({ $wrapper }: Props) {
-    super({ $wrapper });
-    this.$video = null;
-  }
+	constructor({ $wrapper }: Props) {
+		super({ $wrapper });
+		this.$video = null;
+	}
 
-  async initDetector({
-    width = window.innerWidth,
-    height = window.innerHeight,
-  }: {
-    width?: number;
-    height?: number;
-  }) {
-    const detector = new VisualDetection({
-      navigator: window.navigator,
-      document,
-      window,
-    });
-    await detector.load({ width, height });
-    return detector;
-  }
+	async initDetector({
+		width = window.innerWidth,
+		height = window.innerHeight,
+	}: {
+		width?: number;
+		height?: number;
+	}) {
+		const detector = new VisualDetection({
+			navigator: window.navigator,
+			document,
+			window,
+		});
+		await detector.load({ width, height });
+		return detector;
+	}
 }

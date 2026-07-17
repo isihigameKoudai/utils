@@ -5,9 +5,9 @@ import { queries } from './queries';
 import { initialState } from './state';
 
 export const DatabaseStore = defineStore({
-  state: initialState,
-  queries,
-  actions,
+	state: initialState,
+	queries,
+	actions,
 });
 
-export type { DatabaseState, ChromaStatus } from './type';
+export type { ChromaStatus, DatabaseState } from './type';

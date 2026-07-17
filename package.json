@@ -8,8 +8,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "lint": "eslint '{src,utils}/**/*.{ts,tsx}' --fix",
-    "format": "prettier --write '{src,utils}/**/*.{ts,tsx}'",
+    "lint": "biome check src utils",
+    "format": "biome check --write src utils",
     "claude": "npx tsx script/claude.ts",
     "generate:cursorrules": "node script/generate-cursor-rules.js \"**/*.ai.md\" \".cursor/rules/main.mdc\"",
     "tsr": "npx tsr -p tsconfig.src.json -w 'src/main\\.ts$' '.*\\.test\\.ts$'",
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@anthropic-ai/claude-code": "^2.0.14",
+    "@biomejs/biome": "^2.5.3",
     "@tanstack/router-devtools": "1.167.0",
     "@tanstack/router-plugin": "1.168.1",
     "@types/dat.gui": "^0.7.13",
@@ -44,28 +45,16 @@
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
     "@types/three": "^0.180.0",
-    "@typescript-eslint/eslint-plugin": "^8.46.0",
-    "@typescript-eslint/parser": "^8.46.0",
     "@vitejs/plugin-react": "^6.0.0",
-    "eslint": "^9.37.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-import-resolver-typescript": "^4.4.4",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.0",
-    "globals": "^16.4.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.4",
-    "prettier": "^3.6.2",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.0",
+    "typescript": "^7.0.2",
     "vite": "^8.0.0",
-    "vitest": "^3.2.4"
+    "vitest": "4.1.8"
   },
   "lint-staged": {
     "{src,utils}/**/*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
+      "biome check --write"
     ]
   }
 }

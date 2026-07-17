@@ -12,5 +12,5 @@ import type { Token } from './type';
  * ```
  */
 export const createToken = <T>(description: string): Token<T> => {
-  return Symbol(description) as Token<T>;
+	return Symbol(description) as Token<T>;
 };

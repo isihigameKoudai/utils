@@ -17,35 +17,35 @@ import type { EmbeddingResult, EmbeddingResultParams } from './types';
  * console.log(result.vectorNorm); // 1.2345
  */
 export const createEmbeddingResult = createModelFactory<
-  EmbeddingResultParams,
-  EmbeddingResult
+	EmbeddingResultParams,
+	EmbeddingResult
 >({
-  schema: embeddingResultSchema,
-  extension: (params) => {
-    const norm = Math.sqrt(
-      params.values.reduce((sum, val) => sum + val * val, 0),
-    );
-    const preview = params.values.slice(0, 100);
+	schema: embeddingResultSchema,
+	extension: (params) => {
+		const norm = Math.sqrt(
+			params.values.reduce((sum, val) => sum + val * val, 0),
+		);
+		const preview = params.values.slice(0, 100);
 
-    return {
-      get dimensionsLabel() {
-        return String(params.dimensions);
-      },
-      get executionTimeLabel() {
-        return `${params.executionTimeMs.toFixed(2)}ms`;
-      },
-      get vectorNorm() {
-        return norm;
-      },
-      get previewValues() {
-        return preview;
-      },
-      get previewString() {
-        const values = preview.join(', ');
-        return params.values.length > 100 ? `[${values}, ...]` : `[${values}]`;
-      },
-    };
-  },
+		return {
+			get dimensionsLabel() {
+				return String(params.dimensions);
+			},
+			get executionTimeLabel() {
+				return `${params.executionTimeMs.toFixed(2)}ms`;
+			},
+			get vectorNorm() {
+				return norm;
+			},
+			get previewValues() {
+				return preview;
+			},
+			get previewString() {
+				const values = preview.join(', ');
+				return params.values.length > 100 ? `[${values}, ...]` : `[${values}]`;
+			},
+		};
+	},
 });
 
 /**
@@ -53,7 +53,7 @@ export const createEmbeddingResult = createModelFactory<
  * @description 空判定
  */
 export const isEmbeddingResultEmpty = (
-  params: Partial<EmbeddingResultParams>,
+	params: Partial<EmbeddingResultParams>,
 ): boolean => {
-  return !params.values || params.values.length === 0;
+	return !params.values || params.values.length === 0;
 };

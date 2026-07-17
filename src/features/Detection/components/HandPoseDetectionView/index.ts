@@ -1,2 +1,2 @@
 export { HandPoseDetectionView } from './HandPoseDetectionView';
-export type { HandPoseDetectionViewProps, Hand } from './type';
+export type { Hand, HandPoseDetectionViewProps } from './type';

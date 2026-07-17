@@ -1,68 +1,72 @@
 import { Link } from '@tanstack/react-router';
-import React from 'react';
+import type React from 'react';
 
 import { routeList } from './constants';
 
 const Menu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 0,
-        display: 'grid',
-        gridTemplateColumns: '1fr 320px',
-      }}
-    >
-      <div
-        onClick={onClose}
-        style={{
-          background: 'rgba(250, 250, 250, 0.3)',
-          backdropFilter: 'blur(4px)',
-        }}
-      />
-      <nav
-        style={{
-          background: '#222222',
-          margin: 0,
-          padding: '64px 24px',
-          overflowY: 'scroll',
-        }}
-      >
-        <ul style={{ margin: 0, padding: 0 }}>
-          {routeList.map((item, i) => (
-            <li
-              style={{
-                listStyle: 'none',
-                fontSize: 18,
-                padding: 4,
-              }}
-              key={`link-${i}`}
-            >
-              <Link
-                style={{
-                  textDecoration: 'none',
-                  color: '#fefefe',
-                }}
-                to={item.menuPath || item.path}
-              >
-                {
-                  /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
-                  [...new Array(item.path.match(new RegExp('/', 'g'))?.length)]
-                    .map(() => '- ')
-                    .join(' ')
-                }
-                {item.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </div>
-  );
+	return (
+		<div
+			style={{
+				position: 'fixed',
+				top: 0,
+				bottom: 0,
+				left: 0,
+				right: 0,
+				zIndex: 0,
+				display: 'grid',
+				gridTemplateColumns: '1fr 320px',
+			}}
+		>
+			{/* biome-ignore lint/a11y/useKeyWithClickEvents: Backdrop click */}
+			{/* biome-ignore lint/a11y/noStaticElementInteractions: Backdrop click */}
+			{/* biome-ignore lint/a11y/noStaticElementInteractions: intentional */}
+			{/* biome-ignore lint/a11y/useKeyWithClickEvents: intentional */}
+			<div
+				onClick={onClose}
+				style={{
+					background: 'rgba(250, 250, 250, 0.3)',
+					backdropFilter: 'blur(4px)',
+				}}
+			/>
+			<nav
+				style={{
+					background: '#222222',
+					margin: 0,
+					padding: '64px 24px',
+					overflowY: 'scroll',
+				}}
+			>
+				<ul style={{ margin: 0, padding: 0 }}>
+					{routeList.map((item, _i) => (
+						<li
+							style={{
+								listStyle: 'none',
+								fontSize: 18,
+								padding: 4,
+							}}
+							key={item.path}
+						>
+							<Link
+								style={{
+									textDecoration: 'none',
+									color: '#fefefe',
+								}}
+								to={item.menuPath || item.path}
+							>
+								{
+									/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
+									[...new Array(item.path.match(/\//g)?.length)]
+										.map(() => '- ')
+										.join(' ')
+								}
+								{item.title}
+							</Link>
+						</li>
+					))}
+				</ul>
+			</nav>
+		</div>
+	);
 };
 
 export default Menu;

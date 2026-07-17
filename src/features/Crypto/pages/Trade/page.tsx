@@ -1,121 +1,121 @@
 import { useEffect, useState } from 'react';
 
 import { CryptoChart } from '../../components/CryptoChart';
-import { SYMBOLS, TIMEFRAME, type Symbol } from '../../constants';
+import { SYMBOLS, TIMEFRAME, type TokenSymbol } from '../../constants';
 import { useTrade } from '../../hooks/useTrade';
 
 import {
-  ActiveTimeframeButton,
-  AddSymbolArea,
-  ChartCell,
-  ChartGrid,
-  ChartHeader,
-  ErrorOverlay,
-  LoadingOverlay,
-  PageContainer,
-  PairLabel,
-  RemoveButton,
-  SymbolLink,
-  SymbolSelect,
-  TimeframeButton,
-  Toolbar,
+	ActiveTimeframeButton,
+	AddSymbolArea,
+	ChartCell,
+	ChartGrid,
+	ChartHeader,
+	ErrorOverlay,
+	LoadingOverlay,
+	PageContainer,
+	PairLabel,
+	RemoveButton,
+	SymbolLink,
+	SymbolSelect,
+	TimeframeButton,
+	Toolbar,
 } from './style';
 
 export const TradePage = () => {
-  const { queries, actions } = useTrade();
-  const [symbolToAdd, setSymbolToAdd] = useState<Symbol>('DOGE');
+	const { queries, actions } = useTrade();
+	const [symbolToAdd, setSymbolToAdd] = useState<TokenSymbol>('DOGE');
 
-  const selectedTimeframe = queries.selectedTimeframe;
-  const selectedSymbols = queries.selectedSymbols;
+	const selectedTimeframe = queries.selectedTimeframe;
+	const selectedSymbols = queries.selectedSymbols;
 
-  const availableSymbols = SYMBOLS.filter((s) => !selectedSymbols.includes(s));
+	const availableSymbols = SYMBOLS.filter((s) => !selectedSymbols.includes(s));
 
-  useEffect(() => {
-    void actions.fetchAllChartData();
-  }, []);
+	useEffect(() => {
+		void actions.fetchAllChartData();
+	}, [actions.fetchAllChartData]);
 
-  const handleAddSymbol = () => {
-    void actions.addSymbolAndFetch({ symbol: symbolToAdd });
+	const handleAddSymbol = () => {
+		void actions.addSymbolAndFetch({ symbol: symbolToAdd });
 
-    const nextAvailable = availableSymbols.filter((s) => s !== symbolToAdd);
-    if (nextAvailable.length > 0) {
-      setSymbolToAdd(nextAvailable[0]);
-    }
-  };
+		const nextAvailable = availableSymbols.filter((s) => s !== symbolToAdd);
+		if (nextAvailable.length > 0) {
+			setSymbolToAdd(nextAvailable[0]);
+		}
+	};
 
-  return (
-    <PageContainer>
-      <Toolbar>
-        {Object.values(TIMEFRAME).map(({ value: tf, label }) =>
-          tf === selectedTimeframe ? (
-            <ActiveTimeframeButton key={tf} type="button">
-              {label}
-            </ActiveTimeframeButton>
-          ) : (
-            <TimeframeButton
-              key={tf}
-              type="button"
-              onClick={() => void actions.changeTimeframe({ timeframe: tf })}
-            >
-              {label}
-            </TimeframeButton>
-          ),
-        )}
+	return (
+		<PageContainer>
+			<Toolbar>
+				{Object.values(TIMEFRAME).map(({ value: tf, label }) =>
+					tf === selectedTimeframe ? (
+						<ActiveTimeframeButton key={tf} type="button">
+							{label}
+						</ActiveTimeframeButton>
+					) : (
+						<TimeframeButton
+							key={tf}
+							type="button"
+							onClick={() => void actions.changeTimeframe({ timeframe: tf })}
+						>
+							{label}
+						</TimeframeButton>
+					),
+				)}
 
-        {availableSymbols.length > 0 && (
-          <AddSymbolArea>
-            <SymbolSelect
-              value={symbolToAdd}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                setSymbolToAdd(e.target.value as Symbol)
-              }
-            >
-              {availableSymbols.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </SymbolSelect>
-            <TimeframeButton type="button" onClick={handleAddSymbol}>
-              追加
-            </TimeframeButton>
-          </AddSymbolArea>
-        )}
-      </Toolbar>
+				{availableSymbols.length > 0 && (
+					<AddSymbolArea>
+						<SymbolSelect
+							value={symbolToAdd}
+							onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+								setSymbolToAdd(e.target.value as TokenSymbol)
+							}
+						>
+							{availableSymbols.map((s) => (
+								<option key={s} value={s}>
+									{s}
+								</option>
+							))}
+						</SymbolSelect>
+						<TimeframeButton type="button" onClick={handleAddSymbol}>
+							追加
+						</TimeframeButton>
+					</AddSymbolArea>
+				)}
+			</Toolbar>
 
-      <ChartGrid>
-        {selectedSymbols.map((symbol) => {
-          const chartData = queries.chartDataFor(symbol, selectedTimeframe);
-          const isLoading = queries.isLoadingFor(symbol, selectedTimeframe);
-          const error = queries.errorFor(symbol, selectedTimeframe);
+			<ChartGrid>
+				{selectedSymbols.map((symbol) => {
+					const chartData = queries.chartDataFor(symbol, selectedTimeframe);
+					const isLoading = queries.isLoadingFor(symbol, selectedTimeframe);
+					const error = queries.errorFor(symbol, selectedTimeframe);
 
-          return (
-            <ChartCell key={symbol}>
-              <ChartHeader>
-                <div>
-                  <SymbolLink to={`/trade/${symbol}`}>{symbol}</SymbolLink>
-                  <PairLabel>/USDT</PairLabel>
-                </div>
-                <RemoveButton
-                  type="button"
-                  onClick={() => actions.removeSymbol({ symbol })}
-                >
-                  ✕
-                </RemoveButton>
-              </ChartHeader>
+					return (
+						<ChartCell key={symbol}>
+							<ChartHeader>
+								<div>
+									<SymbolLink to={`/trade/${symbol}`}>{symbol}</SymbolLink>
+									<PairLabel>/USDT</PairLabel>
+								</div>
+								<RemoveButton
+									type="button"
+									onClick={() => actions.removeSymbol({ symbol })}
+								>
+									✕
+								</RemoveButton>
+							</ChartHeader>
 
-              {isLoading && <LoadingOverlay>読み込み中...</LoadingOverlay>}
-              {error && <ErrorOverlay>{error}</ErrorOverlay>}
-              {!isLoading && !error && chartData && (
-                <CryptoChart data={chartData} isDark />
-              )}
-              {!isLoading && !error && !chartData && (
-                <LoadingOverlay>データなし</LoadingOverlay>
-              )}
-            </ChartCell>
-          );
-        })}
-      </ChartGrid>
-    </PageContainer>
-  );
+							{isLoading && <LoadingOverlay>読み込み中...</LoadingOverlay>}
+							{error && <ErrorOverlay>{error}</ErrorOverlay>}
+							{!isLoading && !error && chartData && (
+								<CryptoChart data={chartData} isDark />
+							)}
+							{!isLoading && !error && !chartData && (
+								<LoadingOverlay>データなし</LoadingOverlay>
+							)}
+						</ChartCell>
+					);
+				})}
+			</ChartGrid>
+		</PageContainer>
+	);
 };

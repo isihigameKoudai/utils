@@ -1,2 +1,2 @@
 export { PoseDetection } from './PoseDetection';
-export { type Pose } from './type';
+export type { Pose } from './type';

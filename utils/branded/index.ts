@@ -3,9 +3,9 @@ import type { Branded } from './type';
 export type { Branded };
 
 export const defineBranded = <T, Brand extends string>(
-  value: T,
+	value: T,
 ): Branded<T, Brand> => {
-  return value as Branded<T, Brand>;
+	return value as Branded<T, Brand>;
 };
 
 /**
@@ -22,17 +22,17 @@ export const defineBranded = <T, Brand extends string>(
  * const p2 = percent(110);
  */
 export const defineBrandedFactory = <T, Brand extends string>(
-  brand: Brand,
-  validator?: (value: T) => boolean,
+	brand: Brand,
+	validator?: (value: T) => boolean,
 ) => {
-  const isBranded = (value: T): value is Branded<T, Brand> => {
-    if (!validator) return true;
-    return validator(value);
-  };
+	const isBranded = (value: T): value is Branded<T, Brand> => {
+		if (!validator) return true;
+		return validator(value);
+	};
 
-  return (v: T): Branded<T, Brand> => {
-    if (!isBranded(v)) throw new Error(`Invalid ${brand}`);
+	return (v: T): Branded<T, Brand> => {
+		if (!isBranded(v)) throw new Error(`Invalid ${brand}`);
 
-    return v;
-  };
+		return v;
+	};
 };

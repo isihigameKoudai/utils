@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import type * as THREE from 'three';
 
 import divergence_frag from './glsl/sim/divergence.frag?raw';
 import face_vert from './glsl/sim/face.vert?raw';
@@ -6,43 +6,43 @@ import ShaderPass from './ShaderPass';
 import type { SimProps } from './types/Sim';
 
 interface Props extends SimProps {
-  boundarySpace: THREE.Vector2;
-  dst: THREE.WebGLRenderTarget;
-  src: THREE.WebGLRenderTarget;
-  dt: number;
+	boundarySpace: THREE.Vector2;
+	dst: THREE.WebGLRenderTarget;
+	src: THREE.WebGLRenderTarget;
+	dt: number;
 }
 
 export default class Divergence extends ShaderPass {
-  constructor(simProps: Props) {
-    super({
-      material: {
-        vertexShader: face_vert,
-        fragmentShader: divergence_frag,
-        uniforms: {
-          boundarySpace: {
-            value: simProps.boundarySpace,
-          },
-          velocity: {
-            value: simProps.src.texture,
-          },
-          px: {
-            value: simProps.cellScale,
-          },
-          dt: {
-            value: simProps.dt,
-          },
-        },
-      },
-      output: simProps.dst,
-    });
+	constructor(simProps: Props) {
+		super({
+			material: {
+				vertexShader: face_vert,
+				fragmentShader: divergence_frag,
+				uniforms: {
+					boundarySpace: {
+						value: simProps.boundarySpace,
+					},
+					velocity: {
+						value: simProps.src.texture,
+					},
+					px: {
+						value: simProps.cellScale,
+					},
+					dt: {
+						value: simProps.dt,
+					},
+				},
+			},
+			output: simProps.dst,
+		});
 
-    this.init();
-  }
+		this.init();
+	}
 
-  updateDivergence({ vel }: { vel: THREE.WebGLRenderTarget }) {
-    if (this.uniforms) {
-      this.uniforms.velocity.value = vel.texture;
-    }
-    super.update();
-  }
+	updateDivergence({ vel }: { vel: THREE.WebGLRenderTarget }) {
+		if (this.uniforms) {
+			this.uniforms.velocity.value = vel.texture;
+		}
+		super.update();
+	}
 }

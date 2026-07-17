@@ -1,33 +1,33 @@
 import { useCallback, useMemo } from 'react';
 
 import { tokenDetailApi } from '../api/tokenDetail';
-import type { Symbol } from '../constants';
+import type { TokenSymbol } from '../constants';
 import { createTokenDetailService } from '../services/tokenDetail';
 import { TokenDetailStore } from '../stores/tokenDetail';
 
 export const useTokenDetail = () => {
-  const { queries, actions } = TokenDetailStore.useStore();
+	const { queries, actions } = TokenDetailStore.useStore();
 
-  const service = useMemo(
-    () => createTokenDetailService({ api: tokenDetailApi, actions }),
-    [actions],
-  );
+	const service = useMemo(
+		() => createTokenDetailService({ api: tokenDetailApi, actions }),
+		[actions],
+	);
 
-  const initialize = useCallback(
-    (token: Symbol) => {
-      void service.initialize(token);
-    },
-    [service],
-  );
+	const initialize = useCallback(
+		(token: TokenSymbol) => {
+			void service.initialize(token);
+		},
+		[service],
+	);
 
-  const fetchAllTimeframes = useCallback(
-    (token: Symbol) => service.fetchAllTimeframes(token),
-    [service],
-  );
+	const fetchAllTimeframes = useCallback(
+		(token: TokenSymbol) => service.fetchAllTimeframes(token),
+		[service],
+	);
 
-  return {
-    queries,
-    initialize,
-    fetchAllTimeframes,
-  };
+	return {
+		queries,
+		initialize,
+		fetchAllTimeframes,
+	};
 };

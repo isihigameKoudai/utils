@@ -1,47 +1,47 @@
 interface Params {
-  navigator: Navigator;
+	navigator: Navigator;
 }
 
 export class Media {
-  private _stream: MediaStream | null;
+	private _stream: MediaStream | null;
 
-  private navigator: Navigator;
+	private navigator: Navigator;
 
-  constructor(params: Params) {
-    this._stream = null;
-    this.navigator = params.navigator;
-  }
+	constructor(params: Params) {
+		this._stream = null;
+		this.navigator = params.navigator;
+	}
 
-  get stream() {
-    return this._stream;
-  }
+	get stream() {
+		return this._stream;
+	}
 
-  /**
-   * ユーザメディアを取得する
-   * @param constraints
-   * @returns
-   */
-  async getUserMedia(constraints: MediaStreamConstraints) {
-    try {
-      const stream =
-        await this.navigator.mediaDevices.getUserMedia(constraints);
-      this._stream = stream;
-      return stream;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
+	/**
+	 * ユーザメディアを取得する
+	 * @param constraints
+	 * @returns
+	 */
+	async getUserMedia(constraints: MediaStreamConstraints) {
+		try {
+			const stream =
+				await this.navigator.mediaDevices.getUserMedia(constraints);
+			this._stream = stream;
+			return stream;
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	}
 
-  deleteStream() {
-    this.stream?.getVideoTracks().forEach((videoStream) => {
-      videoStream.enabled = false;
-      videoStream.stop();
-    });
-    this.stream?.getAudioTracks().forEach((audioStream) => {
-      audioStream.enabled = false;
-      audioStream.stop();
-    });
-    this._stream = null;
-  }
+	deleteStream() {
+		this.stream?.getVideoTracks().forEach((videoStream) => {
+			videoStream.enabled = false;
+			videoStream.stop();
+		});
+		this.stream?.getAudioTracks().forEach((audioStream) => {
+			audioStream.enabled = false;
+			audioStream.stop();
+		});
+		this._stream = null;
+	}
 }

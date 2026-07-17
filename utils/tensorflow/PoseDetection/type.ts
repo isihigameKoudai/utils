@@ -1,13 +1,13 @@
 export type Keypoint = {
-  x: number;
-  y: number;
-  score?: number;
-  name?: string;
+	x: number;
+	y: number;
+	score?: number;
+	name?: string;
 };
 
 export type Pose = {
-  keypoints: Keypoint[];
-  score: number;
+	keypoints: Keypoint[];
+	score: number;
 };
 
 export type ModelType = 'MoveNet' | 'BlazePose' | 'PoseNet';

@@ -16,46 +16,46 @@ import type { ChartDataItem, SortOrder } from './types';
  * @param groupingType - グルーピングの種類
  */
 export const useBillChartData = (
-  bills: Bill[],
-  groupingType: 'none' | 'store' | 'month',
+	bills: Bill[],
+	groupingType: 'none' | 'store' | 'month',
 ) => {
-  const [sortOrder, setSortOrder] = useState<SortOrder>('none');
+	const [sortOrder, setSortOrder] = useState<SortOrder>('none');
 
-  const data = useMemo<ChartDataItem[]>(() => {
-    // 請求書データをチャート表示用の形式にマッピング
-    const mapped = bills.map((bill, index) => {
-      let name = '';
-      switch (groupingType) {
-        case 'store':
-          name = bill.store;
-          break;
-        case 'month':
-          name = bill.date.format('YYYY-MM');
-          break;
-        default:
-          name = `${bill.date.format('MM/DD')} ${bill.store}`;
-          break;
-      }
+	const data = useMemo<ChartDataItem[]>(() => {
+		// 請求書データをチャート表示用の形式にマッピング
+		const mapped = bills.map((bill, index) => {
+			let name = '';
+			switch (groupingType) {
+				case 'store':
+					name = bill.store;
+					break;
+				case 'month':
+					name = bill.date.format('YYYY-MM');
+					break;
+				default:
+					name = `${bill.date.format('MM/DD')} ${bill.store}`;
+					break;
+			}
 
-      return {
-        name,
-        amount: bill.amount,
-        originalIndex: index,
-      };
-    });
+			return {
+				name,
+				amount: bill.amount,
+				originalIndex: index,
+			};
+		});
 
-    // ソート順序に応じてデータを並び替え
-    if (sortOrder === 'asc') {
-      return [...mapped].sort((a, b) => a.amount - b.amount);
-    }
-    if (sortOrder === 'desc') {
-      return [...mapped].sort((a, b) => b.amount - a.amount);
-    }
-    // 元の順序に戻す
-    return [...mapped].sort((a, b) => a.originalIndex - b.originalIndex);
-  }, [bills, groupingType, sortOrder]);
+		// ソート順序に応じてデータを並び替え
+		if (sortOrder === 'asc') {
+			return [...mapped].sort((a, b) => a.amount - b.amount);
+		}
+		if (sortOrder === 'desc') {
+			return [...mapped].sort((a, b) => b.amount - a.amount);
+		}
+		// 元の順序に戻す
+		return [...mapped].sort((a, b) => a.originalIndex - b.originalIndex);
+	}, [bills, groupingType, sortOrder]);
 
-  return { data, sortOrder, setSortOrder };
+	return { data, sortOrder, setSortOrder };
 };
 
 /**
@@ -65,28 +65,28 @@ export const useBillChartData = (
  * @param sortOrder - 現在のソート順序
  */
 export const useTop20Indices = (
-  data: ChartDataItem[],
-  sortOrder: SortOrder,
+	data: ChartDataItem[],
+	sortOrder: SortOrder,
 ): Set<number> => {
-  return useMemo(() => {
-    // ソートが無効な場合は空のSetを返す
-    if (sortOrder === 'none') {
-      return new Set<number>();
-    }
+	return useMemo(() => {
+		// ソートが無効な場合は空のSetを返す
+		if (sortOrder === 'none') {
+			return new Set<number>();
+		}
 
-    // 金額で降順ソートしてインデックスを取得
-    const sortedByAmount = [...data]
-      .map((item, index) => ({ ...item, currentIndex: index }))
-      .sort((a, b) => b.amount - a.amount);
+		// 金額で降順ソートしてインデックスを取得
+		const sortedByAmount = [...data]
+			.map((item, index) => ({ ...item, currentIndex: index }))
+			.sort((a, b) => b.amount - a.amount);
 
-    const top20Count = Math.ceil(data.length * TOP_PERCENTAGE);
-    const top20Set = new Set<number>();
+		const top20Count = Math.ceil(data.length * TOP_PERCENTAGE);
+		const top20Set = new Set<number>();
 
-    // 上位20%のインデックスをSetに追加
-    for (let i = 0; i < top20Count; i++) {
-      top20Set.add(sortedByAmount[i].currentIndex);
-    }
+		// 上位20%のインデックスをSetに追加
+		for (let i = 0; i < top20Count; i++) {
+			top20Set.add(sortedByAmount[i].currentIndex);
+		}
 
-    return top20Set;
-  }, [data, sortOrder]);
+		return top20Set;
+	}, [data, sortOrder]);
 };

@@ -6,26 +6,25 @@ import type { Theme } from './type';
 
 // グローバルなテーマコンテナを保持する変数
 let ThemeContainer:
-  | ReturnType<typeof createContainer<{ theme: Theme }, Theme>>
-  | undefined = undefined;
+	| ReturnType<typeof createContainer<{ theme: Theme }, Theme>>
+	| undefined;
 
 export const createTheme = (theme: Theme) => {
-  // テーマコンテナを作成
-  ThemeContainer = createContainer<{ theme: Theme }, Theme>(
-    (initialState = theme) => {
-      const [theme, setTheme] = useState(initialState);
-      return { theme, setTheme };
-    },
-  );
+	// テーマコンテナを作成
+	ThemeContainer = createContainer<{ theme: Theme }, Theme>(
+		(initialState = theme) => {
+			const [theme, setTheme] = useState(initialState);
+			return { theme, setTheme };
+		},
+	);
 
-  return ThemeContainer;
+	return ThemeContainer;
 };
 
 // テーマを取得するためのヘルパー関数
 export const useTheme = () => {
-  try {
-    return ThemeContainer?.useContainer();
-  } catch (error) {
-    console.error('Error in useTheme:', error);
-  }
+	if (!ThemeContainer) {
+		throw new Error('useTheme must be used after createTheme is called');
+	}
+	return ThemeContainer.useContainer();
 };

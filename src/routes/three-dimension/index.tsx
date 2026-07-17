@@ -1,7 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router';
-
-import BoxPage from '@/src/features/ThreeDimension/pages/BoxPage';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/three-dimension/')({
-  component: BoxPage,
+	beforeLoad: () => {
+		throw redirect({
+			to: '/three-dimension/shadows',
+		});
+	},
 });
