@@ -137,4 +137,8 @@ export const routeList: IRoute[] = [
 		title: 'CSVスプレッドシート',
 		path: '/csv-spreadsheet',
 	},
+	{
+		title: 'Generative UI (A2UI)',
+		path: '/generative-ui',
+	},
 ];

@@ -1,0 +1,1 @@
+export { GenerativeUIPage } from './page';

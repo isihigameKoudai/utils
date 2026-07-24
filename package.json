@@ -16,6 +16,8 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@a2ui/react": "^0.10.1",
+    "@a2ui/web_core": "^0.10.4",
     "@google/genai": "^1.51.0",
     "@mediapipe/tasks-vision": "^0.10.14",
     "@react-three/drei": "^10.7.6",
