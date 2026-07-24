@@ -1,15 +1,2 @@
-export { default as Advection } from './Advection';
-export { default as Common } from './Common';
-export { type ControlProps, default as Controls } from './Controls';
-export { default as Divergence } from './Divergence';
-export { default as ExternalForce } from './ExternalForce';
 export { default as Mouse } from './Mouse';
-export { default as Output } from './Output';
-export { default as Poisson } from './Poisson';
-export { default as Pressure } from './Pressure';
-export { default as ShaderPass } from './ShaderPass';
-export { default as Simulation } from './Simulation';
-export type { SimProps } from './types/Sim';
-export { createFbos, type Fbos } from './utils/createFbos';
-export { default as Viscous } from './Viscous';
 export { default as WebGL } from './WebGL';

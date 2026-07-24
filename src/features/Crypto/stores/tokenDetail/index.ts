@@ -4,12 +4,7 @@ import { actions } from './actions';
 import { queries } from './queries';
 import { initialState } from './state';
 
-export type {
-	TokenDetailChartData,
-	TokenDetailErrorState,
-	TokenDetailLoadingState,
-	TokenDetailState,
-} from './type';
+export type { TokenDetailErrorState, TokenDetailLoadingState } from './type';
 
 export const TokenDetailStore = defineStore({
 	state: initialState,

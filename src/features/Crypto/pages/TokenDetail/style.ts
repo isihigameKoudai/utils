@@ -77,9 +77,3 @@ export const Overlay = styled('div')({
 	fontSize: '0.875rem',
 	color: '#8b949e',
 });
-
-export const ErrorText = styled('p')({
-	margin: 0,
-	color: '#f85149',
-	fontSize: '0.875rem',
-});
