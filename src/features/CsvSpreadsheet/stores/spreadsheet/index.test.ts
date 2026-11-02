@@ -66,6 +66,19 @@ describe('serializeCell', () => {
 	it('空文字列はそのまま返す', () => {
 		expect(serializeCell('')).toBe('');
 	});
+
+	it('= で始まる値は数式として解釈されないよう無害化する', () => {
+		expect(serializeCell('=2+2')).toBe("'=2+2");
+	});
+
+	it('+ や - で始まる値も無害化する', () => {
+		expect(serializeCell('+1+1')).toBe("'+1+1");
+		expect(serializeCell('-2+3')).toBe("'-2+3");
+	});
+
+	it('@ で始まる値も無害化する', () => {
+		expect(serializeCell('@SUM(A1:A2)')).toBe("'@SUM(A1:A2)");
+	});
 });
 
 describe('queries', () => {

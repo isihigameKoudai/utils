@@ -33,6 +33,19 @@ const MODELS = {
 	GEMINI_3_FLASH_PREVIEW: 'gemini-3-flash-preview',
 } as const;
 
+/**
+ * ArrayBuffer を base64 に変換する（チャンク分割で O(n)、スタックオーバーフロー回避）
+ */
+const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
+	const bytes = new Uint8Array(buffer);
+	let binary = '';
+	const CHUNK_SIZE = 0x8000;
+	for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
+		binary += String.fromCharCode(...bytes.subarray(i, i + CHUNK_SIZE));
+	}
+	return btoa(binary);
+};
+
 export const defineGemini = (config: DefineConfig) => {
 	const ai = new GoogleGenAI(config.root);
 
@@ -80,12 +93,7 @@ export const defineGemini = (config: DefineConfig) => {
 		}
 
 		const arrayBuffer = await file.arrayBuffer();
-		const base64 = btoa(
-			new Uint8Array(arrayBuffer).reduce(
-				(data, byte) => data + String.fromCharCode(byte),
-				'',
-			),
-		);
+		const base64 = arrayBufferToBase64(arrayBuffer);
 
 		const parts: Content['parts'] = [];
 		if (text) {
@@ -214,12 +222,7 @@ export const defineGemini = (config: DefineConfig) => {
 		}
 
 		const arrayBuffer = await file.arrayBuffer();
-		const base64 = btoa(
-			new Uint8Array(arrayBuffer).reduce(
-				(data, byte) => data + String.fromCharCode(byte),
-				'',
-			),
-		);
+		const base64 = arrayBufferToBase64(arrayBuffer);
 
 		const parts: Content['parts'] = [];
 		if (text) {
