@@ -1,5 +1,7 @@
 import type React from 'react';
+import { useState } from 'react';
 
+import { getGeminiApiKey, setGeminiApiKey } from '../../api';
 import { ALL_SUPPORTED_TYPES } from '../../constants';
 import { useEmbeddingFeature } from '../../hooks';
 import type { ChromaStatus } from '../../stores/database';
@@ -73,6 +75,8 @@ export const GeminiEmbeddingPage: React.FC = () => {
 		setSearchOrder,
 	} = useEmbeddingFeature();
 
+	const [apiKey, setApiKey] = useState(() => getGeminiApiKey());
+
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		setSelectedFile(file ?? null);
@@ -86,6 +90,22 @@ export const GeminiEmbeddingPage: React.FC = () => {
 				model (text, image, video, audio, PDF)
 			</Subtitle>
 
+			<Section>
+				<Label htmlFor="geminiApiKey">Gemini API Key</Label>
+				<Input
+					id="geminiApiKey"
+					type="password"
+					placeholder="Paste your Gemini API key (starts with AIza…)"
+					value={apiKey}
+					autoComplete="off"
+					onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+						const next = e.target.value;
+						setApiKey(next);
+						setGeminiApiKey(next);
+					}}
+				/>
+			</Section>
+
 			<InfoBox>
 				<strong>Note:</strong> Get your API key from{' '}
 				<a
@@ -96,7 +116,8 @@ export const GeminiEmbeddingPage: React.FC = () => {
 				>
 					Google AI Studio
 				</a>
-				. Your key is stored locally and never sent to our servers.
+				. The key you enter above is stored only in this browser (localStorage)
+				and is never sent to our servers or bundled into the app.
 			</InfoBox>
 
 			<div style={{ display: 'flex', flexDirection: 'column' }}>

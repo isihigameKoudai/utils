@@ -1,4 +1,3 @@
-import { isTruthy } from '../guards';
 import { deferred } from '../promise/promise';
 
 import type { FetchFiles, Option } from './type';
@@ -67,12 +66,50 @@ export const readCsvFileAsText = async (file: File): Promise<string> => {
  * @param csv
  * @returns
  */
-export const csv2array = (csv: string): string[][] =>
-	csv
-		.replaceAll('\r', '')
-		.split('\n')
-		.filter(isTruthy)
-		.map((row) => row.split(',').map((cell) => cell.replace(/^"|"$/g, '')));
+export const csv2array = (csv: string): string[][] => {
+	const rows: string[][] = [];
+	let row: string[] = [];
+	let field = '';
+	let inQuotes = false;
+
+	for (let i = 0; i < csv.length; i++) {
+		const char = csv[i];
+
+		if (inQuotes) {
+			if (char === '"') {
+				if (csv[i + 1] === '"') {
+					field += '"';
+					i++;
+				} else {
+					inQuotes = false;
+				}
+			} else {
+				field += char;
+			}
+		} else if (char === '"') {
+			inQuotes = true;
+		} else if (char === ',') {
+			row.push(field);
+			field = '';
+		} else if (char === '\n') {
+			row.push(field);
+			rows.push(row);
+			row = [];
+			field = '';
+		} else if (char !== '\r') {
+			field += char;
+		}
+	}
+
+	// 末尾の未確定フィールド／行を処理する
+	if (field !== '' || row.length > 0) {
+		row.push(field);
+		rows.push(row);
+	}
+
+	// 完全に空の行（空文字列のみの行）は除外する（従来の挙動を維持）
+	return rows.filter((r) => !(r.length === 1 && r[0] === ''));
+};
 
 /**
  * 2次元配列をCSV形式のテキストに変換する
@@ -85,8 +122,20 @@ export const csv2array = (csv: string): string[][] =>
  * ]);
  * => 'header1,header2,header3\nddddddd,eeeeeee,fffffff\nggggggg,hhhhhhh,iiiiiii'
  */
+const escapeCsvCell = (cell: string): string => {
+	if (
+		cell.includes(',') ||
+		cell.includes('"') ||
+		cell.includes('\n') ||
+		cell.includes('\r')
+	) {
+		return `"${cell.replace(/"/g, '""')}"`;
+	}
+	return cell;
+};
+
 export const array2csv = (array: string[][]): string =>
-	array.map((row) => row.join(',')).join('\n');
+	array.map((row) => row.map(escapeCsvCell).join(',')).join('\n');
 
 /**
  * CSV形式のテキストをjsonに変換する

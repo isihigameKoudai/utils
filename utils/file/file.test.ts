@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+	array2csv,
 	csv2array,
 	decodeCsvBuffer,
 	mergeArrayedCSVs,
@@ -125,5 +126,41 @@ describe('decodeCsvBuffer', () => {
 			0x83, 0x65, 0x83, 0x58, 0x83, 0x67, 0x2c, 0x31, 0x30, 0x30, 0x30,
 		]);
 		expect(decodeCsvBuffer(shiftJisBytes)).toBe('テスト,1000');
+	});
+});
+
+describe('csv2array (引用フィールド)', () => {
+	it('引用符で囲まれたカンマを含むセルを正しく処理できる', () => {
+		const input = '"a,b",c\n"d""e",f\n';
+		const expected = [
+			['a,b', 'c'],
+			['d"e', 'f'],
+		];
+		expect(csv2array(input)).toEqual(expected);
+	});
+
+	it('引用符内の改行を保持して処理できる', () => {
+		const input = '"line1\nline2",x\n';
+		const expected = [['line1\nline2', 'x']];
+		expect(csv2array(input)).toEqual(expected);
+	});
+});
+
+describe('array2csv', () => {
+	it('カンマ・引用符・改行を含むセルをエスケープして直列化できる', () => {
+		const input = [
+			['a', 'b,c', 'd"e'],
+			['x\ny', 'z'],
+		];
+		expect(array2csv(input)).toBe('a,"b,c","d""e"\n"x\ny",z');
+	});
+
+	it('単純な値はそのまま直列化できる', () => {
+		expect(
+			array2csv([
+				['a', 'b', 'c'],
+				['1', '2', '3'],
+			]),
+		).toBe('a,b,c\n1,2,3');
 	});
 });

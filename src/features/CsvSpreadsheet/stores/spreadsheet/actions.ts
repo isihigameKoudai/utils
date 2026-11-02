@@ -4,11 +4,31 @@ import type { ActionsProps } from '@/utils/i-state';
 import type { queries } from './queries';
 import type { CellPosition, CsvSpreadsheetState } from './type';
 
+const isFormulaPrefix = (value: string): boolean => {
+	if (value.length === 0) return false;
+	const first = value.charCodeAt(0);
+	// = (0x3d), + (0x2b), - (0x2d), @ (0x40), タブ (0x09), CR (0x0d)
+	return (
+		first === 0x3d ||
+		first === 0x2b ||
+		first === 0x2d ||
+		first === 0x40 ||
+		first === 0x09 ||
+		first === 0x0d
+	);
+};
+
 export const serializeCell = (value: string): string => {
-	if (value.includes(',') || value.includes('"') || value.includes('\n')) {
-		return `"${value.replace(/"/g, '""')}"`;
+	// スプレッドシートで数式として評価される値（=, +, -, @, タブ, CR で始まる）は
+	// 先頭に ' を付与して無害化する（CSV / フォーミュラインジェクション対策）。
+	let safe = value;
+	if (isFormulaPrefix(safe)) {
+		safe = `'${safe}`;
 	}
-	return value;
+	if (safe.includes(',') || safe.includes('"') || safe.includes('\n')) {
+		return `"${safe.replace(/"/g, '""')}"`;
+	}
+	return safe;
 };
 
 export const actions = {
