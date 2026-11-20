@@ -44,9 +44,9 @@ export default class Simulation {
 		this.boundarySpace = new THREE.Vector2();
 
 		// clacSize
-		// biome-ignore lint/style/noNonNullAssertion: intentional
+		// oxlint-disable-next-line typescript/no-non-null-assertion -- intentional
 		const width = Math.round(this.options.resolution * Common.width!);
-		// biome-ignore lint/style/noNonNullAssertion: intentional
+		// oxlint-disable-next-line typescript/no-non-null-assertion -- intentional
 		const height = Math.round(this.options.resolution * Common.height!);
 
 		const px_x = 1.0 / width;

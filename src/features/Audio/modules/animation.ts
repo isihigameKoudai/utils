@@ -144,7 +144,7 @@ const injectWaveArray = ({
 		createShader($gl, renderLineVertex, $gl.VERTEX_SHADER),
 		createShader($gl, renderLineFragment, $gl.FRAGMENT_SHADER),
 	);
-	// biome-ignore lint/correctness/useHookAtTopLevel: useProgram is WebGL method
+	// oxlint-disable-next-line react-hooks/rules-of-hooks -- useProgram is WebGL method
 	$gl?.useProgram(program);
 	const uniformKeys = Object.keys(uniforms);
 	const uniformLocs = getUniformLocs($gl, program, [...uniformKeys, 'u_color']);

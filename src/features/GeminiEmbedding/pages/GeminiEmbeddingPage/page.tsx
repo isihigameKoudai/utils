@@ -209,7 +209,7 @@ export const GeminiEmbeddingPage: React.FC = () => {
 										/>
 									)}
 									{selectedFile.type.startsWith('video/') && (
-										// biome-ignore lint/a11y/useMediaCaption: File preview
+										// oxlint-disable-next-line jsx-a11y/media-has-caption -- File preview
 										<video
 											src={filePreviewUrl}
 											controls
@@ -221,7 +221,7 @@ export const GeminiEmbeddingPage: React.FC = () => {
 										/>
 									)}
 									{selectedFile.type.startsWith('audio/') && (
-										// biome-ignore lint/a11y/useMediaCaption: File preview
+										// oxlint-disable-next-line jsx-a11y/media-has-caption -- File preview
 										<audio
 											src={filePreviewUrl}
 											controls

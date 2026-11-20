@@ -39,7 +39,7 @@ class Mouse {
 
 	setCoords(x: number, y: number) {
 		if (this.timer) clearTimeout(this.timer);
-		// biome-ignore lint/style/noNonNullAssertion: width and height are initialized
+		// oxlint-disable-next-line typescript/no-non-null-assertion -- width and height are initialized
 		this.coords.set((x / Common.width!) * 2 - 1, -(y / Common.height!) * 2 + 1);
 		this.mouseMoved = true;
 		this.timer = setTimeout(() => {

@@ -19,7 +19,7 @@ const VisualDetectionView = forwardRef<HTMLDivElement, Props>(
 			>
 				{objects.map((obj, index) => {
 					return (
-						// biome-ignore lint/suspicious/noArrayIndexKey: Detection objects don't have unique IDs
+						// oxlint-disable-next-line react/no-array-index-key -- Detection objects don't have unique IDs
 						<React.Fragment key={index}>
 							<p
 								style={{

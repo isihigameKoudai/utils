@@ -17,10 +17,10 @@ const Menu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 				gridTemplateColumns: '1fr 320px',
 			}}
 		>
-			{/* biome-ignore lint/a11y/useKeyWithClickEvents: Backdrop click */}
-			{/* biome-ignore lint/a11y/noStaticElementInteractions: Backdrop click */}
-			{/* biome-ignore lint/a11y/noStaticElementInteractions: intentional */}
-			{/* biome-ignore lint/a11y/useKeyWithClickEvents: intentional */}
+			{/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events -- Backdrop click */}
+			{/* oxlint-disable-next-line jsx-a11y/no-static-element-interactions -- Backdrop click */}
+			{/* oxlint-disable-next-line jsx-a11y/no-static-element-interactions -- intentional */}
+			{/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events -- intentional */}
 			<div
 				onClick={onClose}
 				style={{

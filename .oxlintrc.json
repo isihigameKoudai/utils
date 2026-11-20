@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "react", "jsx-a11y"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "options": {
+    "typeAware": true
+  },
+  "rules": {
+    "jsx-a11y/anchor-is-valid": "off",
+    "typescript/consistent-type-imports": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "typescript/no-non-null-assertion": "warn",
+    "typescript/no-explicit-any": "warn",
+    "react/no-array-index-key": "warn",
+    "react-hooks/rules-of-hooks": "error"
+  },
+  "ignorePatterns": [
+    "dist",
+    "node_modules",
+    "public",
+    "vite.config.ts",
+    "**/*.gen.*"
+  ]
+}

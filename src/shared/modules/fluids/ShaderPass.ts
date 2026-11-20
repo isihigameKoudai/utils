@@ -38,9 +38,9 @@ export default class ShaderPass {
 	}
 
 	update() {
-		// biome-ignore lint/style/noNonNullAssertion: intentional
+		// oxlint-disable-next-line typescript/no-non-null-assertion -- intentional
 		Common.renderer?.setRenderTarget(this.props.output!);
-		// biome-ignore lint/style/noNonNullAssertion: intentional
+		// oxlint-disable-next-line typescript/no-non-null-assertion -- intentional
 		Common.renderer?.render(this.scene!, this.camera!);
 		Common.renderer?.setRenderTarget(null);
 	}

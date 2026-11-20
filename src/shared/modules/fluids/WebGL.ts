@@ -15,7 +15,7 @@ export default class WebGL {
 		Common.init();
 		Mouse.init();
 
-		// biome-ignore lint/style/noNonNullAssertion: renderer is initialized by Common.init() above
+		// oxlint-disable-next-line typescript/no-non-null-assertion -- renderer is initialized by Common.init() above
 		this.$wrapper.prepend(Common.renderer!.domElement);
 		this.output = new Output();
 		this.loop();

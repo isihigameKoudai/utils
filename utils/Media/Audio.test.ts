@@ -30,7 +30,7 @@ describe('Audio', () => {
 		// MediaStreamAudioSourceNodeのモック
 		mockMediaSource = mediaSourceMock;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		// biome-ignore lint/suspicious/noExplicitAny: mock
+		// oxlint-disable-next-line typescript/no-explicit-any -- mock
 		vi.spyOn(windowMock as any, 'AudioContext').mockImplementation(
 			() => mockContext,
 		);

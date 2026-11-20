@@ -248,7 +248,7 @@ export const SpreadsheetGrid = () => {
 							<CornerCell />
 							{Array.from({ length: colCount }, (_, ci) => (
 								<ColHeaderCell
-									// biome-ignore lint/suspicious/noArrayIndexKey: Grid columns use index
+									// oxlint-disable-next-line react/no-array-index-key -- Grid columns use index
 									key={ci}
 									draggable
 									onDragStart={(e) => handleColDragStart(e, ci)}
@@ -275,7 +275,7 @@ export const SpreadsheetGrid = () => {
 					</thead>
 					<tbody>
 						{rows.map((row, ri) => (
-							// biome-ignore lint/suspicious/noArrayIndexKey: Grid rows use index
+							// oxlint-disable-next-line react/no-array-index-key -- Grid rows use index
 							<tr key={ri}>
 								<RowNumberCell
 									draggable
@@ -309,7 +309,7 @@ export const SpreadsheetGrid = () => {
 
 									return (
 										<Cell
-											// biome-ignore lint/suspicious/noArrayIndexKey: Grid cells use index
+											// oxlint-disable-next-line react/no-array-index-key -- Grid cells use index
 											key={ci}
 											id={`cell-${ri}-${ci}`}
 											data-selected={isSelected ? 'true' : undefined}

@@ -8,7 +8,7 @@ const Content: React.FC = () => {
 	const ref = useRef<Mesh>(null);
 	// 照明の補助線
 	const lightRef = useRef<DirectionalLightHelper>(null);
-	// biome-ignore lint/suspicious/noExplicitAny: intentional
+	// oxlint-disable-next-line typescript/no-explicit-any -- intentional
 	useHelper(lightRef as any, DirectionalLightHelper);
 
 	useFrame(({ clock }) => {

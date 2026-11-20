@@ -18,7 +18,7 @@ class Common {
 	constructor() {
 		this.width = null;
 		this.height = null;
-		// biome-ignore lint/style/noNonNullAssertion: Initialized before use
+		// oxlint-disable-next-line typescript/no-non-null-assertion -- Initialized before use
 		this.aspect = this.width! / this.height!;
 		this.isMobile = false;
 		this.breakpoint = 768;
@@ -44,7 +44,7 @@ class Common {
 
 		this.renderer.autoClear = false;
 
-		// biome-ignore lint/style/noNonNullAssertion: Initialized before use
+		// oxlint-disable-next-line typescript/no-non-null-assertion -- Initialized before use
 		this.renderer.setSize(this.width!, this.height!);
 
 		this.renderer.setClearColor(0x000000);
