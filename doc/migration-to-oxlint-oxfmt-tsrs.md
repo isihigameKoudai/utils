@@ -42,6 +42,19 @@
 - Lint は 1.14 s → 1.80 s と遅くなっているが、これは **type-aware ルール（typescript-eslint 由来、59 ルール）を有効化した対価**。`biome` では検出できなかった型依存のバグ（未処理 Promise、unsafe な代入 など）を lint で拾えるようになる。
 - `oxfmt` は 304 ファイルを ~0.3 秒で検査。biome のフォーマット結果とほぼ一致しており（差分は `.css` の引用符 1 ファイルのみ）、PR の再フォーマット差分は最小限。
 
+## ESLint との比較（参考）
+
+biome ではなく ESLint（`@eslint/js` + `typescript-eslint` + `eslint-plugin-react` / `react-hooks` / `jsx-a11y` の recommended 構成）を相手にした場合の速度差。同一 304 ファイル・同一条件（`pnpm exec` 経由、hyperfine）。
+
+| モード | ESLint | oxlint | 高速化 |
+| --- | --- | --- | --- |
+| type-aware | **43.0 s** ±0.9 | **1.80 s** ±0.07 | **≈ 24×** |
+| non-type-aware | **14.3 s** ±0.4 | **0.32 s** ±0.01 | **≈ 45×** |
+
+- ESLint の type-aware は `typescript-eslint` の `recommendedTypeChecked`（`projectService` で型情報を解決）。実際に型を追っており、このコードベースで 39 件（36 error / 3 warning）を検出したことを確認済み（空回りで速いわけではない）。
+- **但し書き**: `typescript-eslint` は TypeScript 7 に未対応（peer が `<6.1.0`）のため、type-aware の ESLint 計測のみ `typescript@5.9.3` に差し替えて実施した。oxlint は `tsrs`（TS 7 ネイティブ）で動くため、**TS 7 を扱えるのは oxlint 側だけ**という点自体が ESLint に対する優位。
+- ルールセットは「recommended」同士で完全な 1:1 ではない（oxlint は unicorn / oxc プラグイン分だけ多め）。ただしオーダーの差は揺るがないため参考値として記録。
+
 ## 注意点
 
 - `tsrs` はベータ版（`0.25.0-ts7.1.0-beta`）。TypeScript 7.1 への 100% 準拠を目指しており、本リポジトリでは `tsc --noEmit` と同一の診断結果（エラー 0 件）を確認済み。万一の差異に備え、`typescript`（`tsc`）は devDependencies に残してある。
