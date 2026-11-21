@@ -1,4 +1,7 @@
 {
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm --filter @utils/web build",
+  "outputDirectory": "apps/web/dist",
   "rewrites": [
     {
       "source": "/(.*)",
