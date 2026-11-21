@@ -17,6 +17,7 @@
     "**/public/",
     "**/vite.config.ts",
     "**/*.gen.*",
+    "**/*.json",
     "**/*.md",
     "**/*.html",
     "**/*.yaml",
