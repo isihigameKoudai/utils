@@ -1,97 +1,129 @@
 # AGENTS.md
 
-Motto: "Small, clear, safe steps — always grounded in real docs."
+モットー: 「小さく、明確で、安全な一歩を。常に実際のドキュメントに根拠を置く。」
 
-## Project Overview
+## プロジェクト概要
 
-React 19 + TypeScript project for creating reusable utilities and shared components. The `utils/` directory contains utility modules, while `src/` serves as a sandbox for testing those utilities.
+再利用可能なユーティリティと共有コンポーネントのための React 19 + TypeScript モノレポ（pnpm workspaces）。
 
-## Build/Lint/Test Commands
+- `packages/core` — 純粋ユーティリティ（array, file, math, object, promise, di, model, api など）。外部依存は valibot のみ。
+- `packages/modules` — ライブラリ／React／ブラウザAPI のラップ・利用（ui, i-state, tensorflow, ai, db, Shader/Visualizer/Media など）。
+- `packages/domains` — ドメイン特化（crypto の GMO/Binance API など）。`@utils/core` に依存。
+- `apps/web` — それらを利用するアプリ本体（Vite + TanStack Router）。
+
+依存方向: `apps/web → packages/{domains → modules → core}`（core が最下層・最も汎用的）。
+
+## ビルド／Lint／テストのコマンド
 
 ```bash
-# Development
-pnpm run dev         # Start dev server (Vite)
-pnpm run build       # TypeScript compile + Vite build
-pnpm run preview     # Preview production build
+# 開発
+pnpm run dev         # 開発サーバー起動（Vite, @utils/web）
+pnpm run build       # TypeScript コンパイル + Vite ビルド（@utils/web）
+pnpm run preview     # 本番ビルドのプレビュー
 
-# Testing with Vitest
-pnpm run test        # Run all tests in watch mode
-pnpm vitest run      # Run all tests once (CI mode)
-pnpm vitest run utils/array/array.test.ts          # Run single test file
-pnpm vitest run -t "splitMap"                      # Run tests matching pattern
-pnpm vitest run utils/array/array.test.ts -t "配列を指定した数で分割する"  # Specific test
+# Vitest によるテスト
+pnpm run test        # 全テストを一度だけ実行（CI モード）
+pnpm vitest run      # 全テストを一度だけ実行
+pnpm vitest run packages/core/array/array.test.ts          # 単一テストファイルを実行
+pnpm vitest run -t "splitMap"                              # パターンに一致するテストを実行
+pnpm vitest run packages/core/array/array.test.ts -t "配列を指定した数で分割する"  # 特定のテスト
 
-# Linting & Formatting
-pnpm run lint        # ESLint with auto-fix
-pnpm run format      # Prettier formatting
+# Lint とフォーマット
+pnpm run lint        # oxlint（type-aware）
+pnpm run format      # oxfmt によるフォーマット
+pnpm run typecheck   # tsrs による全パッケージの型チェック
+
+# パッケージ単位のコマンド
+pnpm --filter @utils/web build
+pnpm --filter @utils/core test
 ```
 
-## Project Structure
+## プロジェクト構成
 
 ```
-utils/               # Reusable utility modules (array, file, promise, etc.)
-src/
-  ├── components/    # Reusable React components (domain-agnostic)
-  ├── features/      # Feature-specific modules with pages, components, and business logic
-  │   ├── AggregateBill/   # Credit card billing aggregation
-  │   ├── Audio/           # Audio visualization and processing
-│   ├── CryptoCharts/    # Cryptocurrency charts
-│   ├── CsvSpreadsheet/  # CSV spreadsheet editor with import/export
-│   ├── Detection/       # ML-based detection (pose, hand, face)
-  │   ├── Home/            # Homepage
-  │   ├── MeltTheBorder/   # Shader + ML detection demo
-  │   ├── Noise/           # Noise shaders (fBM, fractal, cellular)
-  │   ├── Playground/      # Development sandbox
-  │   ├── Shader/          # Shader examples
-  │   ├── StableFluids/    # Fluid simulation
-  │   └── ThreeDimension/  # 3D rendering examples
-  ├── shared/        # Shared modules across features
-  └── routes/        # TanStack Router configuration
+apps/
+  └── web/                 # アプリ本体 (@utils/web)
+      ├── src/
+      │   ├── components/  # 再利用可能な React コンポーネント（ドメイン非依存）
+      │   ├── features/    # 機能ごとのモジュール（pages, components, ビジネスロジック）
+      │   │   ├── AggregateBill/   # クレジットカード明細の集計
+      │   │   ├── Audio/           # 音声の可視化・処理
+      │   │   ├── Crypto/          # 暗号資産チャート
+      │   │   ├── CsvSpreadsheet/  # CSV スプレッドシートエディタ（インポート/エクスポート付き）
+      │   │   ├── Detection/       # ML ベースの検出（ポーズ・手・顔）
+      │   │   ├── Home/            # ホームページ
+      │   │   ├── MeltTheBorder/   # シェーダー + ML 検出のデモ
+      │   │   ├── Noise/           # ノイズシェーダー（fBM, フラクタル, セルラー）
+      │   │   ├── Playground/      # 開発用サンドボックス
+      │   │   ├── Shader/          # シェーダー例
+      │   │   ├── StableFluids/    # 流体シミュレーション
+      │   │   └── ThreeDimension/  # 3D レンダリング例
+      │   ├── shared/      # 機能横断で共有するモジュール
+      │   ├── generated/   # 生成されたルートツリー（TanStack Router）
+      │   └── routes/      # TanStack Router のルート定義
+      ├── index.html
+      ├── vite.config.ts
+      └── vercel.json
+
+packages/
+  ├── core/                 # 純粋ユーティリティ (@utils/core)
+  │   ├── array/  object/  math/  string.ts  is.ts  guards.ts  date.ts
+  │   ├── promise/  file/ (csv含む)  branded/  model/  di/  api/
+  │   └── index.ts          # barrel
+  ├── modules/              # ライブラリ/React/ブラウザAPI利用 (@utils/modules)
+  │   ├── ui/  i-state/  hooks/  unstated-next.tsx
+  │   ├── tensorflow/  ai/  db/  Shader*  Visualizer/  Media/  Speech.ts
+  │   ├── glsl/  __test__/
+  │   └── index.ts          # barrel
+  └── domains/              # ドメイン特化 (@utils/domains)
+      ├── apis/             # crypto (GMO/Binance)
+      └── index.ts          # barrel
 ```
 
-### Dependency Direction (Features Architecture)
+### 依存方向（モノレポ・アーキテクチャ）
 
-Dependencies must flow in one direction only:
+依存は一方向にのみ流れること:
 
 ```
-routes → features → components → utils
+apps/web/routes → features → components → packages/{domains → modules → core}
 ```
 
-**Prohibited imports:**
+**禁止される import:**
 
-- `utils/` → `src/` (utilities must not depend on application code)
-- `components/` → `features/` (shared components must not depend on features)
-- `components/` → `routes/` (shared components must not depend on routes)
-- `features/` → `routes/` (features must not depend on routes)
-- `features/A` → `features/B` (cross-feature imports forbidden)
-- `generated/` → any (generated files are output only, not imported by app code directly except routes config)
-- `utils/` → `node_modules` application-specific libs (keep utils pure)
+- `packages/*` → `apps/*`（パッケージはアプリコードに依存してはならない）
+- `packages/core` → `packages/modules` / `packages/domains`（core は純粋に保ち、React・ライブラリ依存を持たない）
+- `packages/modules` → `packages/domains`
+- `components/` → `features/`（共有コンポーネントは features に依存してはならない）
+- `components/` → `routes/`（共有コンポーネントは routes に依存してはならない）
+- `features/` → `routes/`（features は routes に依存してはならない）
+- `features/A` → `features/B`（feature 間の import は禁止）
+- `generated/` → 任意（生成ファイルは出力専用であり、routes 設定以外から直接 import しない）
 
-## Code Style Guidelines
+## コードスタイルガイドライン
 
-### TypeScript Configuration
+### TypeScript 設定
 
-- **Strict mode enabled**: `strict: true`, `noImplicitAny: true`
-- **No unused code**: `noUnusedLocals: true`, `noUnusedParameters: true`
-- **Path aliases**: Use `@/*` for root-relative imports (e.g., `@/utils/array`)
-- **Target**: ESNext with ES module syntax
+- **strict モード有効**: `strict: true`, `noImplicitAny: true`
+- **未使用コード禁止**: `noUnusedLocals: true`, `noUnusedParameters: true`
+- **パスエイリアス**: `@/*` は `apps/web/src/*` を指す。パッケージは名前で import する（`@utils/core/array`, `@utils/modules/i-state`）
+- **ターゲット**: ESNext・ES モジュール構文
 
-### Formatting (Prettier)
+### フォーマット（oxfmt）
 
-- Semicolons: required
-- Quotes: single quotes
-- Tab width: 2 spaces
+- セミコロン: 必須
+- クォート: シングルクォート
+- インデント: タブ（JSON / package.json は対象外）
 
-### Import Order
+### import の順序
 
-ESLint (`eslint-plugin-import`) により自動整形される。グループ間には空行を挿入し、各グループ内はアルファベット順。
+oxlint により自動整形される。グループ間には空行を挿入し、各グループ内はアルファベット順。
 
-1. **builtin** - Node.js組み込みモジュール (`fs`, `path` 等)
-2. **external** - 外部ライブラリ (pnpm modules)
+1. **builtin** - Node.js 組み込みモジュール（`fs`, `path` など）
+2. **external** - 外部ライブラリ（pnpm modules）
 3. **internal** - リポジトリ内モジュール
-   - `@/components/**` - 共通系components（先に配置）
-   - `@/**` - その他の内部モジュール (`@/utils`, `@/shared` 等)
-4. **parent/sibling/index** - 同ディレクトリ内ファイル (相対パス)
+   - `@/components/**` - 共通系 components（先に配置）
+   - `@/**` / `@utils/**` - その他の内部モジュール
+4. **parent/sibling/index** - 同ディレクトリ内ファイル（相対パス）
 
 ```typescript
 import { useEffect } from 'react';
@@ -99,106 +131,106 @@ import { create } from 'zustand';
 
 import { Button } from '@/components/Button';
 
-import { fromEntries } from '@/utils/object';
+import { fromEntries } from '@utils/core/object';
 
 import { useLocalState } from './hooks';
 import type { StateProps, QueriesProps } from './type';
 ```
 
-### Type Imports
+### 型の import
 
-Always use `type` keyword when importing types/interfaces:
+型やインターフェースを import する際は必ず `type` キーワードを使う:
 
 ```typescript
-// Top-level type import
+// トップレベルの型 import
 import type { StateProps, QueriesProps } from './type';
 
-// Named import with inline type
+// インライン type 付きの名前付き import
 import { someFunction, type SomeType } from './module';
 ```
 
-### Naming Conventions
+### 命名規則
 
-- **Files**: camelCase for utilities (`array.ts`), PascalCase for components (`Menu.tsx`)
-- **Test files**: `*.test.ts` suffix, same directory as source
-- **Components**: PascalCase (`RootLayout`, `NavigationHeader`)
-- **Functions**: camelCase (`splitMap`, `createCachePromise`)
-- **Types/Interfaces**: PascalCase (`ListItem`, `DeferredOut`)
-- **Constants**: UPPER_SNAKE_CASE for true constants
+- **ファイル**: ユーティリティは camelCase（`array.ts`）、コンポーネントは PascalCase（`Menu.tsx`）
+- **テストファイル**: `*.test.ts` サフィックス、ソースと同じディレクトリに配置
+- **コンポーネント**: PascalCase（`RootLayout`, `NavigationHeader`）
+- **関数**: camelCase（`splitMap`, `createCachePromise`）
+- **型・インターフェース**: PascalCase（`ListItem`, `DeferredOut`）
+- **定数**: 真の定数は UPPER_SNAKE_CASE
 
-### Component Guidelines
+### コンポーネントのガイドライン
 
-- Functional components with hooks only (no class components)
-- `src/components/` must be domain-agnostic and reusable
-- Props interface above component; named exports (default for pages)
+- フックのみを使う関数コンポーネント（クラスコンポーネントは使わない）
+- `apps/web/src/components/` はドメイン非依存で再利用可能であること
+- Props のインターフェースはコンポーネントの上に書く。名前付き export（ページは default export）
 
-### Utility Functions
+### ユーティリティ関数
 
-- Files ≤ 300 LOC; single-purpose modules
-- Use `const` for immutability; export from `index.ts`
-- Add JSDoc comments with `@example` for public APIs
+- ファイルは 300 行以内。単一目的のモジュールにする
+- 不変性のために `const` を使う。`index.ts` から export する
+- 公開 API には `@example` 付きの JSDoc コメントを付ける
 
-### Error Handling
+### エラーハンドリング
 
-- Use explicit return types for functions
-- Prefer returning `undefined`/`null` over throwing for expected failures
-- Use type guards from `utils/guards.ts` and `utils/is.ts`
-- Handle edge cases (empty arrays, undefined values) explicitly
+- 関数には明示的な戻り値型を付ける
+- 想定内の失敗は throw よりも `undefined`/`null` を返すことを優先する
+- `@utils/core/guards` と `@utils/core/is` の型ガードを使う
+- エッジケース（空配列・undefined 値）を明示的に扱う
 
-### Testing Guidelines
+### テストガイドライン
 
-- Vitest for all tests; test files alongside source (`array.ts` → `array.test.ts`)
-- Cover all code paths including edge cases; target 80%+ coverage
-- Use mocks/spies for external dependencies
+- 全テストは Vitest。テストファイルはソースと並置（`array.ts` → `array.test.ts`）
+- エッジケースを含むすべてのコードパスをカバーする。目標カバレッジ 80% 以上
+- 外部依存にはモック・スパイを使う
 
-## Principles
+## 原則
 
-- Keep changes minimal, safe, and reversible
-- Prefer clarity over cleverness; simplicity over complexity
-- Avoid new dependencies unless necessary; remove when possible
-- Implement exactly what's requested—no extra features
+- 変更は最小限・安全・可逆的に保つ
+- 明快さを巧妙さより、単純さを複雑さより優先する
+- 新しい依存は必要な場合のみ追加する。可能なら削除する
+- 要求されたことだけを実装する。余計な機能は追加しない
 
-## Workflow
+## ワークフロー
 
-1. **Plan**: Share a short plan before major edits; prefer small, reviewable diffs
-2. **Read**: Identify and read all relevant files fully before changing anything
-3. **Verify**: Confirm external APIs/assumptions against docs
-4. **Implement**: Keep scope tight; write modular, single-purpose files
-5. **Test**: Add at least one test and verify all existing tests pass
-6. **Reflect**: Fix at the root cause; consider adjacent risks
+1. **計画**: 大きな編集の前に短い計画を共有する。小さくレビューしやすい diff を好む
+2. **読む**: 変更前に関連ファイルをすべて特定し、完全に読む
+3. **検証**: 外部 API・前提をドキュメントと照合する
+4. **実装**: スコープを絞る。モジュール化された単一目的のファイルを書く
+5. **テスト**: 最低 1 つのテストを追加し、既存テストがすべて通ることを確認する
+6. **振り返り**: 根本原因を修正する。隣接するリスクも検討する
 
-## Key Libraries
+## 主要ライブラリ
 
-| Library         | Purpose                             |
+| ライブラリ      | 用途                             |
 | --------------- | ----------------------------------- |
-| React 19        | Functional components with hooks    |
-| TanStack Router | File-based routing (`src/routes/`)  |
-| Zustand         | State management (`utils/i-state/`) |
-| Vitest          | Testing framework                   |
-| TensorFlow.js   | ML models for detection features    |
+| React 19        | フックを使う関数コンポーネント    |
+| TanStack Router | ファイルベースルーティング（`apps/web/src/routes/`） |
+| Zustand         | 状態管理（`packages/modules/i-state/`） |
+| Vitest          | テストフレームワーク                   |
+| MediaPipe       | 検出機能のための ML モデル    |
 
-## Collaboration & Accountability
+## 協業と責任
 
-- Always think in English and respond in Japanese
-- Escalate when requirements are ambiguous or security-sensitive
-- Express uncertainty honestly (confidence < 80% → ask questions)
-- Value correctness over speed; use context7 MCP server when available
+- 常に英語で考え、日本語で回答する
+- 要件があいまいな場合やセキュリティに関わる場合はエスカレーションする
+- 不確かさは正直に示す（確信度 80% 未満 → 質問する）
+- 速度より正確さを優先する。利用可能なら context7 MCP サーバーを使う
 
-## Cursor Rules (from .cursor/rules/main.mdc)
+## Cursor Rules（.cursor/rules/main.mdc より）
 
-- Production code must be placed under `src/`
-- Consider robustness, availability, reusability, and readability
-- Use shared modules from `utils/` when possible
-- Components in `src/components/` must be reusable and domain-agnostic
-- Feature-specific components belong in `src/features/<Feature>/components/`
-- Page components belong in `src/features/<Feature>/pages/` with 1:1 URL relationship
-- Tests must be unit-level, covering all branches and edge cases
+- プロダクションコードは `apps/web/src/`（共有モジュールは `packages/*`）に配置する
+- 堅牢性・可用性・再利用性・可読性を考慮する
+- 可能なら `packages/*` の共有モジュールを使う
+- `apps/web/src/components/` のコンポーネントは再利用可能でドメイン非依存であること
+- feature 固有のコンポーネントは `apps/web/src/features/<Feature>/components/` に置く
+- ページコンポーネントは `apps/web/src/features/<Feature>/pages/` に置き、URL と 1:1 対応させる
+- テストはユニットレベルで、すべての分岐とエッジケースをカバーする
 
-## Quick Checklist
+## クイックチェックリスト
 
-Plan → Read → Verify → Implement → Test → Reflect
+計画 → 読む → 検証 → 実装 → テスト → 振り返り
 
-- [ ] TypeScript strict mode compliance
-- [ ] Tests added/updated and passing (`pnpm run test`)
-- [ ] Lint/format pass (`pnpm run lint && pnpm run format`)
-- [ ] File ≤ 300 LOC with JSDoc for public APIs
+- [ ] TypeScript strict モード準拠
+- [ ] テストを追加・更新し、通ること（`pnpm run test`）
+- [ ] Lint / フォーマットを通すこと（`pnpm run lint && pnpm run format`）
+- [ ] ファイル 300 行以内・公開 API に JSDoc 付き
