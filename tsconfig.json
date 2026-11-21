@@ -1,34 +1,15 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "paths": {
-      "@/*": ["./*"],
-    },
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": false,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "noImplicitAny": true,
-    "jsx": "react-jsx",
-    "types": ["node", "vitest/globals"]
+      "@/*": [
+        "./apps/web/src/*"
+      ]
+    }
   },
-  "include": ["./src", "utils", "vite.config.ts"],
-  "exclude": [
-    "node_modules",
+  "include": [
+    "apps",
+    "packages",
+    "vitest.config.ts"
   ]
 }

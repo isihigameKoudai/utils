@@ -1,0 +1,22 @@
+import type React from 'react';
+import { useEffect, useRef } from 'react';
+
+import { WebGL } from '@/shared/modules/fluids';
+
+const StableFluidsPage: React.FC = () => {
+	const $ref = useRef<HTMLDivElement>(null);
+	const isInitRef = useRef(true);
+
+	useEffect(() => {
+		if (isInitRef.current && $ref.current) {
+			new WebGL({
+				$wrapper: $ref.current,
+			});
+			isInitRef.current = false;
+		}
+	}, []);
+
+	return <div id="fluids" ref={$ref}></div>;
+};
+
+export default StableFluidsPage;
