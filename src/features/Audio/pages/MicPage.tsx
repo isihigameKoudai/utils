@@ -39,8 +39,8 @@ const MicPage: React.FC = () => {
 					$canvas,
 					timeDomainRawArray,
 					spectrumRawArray,
-					// biome-ignore lint/style/noNonNullAssertion: analyzer is initialized by getAudioStream
-					// biome-ignore lint/style/noNonNullAssertion: initialized
+					// oxlint-disable-next-line typescript/no-non-null-assertion -- analyzer is initialized by getAudioStream
+					// oxlint-disable-next-line typescript/no-non-null-assertion -- initialized
 					analyzer: lineVisualizer.analyzer!,
 				});
 			},

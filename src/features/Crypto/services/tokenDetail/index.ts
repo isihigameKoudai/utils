@@ -9,7 +9,6 @@ import type { TokenDetailServiceDeps } from './types';
 const createLoadingState = (value: boolean): TokenDetailLoadingState => {
 	return MULTI_TIMEFRAMES.reduce<TokenDetailLoadingState>((acc, timeframe) => {
 		return {
-			// biome-ignore lint/performance/noAccumulatingSpread: intentional
 			...acc,
 			[timeframe]: value,
 		};

@@ -112,7 +112,7 @@ export class Visualizer extends Audio {
 		this.analyzer.getFloatFrequencyData(this.spectrumRawArray);
 
 		renderCallBack({
-			// biome-ignore lint/style/noNonNullAssertion: initialized
+			// oxlint-disable-next-line typescript/no-non-null-assertion -- initialized
 			$canvas: this.$canvas!,
 			frequencyBinCount: this.analyzer.frequencyBinCount,
 			timeDomainArray: this.timeDomainArray,

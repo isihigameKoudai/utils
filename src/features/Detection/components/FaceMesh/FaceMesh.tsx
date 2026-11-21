@@ -35,7 +35,7 @@ const FaceMesh = forwardRef<HTMLVideoElement, Props>(({ objects }, ref) => {
 
 	return (
 		<div style={{ position: 'relative' }}>
-			{/* biome-ignore lint/a11y/useMediaCaption: ML detection video feed has no caption */}
+			{/* oxlint-disable-next-line jsx-a11y/media-has-caption -- ML detection video feed has no caption */}
 			<video
 				ref={ref}
 				width={640}

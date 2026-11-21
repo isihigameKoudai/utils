@@ -133,8 +133,8 @@ export const defineGemini = (config: DefineConfig) => {
 		});
 
 		// Wait for processing
-		// biome-ignore lint/style/noNonNullAssertion: API check
-		let // biome-ignore lint/style/noNonNullAssertion: API check
+		// oxlint-disable-next-line typescript/no-non-null-assertion -- API check
+		let // oxlint-disable-next-line typescript/no-non-null-assertion -- API check
 			status = await ai.files.get({ name: uploaded.name! });
 		while (status.state === FileState.PROCESSING) {
 			await new Promise((r) => setTimeout(r, 2000));
@@ -148,9 +148,9 @@ export const defineGemini = (config: DefineConfig) => {
 		const parts: Content['parts'] = [
 			{
 				fileData: {
-					// biome-ignore lint/style/noNonNullAssertion: API check
+					// oxlint-disable-next-line typescript/no-non-null-assertion -- API check
 					mimeType: status.mimeType!,
-					// biome-ignore lint/style/noNonNullAssertion: API check
+					// oxlint-disable-next-line typescript/no-non-null-assertion -- API check
 					fileUri: status.uri!,
 				},
 			},
@@ -162,7 +162,7 @@ export const defineGemini = (config: DefineConfig) => {
 		const response = await embed([{ parts }]);
 
 		// Clean up uploaded file
-		// biome-ignore lint/style/noNonNullAssertion: API check
+		// oxlint-disable-next-line typescript/no-non-null-assertion -- API check
 		await ai.files.delete({ name: uploaded.name! });
 
 		return response;

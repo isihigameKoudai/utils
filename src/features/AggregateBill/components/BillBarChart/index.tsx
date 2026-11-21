@@ -92,8 +92,8 @@ export const BillBarChart = ({ bills, groupingType }: Props) => {
 						<Bar dataKey="amount" name="金額">
 							{data.map((_, index) => {
 								return (
-									// biome-ignore lint/suspicious/noArrayIndexKey: Static chart elements
-									<Cell // biome-ignore lint/suspicious/noArrayIndexKey: intentional
+									// oxlint-disable-next-line react/no-array-index-key -- Static chart elements
+									<Cell // oxlint-disable-next-line react/no-array-index-key -- intentional
 										key={`cell-${index}`}
 										fill={getBarColor(index)}
 									/>

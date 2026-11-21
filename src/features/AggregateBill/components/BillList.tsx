@@ -193,8 +193,8 @@ export const BillList = ({ bills }: Props) => {
 						const isChecked = checkedIndices.has(index);
 						const RowComponent = isChecked ? TrChecked : Tr;
 						return (
-							// biome-ignore lint/suspicious/noArrayIndexKey: Sorted bills index
-							// biome-ignore lint/suspicious/noArrayIndexKey: intentional
+							// oxlint-disable-next-line react/no-array-index-key -- Sorted bills index
+							// oxlint-disable-next-line react/no-array-index-key -- intentional
 							<RowComponent key={index}>
 								<TdCheckbox>
 									<Checkbox

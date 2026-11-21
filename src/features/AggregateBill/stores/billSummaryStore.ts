@@ -59,7 +59,6 @@ export const BillSummaryStore = defineStore({
 					const existingRecord = acc[key];
 
 					return {
-						// biome-ignore lint/performance/noAccumulatingSpread: intentional
 						...acc,
 						[key]: existingRecord
 							? {

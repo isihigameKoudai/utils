@@ -8,8 +8,10 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "lint": "biome check src utils",
-    "format": "biome check --write src utils",
+    "lint": "oxlint src utils",
+    "format": "oxfmt --write src utils",
+    "format:check": "oxfmt --check src utils",
+    "typecheck": "tsrs --noEmit --fast",
     "claude": "npx tsx script/claude.ts",
     "generate:cursorrules": "node script/generate-cursor-rules.js \"**/*.ai.md\" \".cursor/rules/main.mdc\"",
     "tsr": "npx tsr -p tsconfig.src.json -w 'src/main\\.ts$' '.*\\.test\\.ts$'",
@@ -37,7 +39,6 @@
   },
   "devDependencies": {
     "@anthropic-ai/claude-code": "^2.0.14",
-    "@biomejs/biome": "^2.5.3",
     "@tanstack/router-devtools": "1.167.0",
     "@tanstack/router-plugin": "1.168.1",
     "@types/dat.gui": "^0.7.13",
@@ -48,13 +49,17 @@
     "@vitejs/plugin-react": "^6.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.4",
+    "oxfmt": "^0.78.0",
+    "oxlint": "^1.93.0",
+    "tsrs": "0.25.0-ts7.1.0-beta",
     "typescript": "^7.0.2",
     "vite": "^8.0.0",
     "vitest": "4.1.8"
   },
   "lint-staged": {
     "{src,utils}/**/*.{ts,tsx}": [
-      "biome check --write"
+      "oxfmt --write",
+      "oxlint"
     ]
   }
 }

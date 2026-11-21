@@ -61,7 +61,7 @@ export default class Viscous extends ShaderPass {
 		dt: number;
 	}) {
 		const exportedFboOut: THREE.WebGLRenderTarget =
-			// biome-ignore lint/style/noNonNullAssertion: intentional
+			// oxlint-disable-next-line typescript/no-non-null-assertion -- intentional
 			(iterations - 1) % 2 === 0 ? this.props.output1! : this.props.output0!;
 
 		if (this.uniforms) {
@@ -70,9 +70,9 @@ export default class Viscous extends ShaderPass {
 
 		for (let i = 0; i < iterations; i++) {
 			const isOdd = i % 2 === 0;
-			// biome-ignore lint/style/noNonNullAssertion: intentional
+			// oxlint-disable-next-line typescript/no-non-null-assertion -- intentional
 			const fbo_in = isOdd ? this.props.output0! : this.props.output1!;
-			// biome-ignore lint/style/noNonNullAssertion: intentional
+			// oxlint-disable-next-line typescript/no-non-null-assertion -- intentional
 			const fbo_out = isOdd ? this.props.output1! : this.props.output0!;
 
 			if (this.uniforms) this.uniforms.velocity_new.value = fbo_in.texture;

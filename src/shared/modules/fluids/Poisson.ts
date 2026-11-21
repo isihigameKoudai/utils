@@ -41,17 +41,17 @@ export default class Poisson extends ShaderPass {
 	}
 
 	updatePoisson({ iterations }: { iterations: number }) {
-		// biome-ignore lint/style/noNonNullAssertion: initialized in init
+		// oxlint-disable-next-line typescript/no-non-null-assertion -- initialized in init
 		let p_in: THREE.WebGLRenderTarget = this.props.output0!;
-		// biome-ignore lint/style/noNonNullAssertion: initialized in init
+		// oxlint-disable-next-line typescript/no-non-null-assertion -- initialized in init
 		let p_out: THREE.WebGLRenderTarget = this.props.output1!;
 
 		for (let i = 0; i < iterations; i++) {
 			const isOdd = i % 2 === 0;
 
-			// biome-ignore lint/style/noNonNullAssertion: intentional
+			// oxlint-disable-next-line typescript/no-non-null-assertion -- intentional
 			p_in = isOdd ? this.props.output0! : this.props.output1!;
-			// biome-ignore lint/style/noNonNullAssertion: intentional
+			// oxlint-disable-next-line typescript/no-non-null-assertion -- intentional
 			p_out = isOdd ? this.props.output1! : this.props.output0!;
 
 			if (this.uniforms) this.uniforms.pressure.value = p_in.texture;

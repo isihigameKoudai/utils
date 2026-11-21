@@ -7,6 +7,7 @@ trustPolicy: no-downgrade
 trustPolicyExclude:
   - 'semver@6.3.1'
   - 'reselect@5.1.1'
+  - 'tsrs@0.25.0-ts7.1.0-beta'
 blockExoticSubdeps: true
 allowBuilds:
   '@anthropic-ai/claude-code': true
