@@ -48,19 +48,19 @@ TanStack Router の `autoCodeSplitting` を有効化し、単一チャンクに�
 
 ## バンドル解析（bundle analyzer）
 
-`rollup-plugin-visualizer` の `raw-data` 出力と実測の minify バイト数から生成した treemap。長方形の面積が minify サイズに比例する。
+`rollup-plugin-visualizer` の `raw-data` から、全チャンク・全モジュールを集約せず描画した treemap（チャンク単位で色分け、モジュールは同系色の濃淡）。長方形の面積は **rendered length（visualizer の出力値・非 minify）** に比例する。minify 換算の数値は上記のチャンク表を参照。
 
 ### Before（単一チャンク）
 
-![bundle-before](./images/bundle-before.png)
+![bundle-before](./images/bundle-before-full.png)
 
-全ライブラリが単一チャンク（`index.js` 2,373 kB）に束ねられた状態。three.js / @mediapipe/tasks-vision / @google/genai / chromadb / recharts / react-dom などが初期ロードにすべて含まれている。
+全モジュールが単一チャンク（`index.js`）に束ねられた状態。three.js / @mediapipe/tasks-vision / @google/genai / chromadb / recharts / react-dom などが初期ロードにすべて含まれている。
 
 ### After（ルート単位の分割）
 
-![bundle-after](./images/bundle-after.png)
+![bundle-after](./images/bundle-after-full.png)
 
-59 チャンクに分割された状態。緑色の「INITIAL LOAD」が初期ロード（`index.js` 270 kB）で、three.js（696 kB）・gemini-embedding（371 kB）・summary = recharts（348 kB）などの重いライブラリは遅延チャンクとして分離されている。
+59 チャンク（小さいチャンクを含む全件）に分割された状態。緑色が初期ロード（`index.js`）。three.js・gemini-embedding・summary（recharts）などの重いライブラリは遅延チャンクとして分離されている。
 
 ## 検証
 
