@@ -8,11 +8,12 @@ import { apiMap } from '@utils/domains/apis/config';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
     TanStackRouterVite({
       generatedRouteTree: './src/generated/routeTree.gen.ts',
       routesDirectory: './src/routes',
+      autoCodeSplitting: true,
     }),
+    react(),
   ],
   resolve: {
     alias: {
