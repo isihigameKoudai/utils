@@ -46,6 +46,22 @@ TanStack Router の `autoCodeSplitting` を有効化し、単一チャンクに�
 
 計 59 チャンクに分割。重いライブラリは各ルートの遅延チャンクへ分離され、当該ルートへの遷移時にのみ取得される。さらに devtools チャンク（63.61 kB）が本番ビルドから消えた。
 
+## バンドル解析（bundle analyzer）
+
+`rollup-plugin-visualizer` の `raw-data` 出力と実測の minify バイト数から生成した treemap。長方形の面積が minify サイズに比例する。
+
+### Before（単一チャンク）
+
+![bundle-before](./images/bundle-before.png)
+
+全ライブラリが単一チャンク（`index.js` 2,373 kB）に束ねられた状態。three.js / @mediapipe/tasks-vision / @google/genai / chromadb / recharts / react-dom などが初期ロードにすべて含まれている。
+
+### After（ルート単位の分割）
+
+![bundle-after](./images/bundle-after.png)
+
+59 チャンクに分割された状態。緑色の「INITIAL LOAD」が初期ロード（`index.js` 270 kB）で、three.js（696 kB）・gemini-embedding（371 kB）・summary = recharts（348 kB）などの重いライブラリは遅延チャンクとして分離されている。
+
 ## 検証
 
 - `pnpm typecheck`（tsrs）: エラー 0 件で通過
